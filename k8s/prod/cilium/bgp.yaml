@@ -1,0 +1,41 @@
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "cilium-lb-pool"
+spec:
+  blocks:
+  - cidr: "10.10.1.225/27"
+  serviceSelector:
+    matchExpressions:
+    - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "traefik-lb-pool"
+spec:
+  blocks:
+  - cidr: "10.10.1.221/32"
+  serviceSelector:
+    matchLabels:
+      pool: cilium-traefik-pool
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: custom-policy
+spec:
+  virtualRouters:
+    - exportPodCIDR: false
+      localASN: 65512
+      neighbors:
+        - connectRetryTimeSeconds: 120
+          eBGPMultihopTTL: 1
+          holdTimeSeconds: 90
+          keepAliveTimeSeconds: 30
+          peerASN: 65000
+          peerAddress: 192.168.1.1/32
+          peerPort: 179
+      serviceSelector:
+        matchExpressions:
+          - { key: somekey, operator: NotIn, values: [ 'never-used-value' ] }
