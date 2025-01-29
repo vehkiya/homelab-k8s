@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kerrlab-app
+  namespace: traefik # Or the namespace where you want the secret to be stored
+spec:
+  secretName: kerrlab-app-tls # Name of the Kubernetes Secret to store the certificate
+  issuerRef:
+    # Or clusterIssuerRef for ClusterIssuer
+    name: letsencrypt-prod
+    # kind: Issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  commonName: kerrlab.app
+  dnsNames:
+  - "kerrlab.app"
+  - "*.kerrlab.app"
