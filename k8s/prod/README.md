@@ -30,7 +30,7 @@
 ```
 2. Install with values
 ```shell
-  helm install -n traefik --create-namespace traefik traefik/traefik -f /home/vehkiya/IdeaProjects/homelab-k8s/k8s/prod/traefik/traefik-config.yaml
+  helm install -n traefik --create-namespace traefik traefik/traefik -f /home/vehkiya/IdeaProjects/homelab-k8s/k8s/traefik/traefik-config.yaml
 ```
 
 ## Install Cert Manager
@@ -52,15 +52,15 @@
 ```
 3. Provision Cloudflare API Token secret
 ```shell
-    kubectl apply -f prod/cert-manager/00-cloudflare-token.yaml
+    kubectl apply -f cert-manager/00-cloudflare-token.yaml
 ```
 4. Create cluster issuer
 ```shell
-    kubectl apply -f prod/cert-manager/01-acme-issuer-cf-solver.yaml
+    kubectl apply -f cert-manager/01-acme-issuer-cf-solver.yaml
 ```
 5. Create certificate config
 ```shell
-    kubectl apply -f prod/cert-manager/02-certificate-config.yaml
+    kubectl apply -f cert-manager/02-certificate-config.yaml
 ```
 
 # Configuration Storage
@@ -75,11 +75,34 @@ In deploy/kubernetes/v1.20/node.yaml add for `csi-plugin `
             - '--chroot-dir=/host'
             - '--iscsiadm-path=/usr/local/sbin/iscsiadm'
 ```
+Install
+```shell
+  ./scripts/deploy.sh build && ./scripts/deploy.sh install --basic
+```
 
 # Dashboard
-FW dashboard
+1. Add repo
 ```shell
-kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+    helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+```
+2. Install 
+```shell
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
+  --create-namespace \
+  --namespace kubernetes-dashboard \
+  --set app.ingress.issuer.scope=cluster
+```
+3. Provision dashboard credentials
+```shell
+  kubectl apply -f kubernetes-dashboard/dashboard-data.yaml
+```
+4. Generate token for your user
+```shell
+  kubectl -n kubernetes-dashboard create token vehkiya
+```
+5. FW dashboard
+```shell
+  kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
 ```
 
 # Tailscale

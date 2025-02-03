@@ -1,0 +1,4 @@
+app:
+  ingress:
+    issuer:
+      scope: cluster

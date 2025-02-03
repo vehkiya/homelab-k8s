@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: default
+spec:
+  selector:
+    app: whoami
+  ports:
+    - port: 80
+      # nodePort: 32022
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-route
+  namespace: default # Where your application is deployed
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "whoami.kerrlab.app"
+    - "infra-ts.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        # Use backendRefs for Gateway API v1beta1
+        - name: whoami
+          port: 80
