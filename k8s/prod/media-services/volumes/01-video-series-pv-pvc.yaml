@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: video-series-pv
+spec:
+  capacity:
+    storage: 15Ti # Adjust the size as needed
+  accessModes:
+    - ReadOnlyMany # Or ReadOnlyMany if only reading
+  persistentVolumeReclaimPolicy: Retain # Or Delete if you want the data deleted when the PV is deleted
+  mountOptions:
+    - nfsvers=4.1
+  nfs:
+    server: 10.10.1.218 # Your NFS server IP
+    path: /volume1/video/Series # The exported path on the NFS server
+  storageClassName: managed-nfs-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: video-series-pvc
+  namespace: media # or the namespace where your application runs
+spec:
+  accessModes:
+    - ReadOnlyMany # Must match the PV's access modes
+  resources:
+    requests:
+      storage: 15Ti # Must be less than or equal to the PV's capacity
+  selector:
+    # Optional but recommended to bind to a specific PV
+    matchLabels:
+      pv-name: video-series-pv # Add this label to your PV
+  storageClassName: managed-nfs-storage # Use your custom StorageClass

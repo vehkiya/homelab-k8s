@@ -79,6 +79,7 @@ Install
 ```shell
   ./scripts/deploy.sh build && ./scripts/deploy.sh install --basic
 ```
+Install StorageClass
 
 # Dashboard
 1. Add repo

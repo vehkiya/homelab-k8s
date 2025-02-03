@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  namespace: media
+spec:
+  selector:
+    app: bazarr
+  ports:
+  - name: web-ui
+    port: 6767
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bazarr
+  namespace: media
+spec:
+  serviceName: bazarr
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+    spec:
+      containers:
+      - name: bazarr
+        image: lscr.io/linuxserver/bazarr:latest
+        env:
+        - name: PGID
+          value: "100"
+        - name: PUID
+          value: "1026"
+        - name: TZ
+          value: "Europe/Chisinau"
+        volumeMounts:
+        - name: video-series-mount
+          mountPath: /tv # Path inside the container
+        - name: video-movies-mount
+          mountPath: /movies
+        - name: video-anime-mount
+          mountPath: /anime
+        - name: config
+          subPath: bazarr
+          mountPath: /config
+      volumes:
+      - name: video-movies-mount
+        persistentVolumeClaim:
+          claimName: video-movies-pvc
+      - name: video-series-mount
+        persistentVolumeClaim:
+          claimName: video-series-pvc
+      - name: video-anime-mount
+        persistentVolumeClaim:
+          claimName: video-anime-pvc
+      - name: config
+        persistentVolumeClaim:
+          claimName: arr-config-pvc
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bazarr-route
+  namespace: media # Where your application is deployed
+spec:
+  parentRefs:
+  - name: traefik-gateway
+    namespace: traefik
+  hostnames:
+  - "bazarr.kerrlab.app"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # Use backendRefs for Gateway API v1beta1
+    - name: bazarr
+      port: 6767
