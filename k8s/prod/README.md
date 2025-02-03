@@ -1,9 +1,12 @@
 ## Set-up Talos OS
-<!-- 
+ 
+## Set up CoreDNS
 ```shell
     helm repo add coredns https://coredns.github.io/helm
-    helm --namespace=kube-system install coredns coredns/coredns
-``` -->
+```
+```shell
+    helm --namespace=kube-system install coredns coredns/coredns --values coredns/values.yaml
+```
 
 ## Set-up Cilium CNI
 1. Add repo
@@ -42,8 +45,10 @@
       --namespace cert-manager \
       --create-namespace \
       --version v1.16.3 \
-      --set crds.enabled=true \
-      --set config.enableGatewayAPI=true
+      --values cert-manager/values.yaml
+#      --set crds.enabled=true \
+#      --set config.enableGatewayAPI=true \
+#      --set dns01RecursiveNameservers=8.8.8.8:53,1.1.1.1:53
 ```
 3. Provision Cloudflare API Token secret
 ```shell

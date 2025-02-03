@@ -1,52 +1,101 @@
-ipam:
-  mode: kubernetes
-  # operator:
-  # clusterPoolIPv4MaskSize: 24
-  # clusterPoolIPv4PodCIDRList:
-  # - 10.244.0.0/16
-  # clusterPoolIPv6MaskSize: 112
-  # clusterPoolIPv6PodCIDRList:
-  # - 2a00:1858:1047:8cfc:6000::/56
-kubeProxyReplacement: true
+cluster:
+  name: homecluster
 
+kubeProxyReplacement: true
+ipv4:
+  enabled: true
+
+ipv6:
+  enabled: false
+
+k8sServiceHost: 10.10.1.101
+k8sServicePort: 6443
+
+ipam:
+  mode: cluster-pool
+  operator:
+    clusterPoolIPv4MaskSize: 24
+    clusterPoolIPv4PodCIDRList:
+      - 10.244.0.0/16
+  # clusterPoolIPv6MaskSize: 112
+#    clusterPoolIPv6PodCIDRList:
+#      - fd00:0:0:b::/64
+
+k8s:
+  requireIPv4PodCIDR: true
+
+autoDirectNodeRoutes: true
+routingMode: native
+endpointRoutes:
+  enabled: true
+
+ipv4NativeRoutingCIDR: "10.244.0.0/16"  # Pods CIDR
+
+bpf:
+  tproxy: true
+  preallocateMaps: true
+  hostLegacyRouting: false
+  masquerade: true
+
+ipMasqAgent:
+  enabled: true
+  config:
+    nonMasqueradeCIDRs:
+      - 10.244.0.0/16 # Pods CIDR
+
+enableIPv4Masquerade: true
+enableIPv6Masquerade: false
+
+externalIPs:
+  enabled: true
+nodePort:
+  enabled: true
+hostPort:
+  enabled: true
+
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+  ui:
+    enabled: true
+    rollOutPods: true
+
+rollOutCiliumPods: true
+operator:
+  rollOutPods: true
+
+bgpControlPlane:
+  enabled: true
+
+# Talos
 securityContext:
   capabilities:
     ciliumAgent:
-    - CHOWN
-    - KILL
-    - NET_ADMIN
-    - NET_RAW
-    - IPC_LOCK
-    - SYS_ADMIN
-    - SYS_RESOURCE
-    - DAC_OVERRIDE
-    - FOWNER
-    - SETGID
-    - SETUID
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
     cleanCiliumState:
-    - NET_ADMIN
-    - SYS_ADMIN
-    - SYS_RESOURCE
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
 
 cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
 
-k8sServiceHost: 10.10.1.101
-k8sServicePort: 6443
 
 gatewayAPI:
   enabled: true
   enableAlpn: true
   enableAppProtocol: true
-
-bgpControlPlane:
-  enabled: true
-  # ipv6:
-  # enabled: true
-
-bpf:
-  masquerade: true
-
-enableIPv6Masquerade: false

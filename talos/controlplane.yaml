@@ -18,18 +18,19 @@ machine:
 
   # Used to provide additional options to the kubelet.
   kubelet:
-    image: ghcr.io/siderolabs/kubelet:v1.32.0 # The `image` field is an optional reference to an alternative kubelet image.
+    image: ghcr.io/siderolabs/kubelet:v1.32.1 # The `image` field is an optional reference to an alternative kubelet image.
     defaultRuntimeSeccompProfileEnabled: true # Enable container runtime default Seccomp profile.
     disableManifestsDirectory: true # The `disableManifestsDirectory` field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory.
 
     # # The `ClusterDNS` field is an optional reference to an alternative kubelet clusterDNS ip list.
-    # clusterDNS:
-    #     - 10.96.0.10
-    #     - 169.254.2.53
+#    clusterDNS:
+#      - 10.96.0.10
+    #      - 1.1.1.1
+    #         - 169.254.2.53
 
     # # The `extraArgs` field is used to provide additional flags to the kubelet.
-    # extraArgs:
-    #     key: value
+#    extraArgs:
+#      key: value
 
     # # The `extraMounts` field is used to add additional mounts to the kubelet container.
     # extraMounts:
@@ -169,9 +170,9 @@ machine:
   #       #     ip: 172.16.199.55 # Specifies the IP address to be used.
 
   # # Used to statically set the nameservers for the machine.
-  # nameservers:
-  #     - 8.8.8.8
-  #     - 1.1.1.1
+#    nameservers:
+#      - 10.10.1.1
+    #     - 1.1.1.1
 
   # # Used to statically set arbitrary search domains.
   # searchDomains:
@@ -193,8 +194,10 @@ machine:
   # Used to provide instructions for installations.
   install:
     disk: /dev/sda # The disk used for installations.
-    image: ghcr.io/siderolabs/installer:v1.9.2 # Allows for supplying the image used to perform the installation.
-    wipe: false # Indicates if the installation disk should be wiped at installation time.
+#    image: ghcr.io/siderolabs/installer:v1.9.2 # Allows for supplying the image used to perform the installation.
+    image: factory.talos.dev/installer/25ae2a4dbc5d5a27e2a33e1910c3e178ad7f6d00e298bd517c51e8f4b92a064b:v1.9.3
+    # Allows for supplying the image used to perform the installation.
+    wipe: true # Indicates if the installation disk should be wiped at installation time.
 
     # # Look up disk using disk attributes like model, size, serial and others.
     # diskSelector:
@@ -409,7 +412,7 @@ machine:
   # baseRuntimeSpecOverrides:
   #     process:
   #         rlimits:
-  #             - hard: 1024
+  #             - hard: 102410.10.1.101
   #               soft: 1024
   #               type: RLIMIT_NOFILE
 
@@ -438,9 +441,11 @@ cluster:
     # The pod subnet CIDR.
     podSubnets:
       - 10.244.0.0/16
+#      - fd00:0:0:b::/64
     # The service subnet CIDR.
     serviceSubnets:
       - 10.96.0.0/12
+#      - fd00:0:0:c::/64
 
     # # The CNI used.
     cni:
@@ -463,12 +468,15 @@ cluster:
     key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlKS1FJQkFBS0NBZ0VBek1xVmZGQkJadEZoWXYzMDVFRVpadXE3WVFoMEFMam8va2Z1cFRBbW1tZ3B1LzU5CjN6UFNCb1pLTWRRZEJzOHk5VWJNeVRDa2V3Vlk2RVNVN0tTVStkZXcvMzVHaDc2L3pkWkVpZmRjWFhoNEJFWWwKaEhqcTRBdzd0d2hhcmxyM20rbEt1WnFWclYxT1hjdXRzWHIwSTR3SEJIcGlCUnAzdHY4ZGNIOXBGVGkvQlRaZAo4YnhRQ3RtNmlBUXlsQ2M0REhlVXlNK05jWDF4SHdUcm9TcDBGMU1Zc1hqRVZUK1MwNGtmcGUrTkhCY25sVURvCnhPV3YrN0pVQWxVSWlBWHRpcDZTc1JLaGpWNDJQRWl4TnVBQ1hDdHZUY00xZTI2S2JscnpFMi9yQUNEK1ZpTksKZm01bUxCSW1uTHpRd0RuS2owMVNvcTJleW1hR3kvZFZuT0ZzTm5EOTMrcit5VDgxTTArTk56bWdhVThid3pwZgpGSmN3L1R0aEF3WXhTNmNWNFdoZ3FMRnVJR3V6ZjdKaWxJanFDTmdYMEZIYkt3ZHorY0dKSjYrenhCWUh2c0NnCmlDZDZwTlVVWDF3UkJQUW9QK2pXbHptWFVCYWh5TXBhN3lvc0piSHNXVzhHMWlIbWVJajlpQzNXanIzK3JDVEYKQVdOLy81eDNmKyt1MU5GanIzODdYQ0hGZHNKU2psRUhGMkN0V1h3dXl1Y3o1cVhTSWVXQmUyQXBrTkFnaEV6cgp1dlppKzBJL1dGWUNGKzZiS29uOSsyUVJqaVl4TFkwQ21pV2cyL3l1Uno3SGRsT0NGS2I5QTNsci9GUTI5d2FaCmhhMUg5ZEt1ZkM1ZzZlZnRqL1ZaeDlJbmJscnhPd2owR1J1aGpBeHlIV2d1ejE5UjZzbmpsa2k0MzZzQ0F3RUEKQVFLQ0FnRUFnbkZIWmpkNGNSVk5BdERmKzhPN2VtSnBtQlRhVHR0NURQNmtjM09JSXpIVjQzam1sQlZkNGVvSAp1RlZ6WjdMeXNtaTJhREFqbEhpRGVPNjJMVVZuM3Z3VU1ha3RJNm5NWWovb3lEaFhEUEorLzdudWk4SzVXSnh5CkxOT1ZieGxpUGwwS3k4NDdLSUlXT0loVHlvaVdtVTNINm9KSmpSYWV5bUVWVDJMWWZEdjQ4RWtBN2NrVTh0UmMKaSthZ2tOMnFSY2FsYm9ORmhOUnlDV0FJOWs4a1F2Y2E4M0FKSG9PdjhpMlZpd3hheFZtNlRNZGJmSThRMlRGdApjVTdZY0V2V1VrVlBDcHJqYkRobU0xL2FBU29PVnNjVHptUlkzSlk4ZHE1WHhqbXpaaEdkN3gvcmd6eXV0OE9YCjlKNFFHV0MyTlREN1FjTjFNVmE4NVk1VmFlZnNGRndCMnBoN29QYTlUMTVYL0l2TjQycnl6NEZieEpxSDhmd2QKNW1FTXA1OTFIRDVscHFEQjB3Vk9KKzlZRWNIK3RXclY0WnZCckE4aGR4MjJlSWl5c0hTVThIcFMzWm5vcXpkdwo3TmlEZXMxakE3Rjd6bzNtbExiRFh4amQycW1RZ3lZZFJiSVBxMzI2aHppRXdGWGVRRGkwcUd2R2hYMHFtSVduCmFWbVpIS0tOREptTWo4dndYK3o1Uy9UTHNNbjNGSURzVnI1T25UejZmUGZwaDdkM3Y1bVM1T2tXU3l1a3ZTWlkKZmg0ZUNpMTA2dFZUcENZNkMvMEExa3cyWkRLWkg3U28wUlJlSllqaENQL0V0eENLdXgwVENrcVc0M3BFNHpLcApRR1JIRy9NTDB1bWg5RnhLV0dWbFQxZEZSZE5OWENPSXpEcHdMbTltYlBRWmpKQWpJd0VDZ2dFQkFQMy9FWG5EClA3U012SVpJeGxBY01pSU9kYXZkM3ZXaUp2aHNxTHZ1Mlk3UU5Cbk16Rnp3OTVBSG0vaXVVNjVaVzlhSnFnd2QKeHRHejNuMW9HRzVvUzhzY29Nd2VGU1FJVW9RQ3Rqbzc1ellGaXk0NTZkYjFjdlduL3Z5dlZURVNoYUtKaWtwawpralRPaUFGK2tqNWEwanZ0dzNSRGxrbm9Pem16Zkd3R1ZyMDh2bGU4K1NyV2kwMDR0bUYxV3lPZXduWThZcG9LCnFDU0JMWS9RY0pUVEJoelQwZEN6STI0MlVkc3BvdkswWWQ3TWFGT3ZESnBkUWFRSmFZS0szUWRxWFQ2bTEvaWgKeDlIdFlhNmJtOEhNK1ljQzkxMjR6a1VxMENFNDNpVGw5R2Y0T3RRV0RKeE9UeUhHK3E1YzFWdHorU3V3eHBQUAp1SE45a2pJOTVJU3JEbU1DZ2dFQkFNNW9KaG1TVVRTRWc1R1dUbG1iRlN2dk5xc3ZiL21ZTGc1RGhaRjZPVTViCmZJVFR6aWxEY05YNUlON2tiS2NNWEs4UVIrc09HUXN1UWxMY3VudWJ4b3lnZzJyc0UvUUF3MW8zemNXWWpmMGsKcVdyWGpOanZqMjY4bjFiMkp3YmQ0NkFjK05sWGFkRXdvc3hOMkc4TTYxNGZuczBReEVVb2oyWUJEVGpmeTRZRApJZnAvYUpxQVhKdTBWS2tTSklIajZwTHhZUksrNkVoMHpsaktwMzBqWUgvM2NFY1JnMmV5V1JJc3ZXU3phYWNFCjN2OUZkSGV2ZWpDaXNUZzJmRFJPaFZSKzZYUDVrSEFUS3F5TDJackRKWDBsb0xFMS93ZFFld05RbTA0RmdYVWUKQkQ1NW5NMm1qM253aHRPTC81bjlNLzBWQ2VIV0RwVmFzb0Z1aTd1M0tCa0NnZ0VCQUl4dTJhK3o5MllSSmk4cwp6NUQ5ZGU2RWhpVUhZRDM1Y0lpTU0yTHROWmFUb1NyZW8rT0RTNjF6dDVYd2RNNENGQmZ6TjNUSmhlTHVDMGJWCkppVHRQM0xHbWxVaEVObENUTFUyZHFDTi9GRlBFVnYybzBhNW9OMFlESkNUTkl3VVRKVEliUkNpdUgrLzdVeSsKT1llR1daVE82ZkUvYVRubHo5RWdYdHV2U1lnSnJNZi84TmZ4bFVXVjVLalA1UnMxclJrSVhCQUZjbC8wbUVkYQpuTlI4TkhYOTI1VURac1NKL2dvcDVERkM4SlhwK0lqRVVUaUw5VDRJQWpFdUsvVHNweTk3dWc5N0Myc1RUNTNsCjVXRnF2bEFhb01CTjdLWXJmTFhScG1sS1J5NncvWDNEenljZzJQbTQ5V013YXJyTXpXaU5yYzJOM05MbUM4NEIKa0hhVnlUY0NnZ0VBYU9DYW0xdXhUMUlWMkIvYlo4UlpHWjNPMVdTaExOMmFhVHo5M1ZHUlZMTS9yZTVCVHM0cAp3MDkyMkVxUXVzQ1pSNHFxUUZGRmdGemM3bVdoaTdVM1NiVTFrVnFyT013NmR0anNBWDdtaHIzZUo1K212WVBjCkNaUm1Falc0MXRCZ0hMY2I2ck56M1FzdGJVb1FzenlKUzZZZGRtMFNqV0Z5bTQzbFBnVFkwUnMrWkozZ2RNRE0KVFlGdmt3alk2L2IyOWZzWUxBSTgzTFFkTlJpanlmM3p4cEhmeHZ5ckhFR082S0U3Q3JQdTl5S09mSDY2RXlaaQptOXZPMkpVMnZ3MDJ5aHhDV3Q5ditNS0VhSEFXL1lBeXlFZ2FRbkVCU0tJb0h5TVNCcTdkZkxqbnh5YmIrZEtzCkRIV2V6RmJTWlZnMjFsMmVTOVlNU3U5dXpEMXpXc3BSNFFLQ0FRQmdCc1VwZDhML1JEdjlXbk8xd0ZRa0NJa2sKM0prS1h0eDZ6UDFIUWpPRUlJazI2Y2ZCYjBFY01JUVdTeWNaeVlZSFhnWE44WG5md3hkNk54SkxTNlQxL01kbQpSOHZpQW5oYm9idDZFSDQ5dXZLL0JjZjZ3S003SmRyRnFxcmtuVEhWR0lJZ0VVVXJkQUNabXp1N1VtdGRjNXp5CjREM1hJcDVRbVN3dWFFMDhaYU9BTEVvK01ST01ZREJTVGFNUHJLR1JMbElDaGxtbGxhek50WmY1U3RCUXZXNkkKZDRuN3VzUTVveWtiUGVWRmZWbFppMUNhUVZ6ODYzc0UxNGdXeWcydkNibVplOXBoOVZObkw1dHRyazNLdUJ6WgpLUXA1OVVNcVdPb2w5OS9rY0JOWmNHTEVJZTM1SDJ6MVB6bjlKa3lMMndSZCtzKzVlbGp5WEZlellKeFUKLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K
   # API server specific configuration options.
   apiServer:
-    image: registry.k8s.io/kube-apiserver:v1.32.0 # The container image used in the API server manifest.
+    image: registry.k8s.io/kube-apiserver:v1.32.1 # The container image used in the API server manifest.
     # Extra certificate subject alternative names for the API server's certificate.
     certSANs:
       - 10.10.1.101
       - 10.10.1.102
       - 10.10.1.103
+      - lab-1
+      - lab-2
+      - lab-3
     disablePodSecurityPolicy: true # Disable PodSecurityPolicy in the API server and default manifests.
     # Configure the API server admission plugins.
     admissionControl:
@@ -527,15 +535,15 @@ cluster:
     #         timeout: 3s
   # Controller manager server specific configuration options.
   controllerManager:
-    image: registry.k8s.io/kube-controller-manager:v1.32.0 # The container image used in the controller manager manifest.
+    image: registry.k8s.io/kube-controller-manager:v1.32.1 # The container image used in the controller manager manifest.
   # Kube-proxy server-specific configuration options
   proxy:
-    image: registry.k8s.io/kube-proxy:v1.32.0 # The container image used in the kube-proxy manifest.
+    image: registry.k8s.io/kube-proxy:v1.32.1 # The container image used in the kube-proxy manifest.
     # # Disable kube-proxy deployment on cluster bootstrap.
     disabled: true
   # Scheduler server specific configuration options.
   scheduler:
-    image: registry.k8s.io/kube-scheduler:v1.32.0 # The container image used in the scheduler manifest.
+    image: registry.k8s.io/kube-scheduler:v1.32.1 # The container image used in the scheduler manifest.
   # Configures cluster member discovery.
   discovery:
     enabled: true # Enable the cluster membership discovery feature.
@@ -584,7 +592,7 @@ cluster:
   # # Core DNS specific configuration options.
   coreDNS:
     image: registry.k8s.io/coredns/coredns:v1.12.0 # The `image` field is an override to the default coredns image.
-
+#    disabled: false
   # # External cloud provider configuration.
   # externalCloudProvider:
   #     enabled: true # Enable external cloud provider.

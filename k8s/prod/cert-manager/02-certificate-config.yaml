@@ -13,5 +13,5 @@ spec:
     group: cert-manager.io
   commonName: kerrlab.app
   dnsNames:
-  - "kerrlab.app"
-  - "*.kerrlab.app"
+    - "kerrlab.app"
+    - "*.kerrlab.app"
