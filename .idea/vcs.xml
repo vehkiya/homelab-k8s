@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/k8s/prod/storage/synology-csi/talos-synology-csi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/k8s/prod/tailscale/tailscale" vcs="Git" />
   </component>
 </project>

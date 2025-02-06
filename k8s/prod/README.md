@@ -109,9 +109,30 @@ helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dash
 # Tailscale
 ## Operator
 https://tailscale.com/kb/1236/kubernetes-operator
+```shell
+    helm upgrade \
+      --install \
+      tailscale-operator \
+      tailscale/tailscale-operator \
+      --namespace=tailscale \
+      --create-namespace \
+      --set-string oauth.clientId="kN6GWhA23g11CNTRL" \
+      --set-string oauth.clientSecret="tskey-client-kN6GWhA23g11CNTRL-HQzzF7oWZjVRrQSYeBEQkVPnZen64ZEuP" \
+      --wait
+```
 
 ## Ingress
 https://tailscale.com/kb/1439/kubernetes-operator-cluster-ingress
 
 ## Dashboard
 https://tailscale.com/kb/1437/kubernetes-operator-api-server-proxy
+
+# ArgoCD
+https://argo-cd.readthedocs.io/en/stable/getting_started/
+
+```shell
+    kubectl create namespace argocd
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+Create ingress-route
