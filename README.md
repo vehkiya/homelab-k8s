@@ -30,7 +30,7 @@
 ```
 2. Install with values
 ```shell
-  helm install -n traefik --create-namespace traefik traefik/traefik -f /home/vehkiya/IdeaProjects/homelab-k8s/k8s/traefik/traefik-config.yaml
+  helm install -n traefik --create-namespace traefik traefik/traefik -f traefik/traefik-config.yaml
 ```
 
 ## Install Cert Manager
