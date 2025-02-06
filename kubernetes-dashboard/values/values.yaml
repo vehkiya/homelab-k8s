@@ -4,7 +4,7 @@ app:
     hosts:
       # Keep 'localhost' host only if you want to access Dashboard using 'kubectl port-forward ...' on:
       # https://localhost:8443
-      - https://infra.kerrlab.app
+      - infra.kerrlab.app
     # - kubernetes.dashboard.domain.com
     ingressClassName: traefik.io/ingress-controller
     # Use only if your ingress controllers support default ingress classes.
