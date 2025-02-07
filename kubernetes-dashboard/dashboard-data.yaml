@@ -13,9 +13,9 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
-  name: vehkiya
-  namespace: kubernetes-dashboard
+  - kind: ServiceAccount
+    name: vehkiya
+    namespace: kubernetes-dashboard
 ---
 apiVersion: v1
 kind: Secret
@@ -25,3 +25,28 @@ metadata:
   annotations:
     kubernetes.io/service-account.name: "vehkiya"
 type: kubernetes.io/service-account-token
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kubernetes-dashboard-route
+  namespace: kubernetes-dashboard # Where your application is deployed
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "infra.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        # Use backendRefs for Gateway API v1beta1
+        - name: kubernetes-dashboard-kong-proxy
+          port: 443
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https

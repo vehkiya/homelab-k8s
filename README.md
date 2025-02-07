@@ -1,17 +1,9 @@
 ## Set-up Talos OS
- 
-## Set up CoreDNS
-```shell
-    helm repo add coredns https://coredns.github.io/helm
-```
-```shell
-    helm --namespace=kube-system install coredns coredns/coredns --values coredns/values.yaml
-```
 
 ## Set-up Cilium CNI
 1. Add repo
 ```shell
-
+    helm repo add cilium https://helm.cilium.io/
 ```
 2. Install
 ```shell
@@ -23,14 +15,14 @@
         --values cilium/values.yaml
 ```
 
-## Instal Traefik
+## Install Traefik
 1. Add repo
 ```shell
-    
+    helm repo add traefik https://traefik.github.io/charts
 ```
 2. Install with values
 ```shell
-  helm install -n traefik --create-namespace traefik traefik/traefik -f traefik/traefik-config.yaml
+    helm upgrade --install -n traefik --create-namespace traefik traefik/traefik -f traefik/traefik-config.yaml
 ```
 
 ## Install Cert Manager
@@ -46,9 +38,6 @@
       --create-namespace \
       --version v1.16.3 \
       --values cert-manager/values.yaml
-#      --set crds.enabled=true \
-#      --set config.enableGatewayAPI=true \
-#      --set dns01RecursiveNameservers=8.8.8.8:53,1.1.1.1:53
 ```
 3. Provision Cloudflare API Token secret
 ```shell
@@ -81,17 +70,16 @@ Install
 ```
 Install StorageClass
 
-# Dashboard
+# Kubernetes Dashboard
 1. Add repo
 ```shell
     helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
 ```
 2. Install 
 ```shell
-helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
-  --create-namespace \
-  --namespace kubernetes-dashboard \
-  --set app.ingress.issuer.scope=cluster
+    helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
+      --create-namespace \
+      --namespace kubernetes-dashboard
 ```
 3. Provision dashboard credentials
 ```shell
@@ -101,6 +89,11 @@ helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dash
 ```shell
   kubectl -n kubernetes-dashboard create token vehkiya
 ```
+Get long-lived token
+```shell
+    kubectl get secret vehkiya -n kubernetes-dashboard -o jsonpath="{.data.token}" | base64 -d
+```
+
 5. FW dashboard
 ```shell
   kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
@@ -126,6 +119,7 @@ https://tailscale.com/kb/1439/kubernetes-operator-cluster-ingress
 
 ## Dashboard
 https://tailscale.com/kb/1437/kubernetes-operator-api-server-proxy
+
 
 # ArgoCD
 https://argo-cd.readthedocs.io/en/stable/getting_started/

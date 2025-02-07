@@ -18,29 +18,24 @@ spec:
         # Use backendRefs for Gateway API v1beta1
         - name: argocd-server
           port: 80
-
-#---
-#apiVersion: traefik.io/v1alpha1
-#kind: IngressRoute
-#metadata:
-#  name: argocd-server
-#  namespace: argocd
-#spec:
-#  entryPoints:
-#    - websecure
-#  routes:
-#    - kind: Rule
-#      match: Host(`argo.kerrlab.app`)
-#      priority: 10
-#      services:
-#        - name: argocd-server
-#          port: 80
-#    - kind: Rule
-#      match: Host(`argo.kerrlab.app`) && Header(`Content-Type`, `application/grpc`)
-#      priority: 11
-#      services:
-#        - name: argocd-server
-#          port: 80
-#          scheme: h2c
-#  tls:
-#    secretName: argo-app-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: argocd-grpc-route
+  namespace: argocd
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "argo.kerrlab.app"
+  rules:
+    - matches:
+      - headers:
+          - type: Exact
+            name: Content-Type
+            value: application/grpc
+      backendRefs:
+        - name: argocd-server
+          port: 80
