@@ -74,9 +74,3 @@ extraObjects:
   spec:
     basicAuth:
       secret: traefik-dashboard-auth-secret
-
-experimental:
-  kubernetesGateway:
-    enabled: true
-  fastProxy:
-    enabled: true

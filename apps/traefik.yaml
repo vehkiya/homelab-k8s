@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+spec:
+  destination:
+    namespace: traefik
+    server: https://10.10.1.101:6443
+  sources:
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      targetRevision: master
+      ref: values
+    - repoURL: https://traefik.github.io/charts
+      targetRevision: 34.3.0
+      chart: traefik
+      helm:
+        valueFiles:
+          - $values/traefik/traefik-config.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
