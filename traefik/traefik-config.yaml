@@ -7,6 +7,7 @@ providers:
   kubernetesGateway:
     enabled: true
     nativeLBByDefault: true
+    experimentalChannel: true
 # Allow the Gateway to expose HTTPRoute from all namespaces
 
 ingressRoute:
@@ -73,3 +74,9 @@ extraObjects:
   spec:
     basicAuth:
       secret: traefik-dashboard-auth-secret
+
+experimental:
+  kubernetesGateway:
+    enabled: true
+  fastProxy:
+    enabled: true
