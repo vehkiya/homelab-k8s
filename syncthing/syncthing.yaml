@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: syncthing-ui
+  namespace: default
+spec:
+  selector:
+    app: syncthing
+  ports:
+    - port: 8384
+      # nodePort: 32022
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: syncthing-listener-tcp
+  namespace: default
+spec:
+  selector:
+    app: syncthing
+  ports:
+    - port: 22000
+      protocol: TCP
+      # nodePort: 32022
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syncthing
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: syncthing
+  template:
+    metadata:
+      labels:
+        app: syncthing
+    spec:
+      containers:
+        - name: syncthing
+          image: lscr.io/linuxserver/syncthing:latest
+          ports:
+            - containerPort: 8384 # Web UI port (adjust if needed)
+              name: ui
+            - containerPort: 22000
+              protocol: TCP
+              name: listen-tcp
+            - containerPort: 22000
+              protocol: UDP
+              name: listen-udp
+            - containerPort: 21027
+              protocol: UDP
+              name: proto-discovery
+          volumeMounts:
+            - name: syncthing-data
+              subPath: config
+              mountPath: /config
+            - name: syncthing-data
+              subPath: qbittorrent
+              mountPath: /data
+      volumes:
+        - name: syncthing-data
+          persistentVolumeClaim:
+            claimName: syncthing-data-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: syncthing-data-pvc
+  namespace: default # or the namespace where your application runs
+spec:
+  accessModes:
+    - ReadWriteOnce # Must match the PV's access modes
+  resources:
+    requests:
+      storage: 10Gi # Must be less than or equal to the PV's capacity
+  storageClassName: synostorage # Use your custom StorageClass
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: syncthing-route
+  namespace: default # Where your application is deployed
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "sync.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        # Use backendRefs for Gateway API v1beta1
+        - name: syncthing-ui
+          port: 8384
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: syncthing-tcp-listener
+  namespace: default
+spec:
+  parentRefs:
+    - name: traefik
+      sectionName: tcp
+      kind: Gateway
+  rules:
+    - backendRefs:
+        - name: syncthing-listener-tcp
+          namespace: default
+          port: 22000

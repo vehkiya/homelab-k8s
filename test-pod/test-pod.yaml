@@ -9,9 +9,22 @@ spec:
     image: busybox:latest
     command: [ 'sh', '-c', 'sleep 3600' ] # Keep the pod running
     volumeMounts:
-    - name: config
-      mountPath: /config
+    - name: test
+      mountPath: /test
   volumes:
-  - name: config
+  - name: test
     persistentVolumeClaim:
-      claimName: arr-config-pvc
+      claimName: test-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-pvc
+  namespace: media # or the namespace where your application runs
+spec:
+  accessModes:
+    - ReadWriteMany # Must match the PV's access modes
+  resources:
+    requests:
+      storage: 1Gi # Must be less than or equal to the PV's capacity
+  storageClassName: synology-iscsi # Use your custom StorageClass
