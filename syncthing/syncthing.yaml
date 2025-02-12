@@ -64,19 +64,6 @@ spec:
           persistentVolumeClaim:
             claimName: syncthing-data-pvc
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: syncthing-data-pvc
-  namespace: default # or the namespace where your application runs
-spec:
-  accessModes:
-    - ReadWriteOnce # Must match the PV's access modes
-  resources:
-    requests:
-      storage: 10Gi # Must be less than or equal to the PV's capacity
-  storageClassName: synostorage # Use your custom StorageClass
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
