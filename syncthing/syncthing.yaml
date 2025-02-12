@@ -57,7 +57,7 @@ spec:
               subPath: config
               mountPath: /config
             - name: syncthing-data
-              subPath: qbittorrent
+              subPath: data
               mountPath: /data
       volumes:
         - name: syncthing-data
