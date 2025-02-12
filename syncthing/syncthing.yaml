@@ -56,9 +56,6 @@ spec:
             - name: syncthing-data
               subPath: config
               mountPath: /config
-            - name: syncthing-data
-              subPath: data
-              mountPath: /data
       volumes:
         - name: syncthing-data
           persistentVolumeClaim:
