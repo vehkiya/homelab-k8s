@@ -58,7 +58,7 @@ service:
     pool: cilium-traefik-pool
   annotations:
     tailscale.com/expose: "true"
-    tailscale.com/funnel: "true"
+    tailscale.com/funnel: "false"
 extraObjects:
 - apiVersion: v1
   kind: Secret
