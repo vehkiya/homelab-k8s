@@ -14,20 +14,6 @@ spec:
       labels:
         app: bazarr
     spec:
-      initContainers:
-        - name: check-pvc
-          image: busybox
-          command:
-            - sh
-            - "-c"
-            - |
-              if! kubectl get pvc bazarr-config-pvc -o jsonpath='{.status.phase}' | grep Bound; then
-                echo "PVC 'bazarr-config-pvc' not bound. Exiting."
-                exit 1
-              fi
-          volumeMounts:
-            - name: bazarr-config-pvc
-              mountPath: /data
       containers:
       - name: bazarr
         image: lscr.io/linuxserver/bazarr:latest
