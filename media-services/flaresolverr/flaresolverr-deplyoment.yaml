@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaresolverr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaresolverr
+  template:
+    metadata:
+      labels:
+        app: flaresolverr
+    spec:
+      containers:
+      - name: flaresolverr
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        env:
+        - name: PGID
+          value: "100"
+        - name: PUID
+          value: "1026"
+        - name: TZ
+          value: "Europe/Chisinau"
+        resources:
+          limits:
+            cpu: "1"
+            memory: "512Mi"
