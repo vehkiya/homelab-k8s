@@ -28,7 +28,6 @@ spec:
         - name: downloads-mount
           mountPath: /downloads # Path inside the container
         - name: config
-          subPath: qbittorrent
           mountPath: /config
       volumes:
       - name: downloads-mount

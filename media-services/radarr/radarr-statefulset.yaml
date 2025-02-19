@@ -34,7 +34,6 @@ spec:
         - name: video-anime-mount
           mountPath: /anime
         - name: config
-          subPath: radarr
           mountPath: /config
       volumes:
       - name: downloads-mount
