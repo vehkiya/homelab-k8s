@@ -1,0 +1,14 @@
+# Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prowlarr-config-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi # Adjust as needed (1Gi is usually sufficient for configs)
+  storageClassName: synology-iscsi-persistent # Use your custom StorageClass
