@@ -9,7 +9,7 @@ spec:
     server: https://10.10.1.101:6443
   sources:
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: media/flaresolverr
+      path: media-services/flaresolverr
       targetRevision: master
   project: default
   syncPolicy:
