@@ -32,7 +32,6 @@ spec:
         - name: video-anime-mount
           mountPath: /anime
         - name: config
-          subPath: bazarr
           mountPath: /config
       volumes:
       - name: video-movies-mount
