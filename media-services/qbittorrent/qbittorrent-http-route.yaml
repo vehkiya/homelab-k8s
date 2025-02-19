@@ -1,0 +1,35 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qbittorrent-route
+  namespace: media # Where your application is deployed
+spec:
+  parentRefs:
+  - name: traefik-gateway
+    namespace: traefik
+  hostnames:
+  - "download.kerrlab.app"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # Use backendRefs for Gateway API v1beta1
+    - name: qbittorrent
+      port: 8080
+
+# --- 
+# ============== WIP ==============
+# apiVersion: traefik.io/v1alpha1
+# kind: IngressRouteUDP
+# metadata:
+#   name: torrenting-route
+#   namespace: media
+# spec:
+#   entryPoints:
+#   - "download.kerrlab.app"
+#   routes:
+#   - services:
+#     - name: qbittorrent
+#       port: 6883
