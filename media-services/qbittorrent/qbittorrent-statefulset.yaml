@@ -24,6 +24,8 @@ spec:
           value: "1026"
         - name: TZ
           value: "Europe/Chisinau"
+        - name: DOCKER_MODS
+          value: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
         volumeMounts:
         - name: downloads-mount
           mountPath: /downloads # Path inside the container
