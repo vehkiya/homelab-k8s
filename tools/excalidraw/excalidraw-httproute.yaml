@@ -17,4 +17,4 @@ spec:
       backendRefs:
         # Use backendRefs for Gateway API v1beta1
         - name: excalidraw-ui
-          port: 5000
+          port: 80
