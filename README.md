@@ -15,6 +15,8 @@
         --values cilium/values.yaml
 ```
 
+**_In case of DNS failures, make sure you're using the correct CoreDNS ConfigMap_**
+
 ## Install Traefik
 1. Add repo
 ```shell

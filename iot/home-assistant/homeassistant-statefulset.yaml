@@ -18,7 +18,7 @@ spec:
         - name: homeassistant
           image: ghcr.io/home-assistant/home-assistant:stable
           volumeMounts:
-            - name: config-volume
+            - name: hass-config-mount
               mountPath: /config
           securityContext:
             privileged: true
@@ -32,7 +32,7 @@ spec:
         - image: ghcr.io/home-assistant-libs/python-matter-server:stable
           name: matter-server
           volumeMounts:
-            - name: config-volume
+            - name: hass-config-mount
               mountPath: /config
       # - image: openthread/otbr:latest
       #   name: open-thread-border-route
