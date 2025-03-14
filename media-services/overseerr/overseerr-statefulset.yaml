@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: overseerr
-        image: sctx/overseerr:latest
+        image: sctx/overseerr:v1.33.2
         env:
         - name: PGID
           value: "100"

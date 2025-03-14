@@ -16,3 +16,4 @@ spec:
       containers:
         - name: excalidraw
           image: excalidraw/excalidraw:latest
+          imagePullPolicy: "Always"

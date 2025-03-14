@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: homeassistant
-          image: ghcr.io/home-assistant/home-assistant:stable
+          image: ghcr.io/home-assistant/home-assistant:2025.3.3
           volumeMounts:
             - name: hass-config-mount
               mountPath: /config
@@ -29,7 +29,7 @@ spec:
                 - NET_RAW
                 - SYS_ADMIN
         # Bundle matter-server with HomeAssistant
-        - image: ghcr.io/home-assistant-libs/python-matter-server:stable
+        - image: ghcr.io/home-assistant-libs/python-matter-server:7.0.1
           name: matter-server
           volumeMounts:
             - name: hass-config-mount
