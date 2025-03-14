@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: overseerr
-        image: sctx/overseerr:v1.33.2
+        image: sctx/overseerr:latest
+        imagePullPolicy: "Always"    
         env:
         - name: PGID
           value: "100"
