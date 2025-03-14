@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  serviceName: home-assistant
+  replicas: 1 # You can adjust the number of replicas here
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant # label pods with this label
+    spec:
+      containers:
+        - name: homeassistant
+          image: ghcr.io/home-assistant/home-assistant:stable
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                # Use 'add' to specify capabilities to add
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_ADMIN
+        # Bundle matter-server with HomeAssistant
+        - image: ghcr.io/home-assistant-libs/python-matter-server:stable
+          name: matter-server
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+      # - image: openthread/otbr:latest
+      #   name: open-thread-border-route
+      volumes:
+        - name: hass-config-mount
+          persistentVolumeClaim:
+            claimName: hass-config-pvc
