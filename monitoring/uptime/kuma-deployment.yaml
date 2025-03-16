@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uptime-kuma
+  namespace: notifications
 spec:
   replicas: 1
   selector:
@@ -17,7 +18,6 @@ spec:
           image: ghcr.io/louislam/uptime-kuma:2.0.0-beta.1
           volumeMounts:
             - name: config
-              subPath: uptime-kuma
               mountPath: /app/data
       volumes:
         - name: config

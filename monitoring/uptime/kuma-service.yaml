@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kuma-ui
+  namespace: notifications
 spec:
   selector:
     app: uptime-kuma
