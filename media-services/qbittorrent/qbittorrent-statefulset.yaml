@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: qbittorrent
-        image: lscr.io/linuxserver/qbittorrent:5.0.4-r0-ls38
+        image: lscr.io/linuxserver/qbittorrent:5.0.4-r0-ls385
         env:
         - name: PGID
           value: "100"
