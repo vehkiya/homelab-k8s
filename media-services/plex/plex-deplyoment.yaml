@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+        - name: plex
+          image: plexinc/pms-docker:latest
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
+            - name: ADVERTISE_IP
+              value: https://plex.kerrlab.app
+            - name: PLEX_UID
+              value: "1026"
+            - name: PLEX_GID
+              value: "100"
+          volumeMounts:
+            - name: video-series-mount
+              mountPath: /tv # Path inside the container
+            - name: video-movies-mount
+              mountPath: /movies
+            - name: video-anime-mount
+              mountPath: /anime
+            - name: config
+              mountPath: /config
+            - name: transcode
+              mountPath: /transcode
+          resources:
+            limits:
+              gpu.intel.com/i915: "1"
+      volumes:
+        - name: video-movies-mount
+          persistentVolumeClaim:
+            claimName: video-movies-pvc
+        - name: video-series-mount
+          persistentVolumeClaim:
+            claimName: video-series-pvc
+        - name: video-anime-mount
+          persistentVolumeClaim:
+            claimName: video-anime-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: plex-config-pvc
+        - name: transcode
+          persistentVolumeClaim:
+            claimName: plex-transcode-pvc

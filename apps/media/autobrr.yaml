@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: autobrr
+  namespace: argocd
+spec:
+  destination:
+    namespace: media
+    server: https://10.10.1.101:6443
+  sources:
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: media-services/autobrr
+      targetRevision: master
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

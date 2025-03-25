@@ -1,0 +1,29 @@
+# Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-config-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 4Gi # Adjust as needed (1Gi is usually sufficient for configs)
+  storageClassName: synology-iscsi-persistent # Use your custom StorageClass
+---
+# Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-transcode-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 30Gi # Adjust as needed (1Gi is usually sufficient for configs)
+  storageClassName: synology-iscsi # Use your custom StorageClass

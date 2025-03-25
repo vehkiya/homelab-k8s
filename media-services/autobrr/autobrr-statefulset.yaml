@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: autobrr
+  namespace: media
+spec:
+  serviceName: autobrr
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autobrr
+  template:
+    metadata:
+      labels:
+        app: autobrr
+    spec:
+      containers:
+      - name: autobrr
+        image: ghcr.io/autobrr/autobrr:v1.60
+        env:
+        - name: TZ
+          value: "Europe/Chisinau"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: autobrr-config-pvc

@@ -132,3 +132,33 @@ https://argo-cd.readthedocs.io/en/stable/getting_started/
 ```
 
 Create ingress-route
+
+
+# Plex
+
+## Install Intel GPU Driver
+_Requires Talos I915 driver_
+_Requires inteldeviceplugins-system namespace to run as root_
+https://github.com/intel/intel-device-plugins-for-kubernetes/blob/main/INSTALL.md
+```shell
+    helm repo add jetstack https://charts.jetstack.io # for cert-manager
+    helm repo add nfd https://kubernetes-sigs.github.io/node-feature-discovery/charts # for NFD
+    helm repo add intel https://intel.github.io/helm-charts/ # for device-plugin-operator and plugins
+    helm repo update
+```
+
+```shell
+    helm install nfd nfd/node-feature-discovery \
+      --namespace node-feature-discovery --create-namespace --version 0.16.4
+```
+
+```shell
+    helm install dp-operator intel/intel-device-plugins-operator --namespace inteldeviceplugins-system --create-namespace
+```
+
+```shell
+    helm install gpu intel/intel-device-plugins-gpu --namespace inteldeviceplugins-system --create-namespace \
+  --set nodeFeatureRule=true
+```
+
+Label: `intel.feature.node.kubernetes.io/gpu: true`
