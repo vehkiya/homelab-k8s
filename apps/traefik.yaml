@@ -12,7 +12,7 @@ spec:
       targetRevision: master
       ref: values
     - repoURL: https://traefik.github.io/charts
-      targetRevision: 34.4.1
+      targetRevision: 34.5.0
       chart: traefik
       helm:
         valueFiles:
