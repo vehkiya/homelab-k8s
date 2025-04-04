@@ -28,7 +28,7 @@ metadata:
 spec:
   # Attach this rule to the 'torrent' entrypoint defined in your Helm values
   entryPoints:
-    - torrent
+    - torrent-udp
   routes:
     - services:
         - name: qbittorrent
@@ -41,7 +41,7 @@ metadata:
   namespace: media
 spec:
   entryPoints:
-    - torrent
+    - torrent-tcp
   routes:
     - match: HostSNI(`*`) # Matches any SNI host - standard for TCP when not specific
       services:

@@ -9,7 +9,7 @@ spec:
   ports:
   - name: web-ui
     port: 8080
-  - name: torrenting-port
+  - name: torrenting-port-tcp
     protocol: TCP
     port: 6883
   - name: torrenting-port-udp
