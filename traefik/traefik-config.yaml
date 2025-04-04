@@ -1,3 +1,6 @@
+additionalArguments:
+  - "--entrypoints.postgres.address=:5432/tcp"
+
 providers:
   # Disable the Ingress provider (optional)
   # We do not want to use Ingress objects anymore!
@@ -32,6 +35,12 @@ ports:
       trustedIPs:
     proxyProtocol:
       trustedIPs:
+  postgres:
+    port: 5432
+    protocol: TCP
+    expose: 
+      default: true
+    exposedPort: 5432
 gateway:
   enabled: true
   name: traefik-gateway
