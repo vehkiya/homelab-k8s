@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: plex
   namespace: media
 spec:
+  serviceName: plex
   replicas: 1
   selector:
     matchLabels:
@@ -13,6 +14,7 @@ spec:
       labels:
         app: plex
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: plex
           image: plexinc/pms-docker:1.41.5.9522-a96edc606
@@ -34,8 +36,6 @@ spec:
               mountPath: /anime
             - name: config
               mountPath: /config
-            - name: transcode
-              mountPath: /transcode
           resources:
             limits:
               gpu.intel.com/i915: "1"
@@ -52,6 +52,3 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: plex-config-pvc
-        - name: transcode
-          persistentVolumeClaim:
-            claimName: plex-transcode-pvc
