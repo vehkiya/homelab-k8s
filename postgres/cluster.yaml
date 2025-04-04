@@ -1,0 +1,16 @@
+# postgres-cluster.yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-db
+  namespace: default
+spec:
+  instances: 3
+
+  storage:
+    storageClass: synology-iscsi-persistent
+    size: 20Gi 
+
+  # Enable Pod Monitor for Prometheus (Optional)
+  monitoring:
+    enablePodMonitor: true

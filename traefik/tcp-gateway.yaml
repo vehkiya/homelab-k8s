@@ -1,0 +1,23 @@
+# gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal-tcp-gateway
+  namespace: traefik
+spec:
+  gatewayClassName: traefik # e.g., istio, cilium, envoy-gateway, etc.
+  listeners:
+    - name: postgres-tcp
+      protocol: TCP # Specify TCP protocol
+      port: 5432     # The standard PostgreSQL port
+      allowedRoutes:
+        namespaces:
+          from: Selector # Allow routes from specific namespaces
+          selector:
+            matchLabels:
+              # Example: Only allow routes from namespaces labeled 'expose-via-gateway=true'
+              # Or use 'kubernetes.io/metadata.name: database' to allow only from 'database' ns
+              shared-gateway-access: "true"
+        kinds:
+          - group: gateway.networking.k8s.io
+            kind: TCPRoute # This listener specifically allows TCPRoutes
