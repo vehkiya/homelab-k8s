@@ -1,0 +1,27 @@
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: synology-iscsi-persistent
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi # Adjust size as needed
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: synology-iscsi-persistent
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi # Adjust
+grafana:
+  persistence:
+    enabled: false
+    storageClassName: synology-iscsi-persistent
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi # Adjust
+  adminPassword: Grafana-Test2

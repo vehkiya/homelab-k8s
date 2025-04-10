@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-route
+  namespace: monitoring # Namespace where Grafana service runs
+spec:
+  parentRefs:
+    - name: traefik-gateway # Your Gateway resource name
+      namespace: traefik # Namespace of your Gateway resource
+  hostnames:
+    - "grafana.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: prometheus-grafana # Verify service name from Helm chart output
+          port: 80 # Verify Grafana service port
+          # Optional weight if needed

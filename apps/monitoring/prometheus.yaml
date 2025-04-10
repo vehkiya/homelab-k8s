@@ -1,27 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubernetes-dashboard
+  name: prometheus
   namespace: argocd
 spec:
   destination:
-    namespace: kubernetes-dashboard
+    namespace: prometheus
     server: https://10.10.1.101:6443
   sources:
-    - repoURL: https://kubernetes.github.io/dashboard/
-      targetRevision: 7.11.1
-      chart: kubernetes-dashboard
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: 70.4.2
+      chart: prometheus-community/kube-prometheus-stack
       helm:
         valueFiles:
-          - $values/kubernetes-dashboard/values/values.yaml
+          - $values/monitoring/values/values.yaml
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: kubernetes-dashboard
+      path: monitoring/prometheus
       targetRevision: master
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
       targetRevision: master
       ref: values
   project: default
-  syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
+#  syncPolicy:
+#    automated:
+#      prune: false
+#      selfHeal: false

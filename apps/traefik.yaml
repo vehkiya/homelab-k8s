@@ -8,15 +8,15 @@ spec:
     namespace: traefik
     server: https://10.10.1.101:6443
   sources:
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      targetRevision: master
-      ref: values
     - repoURL: https://traefik.github.io/charts
       targetRevision: 35.0.0
       chart: traefik
       helm:
         valueFiles:
           - $values/traefik/traefik-config.yaml
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      targetRevision: master
+      ref: values
   project: default
   syncPolicy:
     automated:
