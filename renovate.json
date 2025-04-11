@@ -2,5 +2,16 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "kustomize": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "plexinc/pms-docker"
+      ],
+      "versioning": "loose"
+    }
+  ]
 }
