@@ -24,3 +24,4 @@ data:
       - CiliumIdentity
       clusters:
       - '*' # Apply exclusion to all clusters managed by this Argo CD instance
+  kustomize.buildOptions: --enable-helm
