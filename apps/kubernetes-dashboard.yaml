@@ -8,20 +8,11 @@ spec:
     namespace: kubernetes-dashboard
     server: https://10.10.1.101:6443
   sources:
-    - repoURL: https://kubernetes.github.io/dashboard/
-      targetRevision: 7.11.1
-      chart: kubernetes-dashboard
-      helm:
-        valueFiles:
-          - $values/kubernetes-dashboard/values/values.yaml
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
       path: kubernetes-dashboard
       targetRevision: master
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      targetRevision: master
-      ref: values
   project: default
   syncPolicy:
     automated:
       prune: false
-      selfHeal: false
+      selfHeal: true

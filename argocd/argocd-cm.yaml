@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # Default name for the Argo CD ConfigMap
+  name: argocd-cm
+  # Default namespace for Argo CD (adjust if you installed it elsewhere)
+  namespace: argocd
+  labels:
+    # Standard labels for identifying Argo CD components
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  # Specifies the label key used by Argo CD Application controller
+  # to identify the Application resource (optional, default is shown)
+  application.instanceLabelKey: argocd.argoproj.io/instance
+
+  # Configuration for resource exclusions
+  # This prevents Argo CD from managing certain resource kinds/groups.
+  resource.exclusions: |
+    # Exclude CiliumIdentity resources managed by Cilium CNI
+    - apiGroups:
+      - cilium.io
+      kinds:
+      - CiliumIdentity
+      clusters:
+      - '*' # Apply exclusion to all clusters managed by this Argo CD instance
