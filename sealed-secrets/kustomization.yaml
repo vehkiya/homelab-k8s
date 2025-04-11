@@ -1,0 +1,21 @@
+# base/sealed-secrets/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Specify the namespace where Sealed Secrets will be installed.
+# The default in controller.yaml is usually kube-system.
+# This ensures Kustomize manages resources within that namespace.
+namespace: kube-system
+
+resources:
+  - controller.yaml
+  
+images:
+  - name: docker.io/bitnami/sealed-secrets-controller
+    newTag: 0.29.0
+
+# Optional: Add common labels or annotations if desired
+# commonLabels:
+#   app.kubernetes.io/managed-by: kustomize
+# commonAnnotations:
+#   note: "Sealed Secrets Controller deployment"
