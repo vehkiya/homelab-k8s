@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: home-assistant
+  namespace: argocd
+spec:
+  destination:
+    namespace: home-assistant
+    server: https://10.10.1.101:6443
+  sources:
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: iot/home-assistant
+      targetRevision: master
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
