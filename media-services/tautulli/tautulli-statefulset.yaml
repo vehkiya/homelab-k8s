@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tautulli
-        image: ghcr.io/tautulli/tautulli:v2.15.1
+        image: ghcr.io/tautulli/tautulli:v2.15.2
         env:
         - name: PGID
           value: "100"
