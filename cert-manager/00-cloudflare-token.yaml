@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: cloudflare-api-token-secret
-  namespace: cert-manager
-type: Opaque
-stringData:
-  api-token: 0EUkrGIaj47V4nTDg2S9FbV9UpT00iexpHLnw1oX
