@@ -5,6 +5,7 @@ metadata:
 spec:
   blocks:
   - cidr: "10.10.1.225/27"
+  - cidr: "fd00:10:100::/112"  
   serviceSelector:
     matchExpressions:
     - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }
@@ -16,6 +17,7 @@ metadata:
 spec:
   blocks:
   - cidr: "10.10.1.221/32"
+  - cidr: "fd00:10:244::221/128"
   serviceSelector:
     matchLabels:
       pool: cilium-traefik-pool
@@ -30,12 +32,17 @@ spec:
       localASN: 65512
       neighbors:
         - connectRetryTimeSeconds: 120
-          eBGPMultihopTTL: 1
+          eBGPMultihopTTL: 2
           holdTimeSeconds: 90
           keepAliveTimeSeconds: 30
           peerASN: 65000
           peerAddress: 192.168.1.1/32
           peerPort: 179
+          families:
+            - afi: ipv4
+              safi: unicast
+            - afi: ipv6
+              safi: unicast
       serviceSelector:
         matchExpressions:
           - { key: somekey, operator: NotIn, values: [ 'never-used-value' ] }

@@ -83,18 +83,11 @@ service:
     tailscale.com/expose: "true"
     tailscale.com/funnel: "false"
 extraObjects:
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    name: traefik-dashboard-auth-secret
-  type: kubernetes.io/basic-auth
-  stringData:
-    username: vehkiya
-    password: Handstand0-Scribble7-Evasive5-Pond1-Crayon1
-- apiVersion: traefik.io/v1alpha1
-  kind: Middleware
-  metadata:
-    name: traefik-dashboard-auth
-  spec:
-    basicAuth:
-      secret: traefik-dashboard-auth-secret
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: traefik-dashboard-auth
+      namespace: traefik
+    spec:
+      basicAuth:
+        secret: traefik-dashboard-auth-secret

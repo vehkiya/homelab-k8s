@@ -1,15 +1,17 @@
 cluster:
   name: homecluster
 
-kubeProxyReplacement: true
 ipv4:
   enabled: true
 
 ipv6:
-  enabled: false
+  enabled: true
 
-k8sServiceHost: 10.10.1.101
-k8sServicePort: 6443
+# -- Kubernetes service host endpoint for Cilium agent to connect to
+k8sServiceHost: "127.0.0.1"
+# -- Kubernetes service port endpoint for Cilium agent to connect to
+k8sServicePort: "7445"
+kubeProxyReplacement: true
 
 ipam:
   mode: cluster-pool
@@ -17,9 +19,9 @@ ipam:
     clusterPoolIPv4MaskSize: 24
     clusterPoolIPv4PodCIDRList:
       - 10.244.0.0/16
-  # clusterPoolIPv6MaskSize: 112
-#    clusterPoolIPv6PodCIDRList:
-#      - fd00:0:0:b::/64
+    clusterPoolIPv6MaskSize: 120
+    clusterPoolIPv6PodCIDRList:
+      - fd00:16:244::/112
 
 k8s:
   requireIPv4PodCIDR: true
@@ -44,7 +46,7 @@ ipMasqAgent:
       - 10.244.0.0/16 # Pods CIDR
 
 enableIPv4Masquerade: true
-enableIPv6Masquerade: false
+enableIPv6Masquerade: true
 
 externalIPs:
   enabled: true
@@ -93,9 +95,13 @@ cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-
-
+  
 gatewayAPI:
   enabled: true
   enableAlpn: true
   enableAppProtocol: true
+
+prometheus:
+  metricsService: false
+  enabled: true
+  port: 9962

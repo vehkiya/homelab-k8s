@@ -11,6 +11,7 @@ helmCharts:
     valuesFile: "values/values.yaml"
 
 resources:
+  - kubernetes-dashboard-namespace.yaml
   - dashboard-certificate.yaml
   - dashboard-data.yaml
   

@@ -1,0 +1,16 @@
+# kustomization.yaml (relevant parts)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: cilium
+    repo: https://helm.cilium.io/
+    version: 1.17.2
+    releaseName: cilium
+    namespace: kube-system
+    valuesFile: "values/values.yaml"
+
+resources:
+  - bgp.yaml
+  - coredns-configmap.yaml
+  - network-policy.yaml
