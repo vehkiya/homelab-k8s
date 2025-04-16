@@ -3,6 +3,7 @@
   "kustomize": {
     "enabled": true
   },
+  "commitMessagePrefix": ":arrow_up:",
   "packageRules": [
     {
       "matchDatasources": [
@@ -12,6 +13,18 @@
         "plexinc/pms-docker"
       ],
       "versioning": "loose"
+    },
+    {
+      "packagePatterns": [
+        "^ghcr.io\\/hotio\\/"
+      ],
+      "versionScheme": "regex:^(?<compatibility>.*(\\d+\\.)?)(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
+    },
+    {
+      "packagePatterns": [
+        "^lscr.io\\/linuxserver\\/"
+      ],
+      "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<revision>\\d+)$"
     }
   ]
 }
