@@ -6,7 +6,7 @@ metadata:
 spec:
   destination:
     namespace: traefik
-    server: https://10.10.1.101:6443
+    server: https://kube.kerrlab.app:6443
   sources:
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
       path: traefik
