@@ -1,0 +1,14 @@
+# kustomize/base/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# List of resources to include
+resources:
+  - overseerr-deployment.yaml
+  - overseerr-service.yaml
+  - overseerr-http-route.yaml
+
+# Image tag parametrization (for Renovate)
+images:
+  - name: sctx/overseerr
+    newTag: 1.34.0

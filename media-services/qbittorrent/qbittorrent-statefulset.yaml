@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: qbittorrent
-        image: lscr.io/linuxserver/qbittorrent:5.0.4-r0-ls385
+        image: ghcr.io/hotio/qbittorrent:release-5.0.5
         env:
         - name: PGID
           value: "100"
@@ -24,8 +24,6 @@ spec:
           value: "1026"
         - name: TZ
           value: "Europe/Chisinau"
-        - name: DOCKER_MODS
-          value: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
         volumeMounts:
         - name: downloads-mount
           mountPath: /downloads # Path inside the container

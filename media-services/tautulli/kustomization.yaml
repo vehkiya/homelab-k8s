@@ -1,0 +1,14 @@
+# kustomize/base/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# List of resources to include
+resources:
+  - tautulli-deployment.yaml
+  - tautulli-service.yaml
+  - tautulli-http-route.yaml
+
+# Image tag parametrization (for Renovate)
+images:
+  - name: ghcr.io/tautulli/tautulli
+    newTag: v2.15.2

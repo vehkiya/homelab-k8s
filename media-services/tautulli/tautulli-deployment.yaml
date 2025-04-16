@@ -1,22 +1,21 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: overseerr
+  name: tautulli
   namespace: media
 spec:
-  serviceName: overseerr
   replicas: 1
   selector:
     matchLabels:
-      app: overseerr
+      app: tautulli
   template:
     metadata:
       labels:
-        app: overseerr
+        app: tautulli
     spec:
       containers:
-      - name: overseerr
-        image: sctx/overseerr:1.34.0 
+      - name: tautulli
+        image: ghcr.io/tautulli/tautulli:v2.15.2
         env:
         - name: PGID
           value: "100"
@@ -26,8 +25,8 @@ spec:
           value: "Europe/Chisinau"
         volumeMounts:
         - name: config
-          mountPath: /app/config
+          mountPath: /config
       volumes:
       - name: config
         persistentVolumeClaim:
-          claimName: overseerr-config-pvc
+          claimName: tautulli-config-pvc

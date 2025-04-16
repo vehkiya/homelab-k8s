@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: radarr
-        image: lscr.io/linuxserver/radarr:5.21.1.9799-ls266
+        image: ghcr.io/hotio/radarr:release-5.21.1.9799
         env:
         - name: PGID
           value: "100"

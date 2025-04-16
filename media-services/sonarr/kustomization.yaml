@@ -1,0 +1,14 @@
+# kustomize/base/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# List of resources to include
+resources:
+  - sonarr-statefulset.yaml
+  - sonarr-service.yaml
+  - sonarr-http-route.yaml
+
+# Image tag parametrization (for Renovate)
+images:
+  - name: ghcr.io/hotio/sonarr
+    newTag: release-4.0.14.2939

@@ -1,27 +1,22 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: tautulli
+  name: autobrr
   namespace: media
 spec:
-  serviceName: tautulli
   replicas: 1
   selector:
     matchLabels:
-      app: tautulli
+      app: autobrr
   template:
     metadata:
       labels:
-        app: tautulli
+        app: autobrr
     spec:
       containers:
-      - name: tautulli
-        image: ghcr.io/tautulli/tautulli:v2.15.2
+      - name: autobrr
+        image: ghcr.io/autobrr/autobrr:v1.61
         env:
-        - name: PGID
-          value: "100"
-        - name: PUID
-          value: "1026"
         - name: TZ
           value: "Europe/Chisinau"
         volumeMounts:
@@ -30,4 +25,4 @@ spec:
       volumes:
       - name: config
         persistentVolumeClaim:
-          claimName: tautulli-config-pvc
+          claimName: autobrr-config-pvc

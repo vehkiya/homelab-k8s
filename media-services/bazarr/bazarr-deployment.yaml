@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+    spec:
+      containers:
+        - name: bazarr
+          image: ghcr.io/hotio/bazarr:release-1.5.1
+          env:
+            - name: PGID
+              value: "100"
+            - name: PUID
+              value: "1026"
+            - name: TZ
+              value: "Europe/Chisinau"
+          volumeMounts:
+            - name: video-series-mount
+              mountPath: /tv # Path inside the container
+            - name: video-movies-mount
+              mountPath: /movies
+            - name: video-anime-mount
+              mountPath: /anime
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: video-movies-mount
+          persistentVolumeClaim:
+            claimName: video-movies-pvc
+        - name: video-series-mount
+          persistentVolumeClaim:
+            claimName: video-series-pvc
+        - name: video-anime-mount
+          persistentVolumeClaim:
+            claimName: video-anime-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: bazarr-config-pvc
