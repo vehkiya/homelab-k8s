@@ -1,11 +1,11 @@
+# kustomize-pv/overlays/uptime-kuma/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 labels:
   - pairs:
-      app: radarr
-      
-      
+      app: uptime-kuma
+
 # Inherit from the base configuration
 resources:
   - ../../../base/storage
@@ -18,13 +18,13 @@ patches:
       # --- Start of PV JSON Patch ---
       - op: replace
         path: /metadata/name
-        value: radarr-config-pv
+        value: uptime-kuma-config-pv
       - op: replace
         path: /spec/capacity/storage
-        value: 1Gi
+        value: 5Gi
       - op: replace
         path: /spec/csi/volumeHandle
-        value: 99bc5532-6fc7-419a-b1dc-ebdebbc393ba
+        value: 885b4724-832c-4e33-8938-a5dffd920305
       # --- End of PV JSON Patch ---
 
   - target:
@@ -34,15 +34,15 @@ patches:
       # --- Start of PVC JSON Patch ---
       - op: replace
         path: /metadata/name
-        value: radarr-config-pvc
+        value: uptime-kuma-config-pvc
       - op: replace
         path: /metadata/namespace
-        value: media
+        value: notifications
       - op: replace
         path: /spec/resources/requests/storage
-        value: 1Gi
+        value: 5Gi
       - op: replace
         path: /spec/volumeName
-        value: radarr-config-pv # Match the final patched PV name
+        value: uptime-kuma-config-pv # Match the final patched PV name
       # --- End of PVC JSON Patch ---
       

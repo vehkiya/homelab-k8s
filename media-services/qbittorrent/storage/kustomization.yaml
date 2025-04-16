@@ -8,7 +8,7 @@ labels:
       
 # Inherit from the base configuration
 resources:
-  - ../../base/storage
+  - ../../../base/storage
 
 patches:
   - target:
