@@ -9,7 +9,12 @@
         "docker"
       ],
       "matchPackageNames": [
-        "plexinc/pms-docker"
+        "plexinc/pms-docker",
+        "lscr.io/linuxserver/bazarr",
+        "lscr.io/linuxserver/radarr",
+        "lscr.io/linuxserver/sonarr",
+        "lscr.io/linuxserver/prowlarr",
+        "lscr.io/linuxserver/qbittorrent"
       ],
       "versioning": "loose"
     }
