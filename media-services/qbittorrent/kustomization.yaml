@@ -10,5 +10,5 @@ resources:
 
 # Image tag parametrization (for Renovate)
 images:
-  - name: ghcr.io/hotio/qbittorrent
-    newTag: release-5.0.5
+  - name: lscr.io/linuxserver/qbittorrent
+    newTag: 5.0.4-r0-ls389

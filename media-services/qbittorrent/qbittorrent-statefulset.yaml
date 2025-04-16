@@ -15,24 +15,26 @@ spec:
         app: qbittorrent
     spec:
       containers:
-      - name: qbittorrent
-        image: ghcr.io/hotio/qbittorrent:release-5.0.5
-        env:
-        - name: PGID
-          value: "100"
-        - name: PUID
-          value: "1026"
-        - name: TZ
-          value: "Europe/Chisinau"
-        volumeMounts:
-        - name: downloads-mount
-          mountPath: /downloads # Path inside the container
-        - name: config
-          mountPath: /config
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:5.0.4-r0-ls389
+          env:
+            - name: PGID
+              value: "100"
+            - name: PUID
+              value: "1026"
+            - name: TZ
+              value: "Europe/Chisinau"
+            - name: DOCKER_MODS
+              value: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+          volumeMounts:
+            - name: downloads-mount
+              mountPath: /downloads # Path inside the container
+            - name: config
+              mountPath: /config
       volumes:
-      - name: downloads-mount
-        persistentVolumeClaim:
-          claimName: downloads-pvc
-      - name: config
-        persistentVolumeClaim:
-          claimName: qbittorrent-config-pvc
+        - name: downloads-mount
+          persistentVolumeClaim:
+            claimName: downloads-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: qbittorrent-config-pvc
