@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tailscale
+  namespace: argocd
+spec:
+  destination:
+    namespace: tailscale
+    server: https://kube.kerrlab.app:6443
+  sources:
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: tailscale
+      targetRevision: master
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
