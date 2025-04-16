@@ -4,6 +4,6 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - homeassistant-statefulset.yaml
   - homeassistant-service.yaml
   - homeassistant-http-route.yaml
-  - homeassistant-statefulset.yaml

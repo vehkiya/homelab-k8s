@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app: home-assistant
+
+# Inherit from the base configuration
+resources:
+  - ../../../base/storage
+
+patches:
+  - target:
+      kind: PersistentVolume
+      name: placeholder-pv # Target the base PV by name
+    patch: |-
+      # --- Start of PV JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: home-assistant-config-pv
+      - op: replace
+        path: /spec/capacity/storage
+        value: 4Gi
+      - op: replace
+        path: /spec/csi/volumeHandle
+        value: dac04dcd-4e9c-4df0-8931-b242fe2de933
+      # --- End of PV JSON Patch ---
+
+  - target:
+      kind: PersistentVolumeClaim
+      name: placeholder-pvc # Target the base PVC by name
+    patch: |-
+      # --- Start of PVC JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: home-assistant-config-pvc
+      - op: replace
+        path: /metadata/namespace
+        value: home-assistant
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 4Gi
+      - op: replace
+        path: /spec/volumeName
+        value: home-assistant-config-pv # Match the final patched PV name
+      # --- End of PVC JSON Patch ---
+      

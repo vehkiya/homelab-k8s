@@ -39,4 +39,4 @@ spec:
       volumes:
         - name: hass-config-mount
           persistentVolumeClaim:
-            claimName: hass-config-pvc
+            claimName: home-assistant-config-pvc
