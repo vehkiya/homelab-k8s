@@ -5,8 +5,8 @@ kind: Kustomization
 # List of resources to include
 resources:
   - plex-deployment.yaml # Make sure filename matches exactly
-  - plex-http-route.yaml
   - plex-service.yaml
+  - plex-http-route.yaml
 
 # Image tag parametrization (for Renovate)
 images:

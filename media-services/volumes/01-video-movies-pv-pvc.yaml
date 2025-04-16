@@ -2,6 +2,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: video-movies-pv
+  labels:
+    pv-name: video-movies-pv
 spec:
   capacity:
     storage: 15Ti # Adjust the size as needed
@@ -13,7 +15,7 @@ spec:
   nfs:
     server: 10.10.1.218 # Your NFS server IP
     path: /volume1/video/Movies # The exported path on the NFS server
-  storageClassName: managed-nfs-storage
+  storageClassName: synostorage-nfs
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -30,4 +32,4 @@ spec:
     # Optional but recommended to bind to a specific PV
     matchLabels:
       pv-name: video-movies-pv # Add this label to your PV
-  storageClassName: managed-nfs-storage # Use your custom StorageClass
+  storageClassName: synostorage-nfs # Use your custom StorageClass

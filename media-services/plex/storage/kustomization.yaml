@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app: plex
+      
+      
+# Inherit from the base configuration
+resources:
+  - ../../base/storage
+
+patches:
+  - target:
+      kind: PersistentVolume
+      name: placeholder-pv # Target the base PV by name
+    patch: |-
+      # --- Start of PV JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: plex-config-pv
+      - op: replace
+        path: /spec/capacity/storage
+        value: 10Gi
+      - op: replace
+        path: /spec/csi/volumeHandle
+        value: 201549ed-5072-422f-a16a-3499276a5392
+      # --- End of PV JSON Patch ---
+
+  - target:
+      kind: PersistentVolumeClaim
+      name: placeholder-pvc # Target the base PVC by name
+    patch: |-
+      # --- Start of PVC JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: plex-config-pvc
+      - op: replace
+        path: /metadata/namespace
+        value: media
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 10Gi
+      - op: replace
+        path: /spec/volumeName
+        value: plex-config-pv # Match the final patched PV name
+      # --- End of PVC JSON Patch ---
+      

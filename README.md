@@ -17,6 +17,8 @@
 
 **_In case of DNS failures, make sure you're using the correct CoreDNS ConfigMap_**
 
+### If needed, restore SealedSecrets with master key
+
 ## Install Traefik
 1. Add repo
 ```shell
@@ -24,7 +26,7 @@
 ```
 2. Install with values
 ```shell
-    helm upgrade --install -n traefik --create-namespace traefik traefik/traefik -f traefik/traefik-config.yaml
+    helm upgrade --install -n traefik --create-namespace traefik traefik/traefik -f traefik/values/traefik-config.yaml
 ```
 
 ## Install Cert Manager
@@ -38,12 +40,12 @@
       cert-manager jetstack/cert-manager \
       --namespace cert-manager \
       --create-namespace \
-      --version v1.16.3 \
-      --values cert-manager/values.yaml
+      --version v1.17.1 \
+      --values cert-manager/values/values.yaml
 ```
 3. Provision Cloudflare API Token secret
 ```shell
-    kubectl apply -f cert-manager/00-cloudflare-token.yaml
+    kubectl apply -f cert-manager/00-sealed-cloudflare-token.yaml
 ```
 4. Create cluster issuer
 ```shell

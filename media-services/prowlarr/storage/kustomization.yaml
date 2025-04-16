@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app: prowlarr
+      
+      
+# Inherit from the base configuration
+resources:
+  - ../../base/storage
+
+patches:
+  - target:
+      kind: PersistentVolume
+      name: placeholder-pv # Target the base PV by name
+    patch: |-
+      # --- Start of PV JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: prowlarr-config-pv
+      - op: replace
+        path: /spec/capacity/storage
+        value: 1Gi
+      - op: replace
+        path: /spec/csi/volumeHandle
+        value: fe6ebd6b-cbfb-4335-a455-a3bb402561a3
+      # --- End of PV JSON Patch ---
+
+  - target:
+      kind: PersistentVolumeClaim
+      name: placeholder-pvc # Target the base PVC by name
+    patch: |-
+      # --- Start of PVC JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: prowlarr-config-pvc
+      - op: replace
+        path: /metadata/namespace
+        value: media
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 1Gi
+      - op: replace
+        path: /spec/volumeName
+        value: prowlarr-config-pv # Match the final patched PV name
+      # --- End of PVC JSON Patch ---
+      
