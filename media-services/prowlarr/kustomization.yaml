@@ -11,4 +11,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: ghcr.io/hotio/prowlarr
-    newTag: release-1.31.2.4975
+    newTag: release-1.33.3.5008
