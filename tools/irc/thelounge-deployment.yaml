@@ -16,3 +16,10 @@ spec:
       containers:
         - name: thelounge
           image: ghcr.io/thelounge/thelounge:4.4.3
+          volumeMounts:
+            - name: config
+              mountPath: /var/opt/thelounge
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: the-lounge-config-pvc

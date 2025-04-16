@@ -5,26 +5,26 @@ metadata:
   namespace: media
 spec:
   containers:
-  - name: busybox
-    image: busybox:latest
-    command: [ 'sh', '-c', 'sleep 3600' ] # Keep the pod running
-    volumeMounts:
-    - name: test
-      mountPath: /test
+    - name: busybox
+      image: busybox:latest
+      command: [ 'sh', '-c', 'sleep 3600' ] # Keep the pod running
+      volumeMounts:
+        - name: test
+          mountPath: /test
   volumes:
-  - name: test
-    persistentVolumeClaim:
-      claimName: test-pvc
+    - name: test
+      persistentVolumeClaim:
+        claimName: test-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: test-pvc
-  namespace: media # or the namespace where your application runs
+  namespace: default # or the namespace where your application runs
 spec:
   accessModes:
-    - ReadWriteMany # Must match the PV's access modes
+    - ReadWriteOnce # Must match the PV's access modes
   resources:
     requests:
       storage: 1Gi # Must be less than or equal to the PV's capacity
-  storageClassName: synology-iscsi # Use your custom StorageClass
+  storageClassName: synology-iscsi-persistent
