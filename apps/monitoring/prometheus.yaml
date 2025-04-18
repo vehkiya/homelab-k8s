@@ -21,7 +21,9 @@ spec:
       targetRevision: master
       ref: values
   project: default
-#  syncPolicy:
-#    automated:
-#      prune: false
-#      selfHeal: false
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
