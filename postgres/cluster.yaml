@@ -14,3 +14,13 @@ spec:
   # Enable Pod Monitor for Prometheus (Optional)
   monitoring:
     enablePodMonitor: true
+
+  bootstrap:
+    initdb:
+      # Define the database name your application will use
+      database: my_application_db
+      # Define the username for your application
+      owner: my_app_user
+      # Define the name of the Secret that CloudNativePG will create
+      # This secret will hold the connection credentials for 'my_app_user'
+      secretName: my-app-db-credentials
