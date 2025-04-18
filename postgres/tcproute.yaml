@@ -3,7 +3,7 @@ apiVersion: gateway.networking.k8s.io/v1alpha2 # TCPRoute might still be v1alpha
 kind: TCPRoute
 metadata:
   name: postgres-route
-  namespace: default # Deploy in the same namespace as your DB Service
+  namespace: postgres # Deploy in the same namespace as your DB Service
 spec:
   parentRefs:
     - name: internal-tcp-gateway    # Matches the Gateway resource name
