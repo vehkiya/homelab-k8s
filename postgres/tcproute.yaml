@@ -4,6 +4,8 @@ kind: TCPRoute
 metadata:
   name: postgres-route
   namespace: postgres # Deploy in the same namespace as your DB Service
+  labels:
+    shared-gateway-access: true
 spec:
   parentRefs:
     - name: internal-tcp-gateway    # Matches the Gateway resource name
