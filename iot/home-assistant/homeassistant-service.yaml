@@ -8,3 +8,4 @@ spec:
     app: home-assistant # select pods that match this label
   ports:
     - port: 8123
+      name: home-assistant-web

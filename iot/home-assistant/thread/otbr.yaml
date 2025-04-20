@@ -26,8 +26,10 @@ spec:
         app: otbr # label pods with this label
     spec:
       nodeName: "lab-1"
+      hostNetwork: true
       containers:
         - image: ghcr.io/ownbee/hass-otbr-docker:latest
+          imagePullPolicy: Always
           name: otbr
           ports:
             - containerPort: 8080 # Web UI port (adjust if needed)
@@ -41,14 +43,14 @@ spec:
                 - SYS_ADMIN
           env:
 #            # Configuration environment variables for OTBR
-            - name: REST_API
+            - name: OTBR_REST_PORT
               value: "8443"
-            - name: WEB_GUI
+            - name: OTBR_WEB_PORT
               value: "8080"
             - name: NETWORK_DEVICE
               value: "192.168.4.36:6638"
-            - name: BACKBONE_IF
-              value: "enp3s0"
+#            - name: BACKBONE_IF
+#              value: "enp3s0"
             - name: FLOW_CONTROL
               value: "0"
             - name: AUTOFLASH_FIRMWARE
