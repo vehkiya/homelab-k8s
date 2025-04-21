@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: flaresolverr 
+  name: flaresolverr
   namespace: argocd
 spec:
+  project: default
+  source:
+    repoURL: https://github.com/Vehkiya/homelab-k8s.git
+    path: media-services/flaresolverr
+    targetRevision: master
   destination:
     namespace: media
     server: https://kube.kerrlab.app:6443
-  sources:
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: media-services/flaresolverr
-      targetRevision: master
-  project: default
   syncPolicy:
     automated:
-      prune: true
+      prune: false
       selfHeal: true
     syncOptions:
       - CreateNamespace=true

@@ -4,17 +4,17 @@ metadata:
   name: qbittorrent
   namespace: argocd
 spec:
+  project: default
+  source:
+    repoURL: https://github.com/Vehkiya/homelab-k8s.git
+    path: media-services/qbittorrent
+    targetRevision: master
   destination:
     namespace: media
     server: https://kube.kerrlab.app:6443
-  sources:
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: media-services/qbittorrent
-      targetRevision: master
-  project: default
   syncPolicy:
     automated:
-      prune: true
+      prune: false
       selfHeal: true
     syncOptions:
       - CreateNamespace=true

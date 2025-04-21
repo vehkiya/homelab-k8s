@@ -4,14 +4,14 @@ metadata:
   name: home-assistant
   namespace: argocd
 spec:
+  project: default
+  source:
+    repoURL: https://github.com/Vehkiya/homelab-k8s.git
+    path: iot/home-assistant
+    targetRevision: master
   destination:
     namespace: home-assistant
     server: https://kube.kerrlab.app:6443
-  sources:
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: iot/home-assistant
-      targetRevision: master
-  project: default
   syncPolicy:
     automated:
       prune: false

@@ -4,14 +4,14 @@ metadata:
   name: cert-manager
   namespace: argocd
 spec:
+  project: default
+  source:
+    repoURL: https://github.com/Vehkiya/homelab-k8s.git
+    path: cert-manager
+    targetRevision: master
   destination:
     namespace: cert-manager
     server: https://kube.kerrlab.app:6443
-  sources:
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: cert-manager
-      targetRevision: master
-  project: default
   syncPolicy:
     automated:
       prune: false
