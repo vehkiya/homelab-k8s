@@ -1,19 +1,16 @@
-# postgres-tcproute.yaml
-apiVersion: gateway.networking.k8s.io/v1alpha2 # TCPRoute might still be v1alpha2 or v1beta1 depending on your controller/API version
-kind: TCPRoute
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
 metadata:
-  name: postgres-route
-  namespace: postgres # Deploy in the same namespace as your DB Service
-  labels:
-    shared-gateway-access: "true"
+  name: postgres-passthrough
+  namespace: postgres
 spec:
-  parentRefs:
-    - name: internal-tcp-gateway    # Matches the Gateway resource name
-      namespace: traefik # Matches the Gateway resource namespace
-      sectionName: postgres-tcp      # Matches the listener name in the Gateway
-
-  rules:
-    - backendRefs: # Route traffic to the PostgreSQL read-write service
-        - name: postgres-db-rw # <-- Replace with your ACTUAL CNPG read-write service name
-          kind: Service
-          port: 5432 # The target port on the Service
+  entryPoints:
+    - postgres
+  routes:
+    - match: HostSNI(`*`) # Passthrough routes often match any SNI
+      services:
+        - name: postgres-db-rw # Your CNPG read-write service
+          namespace: postgres    # Namespace of the CNPG service
+          port: 5432          # Port of the CNPG service
+  tls:
+    passthrough: true # Enable TLS Passthrough mode in Traefik
