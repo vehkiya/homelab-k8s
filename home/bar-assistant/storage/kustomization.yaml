@@ -24,7 +24,7 @@ patches:
         value: 2Gi
       - op: replace
         path: /spec/csi/volumeHandle
-        value: 71afaf34-c503-4550-9cc4-9781aee41af9
+        value: 68e49db9-8792-4d08-aaf6-4605e0f76b04
       # --- End of PV JSON Patch ---
 
   - target:

@@ -13,7 +13,7 @@ spec:
     storage: 10Gi # Placeholder storage, will be overridden
   csi:
     driver: csi.san.synology.com
-    volumeHandle: 43024f57-c9f6-4150-9d0d-d40fdf0da17a
+    volumeHandle: 61993a94-3b95-41b6-a3ab-84160d058f6a
     fsType: btrfs # Assuming this is constant
     volumeAttributes: # Assuming these are constant
       dsm: 'fortress.kerrlab.app'

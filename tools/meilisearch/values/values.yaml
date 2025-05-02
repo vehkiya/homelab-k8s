@@ -25,3 +25,5 @@ persistence:
   volume:
     name: data
     mountPath: /meili_data
+
+fullnameOverride: "meilisearch-kubernetes"
