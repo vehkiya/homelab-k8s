@@ -1,0 +1,33 @@
+# Deployment for the Salt Rim Frontend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: salt-rim
+  namespace: default
+  labels:
+    app: salt-rim
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: salt-rim
+  template:
+    metadata:
+      labels:
+        app: salt-rim
+    spec:
+      containers:
+        - name: salt-rim-frontend
+          image: ghcr.io/karlomikus/salt-rim:4.2 # Using specific version from compose
+          env:
+            # Explicitly map needed vars from ConfigMap
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: bar-assistant-config
+                  key: API_URL
+            - name: MEILISEARCH_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: bar-assistant-config
+                  key: MEILISEARCH_URL

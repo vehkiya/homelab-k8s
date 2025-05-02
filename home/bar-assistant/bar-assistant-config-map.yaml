@@ -1,0 +1,27 @@
+# ConfigMap for non-sensitive configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bar-assistant-config
+  namespace: default
+data:
+  # --- Common ---
+  # Set the external URL where the application will be accessed
+  APP_URL: "https://bar.kerrlab.app"
+  # Set the external URL for Meilisearch (used by Salt Rim frontend)
+  # Ensure Meilisearch is also exposed via Traefik at this address
+  MEILISEARCH_URL: "https://meilisearch.kerrlab.app" # Adjust if needed
+
+  # --- Bar Assistant Server ---
+  # Internal hostname for Meilisearch Service within the cluster
+  MEILISEARCH_HOST: "https://meilisearch.kerrlab.app"
+  # Internal hostname for Redis Service within the cluster
+  REDIS_HOST: "redis-service"
+  CACHE_DRIVER: "redis"
+  SESSION_DRIVER: "redis"
+  ALLOW_REGISTRATION: "true"
+
+  # --- Salt Rim Frontend ---
+  # API_URL points to the external URL of the backend API (handled by Ingress)
+  # Often the same as APP_URL or a subpath like APP_URL/api
+  API_URL: "https://bar.kerrlab.app/api" # This matches the Ingress path for the backend

@@ -1,0 +1,45 @@
+# Deployment for the Bar Assistant Backend Server
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bar-assistant
+  namespace: default
+  labels:
+    app: bar-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bar-assistant
+  template:
+    metadata:
+      labels:
+        app: bar-assistant
+    spec:
+      initContainers:
+        - name: volume-permissions
+          image: busybox:1.37
+          command: [ "sh", "-c", "chown 33:33 /var/www/cocktails/storage/bar-assistant" ]
+          volumeMounts:
+            - name: bar-data
+              mountPath: /var/www/cocktails/storage/bar-assistant
+      containers:
+        - name: bar-assistant-server
+          image: ghcr.io/karlomikus/barassistant:5.3 # Using specific version from compose
+          envFrom:
+            - configMapRef:
+                name: bar-assistant-config
+          # Map MEILI_MASTER_KEY from Secret explicitly to MEILISEARCH_KEY env var
+          env:
+            - name: MEILISEARCH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: meilisearch-kubernetes-master-key
+                  key: MEILI_MASTER_KEY
+          volumeMounts:
+            - name: bar-data
+              mountPath: /var/www/cocktails/storage/bar-assistant
+      volumes:
+        - name: bar-data
+          persistentVolumeClaim:
+            claimName: bar-assistant-config-pvc

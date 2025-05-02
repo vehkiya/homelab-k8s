@@ -1,0 +1,15 @@
+# Service to expose the Bar Assistant Backend internally
+apiVersion: v1
+kind: Service
+metadata:
+  name: bar-assistant
+  namespace: default
+  labels:
+    app: bar-assistant
+spec:
+  selector:
+    app: bar-assistant
+  ports:
+    - protocol: TCP
+      port: 8080 # Service port
+  type: ClusterIP # Only needs internal cluster access
