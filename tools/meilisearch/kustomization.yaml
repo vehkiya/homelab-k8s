@@ -1,0 +1,14 @@
+# kustomization.yaml (relevant parts)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: meilisearch
+    repo: https://meilisearch.github.io/meilisearch-kubernetes
+    version: 0.12.0
+    releaseName: meilisearch-kubernetes
+    namespace: default
+    valuesFile: "values/values.yaml"
+
+resources:
+  - meilisearch-httproute.yaml

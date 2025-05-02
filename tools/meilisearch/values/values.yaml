@@ -1,0 +1,27 @@
+environment:
+  # -- Deactivates analytics
+  MEILI_NO_ANALYTICS: true
+  # -- Sets the environment. Either **production** or **development**
+  MEILI_ENV: production
+
+auth:
+  # -- Use an existing Kubernetes secret for the MEILI_MASTER_KEY
+  existingMasterKeySecret: "meilisearch-kubernetes-master-key"
+
+persistence:
+  # -- Enable persistence using PVC
+  enabled: true
+  # -- PVC Access Mode
+  accessMode: ReadWriteOnce
+  ## Data Persistent Volume existing claim name
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # -- Existing PVC
+  existingClaim: "meilisearch-pvc"
+  # -- PVC Storage Request
+  size: 10Gi
+  # -- Additional annotations for PVC
+  annotations: {}
+  volume:
+    name: data
+    mountPath: /meili_data
