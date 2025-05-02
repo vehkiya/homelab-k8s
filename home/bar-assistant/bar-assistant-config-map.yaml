@@ -6,7 +6,7 @@ metadata:
 data:
   # --- Common ---
   # Set the external URL where the application will be accessed
-  APP_URL: "https://bar.kerrlab.app"
+  APP_URL: "https://bar.kerrlab.app/bar"
   # Set the external URL for Meilisearch (used by Salt Rim frontend)
   # Ensure Meilisearch is also exposed via Traefik at this address
   MEILISEARCH_URL: "https://meilisearch.kerrlab.app" # Adjust if needed
@@ -23,4 +23,4 @@ data:
   # --- Salt Rim Frontend ---
   # API_URL points to the external URL of the backend API (handled by Ingress)
   # Often the same as APP_URL or a subpath like APP_URL/api
-  API_URL: "https://bar.kerrlab.app/api" # This matches the Ingress path for the backend
+  API_URL: "https://bar.kerrlab.app/bar" # This matches the Ingress path for the backend

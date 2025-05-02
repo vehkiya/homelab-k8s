@@ -1,20 +1,18 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-    # Consolidate routes for the host into one resource
     name: bar-app-httproute
 spec:
     parentRefs:
-        - name: traefik-gateway # Ensure this Gateway exists
-          namespace: traefik     # Ensure this is the correct namespace for the Gateway
+        - name: traefik-gateway
+          namespace: traefik
     hostnames:
         - "bar.kerrlab.app"
     rules:
-        # Rule 1: Backend API (/api) - Most specific
         - matches:
               - path:
                     type: PathPrefix
-                    value: /api
+                    value: /bar
           filters:
               - type: URLRewrite
                 urlRewrite:
@@ -22,22 +20,12 @@ spec:
                         type: ReplacePrefixMatch
                         replacePrefixMatch: /
           backendRefs:
-              - name: bar-assistant # Assumes meilisearch service exists
-                port: 8080       # Assumes meilisearch service port is 7700
-        # Rule 2: Meilisearch (/search) - If needed
-        - matches:
-              - path:
-                    type: PathPrefix
-                    value: /search
-          backendRefs:
-              - name: meilisearch-kubernetes # Assumes meilisearch service exists
-                port: 7700       # Assumes meilisearch service port is 7700
-
-        # Rule 3: Frontend UI (/) - Catch-all, least specific
+              - name: bar-assistant
+                port: 8080
         - matches:
               - path:
                     type: PathPrefix
                     value: /
           backendRefs:
               - name: salt-rim # Frontend service
-                port: 8080     # K8s Service port for salt-rim
+                port: 8080
