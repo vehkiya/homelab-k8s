@@ -10,7 +10,7 @@ spec:
     path: tools/meilisearch
     targetRevision: master
   destination:
-    namespace: meilisearch
+    namespace: default
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:
