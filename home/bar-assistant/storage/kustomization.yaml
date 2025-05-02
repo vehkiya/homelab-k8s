@@ -37,7 +37,7 @@ patches:
         value: bar-assistant-config-pvc
       - op: replace
         path: /metadata/namespace
-        value: default
+        value: home
       - op: replace
         path: /spec/resources/requests/storage
         value: 2Gi
