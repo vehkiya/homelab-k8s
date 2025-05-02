@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bar-assistant
-  namespace: default
   labels:
     app: bar-assistant
 spec:

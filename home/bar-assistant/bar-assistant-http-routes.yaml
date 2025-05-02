@@ -3,7 +3,6 @@ kind: HTTPRoute
 metadata:
     # Consolidate routes for the host into one resource
     name: bar-app-httproute
-    namespace: default # Assuming services/gateway are accessible from/in default
 spec:
     parentRefs:
         - name: traefik-gateway # Ensure this Gateway exists
