@@ -10,8 +10,8 @@ metadata:
   # variables `RI_APP_HOST` and
   # `RI_APP_PORT`
 spec:
+  type: ClusterIP
   ports:
     - port: 5540
-      type: ClusterIP
   selector:
     app: redisinsight
