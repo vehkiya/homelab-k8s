@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unpackerr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unpackerr
+  template:
+    metadata:
+      labels:
+        app: unpackerr
+    spec:
+      containers:
+        - name: unpackerr
+          image: ghcr.io/unpackerr/unpackerr:0.14.5
+          envFrom:
+            - configMapRef:
+                name: unpackerr-config
+          env:
+            - name: UN_RADARR_0_API_KEY
+              valueFrom:
+                secretKeyRef: { name: unpackerr-app-secrets, key: radarr_key }
+            - name: UN_SONARR_0_API_KEY
+              valueFrom:
+                secretKeyRef: { name: unpackerr-app-secrets, key: sonarr_key }
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+          volumeMounts:
+            - name: downloads-mount
+              mountPath: /downloads # Path inside the container
+      volumes:
+        - name: downloads-mount
+          persistentVolumeClaim:
+            claimName: downloads-pvc
