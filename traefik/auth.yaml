@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: traefik-dashboard-auth-secret
-  namespace: traefik
-type: kubernetes.io/basic-auth
-stringData:
-  username: vehkiya
-  password: Handstand0-Scribble7-Evasive5-Pond1-Crayon1
