@@ -3,19 +3,18 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          volumeName: "pv-prometheus"
-          storageClassName: synology-iscsi-persistent
+          storageClassName: synology-iscsi
           accessModes: ["ReadWriteMany"]
           resources:
             requests:
               storage: 50Gi # Adjust size as needed
+
 alertmanager:
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:
         spec:
-          volumeName: "pv-alertmanager"
-          storageClassName: synology-iscsi-persistent
+          storageClassName: synology-iscsi
           accessModes: ["ReadWriteMany"]
           resources:
             requests:
@@ -23,10 +22,9 @@ alertmanager:
 grafana:
   persistence:
     enabled: true
-    volumeName: "pv-grafana"
-    storageClassName: synology-iscsi-persistent
+    storageClassName: synology-iscsi
     accessModes: ["ReadWriteMany"]
-    size: 10Gi # Adjust
+    size: 10Gi
   admin:
     existingSecret: "app-secrets-grafana"
     userKey: user
