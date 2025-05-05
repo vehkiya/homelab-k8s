@@ -1,0 +1,19 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: postgres-db-superuser
+  namespace: postgres
+spec:
+  encryptedData:
+    password: AgCE81I2SiSwxbrdqP07Cp2WLJ4snFt79p951DDbDiE9RUg7092YQ0QHUT1jzNa+b9rjP1KqvNjbyJi/BFmk/BC/wcksc1ArrDg1PgVN2L6KpY/P6szLJHeM2hyDK6l1iYJ91sWCLt1zudfo4kxf39L1qz5GbQzBHZ1BcxeirHnrictdTRlJXuEoSdNYwnEPaBxEfP+P2bY05MZypVLpqGacLUrD+hygL2K7hJnxagJzhEGhLNDtA00Yb2sNYhbvwYTipi15ImjODkRU91656qebxJDF/bCpImClWCTXCoUP690JdlwTAXmb/krjSEJBrAlQ9xoZ1VbnWbnxEJiaDxJcDSba4L0ZriiooUUDWOpC6Vkwk+RijuHXt8UO0WezpNjkm5CCPcgicnL7xZzgawSKyj6c+lMDMPs+0g17SQqtKPWq+nWAaNU/HUrnXmud6m+P3mFT0xHkZty0DhAxePPJFScFDmOZr+nkNdbbZqAgF5SGs9jAcOMv67McYDbxvQ2dULBhr/APffF9fPLf/B7obdzaHqrHkMwO2w3uSXVfFftR21Y8ydoPRIR8MJ6kyW+cqTruqCQJck5rAiT+/y+dFj2vLBjvFo0yVTfimHeJqNHaHpx0GaZ5oJV5HhJ/Pz8EEZ3X8ivm6L+xbhZelUxrTNggruH4Dn2myEl8TcDGX2c1xIA8muiRz9+aba3tCucWzO577qCmg7RptiZgrfXkYgW8AdF522KDoxBaUclX
+    username: AgBZrD3Yrm1MupNmAcJyNsgdbe5KSm7f7POuZTL834b+OVByF7Mmz920GyzsCm+cwO7OZlouPKK4bJFXGZ1oqLz74l8jX+QFw+S2UlWJ9go3Z9C1Az/MGYR9e0KKqscKQjiuACElS2978VtTiIfKHQSc46/eenj3G4ykZc2QRBoNE66mj30k+U7SxgXpG4NGTJsv9w7IUD3AalShNSqfOJwYgm3r84newuRxAaLbpPMX7afZALXThHuAekKvvI/NlO/5QKl+4bt3gcLCb7UKTVo3Js6kys67M/sGYolZPQ+axxr2wY/UPudVQz95HXMC+N2d+Swboo0P25X27zsDMMG9dY/RJTgsRbmXl8Y1IFhhxxWUba+LTXawLeyr/Knax/yJE254QJtj/zcF0/VEONZNHA/t4As6rsl6vPnPrB0XYAan4+/G3RW5VpPe0I+GFRUW/FtUhEzNQz8+FRPj6ES6Jcg74eagalifMfDaUCGA7JzpfsGXBNlOmp4KSc1vBa/Jy8T/k7vv5a1Q7fcEuqbVs2xQ23KjHTY+oDkYOo26yU6tw7U+W0/etPAjzqDVYX2Udf73R+XlC6MkMKJ5wvFOrEyFjRunWSBfbzwvbHxPkPBirSE4amQYHj9HWUpAjxDkiLm8EnFHNSLPlQ4WKGszLFz9QwvwlMbe8OLJqEzJBG0Mld3RJLrmVUPA/mQ5Yi+nvhLO2Axmgg==
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        cnpg.io/reload: "true"
+      name: postgres-db-superuser
+      namespace: postgres
+    type: kubernetes.io/basic-auth

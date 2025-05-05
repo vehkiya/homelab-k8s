@@ -6,6 +6,7 @@ metadata:
   namespace: postgres
 spec:
   instances: 3
+  enableSuperuserAccess: true
 
 # Static provisioning for retained storage
   storage:
@@ -20,8 +21,8 @@ spec:
 
   # Enable Pod Monitor for Prometheus (Optional)
   monitoring:
-    enablePodMonitor: true
+    enablePodMonitor: false
 
   certificates:
     serverAltDNSNames:
-      - postgres.kerrlab.app      
+      - postgres.kerrlab.app
