@@ -4,6 +4,8 @@ kind: Cluster
 metadata:
   name: postgres-db
   namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   instances: 3
   enableSuperuserAccess: true

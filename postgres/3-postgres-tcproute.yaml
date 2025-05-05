@@ -3,6 +3,8 @@ kind: IngressRouteTCP
 metadata:
   name: postgres-passthrough
   namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   entryPoints:
     - postgres

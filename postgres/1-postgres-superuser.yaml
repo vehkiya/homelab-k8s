@@ -5,6 +5,8 @@ metadata:
   creationTimestamp: null
   name: postgres-db-superuser
   namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   encryptedData:
     password: AgCE81I2SiSwxbrdqP07Cp2WLJ4snFt79p951DDbDiE9RUg7092YQ0QHUT1jzNa+b9rjP1KqvNjbyJi/BFmk/BC/wcksc1ArrDg1PgVN2L6KpY/P6szLJHeM2hyDK6l1iYJ91sWCLt1zudfo4kxf39L1qz5GbQzBHZ1BcxeirHnrictdTRlJXuEoSdNYwnEPaBxEfP+P2bY05MZypVLpqGacLUrD+hygL2K7hJnxagJzhEGhLNDtA00Yb2sNYhbvwYTipi15ImjODkRU91656qebxJDF/bCpImClWCTXCoUP690JdlwTAXmb/krjSEJBrAlQ9xoZ1VbnWbnxEJiaDxJcDSba4L0ZriiooUUDWOpC6Vkwk+RijuHXt8UO0WezpNjkm5CCPcgicnL7xZzgawSKyj6c+lMDMPs+0g17SQqtKPWq+nWAaNU/HUrnXmud6m+P3mFT0xHkZty0DhAxePPJFScFDmOZr+nkNdbbZqAgF5SGs9jAcOMv67McYDbxvQ2dULBhr/APffF9fPLf/B7obdzaHqrHkMwO2w3uSXVfFftR21Y8ydoPRIR8MJ6kyW+cqTruqCQJck5rAiT+/y+dFj2vLBjvFo0yVTfimHeJqNHaHpx0GaZ5oJV5HhJ/Pz8EEZ3X8ivm6L+xbhZelUxrTNggruH4Dn2myEl8TcDGX2c1xIA8muiRz9+aba3tCucWzO577qCmg7RptiZgrfXkYgW8AdF522KDoxBaUclX
@@ -16,4 +18,4 @@ spec:
         cnpg.io/reload: "true"
       name: postgres-db-superuser
       namespace: postgres
-    type: kubernetes.io/basic-auth
+    type: kubernetes.io/basic-auth  

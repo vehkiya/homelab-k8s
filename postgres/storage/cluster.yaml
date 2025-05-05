@@ -21,7 +21,7 @@ spec:
     storage: 25Gi # Placeholder storage, will be overridden
   csi:
     driver: csi.san.synology.com
-    volumeHandle: 16c25297-315e-458c-95fe-24001b160fa2
+    volumeHandle: ccd1643c-ecab-41c8-8032-ccb7b1203ba5
     fsType: btrfs # Assuming this is constant
     volumeAttributes: # Assuming these are constant
       dsm: 'fortress.kerrlab.app'
@@ -53,7 +53,7 @@ spec:
     storage: 25Gi # Placeholder storage, will be overridden
   csi:
     driver: csi.san.synology.com
-    volumeHandle: 03a8e344-d228-4f83-9c53-016a751cf9f3
+    volumeHandle: 108c7bad-25d3-4f6e-9530-d96653d7a668
     fsType: btrfs # Assuming this is constant
     volumeAttributes: # Assuming these are constant
       dsm: 'fortress.kerrlab.app'
@@ -85,7 +85,7 @@ spec:
     storage: 25Gi # Placeholder storage, will be overridden
   csi:
     driver: csi.san.synology.com
-    volumeHandle: 6677128f-3002-4461-807b-7a12c0768144
+    volumeHandle: 195d8351-a205-47c2-84fd-2e59a463b321
     fsType: btrfs # Assuming this is constant
     volumeAttributes: # Assuming these are constant
       dsm: 'fortress.kerrlab.app'
