@@ -1,0 +1,47 @@
+# kustomize-pv/overlays/mealie/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app: mealie
+
+# Inherit from the base configuration
+resources:
+  - ../../../base/storage
+
+patches:
+  - target:
+      kind: PersistentVolume
+      name: placeholder-pv # Target the base PV by name
+    patch: |-
+      # --- Start of PV JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: mealie-config-pv
+      - op: replace
+        path: /spec/capacity/storage
+        value: 10Gi
+      - op: replace
+        path: /spec/csi/volumeHandle
+        value: 1298679c-91a1-4419-abbd-83eef04c0b75
+      # --- End of PV JSON Patch ---
+
+  - target:
+      kind: PersistentVolumeClaim
+      name: placeholder-pvc # Target the base PVC by name
+    patch: |-
+      # --- Start of PVC JSON Patch ---
+      - op: replace
+        path: /metadata/name
+        value: mealie-config-pvc
+      - op: replace
+        path: /metadata/namespace
+        value: home
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 10Gi
+      - op: replace
+        path: /spec/volumeName
+        value: mealie-config-pv # Match the final patched PV name
+      # --- End of PVC JSON Patch ---

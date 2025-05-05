@@ -1,0 +1,12 @@
+# kustomize/base/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# List of resources to include
+resources:
+  - 1-mealie-db-credentials.yaml
+  - 2-mealie-db-create-job.yaml
+  - 3-mealie-configmap.yaml
+  - 4-mealie-deployment.yaml
+  - 5-mealie-service.yaml
+  - 6-mealie-http-route.yaml

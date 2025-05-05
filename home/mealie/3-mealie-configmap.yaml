@@ -1,0 +1,12 @@
+# ConfigMap for non-sensitive configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: mealie-config
+    namespace: home
+data:
+    BASE_URL: https://recipes.kerrlab.app
+    ALLOW_SIGNUP: "true"
+    DB_ENGINE: postgres
+    PUID: "1026"
+    PGID: "100"

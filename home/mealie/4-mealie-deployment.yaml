@@ -1,0 +1,66 @@
+# 3-mealie-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealie-app
+  namespace: home
+  labels:
+    app: mealie
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealie
+  template:
+    metadata:
+      labels:
+        app: mealie
+    spec:
+      #      initContainers:
+      #        - name: volume-permissions
+      #          image: busybox:1.37
+      #          command: [ "sh", "-c", "chown 911:911 /app/data" ]
+      #          volumeMounts:
+      #            - name: data
+      #              mountPath: /app/data
+      #      securityContext:
+      #        runAsUser: 100
+      #        runAsGroup: 100
+      containers:
+        - name: mealie
+          image: ghcr.io/mealie-recipes/mealie:v2.8.0
+          envFrom:
+            - configMapRef:
+                name: mealie-config
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef: { name: mealie-db-credentials, key: username }
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: mealie-db-credentials, key: password }
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef: { name: mealie-db-credentials, key: dbname }
+            - name: POSTGRES_SERVER
+              valueFrom:
+                secretKeyRef: { name: mealie-db-credentials, key: host }
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef: { name: mealie-db-credentials, key: port }
+            - name: DB_ENGINE
+              value: postgres
+            - name: TZ
+              value: "Europe/Chisinau"
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          resources:
+            limits:
+              memory: "1Gi"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mealie-config-pvc
