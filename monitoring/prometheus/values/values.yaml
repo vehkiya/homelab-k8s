@@ -25,6 +25,6 @@ grafana:
     accessModes: ["ReadWriteOnce"]
     size: 10Gi # Adjust
   admin:
-    existingSecret: "grafana-app-secrets"
+    existingSecret: "app-secrets"
     userKey: user
     passwordKey: password
