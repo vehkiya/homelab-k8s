@@ -1,0 +1,95 @@
+# kustomize-pv/base/pv-pvc-base.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Kustomize will merge annotations if specified in patches
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  name: cnpg-cluster-pv-1
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname # Standard label for node hostname
+          operator: In # Operator to check if the value is in the list
+          values:
+          - lab-1
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 25Gi # Placeholder storage, will be overridden
+  csi:
+    driver: csi.san.synology.com
+    volumeHandle: 16c25297-315e-458c-95fe-24001b160fa2
+    fsType: btrfs # Assuming this is constant
+    volumeAttributes: # Assuming these are constant
+      dsm: 'fortress.kerrlab.app'
+      protocol: 'iscsi'
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent # Assuming this is constant
+  volumeMode: Filesystem
+---
+# kustomize-pv/base/pv-pvc-base.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Kustomize will merge annotations if specified in patches
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  name: cnpg-cluster-pv-2
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname # Standard label for node hostname
+          operator: In # Operator to check if the value is in the list
+          values:
+          - lab-2
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 25Gi # Placeholder storage, will be overridden
+  csi:
+    driver: csi.san.synology.com
+    volumeHandle: 03a8e344-d228-4f83-9c53-016a751cf9f3
+    fsType: btrfs # Assuming this is constant
+    volumeAttributes: # Assuming these are constant
+      dsm: 'fortress.kerrlab.app'
+      protocol: 'iscsi'
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent # Assuming this is constant
+  volumeMode: Filesystem
+---
+# kustomize-pv/base/pv-pvc-base.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Kustomize will merge annotations if specified in patches
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  name: cnpg-cluster-pv-3
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname # Standard label for node hostname
+          operator: In # Operator to check if the value is in the list
+          values:
+          - lab-3
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 25Gi # Placeholder storage, will be overridden
+  csi:
+    driver: csi.san.synology.com
+    volumeHandle: 6677128f-3002-4461-807b-7a12c0768144
+    fsType: btrfs # Assuming this is constant
+    volumeAttributes: # Assuming these are constant
+      dsm: 'fortress.kerrlab.app'
+      protocol: 'iscsi'
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent # Assuming this is constant
+  volumeMode: Filesystem

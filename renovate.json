@@ -3,7 +3,7 @@
   "kustomize": {
     "enabled": true
   },
-  "commitMessagePrefix": ":arrow_up:",
+  "commitMessagePrefix": ":arrow_up_small:",
   "packageRules": [
     {
       "matchDatasources": [
