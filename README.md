@@ -19,6 +19,17 @@
 
 ### If needed, restore SealedSecrets with master key
 
+Secret example
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: default
+stringData:
+  key: value
+```
+
 ## Install Traefik
 1. Add repo
 ```shell
@@ -165,3 +176,5 @@ https://github.com/intel/intel-device-plugins-for-kubernetes/blob/main/INSTALL.m
 ```
 
 Label: `intel.feature.node.kubernetes.io/gpu: true`
+
+
