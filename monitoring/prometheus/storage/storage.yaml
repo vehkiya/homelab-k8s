@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Kustomize will merge annotations if specified in patches
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  name: pv-prometheus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 50Gi # Placeholder storage, will be overridden
+  csi:
+    driver: csi.san.synology.com
+    volumeHandle: cd118d0e-c66a-47ff-885f-786939e511d1
+    fsType: btrfs # Assuming this is constant
+    volumeAttributes: # Assuming these are constant
+      dsm: 'fortress.kerrlab.app'
+      protocol: 'iscsi'
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent # Assuming this is constant
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Kustomize will merge annotations if specified in patches
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  name: pv-alertmanager
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi # Placeholder storage, will be overridden
+  csi:
+    driver: csi.san.synology.com
+    volumeHandle: 87c088d2-1a67-4eff-a77c-c0eac5b58763
+    fsType: btrfs # Assuming this is constant
+    volumeAttributes: # Assuming these are constant
+      dsm: 'fortress.kerrlab.app'
+      protocol: 'iscsi'
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent # Assuming this is constant
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Kustomize will merge annotations if specified in patches
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  name: pv-grafana
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi # Placeholder storage, will be overridden
+  csi:
+    driver: csi.san.synology.com
+    volumeHandle: 4b0a2b5c-a6d8-4176-a2cb-2fb177d3b8aa
+    fsType: btrfs # Assuming this is constant
+    volumeAttributes: # Assuming these are constant
+      dsm: 'fortress.kerrlab.app'
+      protocol: 'iscsi'
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent # Assuming this is constant
+  volumeMode: Filesystem
