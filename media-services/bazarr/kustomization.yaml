@@ -11,4 +11,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: ghcr.io/hotio/bazarr
-    newTag: release-1.5.1
+    newTag: release-1.5.2

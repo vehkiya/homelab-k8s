@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: bazarr
-          image: ghcr.io/hotio/bazarr:release-1.5.1
+          image: ghcr.io/hotio/bazarr:release-1.5.2
           env:
             - name: PGID
               value: "100"
