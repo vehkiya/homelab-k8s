@@ -1,0 +1,30 @@
+persistence:
+  defaultClassReplicaCount: 3
+
+# Disable the Helm chart's built-in ingress creation,
+# as we are managing it separately with Traefik's Gateway.
+ingress:
+  enabled: false
+
+# --- Optional Settings ---
+# Add other specific Longhorn settings you might want to configure.
+# Refer to the Longhorn Helm chart documentation for available options.
+# Example: Setting a specific default data path (uncomment and adjust if needed)
+# defaultSettings:
+#   defaultDataPath: "/var/lib/longhorn/"
+
+# Example: Setting resource requests/limits (adjust values as needed for N100 nodes)
+# longhornManager:
+#   resources:
+#     limits:
+#       cpu: 500m
+#       memory: 500Mi
+#     requests:
+#       cpu: 100m
+#       memory: 100Mi
+# longhornDriver:
+#   resources:
+#      # ... requests/limits
+# longhornUI:
+#   resources:
+#      # ... requests/limits
