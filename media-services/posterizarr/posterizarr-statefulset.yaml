@@ -3,10 +3,6 @@ kind: StatefulSet
 metadata:
   name: posterizarr
   namespace: media
-spec:
-  securityContext:
-    runAsUser: 1026
-    runAsGroup: 100
   serviceName: posterizarr
   replicas: 1
   selector:
@@ -17,6 +13,12 @@ spec:
       labels:
         app: posterizarr
     spec:
+      securityContext:
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        supplementalGroups:
+          - 6
       terminationGracePeriodSeconds: 30
       containers:
         - name: posterizarr
