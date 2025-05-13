@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: posterizarr
+  namespace: media
+spec:
+  serviceName: posterizarr
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posterizarr
+  template:
+    metadata:
+      labels:
+        app: posterizarr
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: posterizarr
+          image: ghcr.io/home-operations/posterizarr:1.9.37
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
+            - name: UMASK
+              value: "0002"
+            - name: RUN_TIME
+              value: "10:30,19:30"
+          volumeMounts:
+            - name: assets
+              mountPath: /app/assets
+            - name: config
+              mountPath: /app/config
+          resources:
+            limits:
+              gpu.intel.com/i915: "1"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: posterizarr-config-pvc
+        - name: assets
+          persistentVolumeClaim:
+            claimName: posterizarr-data-pvc
