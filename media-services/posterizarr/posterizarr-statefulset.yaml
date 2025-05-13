@@ -4,6 +4,9 @@ metadata:
   name: posterizarr
   namespace: media
 spec:
+  securityContext:
+    runAsUser: 1026
+    runAsGroup: 100
   serviceName: posterizarr
   replicas: 1
   selector:
