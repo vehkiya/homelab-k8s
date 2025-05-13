@@ -5,7 +5,7 @@ kind: Kustomization
 helmCharts:
   - name: meilisearch
     repo: https://meilisearch.github.io/meilisearch-kubernetes
-    version: 0.12.1
+    version: 0.12.2
     releaseName: meilisearch-kubernetes
     namespace: default
     valuesFile: "values/values.yaml"
