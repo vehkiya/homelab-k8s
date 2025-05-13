@@ -17,22 +17,17 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: posterizarr
-          image: ghcr.io/home-operations/posterizarr:1.9.37
+          image: ghcr.io/fscorrupt/posterizarr:1.9.59
           env:
             - name: TZ
               value: "Europe/Chisinau"
-            - name: UMASK
-              value: "0002"
             - name: RUN_TIME
               value: "10:30,19:30"
           volumeMounts:
             - name: assets
-              mountPath: /app/assets
+              mountPath: /assets
             - name: config
-              mountPath: /app/config
-          resources:
-            limits:
-              gpu.intel.com/i915: "1"
+              mountPath: /config
       volumes:
         - name: config
           persistentVolumeClaim:
