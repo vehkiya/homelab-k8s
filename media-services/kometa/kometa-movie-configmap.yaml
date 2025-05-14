@@ -8,9 +8,9 @@ data:
         sync_mode: sync
         sort_title: Traktpopular
         summary: The most popular movies for all time.
-        radarr_add_missing: true
-        radarr_search: true
-        radarr_monitor: true
+        radarr_add_missing: false
+        radarr_search: false
+        radarr_monitor: false
       Tautulli Most Popular Movies:
         sync_mode: sync
         collection_order: custom
