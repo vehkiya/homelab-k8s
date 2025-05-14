@@ -26,9 +26,6 @@ data:
         tmdb_collection: "1241"
         summary: "The magical adventures of Harry Potter and his friends at Hogwarts School of Witchcraft and Wizardry, and their fight against the dark wizard Lord Voldemort."
         sort_title: "+_Franchise_Harry Potter"
-        plex:
-          labels:
-            - Harry Potter
 kind: ConfigMap
 metadata:
   name: kometa-movie-config

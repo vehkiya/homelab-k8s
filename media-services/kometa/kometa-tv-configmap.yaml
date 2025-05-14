@@ -48,10 +48,6 @@ data:
         sync_mode: sync # Good for dynamic lists like this
 
       Upcoming Premieres (TMDb):
-        tmdb_upcoming: # This usually refers to movies; for TV, tmdb_discover with air_date might be better
-        # Let's use tmdb_discover for more precise upcoming TV premieres
-        # This builder is more for movies. For TV premieres, tmdb_discover is more flexible.
-        # Using tmdb_discover to find shows premiering soon:
         tmdb_discover:
           sort_by: popularity.desc
           first_air_date.gte: {{now|date_add(days=1)|date_format(format='%Y-%m-%d')}} # Premieres from tomorrow onwards
