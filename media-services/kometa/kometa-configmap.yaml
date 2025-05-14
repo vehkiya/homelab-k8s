@@ -56,10 +56,11 @@ data:
       apikey: ${TMDB_API_KEY}
       language: en
     tautulli:
-      url: https://tautulli.kerlab.app
+      url: https://tautulli.kerrlab.app
       apikey: ${TAUTULLI_API_KEY}
     omdb:
       apikey: ${OMDB_API_KEY}
+      cache_expiration: 60
     radarr:
       url: https://radarr.kerrlab.app
       token: ${RADARR_TOKEN}

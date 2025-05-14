@@ -6,7 +6,6 @@ data:
 
       Popular Anime on AniDB:
         anidb_popular: 30 # Fetches up to 30 titles from AniDB's general popular list.
-                          # Adjust limit as needed (max seems to be 30 for this specific builder list).
         summary: "Popular anime series according to AniDB's overall popular list."
         sort_title: "+00_Popular (AniDB)"
         sync_mode: sync # Keeps the collection updated with the list
@@ -61,11 +60,11 @@ data:
       Upcoming Popular Anime - Summer 2025 (MAL):
         mal_upcoming: # This builder is good for generally upcoming popular shows
           # To specifically target Summer 2025, mal_search is more precise:
-        # mal_search:
-        #   season: summer
-        #   year: 2025
-        #   status: upcoming
-        #   sort_by: members.desc # Popularity for upcoming
+          # mal_search:
+          #   season: summer
+          #   year: 2025
+          #   status: upcoming
+          #   sort_by: members.desc # Popularity for upcoming
           limit: 20
         summary: "Highly anticipated and popular upcoming anime for Summer 2025 (Jul-Sep), based on MyAnimeList."
         sort_title: "+2025_S3_Summer (MAL Upcoming)"

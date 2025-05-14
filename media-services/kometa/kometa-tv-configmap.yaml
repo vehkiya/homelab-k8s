@@ -23,22 +23,22 @@ data:
         sort_title: "+03_Top Rated TV"
         sync_mode: sync
 
-       Trending TV Shows (Trakt):
-         trakt_trending: # Trakt's trending list (shows)
-           limit: 20
-         summary: "TV shows currently trending, according to Trakt."
-         sort_title: "+01_Trending TV (Trakt)"
-         sync_mode: sync
-         sonarr_add_missing: true
-         sonarr_search: true
-         sonarr_monitor: true
+        Trending TV Shows (Trakt):
+          trakt_trending: # Trakt's trending list (shows)
+            limit: 20
+          summary: "TV shows currently trending, according to Trakt."
+          sort_title: "+01_Trending TV (Trakt)"
+          sync_mode: sync
+          sonarr_add_missing: false
+          sonarr_search: false
+          sonarr_monitor: false
 
-       Popular TV Shows (Trakt):
-         trakt_popular: # Trakt's popular list (shows)
-           limit: 25
-         summary: "Most popular TV shows, according to Trakt."
-         sort_title: "+02_Popular TV (Trakt)"
-         sync_mode: sync
+        Popular TV Shows (Trakt):
+          trakt_popular: # Trakt's popular list (shows)
+            limit: 25
+          summary: "Most popular TV shows, according to Trakt."
+          sort_title: "+02_Popular TV (Trakt)"
+          sync_mode: sync
 
       Airing Today (TMDb):
         tmdb_airing_today:
@@ -49,9 +49,9 @@ data:
 
       Upcoming Premieres (TMDb):
         tmdb_upcoming: # This usually refers to movies; for TV, tmdb_discover with air_date might be better
-                      # Let's use tmdb_discover for more precise upcoming TV premieres
-          # This builder is more for movies. For TV premieres, tmdb_discover is more flexible.
-          # Using tmdb_discover to find shows premiering soon:
+        # Let's use tmdb_discover for more precise upcoming TV premieres
+        # This builder is more for movies. For TV premieres, tmdb_discover is more flexible.
+        # Using tmdb_discover to find shows premiering soon:
         tmdb_discover:
           sort_by: popularity.desc
           first_air_date.gte: {{now|date_add(days=1)|date_format(format='%Y-%m-%d')}} # Premieres from tomorrow onwards
@@ -83,12 +83,15 @@ data:
         sort_title: "+Genre_Drama"
         sync_mode: sync
 
-      # Collection for shows you've marked as "Watchlist" in Plex (if your agent supports it well)
-      # Plex Watchlist Shows:
-      #   plex_watchlist: true # Collects items on the Plex Watchlist of the user whose token is used.
-      #   summary: "Shows from my Plex Watchlist."
-      #   sort_title: "+Plex_Watchlist"
-      #   sync_mode: sync
+        # Collection for shows you've marked as "Watchlist" in Plex (if your agent supports it well)
+        Plex Watchlist Shows:
+          plex_watchlist: true # Collects items on the Plex Watchlist of the user whose token is used.
+          summary: "Shows from my Plex Watchlist."
+          sort_title: "+Plex_Watchlist"
+          sync_mode: sync
+          sonarr_add_missing: false
+          sonarr_search: false
+          sonarr_monitor: false
 kind: ConfigMap
 metadata:
   name: kometa-tv-config
