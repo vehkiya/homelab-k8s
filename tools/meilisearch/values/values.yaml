@@ -3,6 +3,7 @@ environment:
   MEILI_NO_ANALYTICS: true
   # -- Sets the environment. Either **production** or **development**
   MEILI_ENV: production
+  MEILI_EXPERIMENTAL_DUMPLESS_UPGRADE: true
 
 auth:
   # -- Use an existing Kubernetes secret for the MEILI_MASTER_KEY
