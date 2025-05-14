@@ -33,9 +33,6 @@ data:
         sort_title: "+2025_Top Airing (MAL)"
         sync_mode: sync
 
-      # --- Seasonal Collections for 2025 (MAL) ---
-      # Current Date: May 14, 2025. Winter 2025 is past, Spring 2025 is current.
-
       Popular Anime - Winter 2025 (MAL):
         mal_season:
           season: winter
@@ -58,13 +55,7 @@ data:
         sync_mode: sync
 
       Upcoming Popular Anime - Summer 2025 (MAL):
-        mal_upcoming: # This builder is good for generally upcoming popular shows
-          # To specifically target Summer 2025, mal_search is more precise:
-          # mal_search:
-          #   season: summer
-          #   year: 2025
-          #   status: upcoming
-          #   sort_by: members.desc # Popularity for upcoming
+        mal_upcoming:
           limit: 20
         summary: "Highly anticipated and popular upcoming anime for Summer 2025 (Jul-Sep), based on MyAnimeList."
         sort_title: "+2025_S3_Summer (MAL Upcoming)"
