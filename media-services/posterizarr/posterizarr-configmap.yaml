@@ -1,0 +1,231 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: posterizarr-configmap
+  namespace: media
+data:
+  config.json.template: |
+    {
+      "ApiPart": {
+        "tvdbapi": "${TVDB_API_KEY}",
+        "tmdbtoken": "${TMDB_API_TOKEN}",
+        "FanartTvAPIKey": "${FANART_PERSONAL_API_KEY}",
+        "PlexToken": "${PLEX_TOKEN}",
+        "FavProvider": "tmdb",
+        "WidthHeightFilter": "false",
+        "PosterMinWidth": "2000",
+        "PosterMinHeight": "3000",
+        "BgTcMinWidth": "3840",
+        "BgTcMinHeight": "2160",
+        "tmdb_vote_sorting": "vote_average",
+        "JellyfinAPIKey": "",
+        "EmbyAPIKey": "",
+        "PreferredLanguageOrder": [
+          "xx",
+          "en"
+        ],
+        "PreferredSeasonLanguageOrder": [
+          "xx",
+          "en"
+        ],
+        "PreferredBackgroundLanguageOrder": [
+          "xx",
+          "en"
+        ]
+      },
+      "PlexPart": {
+        "LibstoExclude": [
+        ],
+        "PlexUrl": "https://plex.kerrlab.app",
+        "UsePlex": "true",
+        "UploadExistingAssets": "false"
+      },
+      "JellyfinPart": {
+        "LibstoExclude": [
+          "Youtube",
+          "Audiobooks",
+          "KidsAudiobooks",
+          "TechTrainings"
+        ],
+        "JellyfinUrl": "http://192.168.1.93:8096",
+        "UseJellyfin": "false",
+        "UploadExistingAssets": "false",
+        "ReplaceThumbwithBackdrop": "false"
+      },
+      "EmbyPart": {
+        "LibstoExclude": [
+          "Youtube",
+          "Audiobooks",
+          "KidsAudiobooks",
+          "TechTrainings"
+        ],
+        "EmbyUrl": "http://192.168.1.93:8096/emby",
+        "UseEmby": "false",
+        "UploadExistingAssets": "false",
+        "ReplaceThumbwithBackdrop": "false"
+      },
+      "Notification": {
+        "SendNotification": "true",
+        "DiscordUserName": "Posterizarr",
+        "UseUptimeKuma": "false",
+        "AppriseUrl": "discord://{WebhookID}/{WebhookToken}/",
+        "Discord": "${DISCORD_WEBHOOK}",
+        "UptimeKumaUrl": "http://status.kerrlab.app/"
+      },
+      "PrerequisitePart": {
+        "AssetPath": "/assets",
+        "SkipAddText": "false",
+        "FollowSymlink": "false",
+        "ForceRunningDeletion": "false",
+        "AutoUpdatePosterizarr": "false",
+        "BackupPath": "/assets/backup",
+        "ManualAssetPath": "/manualassets",
+        "PlexUpload": "false",
+        "show_skipped": "false",
+        "magickinstalllocation": "C:\\PosterTemp\\ImageMagickPortable",
+        "maxLogs": "5",
+        "logLevel": "2",
+        "font": "Colus-Regular.ttf",
+        "RTLFont": "Colus-Regular.ttf",
+        "backgroundfont": "Colus-Regular.ttf",
+        "titlecardfont": "Colus-Regular.ttf",
+        "overlayfile": "overlay-innerglow.png",
+        "seasonoverlayfile": "overlay-innerglow.png",
+        "backgroundoverlayfile": "backgroundoverlay-innerglow.png",
+        "titlecardoverlayfile": "backgroundoverlay-innerglow.png",
+        "poster4k": "overlay-innerglow.png",
+        "Poster1080p": "overlay-innerglow.png",
+        "UsePosterResolutionOverlays": "false",
+        "LibraryFolders": "true",
+        "Posters": "true",
+        "SeasonPosters": "true",
+        "BackgroundPosters": "false",
+        "TitleCards": "false",
+        "NewLineOnSpecificSymbols": "false",
+        "NewLineSymbols": [
+          " - "
+        ],
+        "SkipTBA": "false",
+        "SkipJapTitle": "false",
+        "AssetCleanup": "false",
+        "AutoUpdateIM": "false",
+        "DisableHashValidation": "false"
+      },
+      "OverlayPart": {
+        "ImageProcessing": "true",
+        "outputQuality": "92%"
+      },
+      "PosterOverlayPart": {
+        "fontAllCaps": "true",
+        "AddBorder": "true",
+        "AddText": "true",
+        "AddTextStroke": "false",
+        "strokecolor": "black",
+        "strokewidth": "6",
+        "AddOverlay": "true",
+        "fontcolor": "white",
+        "bordercolor": "black",
+        "minPointSize": "45",
+        "maxPointSize": "300",
+        "borderwidth": "30",
+        "MaxWidth": "1900",
+        "MaxHeight": "500",
+        "text_offset": "+430",
+        "lineSpacing": "0",
+        "TextGravity": "south"
+      },
+      "SeasonPosterOverlayPart": {
+        "fontAllCaps": "true",
+        "ShowFallback": "false",
+        "AddBorder": "true",
+        "AddText": "true",
+        "AddTextStroke": "false",
+        "strokecolor": "black",
+        "strokewidth": "6",
+        "AddOverlay": "true",
+        "fontcolor": "white",
+        "bordercolor": "black",
+        "minPointSize": "95",
+        "maxPointSize": "250",
+        "borderwidth": "30",
+        "MaxWidth": "1900",
+        "MaxHeight": "500",
+        "text_offset": "+400",
+        "lineSpacing": "0",
+        "TextGravity": "south"
+      },
+      "ShowTitleOnSeasonPosterPart": {
+        "AddShowTitletoSeason": "false",
+        "fontAllCaps": "true",
+        "AddTextStroke": "false",
+        "strokecolor": "black",
+        "strokewidth": "6",
+        "fontcolor": "white",
+        "minPointSize": "45",
+        "maxPointSize": "300",
+        "MaxWidth": "1900",
+        "MaxHeight": "500",
+        "text_offset": "+300",
+        "lineSpacing": "0",
+        "TextGravity": "south"
+      },
+      "BackgroundOverlayPart": {
+        "fontAllCaps": "true",
+        "AddOverlay": "true",
+        "AddBorder": "true",
+        "AddText": "true",
+        "AddTextStroke": "false",
+        "strokecolor": "black",
+        "strokewidth": "6",
+        "fontcolor": "white",
+        "bordercolor": "black",
+        "minPointSize": "100",
+        "maxPointSize": "300",
+        "borderwidth": "30",
+        "MaxWidth": "3640",
+        "MaxHeight": "500",
+        "text_offset": "+200",
+        "lineSpacing": "0",
+        "TextGravity": "south"
+      },
+      "TitleCardOverlayPart": {
+        "UseBackgroundAsTitleCard": "false",
+        "BackgroundFallback": "true",
+        "AddOverlay": "true",
+        "AddBorder": "true",
+        "bordercolor": "black",
+        "borderwidth": "30"
+      },
+      "TitleCardTitleTextPart": {
+        "fontAllCaps": "true",
+        "AddEPTitleText": "true",
+        "AddTextStroke": "false",
+        "strokecolor": "black",
+        "strokewidth": "6",
+        "fontcolor": "white",
+        "minPointSize": "50",
+        "maxPointSize": "150",
+        "MaxWidth": "3640",
+        "MaxHeight": "280",
+        "text_offset": "+300",
+        "lineSpacing": "0",
+        "TextGravity": "south"
+      },
+      "TitleCardEPTextPart": {
+        "SeasonTCText": "Season",
+        "EpisodeTCText": "Episode",
+        "fontAllCaps": "true",
+        "AddEPText": "true",
+        "AddTextStroke": "false",
+        "strokecolor": "black",
+        "strokewidth": "4",
+        "fontcolor": "white",
+        "minPointSize": "50",
+        "maxPointSize": "80",
+        "MaxWidth": "1000",
+        "MaxHeight": "120",
+        "text_offset": "+150",
+        "lineSpacing": "0",
+        "TextGravity": "south"
+      }
+    }
