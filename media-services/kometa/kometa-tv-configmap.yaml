@@ -1,0 +1,95 @@
+apiVersion: v1
+data:
+  tv.yaml: |
+    collections:
+      Trending TV Shows (TMDb):
+        tmdb_trending_daily: # Or tmdb_trending_weekly
+          limit: 20 # Number of shows to include
+        summary: "TV shows currently trending daily, according to TMDb."
+        sort_title: "+01_Trending TV" # '+' helps with sorting at the beginning
+        sync_mode: sync # Keeps the collection updated with the TMDb list
+
+      Popular TV Shows (TMDb):
+        tmdb_popular:
+          limit: 25
+        summary: "Most popular TV shows, according to TMDb."
+        sort_title: "+02_Popular TV"
+        sync_mode: sync
+
+      Top Rated TV Shows (TMDb):
+        tmdb_top_rated:
+          limit: 25
+        summary: "Highest-rated TV shows of all time, according to TMDb."
+        sort_title: "+03_Top Rated TV"
+        sync_mode: sync
+
+       Trending TV Shows (Trakt):
+         trakt_trending: # Trakt's trending list (shows)
+           limit: 20
+         summary: "TV shows currently trending, according to Trakt."
+         sort_title: "+01_Trending TV (Trakt)"
+         sync_mode: sync
+         sonarr_add_missing: true
+         sonarr_search: true
+         sonarr_monitor: true
+
+       Popular TV Shows (Trakt):
+         trakt_popular: # Trakt's popular list (shows)
+           limit: 25
+         summary: "Most popular TV shows, according to Trakt."
+         sort_title: "+02_Popular TV (Trakt)"
+         sync_mode: sync
+
+      Airing Today (TMDb):
+        tmdb_airing_today:
+          limit: 15
+        summary: "TV shows with episodes airing today, according to TMDb."
+        sort_title: "+04_Airing Today"
+        sync_mode: sync # Good for dynamic lists like this
+
+      Upcoming Premieres (TMDb):
+        tmdb_upcoming: # This usually refers to movies; for TV, tmdb_discover with air_date might be better
+                      # Let's use tmdb_discover for more precise upcoming TV premieres
+          # This builder is more for movies. For TV premieres, tmdb_discover is more flexible.
+          # Using tmdb_discover to find shows premiering soon:
+        tmdb_discover:
+          sort_by: popularity.desc
+          first_air_date.gte: {{now|date_add(days=1)|date_format(format='%Y-%m-%d')}} # Premieres from tomorrow onwards
+          first_air_date.lte: {{now|date_add(days=30)|date_format(format='%Y-%m-%d')}} # Premieres in the next 30 days
+          limit: 15
+        summary: "TV shows premiering in the next 30 days."
+        sort_title: "+05_Upcoming Premieres"
+        sync_mode: sync
+
+      # Simple Genre Example: Top Comedy Shows
+      Top Comedy Shows (TMDb):
+        tmdb_discover:
+          with_genres: 35 # TMDb Genre ID for Comedy
+          sort_by: vote_average.desc
+          vote_count.gte: 500 # Only include shows with a decent number of votes
+          limit: 20
+        summary: "Top-rated comedy TV shows based on TMDb user scores."
+        sort_title: "+Genre_Comedy"
+        sync_mode: sync
+
+      # Simple Genre Example: Top Drama Shows
+      Top Drama Shows (TMDb):
+        tmdb_discover:
+          with_genres: 18 # TMDb Genre ID for Drama
+          sort_by: vote_average.desc
+          vote_count.gte: 500
+          limit: 20
+        summary: "Top-rated drama TV shows based on TMDb user scores."
+        sort_title: "+Genre_Drama"
+        sync_mode: sync
+
+      # Collection for shows you've marked as "Watchlist" in Plex (if your agent supports it well)
+      # Plex Watchlist Shows:
+      #   plex_watchlist: true # Collects items on the Plex Watchlist of the user whose token is used.
+      #   summary: "Shows from my Plex Watchlist."
+      #   sort_title: "+Plex_Watchlist"
+      #   sync_mode: sync
+kind: ConfigMap
+metadata:
+  name: kometa-tv-config
+  namespace: media

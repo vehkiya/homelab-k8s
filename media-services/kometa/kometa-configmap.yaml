@@ -1,0 +1,123 @@
+apiVersion: v1
+data:
+  config.yml: |
+    libraries:
+      Anime:
+        library_name: Anime
+        collection_files:
+          - file: config/anime.yaml
+      Movies:
+        library_name: Movies
+        collection_files:
+          - file: config/movies.yaml
+      TV Shows:
+        library_name: TV Shows
+        collection_files:
+          - file: config/tv.yaml
+    settings:
+      cache: true
+      cache_expiration: 60
+      asset_directory: config/assets
+      asset_folders: true
+      asset_depth: 0
+      create_asset_folders: false
+      dimensional_asset_rename: false
+      download_url_assets: false
+      show_missing_season_assets: false
+      sync_mode: append
+      minimum_items: 1
+      default_collection_order:
+      delete_below_minimum: true
+      delete_not_scheduled: false
+      run_again_delay: 2
+      missing_only_released: false
+      only_filter_missing: false
+      show_unmanaged: true
+      show_filtered: false
+      show_options: false
+      show_missing: true
+      show_missing_assets: true
+      save_report: true
+      tvdb_language: eng
+      ignore_ids:
+      ignore_imdb_ids:
+      playlist_sync_to_users: all
+      verify_ssl: true
+    plex:
+      url: https://plex.kerrlab.app
+      token: ${PLEX_TOKEN}
+      timeout: 60
+      db_cache:
+      clean_bundles: false
+      empty_trash: false
+      optimize: false
+      verify_ssl: true
+    tmdb:
+      apikey: ${TMDB_API_KEY}
+      language: en
+    tautulli:
+      url: https://tautulli.kerlab.app
+      apikey: ${TAUTULLI_API_KEY}
+    omdb:
+      apikey: ${OMDB_API_KEY}
+    radarr:
+      url: https://radarr.kerrlab.app
+      token: ${RADARR_TOKEN}
+      add_missing: false
+      root_folder_path: /movies
+      monitor: false
+      availability: cinemas
+      quality_profile: Any
+      tag: kometa
+      add_existing: false
+      search: false
+      radarr_path:
+      plex_path:
+    sonarr:
+      url: https://sonarr.kerrlab.app
+      token: ${SONARR_TOKEN}
+      add_missing: false
+      add_existing: false
+      root_folder_path: /tv
+      monitor: pilot
+      quality_profile: Any
+      language_profile: English
+      series_type: standard
+      season_folder: true
+      tag: kometa
+      search: true
+      cutoff_search: false
+      sonarr_path:
+      plex_path:
+    anidb:
+      client: vehkiyasclient
+      version: 1
+      language: en
+      cache_expiration: 60
+      username: vehkiya
+      password: ${ANIDB_PASSWORD}
+    mal:
+      client_id: ${MAL_CLIENT_ID}
+      client_secret: ${MAL_CLIENT_SECRET}
+      authorization:
+        access_token: ${MAL_ACCESS_TOKEN}
+        token_type: Bearer
+        expires_in: 2678400
+        refresh_token: ${MAL_REFRESH_TOKEN}
+      localhost_url: http://localhost/?code=${MAL_LOCALHOST_URL_CODE}
+      cache_expiration: 60
+    trakt:
+      client_id: ${TRAKT_CLIENT_ID}
+      client_secret: ${TRAKT_CLIENT_SECRET}
+      authorization:
+        access_token: ${TRAKT_ACCESS_TOKEN}
+        token_type: Bearer
+        expires_in: 86399
+        refresh_token: ${TRAKT_REFRESH_TOKEN}
+        scope: public
+        created_at: 1747247172
+      pin:
+kind: ConfigMap
+metadata:
+  name: kometa-config
+  namespace: media

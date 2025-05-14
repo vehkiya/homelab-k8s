@@ -1,0 +1,35 @@
+apiVersion: v1
+data:
+  movies.yaml: |
+    collections:
+      Trakt Popular:
+        trakt_popular: 200
+        collection_order: custom
+        sync_mode: sync
+        sort_title: Traktpopular
+        summary: The most popular movies for all time.
+        radarr_add_missing: true
+        radarr_search: true
+        radarr_monitor: true
+      Tautulli Most Popular Movies:
+        sync_mode: sync
+        collection_order: custom
+        tautulli_watched:
+          list_days: 180
+          list_size: 10
+          list_minimum: 1
+      Marvel Cinematic Universe:
+        tmdb_collection: "131295"
+        sort_title: "+01_Marvel Cinematic Universe"
+        summary: "All movies from the Marvel Cinematic Universe, in release order."
+      Harry Potter:
+        tmdb_collection: "1241"
+       summary: "The magical adventures of Harry Potter and his friends at Hogwarts School of Witchcraft and Wizardry, and their fight against the dark wizard Lord Voldemort."
+        sort_title: "+_Franchise_Harry Potter"
+        plex:
+          labels:
+            - Harry Potter
+kind: ConfigMap
+metadata:
+  name: kometa-movie-config
+  namespace: media
