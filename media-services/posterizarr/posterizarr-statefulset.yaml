@@ -3,6 +3,7 @@ kind: StatefulSet
 metadata:
   name: posterizarr
   namespace: media
+spec:
   serviceName: posterizarr
   replicas: 1
   selector:
@@ -17,9 +18,47 @@ metadata:
         runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
         supplementalGroups:
           - 6
       terminationGracePeriodSeconds: 30
+      initContainers:
+        - name: prepare-config
+          image: alpine/k8s:1.28.2
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Starting configuration processing..."
+              CONFIG_TEMPLATE_PATH="/config_templates/config.json.template"
+              FINAL_CONFIG_PATH="/config/config.json"
+
+              echo "Template path: $CONFIG_TEMPLATE_PATH"
+              echo "Output path: $FINAL_CONFIG_PATH"
+
+              if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
+                echo "ERROR: Config template $CONFIG_TEMPLATE_PATH not found!"
+                exit 1
+              fi              
+
+              envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"
+
+              echo "Configuration file generated at $FINAL_CONFIG_PATH:"
+              cat "$FINAL_CONFIG_PATH" # For verification in logs
+
+              echo "Contents of /config after processing:"
+              ls -la /config
+
+              echo "Configuration processing complete."
+          envFrom: # This injects all keys from the secret as environment variables
+            - secretRef:
+                name: posterizarr-secret
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: app-config-tpl-volume # Mount the ConfigMap template
+              mountPath: /config_templates
       containers:
         - name: posterizarr
           image: ghcr.io/fscorrupt/posterizarr:1.9.59
@@ -27,7 +66,7 @@ metadata:
             - name: TZ
               value: "Europe/Chisinau"
             - name: RUN_TIME
-              value: "10:30,19:30"
+              value: "10:30,18:52,19:30"
           volumeMounts:
             - name: assets
               mountPath: /assets
@@ -40,3 +79,9 @@ metadata:
         - name: assets
           persistentVolumeClaim:
             claimName: posterizarr-data-pvc
+        - name: app-config-tpl-volume
+          configMap:
+            name: posterizarr-configmap
+            items:
+              - key: config.json.template
+                path: config.json.template
