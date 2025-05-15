@@ -30,7 +30,7 @@ spec:
                 - NET_RAW
                 - SYS_ADMIN
         # Bundle matter-server with HomeAssistant
-        - image: ghcr.io/home-assistant-libs/python-matter-server:7.0.1
+        - image: ghcr.io/home-assistant-libs/python-matter-server:8.0.0
           name: matter-server
           volumeMounts:
             - name: hass-config-mount
