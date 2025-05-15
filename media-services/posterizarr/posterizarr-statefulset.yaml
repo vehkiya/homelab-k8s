@@ -61,7 +61,7 @@ spec:
               mountPath: /config_templates
       containers:
         - name: posterizarr
-          image: ghcr.io/fscorrupt/posterizarr:1.9.59
+          image: ghcr.io/fscorrupt/posterizarr:1.9.60
           env:
             - name: TZ
               value: "Europe/Chisinau"
