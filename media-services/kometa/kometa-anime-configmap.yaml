@@ -21,66 +21,6 @@ data:
         summary: "Most popular and highest-scoring anime released or significantly airing in 2025, according to MyAnimeList."
         sort_title: "+2025_Popular (MAL)"
         sync_mode: sync
-
-      Top Airing Anime - 2025 (MAL):
-        mal_airing: # Specifically anime currently airing
-          limit: 25
-        # mal_airing itself doesn't have a year filter. It shows what's airing NOW.
-        # To ensure these are 2025-centric, this collection will naturally pick up 2025 shows
-        # if they are currently airing when Kometa runs.
-        # For a stricter "started in 2025 and airing", combine with mal_search or trust its current relevance.
-        summary: "Top anime currently airing, based on MyAnimeList ratings/popularity."
-        sort_title: "+2025_Top Airing (MAL)"
-        sync_mode: sync
-
-      Popular Anime - Winter 2025 (MAL):
-        mal_season:
-          season: winter
-          year: 2025
-          sorting: anime_num_list_users # Sort by popularity (members)
-          # sorting: anime_score # Alternative: sort by score
-          limit: 20
-        summary: "Popular anime from the Winter 2025 season (Jan-Mar) on MyAnimeList."
-        sort_title: "+2025_S1_Winter (MAL Popular)"
-        sync_mode: sync
-
-      Popular Anime - Spring 2025 (MAL):
-        mal_season:
-          season: spring
-          year: 2025
-          sorting: anime_num_list_users
-          limit: 20
-        summary: "Popular anime from the Spring 2025 season (Apr-Jun) on MyAnimeList."
-        sort_title: "+2025_S2_Spring (MAL Popular)"
-        sync_mode: sync
-
-      Upcoming Popular Anime - Summer 2025 (MAL):
-        mal_upcoming:
-          limit: 20
-        summary: "Highly anticipated and popular upcoming anime for Summer 2025 (Jul-Sep), based on MyAnimeList."
-        sort_title: "+2025_S3_Summer (MAL Upcoming)"
-        sync_mode: sync
-
-      Upcoming Popular Anime - Fall 2025 (MAL):
-        # Using mal_search for better precision for a specific future season
-        mal_search:
-          season: fall
-          year: 2025
-          status: upcoming
-          sort_by: members.desc # Popularity for upcoming
-          limit: 20
-        summary: "Highly anticipated and popular upcoming anime for Fall 2025 (Oct-Dec), based on MyAnimeList."
-        sort_title: "+2025_S4_Fall (MAL Upcoming)"
-        sync_mode: sync
-
-      Highest Rated Anime of 2025 (MAL):
-        mal_search:
-          year: 2025
-          sort_by: score.desc
-          limit: 25
-        summary: "Highest-rated anime that aired or are airing in 2025, based on MyAnimeList scores."
-        sort_title: "+2025_Top Rated (MAL)"
-        sync_mode: sync
 kind: ConfigMap
 metadata:
   name: kometa-anime-config
