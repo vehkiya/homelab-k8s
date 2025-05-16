@@ -8,9 +8,6 @@ data:
         sync_mode: sync
         sort_title: Traktpopular
         summary: The most popular movies for all time.
-        radarr_add_missing: false
-        radarr_search: false
-        radarr_monitor: false
 
       Marvel Cinematic Universe:
         trakt_list: https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe?sort=rank,asc
