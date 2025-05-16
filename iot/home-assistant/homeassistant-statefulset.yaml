@@ -17,7 +17,7 @@ spec:
       hostNetwork: true
       containers:
         - name: homeassistant
-          image: ghcr.io/home-assistant/home-assistant:2025.5.1
+          image: ghcr.io/home-assistant/home-assistant:2025.5.2
           volumeMounts:
             - name: hass-config-mount
               mountPath: /config
