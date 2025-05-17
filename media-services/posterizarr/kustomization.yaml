@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - posterizarr-secret.yaml
   - posterizarr-configmap.yaml
-  - posterizarr-statefulset.yaml
+  - posterizarr-deployment.yaml

@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: posterizarr
   namespace: media
 spec:
-  serviceName: posterizarr
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: posterizarr
