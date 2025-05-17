@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: salt-rim-frontend
-          image: ghcr.io/karlomikus/salt-rim:4.2 # Using specific version from compose
+          image: ghcr.io/karlomikus/salt-rim:4.3 # Using specific version from compose
           env:
             # Explicitly map needed vars from ConfigMap
             - name: API_URL
