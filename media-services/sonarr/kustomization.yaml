@@ -4,7 +4,7 @@ kind: Kustomization
 
 # List of resources to include
 resources:
-  - sonarr-statefulset.yaml
+  - sonarr-deployment.yaml
   - sonarr-service.yaml
   - sonarr-http-route.yaml
 

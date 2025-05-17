@@ -7,6 +7,8 @@ metadata:
     app: bar-assistant
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: bar-assistant
