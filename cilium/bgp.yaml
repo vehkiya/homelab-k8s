@@ -28,7 +28,7 @@ metadata:
   name: custom-policy
 spec:
   virtualRouters:
-    - exportPodCIDR: false
+    - exportPodCIDR: true
       localASN: 65512
       neighbors:
         - connectRetryTimeSeconds: 120
@@ -36,7 +36,7 @@ spec:
           holdTimeSeconds: 90
           keepAliveTimeSeconds: 30
           peerASN: 65000
-          peerAddress: 192.168.1.1/32
+          peerAddress: 10.10.1.1/32
           peerPort: 179
           families:
             - afi: ipv4
