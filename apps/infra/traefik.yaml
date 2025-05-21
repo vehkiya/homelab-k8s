@@ -13,6 +13,8 @@ spec:
     namespace: traefik
     server: https://kube.kerrlab.app:6443
   syncPolicy:
-#    automated:
+    automated:
+      prune: false
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
