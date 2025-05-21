@@ -3,7 +3,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: synology-iscsi
+          storageClassName: longhorn
           accessModes: ["ReadWriteMany"]
           resources:
             requests:
@@ -14,7 +14,7 @@ alertmanager:
     storage:
       volumeClaimTemplate:
         spec:
-          storageClassName: synology-iscsi
+          storageClassName: longhorn
           accessModes: ["ReadWriteMany"]
           resources:
             requests:
@@ -22,7 +22,7 @@ alertmanager:
 grafana:
   persistence:
     enabled: true
-    storageClassName: synology-iscsi
+    storageClassName: longhorn
     accessModes: ["ReadWriteMany"]
     size: 10Gi
   admin:
