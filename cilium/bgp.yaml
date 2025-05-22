@@ -28,7 +28,7 @@ metadata:
   name: custom-policy
 spec:
   virtualRouters:
-    - exportPodCIDR: true
+    - exportPodCIDR: false
       localASN: 65512
       neighbors:
         - connectRetryTimeSeconds: 120

@@ -103,6 +103,6 @@ gatewayAPI:
   enableAppProtocol: true
 
 prometheus:
-  metricsService: false
+  metricsService: true
   enabled: true
   port: 9962
