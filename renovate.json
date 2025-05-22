@@ -18,13 +18,22 @@
       "packagePatterns": [
         "^ghcr.io\\/hotio\\/"
       ],
-      "versionScheme": "regex:^(?<compatibility>.*(\\d+\\.)?)(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
+      "versioning": "regex:^(?<compatibility>.*(\\d+\\.)?)(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
     },
     {
       "packagePatterns": [
         "^lscr.io\\/linuxserver\\/"
       ],
       "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<revision>\\d+)$"
+    },
+    {
+      "packagePatterns": [
+        "renovate/renovate",
+        "kube-prometheus-stack"
+      ],
+      "schedule": [
+        "every day"
+      ]
     }
   ]
 }
