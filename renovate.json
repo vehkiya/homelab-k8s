@@ -32,7 +32,7 @@
         "kube-prometheus-stack"
       ],
       "schedule": [
-        "every day"
+        "* 0-4 * * *"
       ]
     }
   ]
