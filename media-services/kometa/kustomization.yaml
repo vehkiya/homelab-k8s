@@ -6,5 +6,6 @@ resources:
   - kometa-anime-configmap.yaml
   - kometa-movie-configmap.yaml
   - kometa-tv-configmap.yaml
+  - kometa-overlays-configmap.yaml
   - kometa-configmap.yaml
   - kometa-cronjob.yaml

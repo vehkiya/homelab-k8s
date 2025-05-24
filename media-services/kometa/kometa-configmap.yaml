@@ -10,6 +10,9 @@ data:
         library_name: Movies
         collection_files:
           - file: config/movies.yaml
+        remove_overlays: false
+        overlay_files:
+          - file: config/overlay.yaml
       TV Shows:
         library_name: TV Shows
         collection_files:
@@ -17,9 +20,15 @@ data:
     settings:
       cache: true
       cache_expiration: 60
-      asset_directory: config/assets
+      asset_directory: /config/assets
       asset_folders: true
       asset_depth: 0
+      prioritize_assets: false
+      show_missing_episode_assets: false
+      show_asset_not_needed: true
+      item_refresh_delay: 0
+      show_unconfigured: true
+      show_unfiltered: false
       create_asset_folders: false
       dimensional_asset_rename: false
       download_url_assets: false
@@ -47,14 +56,16 @@ data:
       url: https://plex.kerrlab.app
       token: ${PLEX_TOKEN}
       timeout: 60
-      db_cache:
-      clean_bundles: false
+      db_cache: 512
+      clean_bundles: true
       empty_trash: false
-      optimize: false
+      optimize: true
       verify_ssl: true
     tmdb:
       apikey: ${TMDB_API_KEY}
       language: en
+      region:
+      cache_expiration: 60
     tautulli:
       url: https://tautulli.kerrlab.app
       apikey: ${TAUTULLI_API_KEY}
@@ -74,6 +85,9 @@ data:
       search: false
       radarr_path:
       plex_path:
+      upgrade_existing: false
+      monitor_existing: false
+      ignore_cache: false
     sonarr:
       url: https://sonarr.kerrlab.app
       token: ${SONARR_TOKEN}
@@ -90,6 +104,9 @@ data:
       cutoff_search: false
       sonarr_path:
       plex_path:
+      upgrade_existing: false
+      monitor_existing: false
+      ignore_cache: false
     anidb:
       client: vehkiyasclient
       version: 1
@@ -116,8 +133,8 @@ data:
         expires_in: 86399
         refresh_token: ${TRAKT_REFRESH_TOKEN}
         scope: public
-        created_at: 1747247172
-      pin:
+        created_at: 1748116431
+      pin: c46bad29
 kind: ConfigMap
 metadata:
   name: kometa-config

@@ -1,101 +1,139 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-    name: kometa
-    namespace: media
+  name: kometa
+  namespace: media
 spec:
-    schedule: "@daily"
-    jobTemplate:
+  schedule: "@daily"
+  jobTemplate:
+    spec:
+      template:
         spec:
-            template:
-                spec:
-                    securityContext:
-                        runAsUser: 1000
-                        runAsGroup: 1000
-                        fsGroup: 1000
-                    initContainers:
-                        - name: prepare-config
-                          image: alpine/k8s:1.33.1
-                          command:
-                              - /bin/sh
-                              - -c
-                              - |
-                                echo "Starting configuration processing..."
-                                CONFIG_TEMPLATE_PATH="/config_templates/config.yml"
-                                FINAL_CONFIG_PATH="/config/config.yml"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          initContainers:
+            - name: prepare-config
+              image: alpine/k8s:1.33.1
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "🚀 Starting Configuration Processing..."
+                  echo "--------------------------------------------------"
 
-                                echo "Template path: $CONFIG_TEMPLATE_PATH"
-                                echo "Output path: $FINAL_CONFIG_PATH"
-                                echo "/config"
-                                ls -las /config
-                                echo "/config_templates"
-                                ls -las /config_templates
-                                echo "template contents"
-                                cat $CONFIG_TEMPLATE_PATH
-                                if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
-                                  echo "ERROR: Config template $CONFIG_TEMPLATE_PATH not found!"
-                                  exit 1
-                                fi
+                  CONFIG_TEMPLATE_PATH="/config_templates/config.yml"
+                  FINAL_CONFIG_PATH="/config/config.yml"
 
-                                envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"
+                  echo "ℹ️ Template Path: $CONFIG_TEMPLATE_PATH"
+                  echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
+                  echo "--------------------------------------------------"
 
-                                echo "Configuration file generated at $FINAL_CONFIG_PATH:"
-                                cat "$FINAL_CONFIG_PATH" # For verification in logs
+                  echo "🔎 Debug: Initial contents of /config directory:"
+                  ls -las /config
+                  echo "--------------------------------------------------"
+                  echo "🔎 Debug: Initial contents of /config_templates directory:"
+                  ls -las /config_templates
+                  echo "--------------------------------------------------"
 
-                                echo "Contents of /config after processing:"
-                                ls -la /config
+                  if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
+                    echo "❌ ERROR: Config template '$CONFIG_TEMPLATE_PATH' not found! Aborting."
+                    exit 1
+                  fi
 
-                                echo "Configuration processing complete."
-                          envFrom: # This injects all keys from the secret as environment variables
-                              - secretRef:
-                                    name: kometa-secrets
-                          volumeMounts:
-                              - name: config
-                                mountPath: /config
-                              - name: kometa-config
-                                mountPath: /config_templates/config.yml
-                                subPath: config.yml
-                    containers:
-                        - name: kometa
-                          image: kometateam/kometa:v2.2.0
-                          imagePullPolicy: IfNotPresent
-                          args: [ "--run", "--read-only-config" ]
-                          resources:
-                              limits:
-                                  cpu: 500m
-                                  memory: 512Mi
-                              requests:
-                                  cpu: 500m
-                                  memory: 512Mi
-                          volumeMounts:
-                              - name: config
-                                mountPath: /config
-#                              - name: kometa-config
-#                                mountPath: /config/config.yml
-#                                subPath: config.yml
-                              - name: movie-config
-                                mountPath: /config/movies.yaml
-                                subPath: movies.yaml
-                              - name: tv-config
-                                mountPath: /config/tv.yaml
-                                subPath: tv.yaml
-                              - name: anime-config
-                                mountPath: /config/anime.yaml
-                                subPath: anime.yaml
-                    volumes:
-                        - name: config
-                          persistentVolumeClaim:
-                              claimName: kometa-config-pvc
-                        - configMap:
-                              name: kometa-config
-                          name: kometa-config
-                        - configMap:
-                              name: kometa-movie-config
-                          name: movie-config
-                        - configMap:
-                              name: kometa-tv-config
-                          name: tv-config
-                        - configMap:
-                              name: kometa-anime-config
-                          name: anime-config
-                    restartPolicy: OnFailure
+                  echo "📄 Displaying contents of template '$CONFIG_TEMPLATE_PATH':"
+                  cat "$CONFIG_TEMPLATE_PATH" # Now safe to cat as we've checked it exists
+                  echo "--------------------------------------------------"
+
+                  echo "⚙️  Generating final configuration file from template..."
+                  if envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"; then
+                    echo "✅ Final configuration file '$FINAL_CONFIG_PATH' generated successfully."
+                  else
+                    echo "❌ ERROR: Failed to generate configuration file '$FINAL_CONFIG_PATH'."
+                    exit 1 # Exit if generation fails
+                  fi
+                  echo "--------------------------------------------------"
+
+                  echo "📄 Displaying contents of generated configuration file '$FINAL_CONFIG_PATH':"
+                  cat "$FINAL_CONFIG_PATH" # For verification in logs
+                  echo "--------------------------------------------------"
+
+                  echo "🔎 Debug: Contents of /config directory after processing:"
+                  ls -la /config
+                  echo "--------------------------------------------------"
+
+                  echo "🎉 Main configuration processing complete."
+                  echo ""
+                  echo "--- Processing Additional Configuration Details ---"
+                  ASSETS_FOLDER="/config/assets"
+                  echo "ℹ️ Target Assets Folder: $ASSETS_FOLDER"
+
+                  if [ ! -d "$ASSETS_FOLDER" ]; then
+                    echo "📂 Assets folder '$ASSETS_FOLDER' does not exist. Attempting to create..."
+                    if mkdir -p "$ASSETS_FOLDER"; then
+                      echo "✅ Assets folder '$ASSETS_FOLDER' created successfully."
+                    else
+                      echo "⚠️ WARN: Failed to create assets folder '$ASSETS_FOLDER'."
+                    fi
+                  else
+                    echo "👍 Assets folder '$ASSETS_FOLDER' already exists. No action taken."
+                  fi
+                  echo "--------------------------------------------------"
+                  echo "🏁 All configuration processing finished."
+              envFrom: # This injects all keys from the secret as environment variables
+                - secretRef:
+                    name: kometa-secrets
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+                - name: kometa-config
+                  mountPath: /config_templates/config.yml
+                  subPath: config.yml
+          containers:
+            - name: kometa
+              image: kometateam/kometa:v2.2.0
+              imagePullPolicy: IfNotPresent
+              args: [ "--run", "--read-only-config" ]
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+                requests:
+                  cpu: 500m
+                  memory: 512Mi
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+                - name: movie-config
+                  mountPath: /config/movies.yaml
+                  subPath: movies.yaml
+                - name: tv-config
+                  mountPath: /config/tv.yaml
+                  subPath: tv.yaml
+                - name: anime-config
+                  mountPath: /config/anime.yaml
+                  subPath: anime.yaml
+                - name: overlay-config
+                  mountPath: /config/overlay.yaml
+                  subPath: overlay.yaml
+          volumes:
+            - name: config
+              persistentVolumeClaim:
+                claimName: kometa-config-pvc
+            - name: kometa-config
+              configMap:
+                name: kometa-config
+            - name: movie-config
+              configMap:
+                name: kometa-movie-config
+            - name: tv-config
+              configMap:
+                name: kometa-tv-config
+            - name: anime-config
+              configMap:
+                name: kometa-anime-config
+            - name: overlay-config
+              configMap:
+                name: kometa-overlay-config
+          restartPolicy: OnFailure

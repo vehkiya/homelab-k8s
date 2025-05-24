@@ -3,10 +3,11 @@ data:
   movies.yaml: |
     collections:
       Trakt Popular:
-        trakt_popular: 200
+        trakt_chart:
+          chart: popular
+          limit: 200
         collection_order: custom
         sync_mode: sync
-        sort_title: Traktpopular
         summary: The most popular movies for all time.
 
       Marvel Cinematic Universe:
@@ -14,48 +15,45 @@ data:
         sort_title: "+01_Marvel Cinematic Universe"
         summary: "All movies from the Marvel Cinematic Universe, in release order."
 
-      Harry Potter:
-        tmdb_collection: "1241"
+      Harry Potterverse:
+        trakt_list: https://trakt.tv/users/barsaky/lists/harry-potter-universe-chronological-order?sort=rank,asc
         summary: "The magical adventures of Harry Potter and his friends at Hogwarts School of Witchcraft and Wizardry, and their fight against the dark wizard Lord Voldemort."
         sort_title: "+_Franchise_Harry Potter"
+        sync_mode: sync
+        collection_order: custom
+        radarr_add_missing: true
+        radarr_search: true
 
       The Matrix Collection:
-        tmdb_collection: 623 # The Matrix Collection
+        tmdb_collection: 2344 # The Matrix Collection
         summary: "A collection of movies from The Matrix franchise."
         sort_title: "+Franchise_Matrix"
 
       Middle-earth Saga:
-        trakt_list: https://trakt.tv/users/USERNAME/lists/middle-earth # IF you create such a list on Trakt
-        tmdb_collection:
-          - 119 # The Lord of the Rings
-          - 121938 # The Hobbit
+        trakt_list: https://trakt.tv/users/drachenplatinum/lists/middle-earth-chronological-order?sort=rank,asc
         summary: "The complete Middle-earth saga including The Lord of the Rings and The Hobbit."
         sort_title: "+Franchise_Middle-earth Saga"
+        sync_mode: sync
+        collection_order: custom
 
       The Lord of the Rings Collection:
         tmdb_collection: 119 # The Lord of the Rings Collection
         summary: "The epic fantasy adventure based on J.R.R. Tolkien's novels."
         sort_title: "+Franchise_Lord of the Rings"
 
-      The Hobbit Collection:
-        tmdb_collection: 121938 # The Hobbit Collection
-        summary: "The prequel trilogy to The Lord of the Rings, following Bilbo Baggins."
-        sort_title: "+Franchise_Hobbit"
-
       Star Wars Collection:
-        tmdb_collection: 10 # Star Wars Collection (Skywalker Saga and related films)
+        trakt_list: https://trakt.tv/users/docteur-dream/lists/star-wars-chronology?sort=rank,asc
         summary: "The epic space opera franchise created by George Lucas."
         sort_title: "+Franchise_Star Wars"
+        sync_mode: sync
+        collection_order: custom
 
-     Dune Collection:
-        tmdb_collection: 86061 # Dune Collection (Covers recent Denis Villeneuve films and potentially older ones if TMDb groups them)
+      Dune Collection:
+        tmdb_collection: 726871 # Dune Collection (Covers recent Denis Villeneuve films and potentially older ones if TMDb groups them)
         summary: "Feature film adaptations of Frank Herbert's epic science fiction novel, Dune."
         sort_title: "+Franchise_Dune"
-
-      Men in Black Collection:
-        tmdb_collection: 86055 # Men In Black Collection
-        summary: "The Men in Black film series, following agents who monitor alien life on Earth."
-        sort_title: "+Franchise_Men in Black"
+        radarr_add_missing: true
+        radarr_search: true
 
       Indiana Jones Collection:
         tmdb_collection: 84 # Indiana Jones Collection
@@ -63,12 +61,12 @@ data:
         sort_title: "+Franchise_Indiana Jones"
 
       Shrek Collection:
-        tmdb_collection: 4355 # Shrek Collection (Includes Shrek movies and Puss in Boots movies)
+        tmdb_collection: 2150 # Shrek Collection (Includes Shrek movies and Puss in Boots movies)
         summary: "The animated adventures of Shrek, Donkey, Puss in Boots, and their fairy tale friends."
         sort_title: "+Franchise_Shrek"
 
-      Taxi Collection (French):
-        tmdb_collection: 9071 # Taxi Collection (Original French series)
+      Taxi Collection:
+        tmdb_collection: 211721 # Taxi Collection (Original French series)
         summary: "The French action-comedy film series about a taxi driver and a police inspector."
         sort_title: "+Franchise_Taxi (French)"
 
@@ -77,15 +75,10 @@ data:
         summary: "The cinematic adventures of MI6 agent James Bond, 007."
         sort_title: "+Franchise_James Bond"
 
-      Mission: Impossible Collection:
+      Mission Impossible Collection:
         tmdb_collection: 87359 # Mission: Impossible Collection
         summary: "The action spy film series following IMF agent Ethan Hunt."
         sort_title: "+Franchise_Mission Impossible"
-
-      The Dark Knight Trilogy: # Specific Batman collection
-        tmdb_collection: 2121 # The Dark Knight Trilogy
-        summary: "Christopher Nolan's critically acclaimed Batman trilogy."
-        sort_title: "+Franchise_Batman The Dark Knight Trilogy"
 
       Pirates of the Caribbean Collection:
         tmdb_collection: 295 # Pirates of the Caribbean Collection
@@ -102,11 +95,6 @@ data:
         summary: "The science fiction action franchise about the war between humans and intelligent machines."
         sort_title: "+Franchise_Terminator"
 
-      Back to the Future Collection:
-        tmdb_collection: 264 # Back to the Future Collection
-        summary: "The classic time-traveling adventures of Marty McFly and Doc Brown."
-        sort_title: "+Franchise_Back to the Future"
-
       John Wick Collection:
         tmdb_collection: 404609 # John Wick Collection
         summary: "The neo-noir action thriller series about the legendary hitman."
@@ -117,15 +105,16 @@ data:
         summary: "The animated adventures of Gru, his family, and the mischievous Minions."
         sort_title: "+Franchise_Despicable Me & Minions"
 
-      Ice Age Collection:
-        tmdb_collection: 8354 # Ice Age Collection
-        summary: "The prehistoric animated adventures of Manny, Sid, Diego, and Scrat."
-        sort_title: "+Franchise_Ice Age"
+      Christmas:
+        trakt_list:
+          - https://trakt.tv/users/movistapp/lists/christmas-movies
+          - https://trakt.tv/users/2borno2b/lists/christmas-movies-extravanganza
+        sync_mode: sync
 
-      How to Train Your Dragon Collection:
-        tmdb_collection: 131296 # How to Train Your Dragon Collection
-        summary: "The animated saga of Hiccup and his dragon Toothless."
-        sort_title: "+Franchise_How to Train Your Dragon"
+      Documentaries:
+        smart_filter:
+          all:
+            genre: Documentary
 kind: ConfigMap
 metadata:
   name: kometa-movie-config

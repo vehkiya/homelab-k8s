@@ -2,49 +2,14 @@ apiVersion: v1
 data:
   tv.yaml: |
     collections:
-      Trending TV Shows (TMDb):
-        tmdb_trending_daily: 20
-        summary: "TV shows currently trending daily, according to TMDb."
-        sort_title: "+01_Trending TV" # '+' helps with sorting at the beginning
-        sync_mode: sync # Keeps the collection updated with the TMDb list
-
-      Popular TV Shows (TMDb):
-        tmdb_popular: 25
-        summary: "Most popular TV shows, according to TMDb."
-        sort_title: "+02_Popular TV"
-        sync_mode: sync
-
-      Top Rated TV Shows (TMDb):
-        tmdb_top_rated: 25
-        summary: "Highest-rated TV shows of all time, according to TMDb."
-        sort_title: "+03_Top Rated TV"
-        sync_mode: sync
-
       Trending TV Shows (Trakt):
-        trakt_trending: 20
+        trakt_chart:
+          chart: trending
+          limit: 30
         summary: "TV shows currently trending, according to Trakt."
         sort_title: "+01_Trending TV (Trakt)"
         sync_mode: sync
 
-      Popular TV Shows (Trakt):
-        trakt_popular: 25
-        summary: "Most popular TV shows, according to Trakt."
-        sort_title: "+02_Popular TV (Trakt)"
-        sync_mode: sync
-
-      Airing Today (TMDb):
-        tmdb_airing_today: 15
-        summary: "TV shows with episodes airing today, according to TMDb."
-        sort_title: "+04_Airing Today"
-        sync_mode: sync # Good for dynamic lists like this
-
-
-        # Collection for shows you've marked as "Watchlist" in Plex (if your agent supports it well)
-      Plex Watchlist Shows:
-        plex_watchlist: true # Collects items on the Plex Watchlist of the user whose token is used.
-        summary: "Shows from my Plex Watchlist."
-        sort_title: "+Plex_Watchlist"
-        sync_mode: sync
 kind: ConfigMap
 metadata:
   name: kometa-tv-config
