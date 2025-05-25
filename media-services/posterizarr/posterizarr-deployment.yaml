@@ -31,27 +31,50 @@ spec:
             - /bin/sh
             - -c
             - |
-              echo "Starting configuration processing..."
+              echo "🚀 Starting Configuration Processing..."
+              echo "--------------------------------------------------"
+              DEBUG="false"
+
               CONFIG_TEMPLATE_PATH="/config_templates/config.json.template"
               FINAL_CONFIG_PATH="/config/config.json"
 
-              echo "Template path: $CONFIG_TEMPLATE_PATH"
-              echo "Output path: $FINAL_CONFIG_PATH"
+              echo "ℹ️ Template Path: $CONFIG_TEMPLATE_PATH"
+              echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
+              echo "--------------------------------------------------"
 
+              # Check if template file exists
               if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
-                echo "ERROR: Config template $CONFIG_TEMPLATE_PATH not found!"
+                echo "❌ ERROR: Config template '$CONFIG_TEMPLATE_PATH' not found! Aborting."
                 exit 1
-              fi              
+              fi
 
-              envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"
+              if [ "$DEBUG" = "true" ]; then
+                echo "📄 Contents of template '$CONFIG_TEMPLATE_PATH':"
+                cat "$CONFIG_TEMPLATE_PATH"
+                echo "--------------------------------------------------"
+              fi
 
-              echo "Configuration file generated at $FINAL_CONFIG_PATH:"
-              cat "$FINAL_CONFIG_PATH" # For verification in logs
+              echo "⚙️  Generating final configuration file from template..."
+              if envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"; then
+                echo "✅ Configuration file '$FINAL_CONFIG_PATH' generated successfully."
+              else
+                echo "❌ ERROR: Failed to generate configuration file '$FINAL_CONFIG_PATH' using envsubst."
+                ls -la /config
+                exit 1 # Critical step failed
+              fi
+              echo "--------------------------------------------------"
 
-              echo "Contents of /config after processing:"
-              ls -la /config
+              if [ "$DEBUG" = "true" ]; then
+                echo "📄 Verifying generated configuration file '$FINAL_CONFIG_PATH':"
+                cat "$FINAL_CONFIG_PATH" # For verification in logs
+                echo "--------------------------------------------------"
 
-              echo "Configuration processing complete."
+                echo "🔎 Contents of /config directory after processing:"
+                ls -la /config
+                echo "--------------------------------------------------"
+              fi
+
+              echo "🎉 Configuration processing complete."
           envFrom: # This injects all keys from the secret as environment variables
             - secretRef:
                 name: posterizarr-secret

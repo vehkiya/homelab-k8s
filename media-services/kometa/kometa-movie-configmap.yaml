@@ -13,7 +13,7 @@ data:
       Marvel Cinematic Universe:
         trakt_list: https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe?sort=rank,asc
         sort_title: "+01_Marvel Cinematic Universe"
-        summary: "All movies from the Marvel Cinematic Universe, in release order."
+        summary: "All movies from the Marvel Cinematic Universe, in release order. https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe"
 
       Harry Potterverse:
         trakt_list: https://trakt.tv/users/barsaky/lists/harry-potter-universe-chronological-order?sort=rank,asc
