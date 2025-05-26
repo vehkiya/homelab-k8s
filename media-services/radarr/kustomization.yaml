@@ -11,4 +11,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: ghcr.io/hotio/radarr
-    newTag: release-5.23.3.9987
+    newTag: release-5.24.1.10017
