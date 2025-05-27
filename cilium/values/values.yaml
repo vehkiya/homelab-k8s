@@ -12,6 +12,9 @@ k8sServiceHost: "127.0.0.1"
 # -- Kubernetes service port endpoint for Cilium agent to connect to
 k8sServicePort: "7445"
 kubeProxyReplacement: true
+# required for Tailscale
+socketLB:
+  hostNamespaceOnly: true
 
 ipam:
   mode: cluster-pool

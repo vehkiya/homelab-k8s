@@ -28,7 +28,10 @@ logs:
     level: INFO
 
 ports:
+  web:
+    port: 8000
   websecure:
+    port: 8443
     tls:
       enabled: true
     http3:
@@ -80,7 +83,8 @@ service:
     pool: cilium-traefik-pool
   annotations:
     tailscale.com/expose: "true"
-    tailscale.com/funnel: "false"
+    tailscale.com/hostname: traefik
+    tailscale.com/tailnet-ip: 100.100.1.221
 extraObjects:
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware

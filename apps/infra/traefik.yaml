@@ -5,16 +5,19 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/Vehkiya/homelab-k8s.git
-    path: traefik
-    targetRevision: master
+  sources:
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: traefik/crds
+      targetRevision: master
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: traefik
+      targetRevision: master
   destination:
     namespace: traefik
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
