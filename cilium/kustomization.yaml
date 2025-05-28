@@ -11,6 +11,7 @@ helmCharts:
     valuesFile: "values/values.yaml"
 
 resources:
+  - ip-pools.yaml
   - bgp.yaml
   - coredns-configmap.yaml
   - network-policy.yaml

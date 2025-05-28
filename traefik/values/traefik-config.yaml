@@ -84,7 +84,6 @@ service:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: traefik
-    tailscale.com/tailnet-ip: 100.100.1.221
 extraObjects:
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware

@@ -22,9 +22,6 @@ ipam:
     clusterPoolIPv4MaskSize: 24
     clusterPoolIPv4PodCIDRList:
       - 10.244.0.0/16
-    clusterPoolIPv6MaskSize: 120
-    clusterPoolIPv6PodCIDRList:
-      - fd00:16:244::/112
 
 k8s:
   requireIPv4PodCIDR: true
@@ -34,14 +31,17 @@ routingMode: native
 endpointRoutes:
   enabled: true
 
+
 ipv4NativeRoutingCIDR: "10.244.0.0/16"  # Pods CIDR
 
 bpf:
+  datapathMode: netkit
   tproxy: true
   preallocateMaps: true
   hostLegacyRouting: false
   masquerade: true
-
+  
+bpfClockProbe: true
 ipMasqAgent:
   enabled: true
   config:
@@ -50,6 +50,7 @@ ipMasqAgent:
 
 enableIPv4Masquerade: true
 enableIPv6Masquerade: true
+#enableMasqueradeRouteSource: true
 
 externalIPs:
   enabled: true
@@ -66,14 +67,19 @@ hubble:
   ui:
     enabled: true
     rollOutPods: true
-
+  
+enableIPv4BIGTCP: true
 rollOutCiliumPods: true
 operator:
   rollOutPods: true
 
 bgpControlPlane:
   enabled: true
-
+  
+# Used r8169 driver does not support XDP
+loadBalancer:
+  acceleration: disabled
+  
 # Talos
 securityContext:
   capabilities:

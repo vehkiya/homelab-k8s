@@ -1,48 +1,50 @@
-apiVersion: "cilium.io/v2alpha1"
-kind: CiliumLoadBalancerIPPool
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
 metadata:
-  name: "cilium-lb-pool"
+  name: ubiquiti-gateway-peer # Name referenced in CiliumBGPNodeConfig
+  namespace: kube-system
 spec:
-  blocks:
-  - cidr: "10.10.1.225/27"
-  - cidr: "fd00:10:100::/112"  
-  serviceSelector:
-    matchExpressions:
-    - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }
----
-apiVersion: "cilium.io/v2alpha1"
-kind: CiliumLoadBalancerIPPool
-metadata:
-  name: "traefik-lb-pool"
-spec:
-  blocks:
-  - cidr: "10.10.1.221/32"
-  - cidr: "fd00:10:244::221/128"
-  serviceSelector:
-    matchLabels:
-      pool: cilium-traefik-pool
+  ebgpMultihop: 1
+  timers:
+    connectRetryTimeSeconds: 120
+    holdTimeSeconds: 90
+    keepAliveTimeSeconds: 30
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
 ---
 apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPPeeringPolicy
+kind: CiliumBGPClusterConfig
 metadata:
-  name: custom-policy
+  name: default-bgp-cluster-config # You can choose a more descriptive name
+  namespace: kube-system
 spec:
-  virtualRouters:
-    - exportPodCIDR: false
+  bgpInstances:
+    - name: homelab-router # An identifier for this BGP instance
       localASN: 65512
-      neighbors:
-        - connectRetryTimeSeconds: 120
-          eBGPMultihopTTL: 2
-          holdTimeSeconds: 90
-          keepAliveTimeSeconds: 30
+      peers:
+        - name: "ubiquiti-gateway-peer"
+          peerAddress: "10.10.1.1"
           peerASN: 65000
-          peerAddress: 10.10.1.1/32
-          peerPort: 179
-          families:
-            - afi: ipv4
-              safi: unicast
-            - afi: ipv6
-              safi: unicast
-      serviceSelector:
-        matchExpressions:
-          - { key: somekey, operator: NotIn, values: [ 'never-used-value' ] }
+          peerConfigRef:
+            name: ubiquiti-gateway-peer
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: traefik-lb-advertisement
+  namespace: traefik
+  labels:
+    advertise: "bgp"  
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: "traefik"
