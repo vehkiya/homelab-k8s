@@ -26,7 +26,7 @@ spec:
               mountPath: /var/www/cocktails/storage/bar-assistant
       containers:
         - name: bar-assistant-server
-          image: ghcr.io/karlomikus/barassistant:5.4 # Using specific version from compose
+          image: ghcr.io/karlomikus/barassistant:5.5 # Using specific version from compose
           envFrom:
             - configMapRef:
                 name: bar-assistant-config
