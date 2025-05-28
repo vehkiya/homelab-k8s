@@ -10,4 +10,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: redis/redisinsight
-    newTag: "2.68"
+    newTag: "2.70"
