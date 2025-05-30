@@ -13,5 +13,7 @@ helmCharts:
 resources:
   - 00-sealed-cloudflare-token.yaml
   - 01-acme-issuer-cf-solver.yaml
+  - zerossl-eab-secret.yaml
+  - zerossl-issuer-cf-solver.yaml
   - 02-certificate-config.yaml
   

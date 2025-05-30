@@ -63,7 +63,7 @@ gateway:
   name: traefik-gateway
   namespacePolicy: All
   annotations:
-    cert-manager.io/issuer: letsencrypt-prod
+    cert-manager.io/issuer: zerossl-prod
   listeners:
     web:
       port: 8000

@@ -6,7 +6,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: l33tbird@gmail.com
+    email: sergiu@kerrlab.app
     privateKeySecretRef:
       name: cloudflare-key
     solvers:
