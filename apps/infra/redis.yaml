@@ -10,9 +10,11 @@ spec:
     path: redis
     targetRevision: master
   destination:
-    namespace: default
+    namespace: redis
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:
       prune: false
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
