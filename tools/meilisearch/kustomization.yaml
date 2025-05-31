@@ -11,4 +11,5 @@ helmCharts:
     valuesFile: "values/values.yaml"
 
 resources:
+  - master-key.yaml
   - meilisearch-httproute.yaml
