@@ -8,13 +8,13 @@ ipv6:
   enabled: false
 
 # -- Kubernetes service host endpoint for Cilium agent to connect to
-k8sServiceHost: "127.0.0.1"
+k8sServiceHost: "localhost"
 # -- Kubernetes service port endpoint for Cilium agent to connect to
 k8sServicePort: "7445"
 kubeProxyReplacement: true
 # required for Tailscale
 socketLB:
-  hostNamespaceOnly: true
+  hostNamespaceOnly: false
 
 ipam:
   mode: cluster-pool
@@ -45,7 +45,7 @@ bpf:
   
 bpfClockProbe: true
 ipMasqAgent:
-  enabled: true
+  enabled: false
   config:
     nonMasqueradeCIDRs:
       - 10.244.0.0/16 # Pods CIDR
