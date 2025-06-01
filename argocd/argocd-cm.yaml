@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
+  url: https://argo.kerrlab.app
   # Specifies the label key used by Argo CD Application controller
   # to identify the Application resource (optional, default is shown)
   application.instanceLabelKey: argocd.argoproj.io/instance
@@ -25,3 +26,10 @@ data:
       clusters:
       - '*' # Apply exclusion to all clusters managed by this Argo CD instance
   kustomize.buildOptions: --enable-helm
+  
+  # Enables application status badge feature
+  statusbadge.enabled: "true"
+  
+  # cluster.inClusterEnabled indicates whether to allow in-cluster server address. This is enabled by default.
+  cluster.inClusterEnabled: "false"
+  

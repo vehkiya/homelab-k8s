@@ -8,6 +8,7 @@ resources:
   - sealed-argocd-initial-admin-secret.yaml 
   - https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.5/manifests/ha/install.yaml
   - ingress-route.yaml
+  - argocd-repositories.yaml
 
 patches:
   - path: argocd-cm.yaml
