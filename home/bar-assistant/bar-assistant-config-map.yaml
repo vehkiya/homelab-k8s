@@ -15,7 +15,7 @@ data:
   # Internal hostname for Meilisearch Service within the cluster
   MEILISEARCH_HOST: "https://meilisearch.kerrlab.app"
   # Internal hostname for Redis Service within the cluster
-  REDIS_HOST: "redis-service.default.svc.cluster.local"
+  REDIS_HOST: "redis-service.redis.svc.cluster.local"
   CACHE_DRIVER: "redis"
   SESSION_DRIVER: "redis"
   ALLOW_REGISTRATION: "true"

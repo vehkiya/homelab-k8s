@@ -40,20 +40,30 @@ bpf:
   datapathMode: netkit
   tproxy: true
   preallocateMaps: true
-  hostLegacyRouting: true
+  hostLegacyRouting: false
   masquerade: true
-  
+  distributedLRU:
+    enabled: true
+  mapDynamicSizeRatio: 0.08
+
+enableIPv4BIGTCP: true
 bpfClockProbe: true
+
 ipMasqAgent:
   enabled: false
   config:
     nonMasqueradeCIDRs:
       - 10.244.0.0/16 # Pods CIDR
+      - 10.96.0.0/12
+
+bandwidthManager:
+  enabled: true
+  bbr: true
 
 enableIPv4Masquerade: true
 enableIPv6Masquerade: false
 #enableMasqueradeRouteSource: true
-  
+
 externalIPs:
   enabled: true
 nodePort:
@@ -69,19 +79,18 @@ hubble:
   ui:
     enabled: true
     rollOutPods: true
-  
-enableIPv4BIGTCP: true
+
 rollOutCiliumPods: true
 operator:
   rollOutPods: true
 
 bgpControlPlane:
   enabled: true
-  
+
 # Used r8169 driver does not support XDP
 loadBalancer:
   acceleration: disabled
-  
+
 # Talos
 securityContext:
   capabilities:
@@ -106,7 +115,7 @@ cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-  
+
 gatewayAPI:
   enabled: true
   enableAlpn: true
