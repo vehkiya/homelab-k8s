@@ -17,11 +17,11 @@ socketLB:
   hostNamespaceOnly: false
 
 ipam:
-  mode: cluster-pool
-  operator:
-    clusterPoolIPv4MaskSize: 24
-    clusterPoolIPv4PodCIDRList:
-      - 10.244.0.0/16
+  mode: kubernetes
+#  operator:
+#    clusterPoolIPv4MaskSize: 24
+#    clusterPoolIPv4PodCIDRList:
+#      - 10.244.0.0/16
 #    clusterPoolIPv6MaskSize: 120
 #    clusterPoolIPv6PodCIDRList:
 #      - fd00:16:244::/112
@@ -40,7 +40,7 @@ bpf:
   datapathMode: netkit
   tproxy: true
   preallocateMaps: true
-  hostLegacyRouting: false
+  hostLegacyRouting: true
   masquerade: true
   
 bpfClockProbe: true
@@ -53,7 +53,7 @@ ipMasqAgent:
 enableIPv4Masquerade: true
 enableIPv6Masquerade: false
 #enableMasqueradeRouteSource: true
-
+  
 externalIPs:
   enabled: true
 nodePort:

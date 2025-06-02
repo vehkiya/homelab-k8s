@@ -1,4 +1,4 @@
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
   name: ubiquiti-gateway-peer # Name referenced in CiliumBGPNodeConfig
@@ -16,7 +16,7 @@ spec:
         matchLabels:
           advertise: "bgp"
 ---
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
   name: default-bgp-cluster-config # You can choose a more descriptive name
@@ -32,7 +32,7 @@ spec:
           peerConfigRef:
             name: ubiquiti-gateway-peer
 ---
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
   name: traefik-lb-advertisement

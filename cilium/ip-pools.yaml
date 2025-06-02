@@ -1,4 +1,4 @@
-apiVersion: "cilium.io/v2alpha1"
+apiVersion: "cilium.io/v2"
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: "cilium-lb-pool"
@@ -9,7 +9,7 @@ spec:
     matchExpressions:
       - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }
 ---
-apiVersion: "cilium.io/v2alpha1"
+apiVersion: "cilium.io/v2"
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: "traefik-lb-pool"
