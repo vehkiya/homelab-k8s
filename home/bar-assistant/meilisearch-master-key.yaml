@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: meilisearch-kubernetes-master-key
+  namespace: home
+spec:
+  encryptedData:
+    MEILI_MASTER_KEY: AgB1KdYvA3nCHlqR4wVqvcCM9HtFGIKtg1MjP5S4QzjmEFRKQjlUKzBoMHNgLVPRgbqPM0m/MH1XcgyIElK7Lj6PZ6mxJCWbTFkekLTvUF5m0TpXpcIAYlbK5WIOIjbMrWE/zglVybJLwsgg3VZ6AUa/+oeJ2TEdIagYL1h6sSdvbPcj0LOKdLQJ3kkVwkfaqOkpITsKQh8vHGBtgxAZHATjRGZXItFxRRLYsGAMep9DcQBnSCSaJb7eVM2vYjhresWhYHzBJKCm3lxX0nqpcStliV+b2fl0PEpg22FTRsjKV1ojygqLgHdnSsho5llR9Asig/cMC3K5eg/6vaUjP+XsSzzB1EjtLNzp4TqAugyn/+mfDFnrGwHGW2Sky+1zvCN26Pyp7t0I7KvmPfV6b7ZqiBWAdSG2SbkQDp8LROaePqH4Szj6MI6t+l8VGFiikXhZ9jgUX2MBJY22si5V26vwI6CP+2Q9IWU8LdLgg3d5kpqZb5zEd2ws8vyGTaIL9Ulv5NjgkVgYIGktNcQhdbG3/OAuBM4zl6lfBsBKDEawudi8wnP+MdGvaSCkRjE9/yQ42tftxiLZiNuc1ptzLB90Sg8QbshZTRH7cjpvBIkO6FB3TkJ0BU+tt0KRPltMjN1712Us0SsvJkzIBCVKxnbBxvwUTJK26aSX2IeXecuje7bOL5e8lMeN0vyYGZlosASGlhwTtj9h8O7CtC8lUnRA9FeIMRpxGadn6deNgrD8I3yctPg=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: meilisearch-kubernetes-master-key
+      namespace: home

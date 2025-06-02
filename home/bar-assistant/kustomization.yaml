@@ -4,6 +4,7 @@ kind: Kustomization
 
 # List of resources to include
 resources:
+  - meilisearch-master-key.yaml
   - bar-assistant-config-map.yaml
   - bar-assistant-deployment.yaml
   - bar-assistant-service.yaml
