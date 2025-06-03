@@ -14,7 +14,8 @@ providers:
     nativeLBByDefault: false
     experimentalChannel: true
 # Allow the Gateway to expose HTTPRoute from all namespaces
-
+deployment:
+  kind: DaemonSet
 ingressRoute:
   dashboard:
     enabled: true
@@ -79,6 +80,8 @@ tlsStore:
     defaultCertificate:
       secretName: kerrlab-app-tls
 service:
+  spec:
+    externalTrafficPolicy: Local
   labels:
     pool: cilium-traefik-pool
   annotations:
