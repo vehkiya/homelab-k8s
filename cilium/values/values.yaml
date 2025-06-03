@@ -44,7 +44,6 @@ bpf:
   masquerade: true
   distributedLRU:
     enabled: true
-  mapDynamicSizeRatio: 0.08
 
 enableIPv4BIGTCP: true
 bpfClockProbe: true
@@ -90,7 +89,9 @@ bgpControlPlane:
 # Used r8169 driver does not support XDP
 loadBalancer:
   acceleration: disabled
-
+  mode: dsr
+  dsrDispatch: opt
+  
 # Talos
 securityContext:
   capabilities:
@@ -125,3 +126,6 @@ prometheus:
   metricsService: true
   enabled: true
   port: 9962
+  
+wellKnownIdentities:
+  enabled: true
