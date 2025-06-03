@@ -13,6 +13,16 @@ spec:
       labels:
         app: speedtest
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1 # A higher weight means a stronger preference
+              preference:
+                matchExpressions:
+                  - key: networkSpeed
+                    operator: In
+                    values:
+                      - "2.5G"
       containers:
         - name: speedtest
           image: openspeedtest/latest:v2.0.6
