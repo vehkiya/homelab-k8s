@@ -91,7 +91,7 @@ loadBalancer:
   acceleration: disabled
   mode: dsr
   dsrDispatch: opt
-  
+
 # Talos
 securityContext:
   capabilities:
@@ -126,6 +126,10 @@ prometheus:
   metricsService: true
   enabled: true
   port: 9962
-  
+
 wellKnownIdentities:
   enabled: true
+
+# Required for Multus  
+cni:
+  exclusive: false
