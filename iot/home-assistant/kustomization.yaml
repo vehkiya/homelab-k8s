@@ -4,6 +4,6 @@ kind: Kustomization
 
 resources:
   - storage/namespace.yaml
-  - homeassistant-statefulset.yaml
+  - homeassistant-deployment.yaml
   - homeassistant-service.yaml
   - homeassistant-http-route.yaml

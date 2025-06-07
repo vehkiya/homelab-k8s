@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: home-assistant
   namespace: home-assistant
-spec:
-  serviceName: home-assistant
+spec:    
   replicas: 1 # You can adjust the number of replicas here
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: home-assistant
@@ -35,31 +36,6 @@ spec:
           volumeMounts:
             - name: hass-config-mount
               mountPath: /config
-#        - image: openthread/otbr:latest
-#          name: open-thread-border-router
-#          ports:
-#            - containerPort: 8080 # Web UI port (adjust if needed)
-#            - containerPort: 8443
-#          securityContext:
-#            privileged: true
-#            capabilities:
-#              add:
-#                # Use 'add' to specify capabilities to add
-#                - NET_ADMIN
-#                - SYS_ADMIN
-#          env:
-#            - name: NETWORK_DEVICE
-#              value: "192.168.4.36:6638"
-#            - name: FLOW_CONTROL
-#              value: "0"
-#            - name: AUTOFLASH_FIRMWARE
-#              value: "0"
-#            - name: REST_API
-#              value: "8443"
-#            - name: WEB_GUI
-#              value: "8080"
-#            - name: BACKBONE_IF
-#              value: "enp3s0"
       volumes:
         - name: hass-config-mount
           persistentVolumeClaim:
