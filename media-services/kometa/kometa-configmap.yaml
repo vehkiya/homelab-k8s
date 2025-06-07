@@ -120,7 +120,7 @@ data:
       authorization:
         access_token: ${MAL_ACCESS_TOKEN}
         token_type: Bearer
-        expires_in: 2678400
+        expires_in: 2592000
         refresh_token: ${MAL_REFRESH_TOKEN}
       localhost_url: http://localhost/?code=${MAL_LOCALHOST_URL_CODE}
       cache_expiration: 60
@@ -133,8 +133,8 @@ data:
         expires_in: 86399
         refresh_token: ${TRAKT_REFRESH_TOKEN}
         scope: public
-        created_at: 1748116431
-      pin: c46bad29
+        created_at: 1749268666
+      pin: 01669436
 kind: ConfigMap
 metadata:
   name: kometa-config

@@ -1,5 +1,14 @@
 ## Set-up Talos OS
 
+1. Cilium
+2. Sealed secrets
+4. Traefik CRDs
+5. Traefik
+6. cert-manager
+7. Synology
+8. Argo
+9. Intel drivers
+
 ## Set-up Cilium CNI
 1. Add repo
 ```shell
@@ -162,17 +171,15 @@ https://github.com/intel/intel-device-plugins-for-kubernetes/blob/main/INSTALL.m
 ```
 
 ```shell
-    helm install nfd nfd/node-feature-discovery \
-      --namespace node-feature-discovery --create-namespace --version 0.16.4
+    helm upgrade --install nfd nfd/node-feature-discovery --namespace node-feature-discovery --create-namespace --version 0.16.4
 ```
 
 ```shell
-    helm install dp-operator intel/intel-device-plugins-operator --namespace inteldeviceplugins-system --create-namespace
+    helm upgrade --install dp-operator intel/intel-device-plugins-operator --namespace inteldeviceplugins-system --create-namespace
 ```
 
 ```shell
-    helm install gpu intel/intel-device-plugins-gpu --namespace inteldeviceplugins-system --create-namespace \
-  --set nodeFeatureRule=true
+    helm upgrade --install gpu intel/intel-device-plugins-gpu --namespace inteldeviceplugins-system --create-namespace --set nodeFeatureRule=true
 ```
 
 Label: `intel.feature.node.kubernetes.io/gpu: true`
