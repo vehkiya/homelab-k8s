@@ -35,7 +35,8 @@ spec:
           name: matter-server
           volumeMounts:
             - name: hass-config-mount
-              mountPath: /config
+              subPath: matter-server
+              mountPath: /data
       volumes:
         - name: hass-config-mount
           persistentVolumeClaim:
