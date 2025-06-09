@@ -8,23 +8,14 @@ spec:
     namespace: monitoring
     server: https://kube.kerrlab.app:6443
   sources:
-    - repoURL: https://prometheus-community.github.io/helm-charts
-      targetRevision: 73.2.0
-      chart: kube-prometheus-stack
-      helm:
-        valueFiles:
-          - $values/monitoring/prometheus/values/values.yaml
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
       path: monitoring/prometheus
       targetRevision: master
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      targetRevision: master
-      ref: values
   project: default
   syncPolicy:
     automated:
-      prune: false
-      selfHeal: false
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true

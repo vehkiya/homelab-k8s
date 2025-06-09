@@ -15,6 +15,6 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: prometheus-grafana # Verify service name from Helm chart output
+        - name: kube-prometheus-stack-grafana # Verify service name from Helm chart output
           port: 80 # Verify Grafana service port
           # Optional weight if needed
