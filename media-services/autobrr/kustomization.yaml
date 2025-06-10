@@ -11,4 +11,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: ghcr.io/autobrr/autobrr
-    newTag: v1.62
+    newTag: v1.63
