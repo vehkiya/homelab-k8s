@@ -4,8 +4,8 @@ kind: Kustomization
 namespace: argocd
 resources:
   - argocd-namespace.yaml
+  - sealed-argocd-initial-admin-secret.yaml
   # renovate: datasource=github-releases depName=argoproj/argo-cd versioning=semver
-  - sealed-argocd-initial-admin-secret.yaml 
   - https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.5/manifests/ha/install.yaml
   - ingress-route.yaml
   - argocd-repositories.yaml
