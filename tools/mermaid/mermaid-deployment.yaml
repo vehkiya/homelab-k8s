@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mermaid
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mermaid
+  template:
+    metadata:
+      labels:
+        app: mermaid
+    spec:
+      containers:
+        - name: mermaid
+          image: ghcr.io/mermaid-js/mermaid-live-editor:latest
+          imagePullPolicy: "Always"
