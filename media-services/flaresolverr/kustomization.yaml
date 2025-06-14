@@ -11,4 +11,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: ghcr.io/flaresolverr/flaresolverr
-    newTag: v3.3.24
+    newTag: v3.3.25
