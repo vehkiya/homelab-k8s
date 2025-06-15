@@ -71,7 +71,7 @@ hostPort:
   enabled: true
 
 hubble:
-  enabled: true
+  enabled: false
   relay:
     enabled: true
     rollOutPods: true
@@ -133,3 +133,10 @@ wellKnownIdentities:
 # Required for Multus  
 cni:
   exclusive: false
+  
+pmtuDiscovery:
+  # -- Enable path MTU discovery to send ICMP fragmentation-needed replies to
+  # the client.
+  enabled: false
+
+MTU: 9000
