@@ -72,12 +72,6 @@ hostPort:
 
 hubble:
   enabled: false
-  relay:
-    enabled: true
-    rollOutPods: true
-  ui:
-    enabled: true
-    rollOutPods: true
 
 rollOutCiliumPods: true
 operator:
