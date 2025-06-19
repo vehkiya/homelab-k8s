@@ -42,6 +42,7 @@ bpf:
   preallocateMaps: true
   hostLegacyRouting: false
   masquerade: true
+  mapDynamicSizeRatio: 0.08
   distributedLRU:
     enabled: true
 
@@ -82,9 +83,16 @@ bgpControlPlane:
 
 # Used r8169 driver does not support XDP
 loadBalancer:
-  acceleration: disabled
+  acceleration: best-effort
+  experimental: true
   mode: dsr
   dsrDispatch: opt
+  algorithm: maglev
+    
+l2NeighDiscovery:
+  enabled: true
+
+installNoConntrackIptablesRules: true
 
 # Talos
 securityContext:
@@ -131,6 +139,4 @@ cni:
 pmtuDiscovery:
   # -- Enable path MTU discovery to send ICMP fragmentation-needed replies to
   # the client.
-  enabled: false
-
-MTU: 9000
+  enabled: true
