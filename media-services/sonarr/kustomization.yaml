@@ -11,4 +11,4 @@ resources:
 # Image tag parametrization (for Renovate)
 images:
   - name: ghcr.io/hotio/sonarr
-    newTag: release-4.0.14.2939
+    newTag: release-4.0.15.2941
