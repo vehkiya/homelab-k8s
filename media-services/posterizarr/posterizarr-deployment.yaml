@@ -26,7 +26,7 @@ spec:
       terminationGracePeriodSeconds: 30
       initContainers:
         - name: prepare-config
-          image: alpine/k8s:1.33.1
+          image: alpine/k8s:1.33.2
           command:
             - /bin/sh
             - -c
