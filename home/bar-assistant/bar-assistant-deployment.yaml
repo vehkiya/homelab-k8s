@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bar-assistant
+  namespace: home
   labels:
     app: bar-assistant
 spec:
@@ -26,7 +27,7 @@ spec:
               mountPath: /var/www/cocktails/storage/bar-assistant
       containers:
         - name: bar-assistant-server
-          image: ghcr.io/karlomikus/barassistant:5.5.1 # Using specific version from compose
+          image: ghcr.io/karlomikus/barassistant:5.5.1
           envFrom:
             - configMapRef:
                 name: bar-assistant-config

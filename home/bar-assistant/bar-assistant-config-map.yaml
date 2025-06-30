@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bar-assistant-config
+  namespace: home
 data:
   # --- Common ---
   # Set the external URL where the application will be accessed

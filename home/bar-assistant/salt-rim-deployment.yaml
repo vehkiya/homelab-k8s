@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: salt-rim
+  namespace: home
   labels:
     app: salt-rim
 spec:
@@ -19,7 +20,7 @@ spec:
     spec:
       containers:
         - name: salt-rim-frontend
-          image: ghcr.io/karlomikus/salt-rim:4.5.0 # Using specific version from compose
+          image: ghcr.io/karlomikus/salt-rim:4.5.0
           env:
             # Explicitly map needed vars from ConfigMap
             - name: API_URL
