@@ -1,0 +1,17 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-dashboard-internal
+  namespace: kubernetes-dashboard
+spec:
+  endpointSelector:
+    # Select all pods in the namespace
+    matchLabels: {}
+  egress:
+    # Allow pods to communicate with any other pod in the same namespace
+    - toEndpoints:
+        - matchLabels: {}
+  ingress:
+    # Allow pods to receive traffic from any other pod in the same namespace
+    - fromEndpoints:
+        - matchLabels: {}
