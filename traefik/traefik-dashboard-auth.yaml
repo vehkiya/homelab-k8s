@@ -1,17 +1,24 @@
----
-apiVersion: bitnami.com/v1alpha1
-kind: SealedSecret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
-  creationTimestamp: null
   name: traefik-dashboard-auth-secret
   namespace: traefik
 spec:
-  encryptedData:
-    password: AgA7hT9K12Xf1La/Deg/y+jN9JzBfeZaOQKZEMyVK99fm0Gyk0RmXFQlwqCSTS+IpUBsw9X16wqF+dTSQENIyIf2zobNB3w1hoCv/UtPQM3B6+LMTgSE6iFDPgBgg+6ry8pSnVkl5WjuBGdIteCd5KO8F9PukuB/yA24Ah16h4fLtpbKCH8X7UBSomozomlMt0poOyMVI+D+cq0o9F7pdxtcSD4fZyBsCEDV5xGKy+WEqY4/D41N0ueVtXBQ9cPnMjUWLkPqPUmbTz2nEJ3+oenBVtzDUQzgBdFo/8n4DDS41pSPNpXRvaVxzeNK0nI7nmf1661PZ2WoeMp3kAJ1jUqx958DJQ4NL934S/jNV58FrzrEg0Bm9rIcnZybO5hHq3kmjK9qiXP4L0awM1233Rk+1XI1N5hb2gBe9A2kCvyNIvKAnhAYo69cV0L1AIiJERoQ0ak7A+lp/e04Bpq1Dj1Y/M9lbA68ePx5od+T+n/GRzDt+9aCrHBP1eUiLM1zSiH7rl988wW71QThda+XZI7RKdTHuNSW+4CBBBcRU4FH/26cF/C7lMH71R5yO/dGiahTgLZXGsWj0VzOyNoFKq4gjLk8fT0wdzIZsN5mpH02dWHcVXSXKQMW0fHSX/wo2tBAC0bxX9k1YTCDSfuphYI0HBN2dVkFnQbU+aFXiynK6S9lzTWvIZhvSK7FzoqeqThM5WeUy0+TekOXRekDaqjzgQoAMhtYaemDieElfB5FDw5ebNgGjA==
-    username: AgAOne5zO4gy2BQh0j8Vg5+XdOSlU9EAdoKGtE3jitc3+OYldVh9RdbrfoAMhXlp+KTAIha0+OXtJueUs/vqnhzOeio+06vmg7a73nli3ag7qqFT44mfNvGtQ3NhF114v9a/RZEu22+9nLI0c6UPf1KlvNFtjPtaREoxKtNEoy2IDFaslKLzp/cCMFHYxDk+Gt+h/sWZp4b1Cl0CMKCCnBU8Gxvv1HVCUnB+zCPDGOSpVXUTMGxpvEXTiBCa4AEzVZlwCJx9G9CWbQuBOwXSZ7NUNuet5UMUYHZNOD86sPY5BphmdBO2rI1KoR4ot8T7Wn6PBFlNQH+D8FOx8xE2bx0pTd9JhoE88vlTgv73oefqvhgJvyG+ZdiusV1NaSbN9nDwtZ2NVCQfLk6OFh4xIkTEo5MGnc+yiX/5bLnvthWEJArQAJU0m3twrj9EWyWrOM77/VhEWH/X83xXQ7MMHoDFVQr6BCk4tbDzFhQ59oHGMI1HgSkYmDNHFTXHEWSfN5SE5yijgyGhrO5We1LojpKsulVQ3BgZs34aJJNR5w1Q5LXj7VIzmbxl+DB/ZKkwtld4Hcqq41ejifxyGqm8BmLgUPs2evYsifcRaIEMMX7irpnZ/iybcJ3bxyfyoXSnNQQfy6NOFTZP7eeg4lajqVdyBAc+Fiw6nnP5cPy90tlOq8D4VvieuLELACoS/kC6ur0FJgcyPy82
-  template:
-    metadata:
-      creationTimestamp: null
-      name: traefik-dashboard-auth-secret
-      namespace: traefik
-    type: kubernetes.io/basic-auth
+  target:
+    name: traefik-dashboard-auth-secret
+  
+  secretStoreRef:
+    name: vaultwarden-store
+    kind: ClusterSecretStore
+
+  data:
+    # ---- Radarr ----
+    - secretKey: username
+      remoteRef:
+        key: "eef82d3f-39ef-4e6f-bff2-d2dd9290810f"
+        property: "username"
+    # ---- Sonarr ----
+    - secretKey: password
+      remoteRef:
+        key: "eef82d3f-39ef-4e6f-bff2-d2dd9290810f"
+        property: "password"
