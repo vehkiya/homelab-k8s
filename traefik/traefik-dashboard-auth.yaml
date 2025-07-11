@@ -12,12 +12,10 @@ spec:
     kind: ClusterSecretStore
 
   data:
-    # ---- Radarr ----
     - secretKey: username
       remoteRef:
         key: "eef82d3f-39ef-4e6f-bff2-d2dd9290810f"
         property: "username"
-    # ---- Sonarr ----
     - secretKey: password
       remoteRef:
         key: "eef82d3f-39ef-4e6f-bff2-d2dd9290810f"
