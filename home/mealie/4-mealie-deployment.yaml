@@ -32,7 +32,7 @@ spec:
       #        runAsGroup: 100
       containers:
         - name: mealie
-          image: ghcr.io/mealie-recipes/mealie:v2.8.0
+          image: ghcr.io/mealie-recipes/mealie:v3.0.0
           envFrom:
             - configMapRef:
                 name: mealie-config
