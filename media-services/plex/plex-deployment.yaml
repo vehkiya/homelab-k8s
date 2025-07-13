@@ -37,6 +37,8 @@ spec:
               mountPath: /anime
             - name: config
               mountPath: /config
+            - name: transcode
+              mountPath: /transcode
           resources:
             limits:
               gpu.intel.com/i915: "1"
@@ -53,3 +55,6 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: plex-config-pvc
+        - name: transcode
+          persistentVolumeClaim:
+            claimName: plex-transcode-pvc
