@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: qbittorrent
   namespace: media
-  annotations:
-    io.cilium/load-balancer-ipam-ips: "10.10.1.226"
 spec:
   selector:
     app: qbittorrent
