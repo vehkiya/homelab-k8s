@@ -19,8 +19,8 @@ spec:
     - name: torrenting-port-tcp
       protocol: TCP
       port: 56883
-      targetPort: 6883
+      targetPort: 56883
     - name: torrenting-port-udp
       protocol: UDP
       port: 56883
-      targetPort: 6883
+      targetPort: 56883
