@@ -54,6 +54,8 @@ kind: CiliumBGPAdvertisement
 metadata:
   name: general-lb-advertisement
   namespace: kube-system
+  labels:
+    advertise: "bgp"
 spec:
   advertisements:
     - advertisementType: Service
