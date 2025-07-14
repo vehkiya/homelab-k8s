@@ -1,7 +1,5 @@
 additionalArguments:
   - "--entrypoints.postgres.address=:5432/tcp"
-  - "--entrypoints.torrent-tcp.address=:6883/tcp"
-  - "--entrypoints.torrent-udp.address=:6883/udp"
 
 providers:
   # Disable the Ingress provider (optional)
@@ -47,18 +45,6 @@ ports:
     expose:
       default: true
     exposedPort: 5432
-  torrent-tcp: # Unique name for the TCP service port entry
-    port: 6883          # Target port in Traefik container (must match entrypoint definition)
-    expose:
-      default: true
-    exposedPort: 6883   # Port the Service listens on for TCP traffic
-    protocol: TCP       # Protocol for this service port definition
-  torrent-udp: # Unique name for the UDP service port entry
-    port: 6883          # Target port in Traefik container (must match entrypoint definition)
-    expose:
-      default: true
-    exposedPort: 6883   # Port the Service listens on for UDP traffic
-    protocol: UDP
 gateway:
   enabled: true
   name: traefik-gateway

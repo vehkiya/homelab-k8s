@@ -38,7 +38,7 @@ metadata:
   name: traefik-lb-advertisement
   namespace: traefik
   labels:
-    advertise: "bgp"  
+    advertise: "bgp"
 spec:
   advertisements:
     - advertisementType: "Service"
@@ -48,3 +48,20 @@ spec:
       selector:
         matchLabels:
           app.kubernetes.io/name: "traefik"
+---
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: general-lb-advertisement
+  namespace: kube-system
+  labels:
+    advertise: "bgp"
+spec:
+  advertisements:
+    - advertisementType: Service
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchExpressions:
+          - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }          

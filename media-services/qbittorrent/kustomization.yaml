@@ -7,7 +7,6 @@ resources:
   - qbittorrent-statefulset.yaml
   - qbittorrent-service.yaml
   - qbittorrent-http-route.yaml
-  - qbittorrent-tcp-udp-routes.yaml
 
 # Image tag parametrization (for Renovate)
 images:
