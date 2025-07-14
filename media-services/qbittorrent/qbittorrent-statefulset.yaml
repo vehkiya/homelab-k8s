@@ -24,18 +24,44 @@ spec:
                     operator: In
                     values:
                       - "2.5G"
+      initContainers:
+      - name: install-vuetorrent
+        # Switch to a more capable image
+        image: alpine/k8s:1.33.2
+        command:
+          - /bin/sh
+          - -c
+          - |
+            VERSION="v2.27.0"
+            DOWNLOAD_URL="https://github.com/VueTorrent/VueTorrent/releases/download/${VERSION}/vuetorrent.zip"
+            
+            echo "Downloading VueTorrent version ${VERSION}..."
+            curl -L "$DOWNLOAD_URL" -o /tmp/vuetorrent.zip
+            
+            if [ ! -f /tmp/vuetorrent.zip ]; then
+              echo "Download failed. Exiting."
+              exit 1
+            fi
+            
+            echo "Unpacking to /vuetorrent..."
+            # Now the unzip command will work
+            unzip /tmp/vuetorrent.zip -d /
+            
+            # Clean up
+            rm /tmp/vuetorrent.zip
+            
+            echo "VueTorrent installation complete."
+        volumeMounts:
+          - name: vuetorrent-webui
+            mountPath: /vuetorrent
       containers:
         - name: qbittorrent
-          image: lscr.io/linuxserver/qbittorrent:5.0.4-r0-ls389
+          image: ghcr.io/home-operations/qbittorrent:5.1.2
           env:
-            - name: PGID
-              value: "100"
-            - name: PUID
-              value: "1026"
             - name: TZ
               value: "Europe/Chisinau"
-            - name: DOCKER_MODS
-              value: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+            - name: WEBUI_PATH
+              value: "/vuetorrent"
           ports:
             - containerPort: 56883
               name: torrent-port
@@ -44,6 +70,14 @@ spec:
               mountPath: /downloads # Path inside the container
             - name: config
               mountPath: /config
+            - name: vuetorrent-webui
+              mountPath: /vuetorrent
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
       volumes:
         - name: downloads-mount
           persistentVolumeClaim:
@@ -51,3 +85,5 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: qbittorrent-config-pvc
+        - name: vuetorrent-webui
+          emptyDir: {} 
