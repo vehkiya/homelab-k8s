@@ -36,6 +36,9 @@ spec:
               value: "Europe/Chisinau"
             - name: DOCKER_MODS
               value: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+          ports:
+            - containerPort: 56883
+              name: torrent-port
           volumeMounts:
             - name: downloads-mount
               mountPath: /downloads # Path inside the container

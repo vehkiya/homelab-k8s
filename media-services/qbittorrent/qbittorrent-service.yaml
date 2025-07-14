@@ -6,12 +6,19 @@ metadata:
 spec:
   selector:
     app: qbittorrent
+  # Change the service type to LoadBalancer
+  type: LoadBalancer
+  # This is critical for preserving client source IPs
+  externalTrafficPolicy: Local
   ports:
-  - name: web-ui
-    port: 8080
-  - name: torrenting-port-tcp
-    protocol: TCP
-    port: 6883
-  - name: torrenting-port-udp
-    protocol: UDP
-    port: 6883
+    - name: web-ui
+      port: 8080
+      targetPort: 8080 
+    - name: torrenting-port-tcp
+      protocol: TCP
+      port: 56883
+      targetPort: 6883
+    - name: torrenting-port-udp
+      protocol: UDP
+      port: 56883
+      targetPort: 6883
