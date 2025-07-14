@@ -53,7 +53,7 @@ spec:
     storage: 25Gi # Placeholder storage, will be overridden
   csi:
     driver: csi.san.synology.com
-    volumeHandle: 108c7bad-25d3-4f6e-9530-d96653d7a668
+    volumeHandle: fbf63a9c-e076-40e9-ba34-b15bcf0996c5
     fsType: btrfs # Assuming this is constant
     volumeAttributes: # Assuming these are constant
       dsm: 'fortress.kerrlab.app'

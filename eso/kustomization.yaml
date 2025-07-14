@@ -10,6 +10,5 @@ helmCharts:
     namespace: external-secrets
 
 resources:
-  - vaultwarden-secrets.yaml
   - bitwarden-cli.yaml
   - cluster-secret-store.yaml

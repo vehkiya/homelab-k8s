@@ -14,7 +14,7 @@ spec:
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
