@@ -48,6 +48,13 @@ data:
         sync_mode: sync
         collection_order: custom
 
+      Futurama Collection:
+        trakt_list: https://trakt.tv/lists/official/futurama-collection?sort=rank,asc
+        summary: "The Futurama movies in chronological order."
+        sort_title: "+Franchise_Futurama"
+        sync_mode: sync
+        collection_order: custom
+
       Dune Collection:
         tmdb_collection: 726871 # Dune Collection (Covers recent Denis Villeneuve films and potentially older ones if TMDb groups them)
         summary: "Feature film adaptations of Frank Herbert's epic science fiction novel, Dune."

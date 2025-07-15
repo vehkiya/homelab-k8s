@@ -9,7 +9,14 @@ data:
         summary: "TV shows currently trending, according to Trakt."
         sort_title: "+01_Trending TV (Trakt)"
         sync_mode: sync
-
+        
+      Star Wars Collection:
+        trakt_list: https://trakt.tv/users/docteur-dream/lists/star-wars-chronology?sort=rank,asc
+        summary: "The epic space opera franchise created by George Lucas."
+        sort_title: "+Franchise_Star Wars"
+        sync_mode: sync
+        collection_order: custom    
+        
 kind: ConfigMap
 metadata:
   name: kometa-tv-config
