@@ -48,12 +48,15 @@ data:
         sync_mode: sync
         collection_order: custom
 
-      Futurama Collection:
-        trakt_list: https://trakt.tv/lists/official/futurama-collection?sort=rank,asc
-        summary: "The Futurama movies in chronological order."
-        sort_title: "+Franchise_Futurama"
-        sync_mode: sync
-        collection_order: custom
+      The Futurama Collection:
+        tmdb_movie:
+          - 7249  # Bender's Big Score (2007)
+          - 12889  # The Beast with a Billion Backs (2008)
+          - 13253  # Bender's Game (2008)
+          - 15060  # Into the Wild Green Yonder (2009)
+        summary: "The adventures of a late-20th-century New York City pizza delivery boy, Philip J. Fry, who, after being unwittingly cryogenically frozen for one thousand years, finds employment at Planet Express, an interplanetary delivery company in the retro-futuristic 31st century."
+        # Sort the items within the collection chronologically by their release date
+        collection_order: release
 
       Dune Collection:
         tmdb_collection: 726871 # Dune Collection (Covers recent Denis Villeneuve films and potentially older ones if TMDb groups them)

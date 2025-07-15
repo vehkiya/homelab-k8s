@@ -130,11 +130,11 @@ data:
       authorization:
         access_token: ${TRAKT_ACCESS_TOKEN}
         token_type: Bearer
-        expires_in: 86399
+        expires_in: 7776000
         refresh_token: ${TRAKT_REFRESH_TOKEN}
         scope: public
-        created_at: 1749268666
-      pin: 01669436
+        created_at: 1752616885
+      pin: 7ea27e57
 kind: ConfigMap
 metadata:
   name: kometa-config
