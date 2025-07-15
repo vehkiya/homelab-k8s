@@ -12,4 +12,4 @@ resources:
 images:
   - name: plexinc/pms-docker
     # renovate: datasource=docker depName=plexinc/pms-docker versioning=loose
-    newTag: 1.41.8.9834-071366d65 # This is the tag Renovate will find and update
+    newTag: 1.41.9.9961-46083195d # This is the tag Renovate will find and update
