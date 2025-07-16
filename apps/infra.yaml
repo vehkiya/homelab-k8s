@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: the-lounge
+  name: infra
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: https://github.com/Vehkiya/homelab-k8s.git
-    path: tools/irc
+    path: apps/definitions/infra
     targetRevision: master
   destination:
-    namespace: default
+    namespace: argocd
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:

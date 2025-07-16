@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tools
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      revision: master
+      directories:
+      - path: tools/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Vehkiya/homelab-k8s.git
+        targetRevision: master
+        path: '{{path}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

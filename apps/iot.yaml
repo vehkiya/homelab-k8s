@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: excalidraw
+  name: iot
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argoprod.io
 spec:
   project: default
   source:
     repoURL: https://github.com/Vehkiya/homelab-k8s.git
-    path: tools/excalidraw
+    path: apps/definitions/iot
     targetRevision: master
   destination:
-    namespace: default
+    namespace: argocd
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:
