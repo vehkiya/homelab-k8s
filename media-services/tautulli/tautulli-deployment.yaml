@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: tautulli
-        image: ghcr.io/tautulli/tautulli:v2.15.2
+        image: ghcr.io/home-operations/tautulli:2.15.2
         env:
         - name: PGID
           value: "100"
@@ -28,6 +28,19 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        securityContext:
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
       volumes:
       - name: config
         persistentVolumeClaim:

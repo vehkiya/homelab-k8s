@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: sonarr
-        image: ghcr.io/hotio/sonarr:release-4.0.15.2941
+        image: ghcr.io/home-operations/sonarr:4.0.15
         env:
         - name: PGID
           value: "100"
@@ -36,6 +36,19 @@ spec:
           mountPath: /movies
         - name: config
           mountPath: /config
+        securityContext:
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
       volumes:
       - name: downloads-mount
         persistentVolumeClaim:

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: radarr
-        image: ghcr.io/hotio/radarr:release-5.26.2.10099
+        image: ghcr.io/home-operations/radarr:5.27.1
         env:
         - name: PGID
           value: "100"
@@ -36,6 +36,19 @@ spec:
           mountPath: /anime
         - name: config
           mountPath: /config
+        securityContext:
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
       volumes:
       - name: downloads-mount
         persistentVolumeClaim:

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: bazarr
-          image: ghcr.io/hotio/bazarr:release-1.5.2
+          image: ghcr.io/home-operations/bazarr:1.5.2
           env:
             - name: PGID
               value: "100"
@@ -34,6 +34,19 @@ spec:
               mountPath: /anime
             - name: config
               mountPath: /config
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
       volumes:
         - name: video-movies-mount
           persistentVolumeClaim:
