@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mealie-app
-  namespace: home
   labels:
     app: mealie
   annotations:

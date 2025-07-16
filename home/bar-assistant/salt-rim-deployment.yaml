@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: salt-rim
-  namespace: home
   labels:
     app: salt-rim
 spec:
