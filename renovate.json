@@ -33,7 +33,8 @@
       ],
       "schedule": [
         "* 0-4 * * *"
-      ]
+      ],
+      "automerge": true
     }
   ]
 }
