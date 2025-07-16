@@ -19,17 +19,39 @@ spec:
       containers:
         - name: bitwarden-cli
           image: ghcr.io/vehkiya/bw-cli:2025.6.1
+          imagePullPolicy: "Always"
           ports:
-            - containerPort: 8087
+            - name: api
+              containerPort: 8087
           envFrom:
             - secretRef:
                 name: vaultwarden-credentials
           livenessProbe:
             httpGet:
-              path: /sync
-              port: 8087
+              path: /healthz
+              port: api
             initialDelaySeconds: 20
-            periodSeconds: 120
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: api
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: api
+            initialDelaySeconds: 30
+            failureThreshold: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
 ---
 apiVersion: v1
 kind: Service
@@ -40,6 +62,7 @@ spec:
   selector:
     app: bitwarden-cli
   ports:
-    - protocol: TCP
+    - name: api
+      protocol: TCP
       port: 8087
       targetPort: 8087
