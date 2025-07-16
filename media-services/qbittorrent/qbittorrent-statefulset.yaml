@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: qbittorrent
-  namespace: media
 spec:
   serviceName: qbittorrent
   replicas: 1
@@ -25,36 +24,36 @@ spec:
                     values:
                       - "2.5G"
       initContainers:
-      - name: install-vuetorrent
-        # Switch to a more capable image
-        image: alpine/k8s:1.33.2
-        command:
-          - /bin/sh
-          - -c
-          - |
-            VERSION="v2.27.0"
-            DOWNLOAD_URL="https://github.com/VueTorrent/VueTorrent/releases/download/${VERSION}/vuetorrent.zip"
-            
-            echo "Downloading VueTorrent version ${VERSION}..."
-            curl -L "$DOWNLOAD_URL" -o /tmp/vuetorrent.zip
-            
-            if [ ! -f /tmp/vuetorrent.zip ]; then
-              echo "Download failed. Exiting."
-              exit 1
-            fi
-            
-            echo "Unpacking to /vuetorrent..."
-            # Now the unzip command will work
-            unzip /tmp/vuetorrent.zip -d /
-            
-            # Clean up
-            rm /tmp/vuetorrent.zip
-            
-            echo "VueTorrent installation complete."
-        volumeMounts:
-          - name: vuetorrent-webui
-            mountPath: /vuetorrent
-        securityContext:
+        - name: install-vuetorrent
+          # Switch to a more capable image
+          image: alpine/k8s:1.33.2
+          command:
+            - /bin/sh
+            - -c
+            - |
+              VERSION="v2.27.0"
+              DOWNLOAD_URL="https://github.com/VueTorrent/VueTorrent/releases/download/${VERSION}/vuetorrent.zip"
+              
+              echo "Downloading VueTorrent version ${VERSION}..."
+              curl -L "$DOWNLOAD_URL" -o /tmp/vuetorrent.zip
+              
+              if [ ! -f /tmp/vuetorrent.zip ]; then
+                echo "Download failed. Exiting."
+                exit 1
+              fi
+              
+              echo "Unpacking to /vuetorrent..."
+              # Now the unzip command will work
+              unzip /tmp/vuetorrent.zip -d /
+              
+              # Clean up
+              rm /tmp/vuetorrent.zip
+              
+              echo "VueTorrent installation complete."
+          volumeMounts:
+            - name: vuetorrent-webui
+              mountPath: /vuetorrent
+          securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
               type: RuntimeDefault
@@ -70,8 +69,34 @@ spec:
             - name: WEBUI_PATH
               value: "/vuetorrent"
           ports:
+            - name: http
+              containerPort: 8080
             - containerPort: 56883
               name: torrent-port
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
           volumeMounts:
             - name: downloads-mount
               mountPath: /downloads # Path inside the container
@@ -100,4 +125,4 @@ spec:
           persistentVolumeClaim:
             claimName: qbittorrent-config-pvc
         - name: vuetorrent-webui
-          emptyDir: {} 
+          emptyDir: { } 

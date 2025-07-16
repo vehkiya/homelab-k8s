@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flaresolverr
-  namespace: media
 spec:
   replicas: 1
   selector:
@@ -23,6 +22,34 @@ spec:
           value: "1000"
         - name: TZ
           value: "Europe/Chisinau"
+        ports:
+        - name: http
+          containerPort: 8191
+          protocol: TCP
+        startupProbe:
+          httpGet:
+            path: /
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
         resources:
           limits:
             cpu: "1"

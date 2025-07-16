@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: autobrr
-  namespace: media
 spec:
   replicas: 1
   strategy:
@@ -21,6 +20,34 @@ spec:
         env:
         - name: TZ
           value: "Europe/Chisinau"
+        ports:
+        - name: http
+          containerPort: 7474
+          protocol: TCP
+        startupProbe:
+          httpGet:
+            path: /api/healthz/readiness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/healthz/readiness
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/healthz/liveness
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
         volumeMounts:
         - name: config
           mountPath: /config

@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: overseerr
-  namespace: media
 spec:
   replicas: 1
   strategy:
@@ -25,6 +24,34 @@ spec:
               value: "1000"
             - name: TZ
               value: "Europe/Chisinau"
+          ports:
+          - name: http
+            containerPort: 5055
+            protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /api/v1/status
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/v1/status
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/v1/status
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
           volumeMounts:
             - name: config
               mountPath: /app/config
