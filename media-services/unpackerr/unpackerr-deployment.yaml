@@ -33,6 +33,19 @@ spec:
           volumeMounts:
             - name: downloads-mount
               mountPath: /downloads # Path inside the container
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
       volumes:
         - name: downloads-mount
           persistentVolumeClaim:

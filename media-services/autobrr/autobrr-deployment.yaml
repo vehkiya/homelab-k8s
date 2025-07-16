@@ -24,6 +24,19 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        securityContext:
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       volumes:
       - name: config
         persistentVolumeClaim:

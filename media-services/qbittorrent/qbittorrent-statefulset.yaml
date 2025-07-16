@@ -54,6 +54,13 @@ spec:
         volumeMounts:
           - name: vuetorrent-webui
             mountPath: /vuetorrent
+        securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
       containers:
         - name: qbittorrent
           image: ghcr.io/home-operations/qbittorrent:5.1.2
@@ -72,6 +79,13 @@ spec:
               mountPath: /config
             - name: vuetorrent-webui
               mountPath: /vuetorrent
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
       securityContext:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch

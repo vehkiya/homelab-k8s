@@ -20,14 +20,27 @@ spec:
           image: sctx/overseerr:1.34.0
           env:
             - name: PGID
-              value: "100"
+              value: "1000"
             - name: PUID
-              value: "1026"
+              value: "1000"
             - name: TZ
               value: "Europe/Chisinau"
           volumeMounts:
             - name: config
               mountPath: /app/config
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       volumes:
         - name: config
           persistentVolumeClaim:

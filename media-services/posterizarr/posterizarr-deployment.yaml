@@ -83,6 +83,13 @@ spec:
               mountPath: /config
             - name: app-config-tpl-volume # Mount the ConfigMap template
               mountPath: /config_templates
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
       containers:
         - name: posterizarr
           image: ghcr.io/fscorrupt/posterizarr:1.9.70
@@ -96,6 +103,13 @@ spec:
               mountPath: /assets
             - name: config
               mountPath: /config
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
       volumes:
         - name: config
           persistentVolumeClaim:
