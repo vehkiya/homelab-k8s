@@ -24,7 +24,7 @@ data:
         forward . /etc/resolv.conf {
            max_concurrent 1000
         }
-        cache 30
+        cache 300
         loop
         reload
         loadbalance

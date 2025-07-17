@@ -1,10 +1,13 @@
-# kustomize/base/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: media
 
 # List of resources to include
 resources:
+  - ../base
   - autobrr-deployment.yaml
   - autobrr-service.yaml
   - autobrr-http-route.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: autobrr
