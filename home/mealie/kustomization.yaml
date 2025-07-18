@@ -3,11 +3,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: home
 
+labels:
+  - pairs:
+      app.kubernetes.io/name: mealie
+
 # List of resources to include
 resources:
-  - 1-mealie-db-credentials.yaml
-  - 2-mealie-db-create-job.yaml
-  - 3-mealie-configmap.yaml
-  - 4-mealie-deployment.yaml
-  - 5-mealie-service.yaml
-  - 6-mealie-http-route.yaml
+  - 0-mealie-db-external-secret.yaml
+  - 1-mealie-db.yaml
+  - 2-mealie-configmap.yaml
+  - 3-mealie-deployment.yaml
+  - 4-mealie-service.yaml
+  - 5-mealie-http-route.yaml

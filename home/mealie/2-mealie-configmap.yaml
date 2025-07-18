@@ -9,3 +9,6 @@ data:
     DB_ENGINE: postgres
     PUID: "1026"
     PGID: "100"
+    POSTGRES_SERVER: postgres-db-rw.postgres.svc
+    POSTGRES_PORT: "5432"
+    POSTGRES_DB: mealie-db
