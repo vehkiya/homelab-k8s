@@ -9,6 +9,7 @@ labels:
 
 resources:
   - meilisearch-master-key.yaml
+  - redis-password.yaml
   - bar-assistant-config-map.yaml
   - bar-assistant-deployment.yaml
   - bar-assistant-service.yaml
