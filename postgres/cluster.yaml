@@ -1,0 +1,54 @@
+# postgres-cluster.yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-db
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  instances: 3
+  enableSuperuserAccess: true
+
+  managed:
+    roles:
+      - name: mealie_user
+        ensure: present
+        login: true
+        passwordSecret:
+          name: mealie-user-password
+      - name: authelia_user
+        ensure: present
+        login: true
+        passwordSecret:
+          name: authelia-user-password
+
+  # Static provisioning for retained storage
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - lab-1
+                  - lab-2
+                  - lab-3
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 25Gi
+      storageClassName: synology-iscsi-persistent
+      volumeMode: Filesystem
+
+  # Enable Pod Monitor for Prometheus (Optional)
+  monitoring:
+    enablePodMonitor: false
+
+  certificates:
+    serverAltDNSNames:
+      - postgres.kerrlab.app
