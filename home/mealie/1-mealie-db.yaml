@@ -4,6 +4,7 @@ metadata:
   name: mealie-db
   namespace: postgres
 spec:
+  name: mealie-db
   cluster:
     name: postgres-db
   owner: mealie_user
