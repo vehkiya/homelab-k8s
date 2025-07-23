@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: radarr
-        image: ghcr.io/home-operations/radarr:5.27.1
+        image: ghcr.io/home-operations/radarr:5.27.2
         env:
         - name: PGID
           value: "100"
