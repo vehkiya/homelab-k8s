@@ -24,7 +24,7 @@ ingressRoute:
       - name: traefik-dashboard-auth
 logs:
   general:
-    level: INFO
+    level: WARN
 
 ports:
   web:
@@ -57,7 +57,8 @@ gateway:
     websecure:
       port: 8443
       protocol: HTTPS
-      namespacePolicy: All
+      namespacePolicy:
+        from: All
       certificateRefs:
         - name: kerrlab-app-tls # Must match the Certificate's metadata.name
           kind: Secret # Must be Secret

@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: traefik/crds
-      targetRevision: master
+    - chart: traefik-crds
+      repoURL: https://traefik.github.io/charts
+      targetRevision: 1.10.0
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
       path: traefik
       targetRevision: master
