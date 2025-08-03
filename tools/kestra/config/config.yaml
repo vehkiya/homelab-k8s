@@ -11,3 +11,6 @@ deployments:
     enabled: true
   standalone:
     enabled: false
+    
+dind:
+  enabled: false    

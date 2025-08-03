@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kestra
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      ref: kestra-manifests
+      path: tools/kestra
+      targetRevision: master
+    - chart: kestra
+      repoURL: https://helm.kestra.io/
+      targetRevision: 0.23.9
+      helm:
+        valueFiles:
+          - $kestra-manifests/config/config.yaml
+  destination:
+    namespace: tools
+    server: https://kube.kerrlab.app:6443
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
