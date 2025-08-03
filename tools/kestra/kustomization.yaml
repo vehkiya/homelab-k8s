@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tools
+  
+helmCharts:
+  - name: kestra
+    repo: https://helm.kestra.io/
+    version: 0.23.9
+    releaseName: kestra
+    namespace: tools
+    valuesFile: "config/config.yaml"
+
+resources:
+  - kestra-http-route.yaml
