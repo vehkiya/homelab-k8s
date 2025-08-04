@@ -11,4 +11,5 @@ helmCharts:
     valuesFile: "config/config.yaml"
 
 resources:
+  - kestra-secrets.yaml
   - kestra-http-route.yaml

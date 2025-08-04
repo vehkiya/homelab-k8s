@@ -13,4 +13,8 @@ deployments:
     enabled: false
     
 dind:
-  enabled: false    
+  enabled: false
+  
+externalSecret:
+  secretName: kestra-secret
+  key: application-k8s.yml
