@@ -12,7 +12,7 @@ spec:
       targetRevision: master
     - chart: kestra
       repoURL: https://helm.kestra.io/
-      targetRevision: 0.23.9
+      targetRevision: 0.24.0
       helm:
         valueFiles:
           - $kestra-manifests/config/config.yaml
