@@ -91,7 +91,7 @@ spec:
                 - ALL
       containers:
         - name: posterizarr
-          image: ghcr.io/fscorrupt/posterizarr:1.9.71
+          image: ghcr.io/fscorrupt/posterizarr:1.9.72
           env:
             - name: TZ
               value: "Europe/Chisinau"
