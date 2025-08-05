@@ -5,7 +5,7 @@ namespace: tools
 helmCharts:
   - name: kestra
     repo: https://helm.kestra.io/
-    version: 0.23.9
+    version: 0.24.0
     releaseName: kestra
     namespace: tools
     valuesFile: "config/config.yaml"
