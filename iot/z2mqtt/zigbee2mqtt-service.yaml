@@ -1,0 +1,12 @@
+# 9-z2m-service-and-ingress.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: zigbee2mqtt-svc
+spec:
+  selector:
+    app: zigbee2mqtt
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

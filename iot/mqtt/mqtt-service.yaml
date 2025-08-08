@@ -1,0 +1,14 @@
+# 5-mosquitto-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: mosquitto
+  ports:
+    - name: mqtt
+      protocol: TCP
+      port: 1883
+      targetPort: 1883

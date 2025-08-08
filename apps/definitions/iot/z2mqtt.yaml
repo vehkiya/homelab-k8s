@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: z2mqtt
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Vehkiya/homelab-k8s.git
+    path: iot/z2mqtt
+    targetRevision: master
+  destination:
+    namespace: home-assistant
+    server: https://kube.kerrlab.app:6443
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

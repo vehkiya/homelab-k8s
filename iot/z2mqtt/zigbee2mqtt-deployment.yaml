@@ -1,0 +1,56 @@
+# 8-z2m-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zigbee2mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zigbee2mqtt
+  template:
+    metadata:
+      labels:
+        app: zigbee2mqtt
+    spec:
+      initContainers:
+        - name: copy-config
+          image: busybox:1.36
+          command:
+            - "sh"
+            - "-c"
+            - "cp /config/configuration.yaml /data/configuration.yaml"
+          volumeMounts:
+            - name: config # Mount the read-only configmap
+              mountPath: /config
+            - name: data # Mount the read-write persistent volume
+              mountPath: /data      
+      containers:
+        - name: zigbee2mqtt
+          image: ghcr.io/koenkk/zigbee2mqtt:2.6.0
+          ports:
+            - containerPort: 8080
+              name: frontend
+          env:
+            - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
+              value: "mqtt://mosquitto-svc.home-assistant.svc.cluster.local"
+            - name: ZIGBEE2MQTT_CONFIG_MQTT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mosquitto-credentials
+                  key: user
+            - name: ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mosquitto-credentials
+                  key: password
+          volumeMounts:
+            - name: data
+              mountPath: /app/data         
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: zigbee2mqtt-data-pvc
+        - name: config
+          configMap:
+            name: zigbee2mqtt-config            

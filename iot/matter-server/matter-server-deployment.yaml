@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: home-assistant
+  name: matter-server
   namespace: home-assistant
 spec:
   replicas: 1
@@ -9,30 +9,29 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: home-assistant
+      app: matter-server
   template:
     metadata:
       labels:
-        app: home-assistant
+        app: matter-server
     spec:
+      hostNetwork: true
       containers:
-        - name: homeassistant
-          image: ghcr.io/home-operations/home-assistant:2025.8.0
+        - image: ghcr.io/home-assistant-libs/python-matter-server:8.0.0
+          name: matter-server
           volumeMounts:
-            - name: hass-config-mount
-              mountPath: /config
+            - name: data
+              mountPath: /data
           securityContext:
-            allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
-            readOnlyRootFilesystem: true
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
+        runAsUser: 0
+        runAsGroup: 0
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
       volumes:
-        - name: hass-config-mount
+        - name: data
           persistentVolumeClaim:
-            claimName: home-assistant-config-pvc
+            claimName: matter-data-pvc
