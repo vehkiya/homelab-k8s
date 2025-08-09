@@ -12,7 +12,7 @@ spec:
     path: apps/definitions/iot
     targetRevision: master
   destination:
-    namespace: argocd
+    namespace: home-assistant
     server: https://kube.kerrlab.app:6443
   syncPolicy:
     automated:
