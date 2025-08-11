@@ -22,7 +22,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: homeassistant
-          image: ghcr.io/home-operations/home-assistant:2025.8.0
+          image: ghcr.io/home-operations/home-assistant:2025.8.1
           volumeMounts:
             - name: hass-config-mount
               mountPath: /config
