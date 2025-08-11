@@ -17,7 +17,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: plex
-          image: plexinc/pms-docker:1.42.1.10054-f333bdaa8
+          image: plexinc/pms-docker:1.42.1.10060-4e8b05daf
           env:
             - name: TZ
               value: "Europe/Chisinau"
