@@ -91,7 +91,7 @@ spec:
                   subPath: config.yml
           containers:
             - name: kometa
-              image: kometateam/kometa:v2.2.0
+              image: kometateam/kometa:v2.2.1
               imagePullPolicy: IfNotPresent
               args: [ "--run", "--read-only-config" ]
               resources:
