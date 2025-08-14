@@ -17,7 +17,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: ghcr.io/home-assistant-libs/python-matter-server:8.0.0
+        - image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0
           name: matter-server
           volumeMounts:
             - name: data
