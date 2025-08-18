@@ -12,7 +12,7 @@ resources:
   
 images:
   - name: docker.io/bitnami/sealed-secrets-controller
-    newTag: 0.30.0
+    newTag: 0.31.0
 
 # Optional: Add common labels or annotations if desired
 # commonLabels:
