@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: salt-rim-frontend
-          image: ghcr.io/karlomikus/salt-rim:4.7.0
+          image: ghcr.io/karlomikus/salt-rim:4.8.0
           env:
             # Explicitly map needed vars from ConfigMap
             - name: API_URL
