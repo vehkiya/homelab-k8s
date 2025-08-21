@@ -12,10 +12,10 @@ data:
       "repositories": ["Vehkiya/homelab-k8s"],
       "labels": ["renovate", "dependencies"],
       "kubernetes": {
-        "fileMatch": ["\\.yaml$", "\\.yml$"]
+        "managerFilePatterns": ["/\\.yaml$/","/\\.yml$/"]
       },
       "argocd": {
-        "fileMatch": ["apps/.+\\.yaml$"]
+        "managerFilePatterns": ["/apps/.+\\.yaml$/"]
       },
       "prHourlyLimit": 10
     }
