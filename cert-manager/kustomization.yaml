@@ -11,9 +11,9 @@ helmCharts:
     valuesFile: "values/values.yaml"
 
 resources:
-  - 00-sealed-cloudflare-token.yaml
+  - 00-cloudflare-token-external-secret.yaml
   - 01-acme-issuer-cf-solver.yaml
-  - zerossl-eab-secret.yaml
+  - zerossl-eab-external-secret.yaml
   - zerossl-issuer-cf-solver.yaml
   - 02-certificate-config.yaml
   
