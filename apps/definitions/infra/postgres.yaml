@@ -5,10 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/Vehkiya/homelab-k8s.git
-    path: postgres
-    targetRevision: master
+  sources:
+    - chart: cnpg
+      repoURL: https://cloudnative-pg.github.io/charts
+      targetRevision: 0.26.0
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: postgres
+      targetRevision: master
   destination:
     namespace: postgres
     server: https://kube.kerrlab.app:6443
