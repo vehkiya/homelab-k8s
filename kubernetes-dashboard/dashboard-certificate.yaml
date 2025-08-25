@@ -7,7 +7,7 @@ spec:
   secretName: k8s-dash-app-tls # Name of the Kubernetes Secret to store the certificate
   issuerRef:
     # Or clusterIssuerRef for ClusterIssuer
-    name: letsencrypt-prod
+    name: zerossl-prod
     # kind: Issuer
     kind: ClusterIssuer
     group: cert-manager.io
