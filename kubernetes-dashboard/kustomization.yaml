@@ -12,7 +12,7 @@ helmCharts:
     valuesFile: "values/values.yaml"
 
 resources:
-  - dashboard-certificate.yaml
   - dashboard-data.yaml
   - dashboard-network-policy.yaml
+  - dashboard-http-route.yaml
   
