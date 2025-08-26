@@ -10,6 +10,7 @@ labels:
 # List of resources to include
 resources:
   - 0-mealie-db-external-secret.yaml
+  - 0-mealie-oidc-secrets.yaml
   - 1-mealie-db.yaml
   - 2-mealie-configmap.yaml
   - 3-mealie-deployment.yaml

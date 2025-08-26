@@ -2,13 +2,23 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: mealie-config
+  name: mealie-config
 data:
-    BASE_URL: https://recipes.kerrlab.app
-    ALLOW_SIGNUP: "true"
-    DB_ENGINE: postgres
-    PUID: "1026"
-    PGID: "100"
-    POSTGRES_SERVER: postgres-db-rw.postgres.svc
-    POSTGRES_PORT: "5432"
-    POSTGRES_DB: mealie-db
+  BASE_URL: https://recipes.kerrlab.app
+  ALLOW_SIGNUP: "true"
+  ALLOW_PASSWORD_LOGIN: "false"
+  DB_ENGINE: postgres
+  PUID: "1026"
+  PGID: "100"
+  POSTGRES_SERVER: postgres-db-rw.postgres.svc
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: mealie-db
+  OIDC_AUTH_ENABLED: "true"
+  OIDC_SIGNUP_ENABLED: "true"
+  OIDC_CONFIGURATION_URL: 'https://auth.kerrlab.app/.well-known/openid-configuration'
+  OIDC_AUTO_REDIRECT: 'true'
+  OIDC_CLIENT_ID: "mealie"
+  OIDC_USER_GROUP: "users"
+  OIDC_ADMIN_GROUP: "administrators"
+  OIDC_PROVIDER_NAME: "Authelia"
+  OIDC_REMEMBER_ME: "true"

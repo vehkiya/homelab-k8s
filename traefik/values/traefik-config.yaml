@@ -37,6 +37,10 @@ ports:
       enabled: true
     forwardedHeaders:
       trustedIPs:
+        - 10.10.1.0/24
+        - 10.96.0.0/12
+        - fd00:11::/112
+        - 10.244.0.0/16
     proxyProtocol:
       trustedIPs:
   postgres:
