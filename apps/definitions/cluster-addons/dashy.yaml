@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dashy
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Vehkiya/homelab-k8s.git
+    path: addons/dashy
+    targetRevision: master
+  destination:
+    namespace: dashy
+    server: https://kube.kerrlab.app:6443
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
