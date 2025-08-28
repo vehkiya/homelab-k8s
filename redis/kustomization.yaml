@@ -10,7 +10,7 @@ resources:
 helmCharts:
   - name: redis
     repo: https://charts.bitnami.com/bitnami
-    version: 22.0.6
+    version: 22.0.7
     releaseName: redis
     namespace: redis
     valuesFile: values/redis-values.yaml
