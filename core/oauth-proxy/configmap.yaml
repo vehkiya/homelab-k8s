@@ -20,6 +20,8 @@ data:
     # client_secret is loaded from the environment variable
     code_challenge_method = "S256"
     
+    session_store_type = "redis"
+    redis_connection_url = "redis://redis-master.redis.svc.cluster.local:6379/2"
     # Cookie Settings
     # The cookie_secret is loaded from the environment variable
     cookie_name = "_oauth2_proxy"

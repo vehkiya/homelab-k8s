@@ -13,6 +13,7 @@ helmCharts:
     valuesFile: "values/traefik-config.yaml"
 
 resources:
+  - namespace.yaml
   - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
   - traefik-dashboard-auth.yaml
   - tcp-gateway.yaml
