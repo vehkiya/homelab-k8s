@@ -1,0 +1,42 @@
+# oauth2-proxy-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oauth2-proxy-configmap
+  namespace: core
+data:
+  oauth2-proxy.cfg: |
+    # Listen Address
+    http_address = "0.0.0.0:4180"
+
+    # OIDC Provider Settings
+    provider = "oidc"
+    oidc_issuer_url = "https://auth.kerrlab.app"
+    provider_display_name = "Authelia"
+
+    # Client Credentials (loaded from the secret)
+    # The client ID must match what you configured in Authelia.
+    # client_id = "oauth2-proxy"
+    # client_secret is loaded from the environment variable
+    code_challenge_method = "S256"
+    
+    # Cookie Settings
+    # The cookie_secret is loaded from the environment variable
+    cookie_name = "_oauth2_proxy"
+    cookie_secure = true
+    cookie_httponly = true
+    cookie_samesite = "lax"
+    # This is the magic for cross-domain SSO!
+    cookie_domains = ".kerrlab.app"
+
+    # Email / User Settings
+    email_domains = "kerrlab.app"
+    
+    # Upstream / Forwarding Settings
+    # We let Traefik handle the upstream, so we just need a static code.
+    upstreams = [ "static://200" ]
+
+    # Standard Headers
+    pass_access_token = true
+    set_xauthrequest = true
+    prefer_email_to_user = false

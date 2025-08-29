@@ -1,0 +1,38 @@
+# core/oauth-proxy/deployment.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: oauth-proxy
+  namespace: core
+  labels:
+    app: oauth-proxy
+spec:
+  selector:
+    matchLabels:
+      app: oauth-proxy
+  template:
+    metadata:
+      labels:
+        app: oauth-proxy
+    spec:
+      containers:
+        - name: oauth-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.12.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config=/etc/oauth2-proxy/oauth2-proxy.cfg
+          envFrom:
+            - secretRef:
+                name: oauth-proxy-secrets
+          ports:
+            - name: http
+              containerPort: 4180
+              hostPort: 4180
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/oauth2-proxy
+      volumes:
+        - name: config
+          configMap:
+            name: oauth2-proxy-configmap

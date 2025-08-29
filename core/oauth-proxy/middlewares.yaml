@@ -1,0 +1,18 @@
+--- # ---- Media ----
+# oauth2-proxy-middleware.yaml
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oauth2-proxy-middleware
+  namespace: media
+spec:
+  forwardAuth:
+    # The address of the oauth2-proxy service.
+    # The path /oauth2/auth is the endpoint oauth2-proxy uses for verification.
+    address: http://oauth-proxy.core.svc.cluster.local:4180/oauth2/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - "X-Auth-Request-User"
+      - "X-Auth-Request-Email"
+      - "X-Auth-Request-Groups"
+      - "X-Auth-Request-Access-Token"

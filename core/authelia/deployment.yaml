@@ -90,6 +90,7 @@ spec:
           ports:
             - name: http
               containerPort: 9091
+              hostPort: 9091
               protocol: TCP
           env:
             - name: X_AUTHELIA_CONFIG_FILTERS

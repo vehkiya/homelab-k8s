@@ -1,0 +1,16 @@
+# core/oauth-proxy/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth-proxy
+  namespace: core
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 4180
+      targetPort: http
+      protocol: TCP
+  externalTrafficPolicy: Local
+  selector:
+    app: oauth-proxy
