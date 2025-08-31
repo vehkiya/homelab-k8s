@@ -18,7 +18,7 @@ spec:
       enableServiceLinks: false
       initContainers:
         - name: prepare-config
-          image: alpine/k8s:1.33.4
+          image: alpine/k8s:1.34.0
           command:
             - /bin/sh
             - -c
