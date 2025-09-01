@@ -6,25 +6,49 @@ metadata:
 data:
   Corefile: |
     .:53 {
+        # --- Standard Plugins ---
         errors
         health {
             lameduck 5s
         }
         ready
+        prometheus :9153
         log . {
             class error
         }
-        prometheus :9153
 
+        # --- Optimizations ---
+        # 1. Custom hosts for your Kubernetes services via Traefik.
+        hosts {
+            10.10.1.221 proxy.kerrlab.app
+            fallthrough
+        }
+        template IN A kerrlab.app {
+            answer "{{ .Name }} 60 IN A 10.10.1.221"
+            fallthrough
+        }
+
+        # --- Core Kubernetes DNS ---
         kubernetes cluster.local in-addr.arpa ip6.arpa {
             pods insecure
             fallthrough in-addr.arpa ip6.arpa
             ttl 30
         }
-        forward . /etc/resolv.conf {
-           max_concurrent 1000
+
+        # --- Performance ---
+        # Optimized caching, placed BEFORE forward.
+        cache 600 {
+            prefetch 1 1h 10%
         }
-        cache 300
+
+        # --- External DNS ---
+        # 2. Forward to your local gateway first, with a public DNS fallback.
+        forward . 10.10.1.1 1.1.1.1 {
+            policy sequential
+            max_concurrent 1000
+        }
+
+        # --- Standard Utilities ---
         loop
         reload
         loadbalance
