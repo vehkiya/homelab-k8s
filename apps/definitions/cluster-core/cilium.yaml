@@ -12,9 +12,9 @@ spec:
       helm:
         releaseName: cilium
         valueFiles:
-          - $values/values.yaml
+          - $values/cilium/values/values.yaml
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
-      path: cilium/values
+      targetRevision: master
       ref: values
     - repoURL: https://github.com/Vehkiya/homelab-k8s.git
       path: cilium
