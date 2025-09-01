@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://coredns.github.io/helm'
     chart: coredns
-    targetRevision: '1.29.0' # Pin to a specific chart version for stability
+    targetRevision: '1.43.3' # Pin to a specific chart version for stability
     helm:
       # You can either reference a values file in another git repo,
       # or paste the values directly here for a self-contained application.
