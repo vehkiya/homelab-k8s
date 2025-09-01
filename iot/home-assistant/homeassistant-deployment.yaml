@@ -17,7 +17,7 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
             { "name": "iot-vlan-net", "interface": "eth1" }
-          ]'  
+          ]'
     spec:
       dnsPolicy: ClusterFirst
       containers:
@@ -49,6 +49,10 @@ spec:
               subPath: go2rtc.yaml
             - name: hass-config-mount
               mountPath: /config
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

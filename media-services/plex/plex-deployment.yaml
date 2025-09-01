@@ -69,6 +69,10 @@ spec:
           resources:
             limits:
               gpu.intel.com/i915: "1"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       volumes:
         - name: video-movies-mount
           persistentVolumeClaim:

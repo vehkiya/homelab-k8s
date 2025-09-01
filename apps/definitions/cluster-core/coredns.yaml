@@ -58,6 +58,7 @@ spec:
                 health {
                     lameduck 5s
                 }
+                recursion
                 ready
                 prometheus :9153
                 log . {
