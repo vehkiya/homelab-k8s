@@ -12,6 +12,8 @@ k8sServiceHost: "localhost"
 # -- Kubernetes service port endpoint for Cilium agent to connect to
 k8sServicePort: "7445"
 kubeProxyReplacement: true
+localRedirectPolicies:
+  enabled: true
 # required for Tailscale
 socketLB:
   hostNamespaceOnly: false

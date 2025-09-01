@@ -5,10 +5,20 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/Vehkiya/homelab-k8s.git
-    path: cilium
-    targetRevision: master
+  sources:
+    - chart: cilium
+      repoURL: https://helm.cilium.io/
+      targetRevision: 1.18.1
+      helm:
+        releaseName: cilium
+        valueFiles:
+          - $values/values.yaml
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: cilium/values
+      ref: values
+    - repoURL: https://github.com/Vehkiya/homelab-k8s.git
+      path: cilium
+      targetRevision: master
   destination:
     namespace: kube-system
     server: https://kube.kerrlab.app:6443
