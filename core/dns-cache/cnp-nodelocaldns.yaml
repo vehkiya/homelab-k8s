@@ -1,0 +1,64 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-nodelocal-to-coredns
+  # This policy must be in the same namespace as your CoreDNS pods
+  namespace: kube-system
+spec:
+  # This policy applies to your CoreDNS pods
+  endpointSelector:
+    matchLabels:
+      k8s-app: kube-dns
+  
+  # It defines an ingress (incoming traffic) rule
+  ingress:
+    - fromEndpoints:
+        # It allows traffic FROM the NodeLocal DNSCache pods
+        - matchLabels:
+            k8s-app: node-local-dns
+      # On the required DNS ports and protocols
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-nodelocal-egress-to-coredns
+  namespace: kube-system
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: node-local-dns
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: UDP
+            - port: '53'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-nodelocal-egress-to-external-dns
+  namespace: kube-system
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: node-local-dns
+  egress:
+    - toCIDR:
+        - 10.10.1.1/32
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: UDP
+            - port: '53'
+              protocol: TCP

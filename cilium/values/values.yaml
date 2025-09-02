@@ -45,7 +45,7 @@ bpf:
   datapathMode: netkit
   tproxy: true
   preallocateMaps: true
-  hostLegacyRouting: false
+  hostLegacyRouting: true
   masquerade: true
   mapDynamicSizeRatio: 0.08
   distributedLRU:
@@ -64,7 +64,7 @@ ipMasqAgent:
 
 bandwidthManager:
   enabled: true
-  bbr: true
+  bbr: false
 
 enableIPv4Masquerade: true
 enableIPv6Masquerade: true

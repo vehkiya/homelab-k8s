@@ -19,7 +19,7 @@ spec:
         
         service:
           name: kube-dns
-          clusterIP: "10.96.0.10" # Default kube-dns service IP in the 10.96.0.0/12 range
+          clusterIP: "10.96.0.11" # Default kube-dns service IP in the 10.96.0.0/12 range
         
         # Ensure pods are spread across different nodes for high availability.
         affinity:
