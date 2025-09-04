@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  labels:
+    app: the-lounge
+  name: the-lounge-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 4Gi
+  csi:
+    driver: csi.san.synology.com
+    fsType: btrfs
+    volumeAttributes:
+      dsm: fortress.kerrlab.app
+      protocol: iscsi
+    volumeHandle: a38df129-46ad-4c09-8d29-10b994bdc694
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: the-lounge
+  name: the-lounge-config-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+  volumeName: the-lounge-config-pv

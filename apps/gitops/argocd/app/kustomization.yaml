@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+resources:
+  - argocd-initial-admin-external-secret.yaml
+  # renovate: datasource=github-releases depName=argoproj/argo-cd versioning=semver
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.5/manifests/ha/install.yaml
+  - argocd-repositories-external-secret.yaml
+  - ingress-route.yaml
+
+patches:
+  - path: argocd-cm.yaml
+    target:
+      kind: ConfigMap
+      name: argocd-cm
+  - path: argocd-cmd-params-cm.yaml
+    target:
+      kind: ConfigMap
+      name: argocd-cmd-params-cm

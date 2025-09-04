@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matter-server
+  namespace: iot
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: matter-server
+  template:
+    metadata:
+      labels:
+        app: matter-server
+    spec:
+      hostNetwork: true
+      containers:
+        - image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0
+          name: matter-server
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: matter-data-pvc

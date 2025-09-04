@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: storage-applications
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: synology-csi
+          - name: longhorn
+          - name: postgres
+          - name: redis
+          - name: meilisearch
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: 'apps/applications/storage/{{name}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

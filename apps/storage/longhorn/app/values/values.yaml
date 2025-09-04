@@ -1,0 +1,4 @@
+persistence:
+  defaultClassReplicaCount: 3
+ingress:
+  enabled: false

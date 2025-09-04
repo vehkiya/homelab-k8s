@@ -1,0 +1,31 @@
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: [ "ReadWriteMany" ]
+          resources:
+            requests:
+              storage: 50Gi # Adjust size as needed
+
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: [ "ReadWriteMany" ]
+          resources:
+            requests:
+              storage: 10Gi # Adjust
+grafana:
+  persistence:
+    enabled: true
+    storageClassName: longhorn
+    accessModes: [ "ReadWriteMany" ]
+    size: 10Gi
+  admin:
+    existingSecret: "app-secrets-grafana"
+    userKey: user
+    passwordKey: password

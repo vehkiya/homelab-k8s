@@ -1,0 +1,29 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: postgres-superuser
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vaultwarden-store
+    kind: ClusterSecretStore
+  target:
+    name: postgres-db-superuser
+    creationPolicy: Owner
+    template:
+      type: kubernetes.io/basic-auth
+      metadata:
+        labels:
+          cnpg.io/reload: "true"
+  data:
+    - secretKey: username
+      remoteRef:
+        key: "567e770a-6428-4978-8d05-a525509b2022"
+        property: "username"
+    - secretKey: password
+      remoteRef:
+        key: "567e770a-6428-4978-8d05-a525509b2022"
+        property: "password"

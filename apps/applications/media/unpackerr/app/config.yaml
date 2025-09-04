@@ -1,0 +1,10 @@
+# ConfigMap for non-sensitive configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unpackerr-config
+  namespace: media
+data:
+  TZ: "Europe/Chisinau"
+  UN_SONARR_0_URL: "https://sonarr.kerrlab.app"
+  UN_RADARR_0_URL: "https://radarr.kerrlab.app"

@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mqtt-persistence
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/vehkiya/homelab-k8s.git
+    targetRevision: HEAD
+    path: apps/applications/iot/mqtt/persistence
+  destination:
+    server: https://kube.kerrlab.app:6443
+    namespace: iot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    preserveResourcesOnDeletion: true

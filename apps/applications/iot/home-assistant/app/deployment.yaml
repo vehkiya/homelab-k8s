@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: iot
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+            { "name": "iot-vlan-net", "interface": "eth1" }
+          ]'
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: homeassistant
+          image: ghcr.io/home-operations/home-assistant:2025.8.3
+          volumeMounts:
+            - name: hass-config-mount
+              mountPath: /config
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+        - name: go2rtc
+          image: ghcr.io/alexxit/go2rtc:1.9.9
+          ports:
+            - containerPort: 1984
+              name: http-api
+            - containerPort: 8554
+              name: rtsp
+            - containerPort: 8555
+              name: webrtc
+            - containerPort: 1935
+              name: rtmp
+          volumeMounts:
+            - name: go2rtc-config
+              mountPath: /config/go2rtc.yaml
+              subPath: go2rtc.yaml
+            - name: hass-config-mount
+              mountPath: /config
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - name: hass-config-mount
+          persistentVolumeClaim:
+            claimName: home-assistant-config-pvc
+        - name: go2rtc-config
+          configMap:
+            name: go2rtc-config

@@ -1,9 +1,0 @@
-# kustomize/base/kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-# List of resources to include
-resources:
-  - 01-whoami-deployment.yaml
-  - 02-whoami-service.yaml
-  - 03-whoami-http-route.yaml

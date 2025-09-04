@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: gitops-applications
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: argocd
+          - name: renovate
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: 'apps/applications/gitops/{{name}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

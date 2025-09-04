@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./applicationset.yaml
+  - ./excalidraw
+  - ./irc
+  - ./it-tools
+  - ./mermaid
+  - ./n8n
+  - ./speedtest
+  - ./whoami

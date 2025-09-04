@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  labels:
+    app: uptime-kuma
+  name: uptime-kuma-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  csi:
+    driver: csi.san.synology.com
+    fsType: btrfs
+    volumeAttributes:
+      dsm: fortress.kerrlab.app
+      protocol: iscsi
+    volumeHandle: 885b4724-832c-4e33-8938-a5dffd920305
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: uptime-kuma
+  name: uptime-kuma-config-pvc
+  namespace: notifications
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+  volumeName: uptime-kuma-config-pv

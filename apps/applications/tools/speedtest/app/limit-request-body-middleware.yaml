@@ -1,0 +1,8 @@
+apiVersion: traefik.io/v1alpha1 # Or traefik.containo.us/v1alpha1 for older versions
+kind: Middleware
+metadata:
+  name: limit-request-body
+  namespace: default
+spec:
+  buffering:
+    maxRequestBodyBytes: 36700160

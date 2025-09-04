@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  labels:
+    app: mealie
+  name: mealie-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  csi:
+    driver: csi.san.synology.com
+    fsType: btrfs
+    volumeAttributes:
+      dsm: fortress.kerrlab.app
+      protocol: iscsi
+    volumeHandle: 1298679c-91a1-4419-abbd-83eef04c0b75
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: mealie
+  name: mealie-config-pvc
+  namespace: home
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+  volumeName: mealie-config-pv

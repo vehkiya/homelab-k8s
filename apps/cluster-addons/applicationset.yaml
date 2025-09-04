@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-addons
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: kubernetes-dashboard
+          - name: authelia
+          - name: oauth-proxy
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: 'apps/cluster-addons/{{name}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

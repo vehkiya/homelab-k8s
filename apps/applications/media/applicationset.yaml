@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: media-applications
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: autobrr
+          - name: bazarr
+          - name: flaresolverr
+          - name: kometa
+          - name: overseerr
+          - name: plex
+          - name: posterizarr
+          - name: prowlarr
+          - name: qbittorrent
+          - name: radarr
+          - name: sonarr
+          - name: tautulli
+          - name: unpackerr
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: 'apps/applications/media/{{name}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: media
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

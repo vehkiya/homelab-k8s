@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: iot-applications
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: home-assistant
+          - name: matter-server
+          - name: mqtt
+          - name: z2mqtt
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: 'apps/applications/iot/{{name}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: iot
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

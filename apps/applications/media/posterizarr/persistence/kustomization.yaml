@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - storage-config.yaml
+  - storage-assets.yaml
+  - secret.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: posterizarr
+      app.kubernetes.io/part-of: media-services

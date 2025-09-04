@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  labels:
+    app: bar-assistant
+  name: bar-assistant-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  csi:
+    driver: csi.san.synology.com
+    fsType: btrfs
+    volumeAttributes:
+      dsm: fortress.kerrlab.app
+      protocol: iscsi
+    volumeHandle: 68e49db9-8792-4d08-aaf6-4605e0f76b04
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: bar-assistant
+  name: bar-assistant-config-pvc
+  namespace: home
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+  volumeName: bar-assistant-config-pv

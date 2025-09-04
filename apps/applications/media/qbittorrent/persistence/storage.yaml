@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: csi.san.synology.com
+  labels:
+    app: qbittorrent
+  name: qbittorrent-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  csi:
+    driver: csi.san.synology.com
+    fsType: btrfs
+    volumeAttributes:
+      dsm: fortress.kerrlab.app
+      protocol: iscsi
+    volumeHandle: a2ae08fd-6506-486b-8b00-a2add5584a37
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: qbittorrent
+  name: qbittorrent-config-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: synology-iscsi-persistent
+  volumeMode: Filesystem
+  volumeName: qbittorrent-config-pv

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+spec:
+  selector:
+    app: prowlarr
+  ports:
+    - name: web-ui
+      port: 9696

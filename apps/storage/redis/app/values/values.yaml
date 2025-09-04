@@ -1,0 +1,11 @@
+auth:
+  existingSecret: redis-secret
+  existingSecretPasswordKey: redis-password
+master:
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    size: 5Gi
+replica:
+  persistence:
+    enabled: false

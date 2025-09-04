@@ -1,7 +1,0 @@
-# kustomization.yaml (relevant parts)
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - matter-server-deployment.yaml
-  - matter-server-service.yaml

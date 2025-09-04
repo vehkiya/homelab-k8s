@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: iot
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: mqtt
+
+resources:
+  - credentials.yaml
+  - config.yaml
+  - deployment.yaml
+  - service.yaml

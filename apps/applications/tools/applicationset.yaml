@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tools-applications
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: excalidraw
+          - name: irc
+          - name: it-tools
+          - name: mermaid
+          - name: n8n
+          - name: speedtest
+          - name: whoami
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: 'apps/applications/tools/{{name}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
