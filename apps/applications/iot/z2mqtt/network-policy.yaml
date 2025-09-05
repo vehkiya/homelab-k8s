@@ -9,7 +9,18 @@ spec:
       app: zigbee2mqtt
   # This section defines all required outgoing traffic
   egress:
-    # Rule 1: Allow traffic to Mosquitto
+    # Rule 1: Allow DNS
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": kube-system
+          "k8s:k8s-app": coredns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+    # Rule 2: Allow traffic to Mosquitto
     - toEndpoints:
         - matchLabels:
             app: mosquitto
@@ -17,14 +28,10 @@ spec:
         - ports:
             - port: "1883"
               protocol: TCP
-    # Rule 2: Allow traffic to the Zigbee Coordinator IP
+    # Rule 3: Allow traffic to the Zigbee Coordinator IP
     - toCIDR:
         - 192.168.4.36/32
       toPorts:
         - ports:
             - port: "6638"
-              protocol: TCP
-    - toServices:
-        - k8sService:
-            serviceName: kube-dns
-            namespace: kube-system              
+              protocol: TCP              
