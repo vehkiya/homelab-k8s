@@ -7,3 +7,4 @@ helmCharts:
     version: 0.17.3
     releaseName: node-feature-discovery
     namespace: node-feature-discovery
+    includeCRDs: true
