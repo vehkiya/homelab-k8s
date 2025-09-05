@@ -12,11 +12,10 @@ spec:
     
     # for each cert-manager new EAB credencials are required
     externalAccountBinding:
-      keyID: BH5otLp3bie2P1K_6IbHiA
+      keyID: OjxSLvGJsQGvVPIWwf3C0A
       keySecretRef:
         name: zero-ssl-eabsecret
         key: secret
-      keyAlgorithm: HS256
     
     solvers:
       - dns01:
