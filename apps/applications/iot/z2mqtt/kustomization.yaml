@@ -1,5 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
+namespace: iot
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: z2mqtt
+
 resources:
-  - app.yaml
-  - persistence.yaml
+  - network-policy.yaml
+  - config.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml

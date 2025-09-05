@@ -21,7 +21,7 @@ spec:
       source:
         repoURL: https://github.com/vehkiya/homelab-k8s.git
         targetRevision: HEAD
-        path: 'apps/applications/storage/{{name}}'
+        path: 'apps/storage/{{name}}'
       destination:
         server: https://kube.kerrlab.app:6443
         namespace: argocd

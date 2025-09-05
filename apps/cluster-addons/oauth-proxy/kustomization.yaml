@@ -1,5 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: core
 resources:
-  - app.yaml
-  - persistence.yaml
+  - config.yaml
+  - secrets.yaml
+  - deployment.yaml
+  - http-route.yaml
+  - middlewares.yaml
+  - service.yaml

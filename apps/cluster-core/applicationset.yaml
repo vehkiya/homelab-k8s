@@ -10,7 +10,7 @@ spec:
           - name: cert-manager
           - name: cilium
           - name: multus
-          - name: tailscale
+#          - name: tailscale
           - name: traefik
           - name: external-secrets-operator
   template:
