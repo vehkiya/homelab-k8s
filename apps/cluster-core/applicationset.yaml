@@ -13,6 +13,8 @@ spec:
 #          - name: tailscale
           - name: traefik
           - name: external-secrets-operator
+          - name: nfd
+          - name: intel-device-plugin
   template:
     metadata:
       name: '{{name}}'
