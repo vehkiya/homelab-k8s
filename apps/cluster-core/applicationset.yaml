@@ -7,8 +7,9 @@ spec:
   generators:
     - list:
         elements:
-          - name: cert-manager
           - name: cilium
+          - name: coredns
+          - name: cert-manager
           - name: multus
 #          - name: tailscale
           - name: traefik

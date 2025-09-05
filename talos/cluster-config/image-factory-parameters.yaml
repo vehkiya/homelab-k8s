@@ -1,0 +1,16 @@
+customization:
+  extraKernelArgs:
+    - intel_idle.max_cstate=0
+    - iommu.passthrough=1
+    - intel_iommu=on
+    - iommu=pt
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/btrfs
+      - siderolabs/crun
+      - siderolabs/i915
+      - siderolabs/iscsi-tools
+      - siderolabs/lldpd
+      - siderolabs/mei
+      - siderolabs/realtek-firmware
+      - siderolabs/util-linux-tools
