@@ -9,3 +9,4 @@ labels:
 
 resources:
   - storage.yaml
+  - namespace.yaml

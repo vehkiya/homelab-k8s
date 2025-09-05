@@ -49,10 +49,6 @@ spec:
               subPath: go2rtc.yaml
             - name: hass-config-mount
               mountPath: /config
-      dnsConfig:
-        options:
-          - name: ndots
-            value: "1"
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

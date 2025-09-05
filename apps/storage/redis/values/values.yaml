@@ -1,3 +1,10 @@
+haMode:
+  enabled: true
+
+storage:
+  className: longhorn
+  requestedSize: 5Gi
+
 auth:
   existingSecret: redis-secret
   existingSecretPasswordKey: redis-password

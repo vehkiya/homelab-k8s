@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - storage-config.yaml
   - storage-assets.yaml
-  - secret.yaml
 
 labels:
   - pairs:

@@ -4,6 +4,7 @@ metadata:
   name: iot-applications
   namespace: argocd
 spec:
+  
   generators:
     - list:
         elements:
