@@ -86,6 +86,12 @@ zoneFiles:
       @           IN  NS  ns.kerrlab.app.
       ns          IN  A   127.0.0.1
       ;
+      ; A Records for endpoint services
+      kube    IN  A   10.10.1.250
+      ; A Records for nodes services
+      lab-1.kube    IN  A   10.10.1.101
+      lab-2.kube    IN  A   10.10.1.102
+      lab-3.kube    IN  A   10.10.1.103
       ; A Records for NAS-hosted services
       fortress    IN  A   10.10.1.218
       nas         IN  A   10.10.1.218
