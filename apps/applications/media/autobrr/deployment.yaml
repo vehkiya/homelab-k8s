@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: autobrr
-          image: ghcr.io/autobrr/autobrr:v1.65.0
+          image: ghcr.io/autobrr/autobrr:v1.66.0
           env:
             - name: TZ
               value: "Europe/Chisinau"
