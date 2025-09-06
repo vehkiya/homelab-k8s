@@ -1,0 +1,30 @@
+# Redis Insight deployment with name 'redis'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis #deployment name
+  labels:
+    app: redis #deployment label
+spec:
+  replicas: 1 #a single replica pod
+  selector:
+    matchLabels:
+      app: redis #which pods is the deployment managing, as defined by the pod template
+  template: #pod template
+    metadata:
+      labels:
+        app: redis #label for pod/s
+    spec:
+      containers:
+        - name: redis #Container name (DNS_LABEL, unique)
+          image: redis:8.2.1
+          imagePullPolicy: IfNotPresent #Installs the latest Redis Insight version
+          volumeMounts:
+            - name: redis #Pod volumes to mount into the container's filesystem. Cannot be updated.
+              mountPath: /data
+          ports:
+            - containerPort: 6379 #exposed container port and protocol
+              protocol: TCP
+      volumes:
+        - name: redis
+          emptyDir: {} # node-ephemeral volume https://kubernetes.io/docs/concepts/storage/volumes/#emptydir

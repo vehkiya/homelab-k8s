@@ -37,11 +37,11 @@ spec:
                 secretKeyRef:
                   name: meilisearch-kubernetes-master-key
                   key: MEILI_MASTER_KEY
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-secret
-                  key: redis-password
+#            - name: REDIS_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: redis-secret
+#                  key: redis-password
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant
