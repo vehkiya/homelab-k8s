@@ -1,18 +1,19 @@
-haMode:
-  enabled: true
-
-storage:
-  className: longhorn
-  requestedSize: 5Gi
-
 auth:
   existingSecret: redis-secret
   existingSecretPasswordKey: redis-password
+
 master:
   persistence:
     enabled: true
     storageClass: "longhorn"
     size: 5Gi
+
+# Disable persistence for replicas
 replica:
   persistence:
     enabled: false
+    
+    
+image:
+  registry: docker.io
+  repository: bitnamilegacy/redis
