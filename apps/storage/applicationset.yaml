@@ -10,7 +10,7 @@ spec:
           - name: synology-csi
           - name: longhorn
           - name: postgres
-#          - name: redis
+          - name: redis
           - name: meilisearch
   template:
     metadata:
