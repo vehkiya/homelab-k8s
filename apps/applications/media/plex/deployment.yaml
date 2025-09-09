@@ -27,6 +27,9 @@ spec:
               value: "1026"
             - name: PLEX_GID
               value: "100"
+          envFrom:
+            - secretRef:
+                name: plex-secret
           ports:
             - name: http
               containerPort: 32400
