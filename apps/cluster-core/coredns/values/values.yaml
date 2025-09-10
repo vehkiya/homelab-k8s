@@ -100,6 +100,8 @@ zoneFiles:
       ;
       ; A Record for the Reverse Proxy
       proxy       IN  A   10.10.1.221
+      ; A Records for other services in domain
+      mc       IN  A   185.206.149.82
       ;
       ; Wildcard for all other services in the cluster
       * IN  A   10.10.1.221      
