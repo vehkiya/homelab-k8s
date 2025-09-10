@@ -14,6 +14,9 @@ providers:
 # Allow the Gateway to expose HTTPRoute from all namespaces
 deployment:
   kind: DaemonSet
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 1
 ingressRoute:
   dashboard:
     enabled: true
