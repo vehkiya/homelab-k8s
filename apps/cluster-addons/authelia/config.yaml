@@ -184,7 +184,7 @@ data:
         hmac_secret: "${OIDC_HMAC_SECRET}"
         jwks:
           - key_id: 'oidc_pk'
-            key: { { secret "/config/secrets/oidc/jwks/oidc_private.pem" | mindent 10 "|" | msquote } }
+            key: {{ secret "/config/secrets/oidc/jwks/oidc_private.pem" | mindent 10 "|" | msquote }}
         clients:
           - client_id: 'mealie'
             client_name: 'Mealie'
@@ -216,7 +216,6 @@ data:
             public: false
             authorization_policy: 'one_factor'
             consent_mode: 'pre-configured'
-            pre_configured_consent_duration: '1 week'
             pre_configured_consent_duration: '1 week'
             redirect_uris:
               - 'https://oauth.kerrlab.app/oauth2/callback'

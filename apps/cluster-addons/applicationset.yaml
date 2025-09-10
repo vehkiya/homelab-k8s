@@ -8,6 +8,7 @@ spec:
     - list:
         elements:
           - name: kubernetes-dashboard
+#          - name: headlamp
           - name: authelia
           - name: oauth-proxy
   template:

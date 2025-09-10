@@ -13,3 +13,4 @@ helmCharts:
 resources:
   - bitwarden-cli.yaml
   - cluster-secret-store.yaml
+  - network-policy.yaml
