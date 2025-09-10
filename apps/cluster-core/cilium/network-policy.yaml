@@ -1,11 +1,9 @@
 apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
+kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: global-connectivity
-  namespace: default
+  name: global-dns-connectivity
 spec:
-  endpointSelector:
-    matchLabels: { }
+  endpointSelector: {}
   egress:
     - toEndpoints:
         - matchLabels:

@@ -14,12 +14,7 @@ spec:
     metadata:
       labels:
         app: home-assistant
-      annotations:
-        k8s.v1.cni.cncf.io/networks: '[
-            { "name": "iot-vlan-net", "interface": "eth1" }
-          ]'
     spec:
-      dnsPolicy: ClusterFirst
       containers:
         - name: homeassistant
           image: ghcr.io/home-operations/home-assistant:2025.9.1
@@ -31,7 +26,7 @@ spec:
             capabilities:
               drop:
                 - ALL
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
         - name: go2rtc
           image: ghcr.io/alexxit/go2rtc:1.9.9
           ports:

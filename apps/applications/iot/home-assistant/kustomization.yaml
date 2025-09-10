@@ -8,7 +8,6 @@ labels:
       app.kubernetes.io/name: home-assistant
 
 resources:
-  - nad.yaml
   - deployment.yaml
   - service.yaml
   - http-route.yaml
