@@ -15,8 +15,10 @@ providers:
 deployment:
   kind: DaemonSet
 updateStrategy:
+  type: RollingUpdate
   rollingUpdate:
-    maxUnavailable: 1
+    maxUnavailable: 0  # @schema type:[integer, string, null]
+    maxSurge: 1
 ingressRoute:
   dashboard:
     enabled: true
