@@ -14,13 +14,31 @@ spec:
     metadata:
       labels:
         app: home-assistant
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+            { "name": "iot-vlan-net", "interface": "eth1" }
+          ]'
     spec:
+      dnsPolicy: None
+      dnsConfig:
+        searches:
+          - iot.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+        nameservers:
+          - 10.96.0.10
+        options:
+          - name: ndots
+            value: "5"
       containers:
         - name: homeassistant
           image: ghcr.io/home-operations/home-assistant:2025.9.1
           volumeMounts:
             - name: hass-config-mount
               mountPath: /config
+            - name: hass-config-files
+              mountPath: /config/configuration.yaml
+              subPath: configuration.yaml
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -42,8 +60,7 @@ spec:
             - name: go2rtc-config
               mountPath: /config/go2rtc.yaml
               subPath: go2rtc.yaml
-            - name: hass-config-mount
-              mountPath: /config
+              
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -56,3 +73,6 @@ spec:
         - name: go2rtc-config
           configMap:
             name: go2rtc-config
+        - name: hass-config-files
+          configMap:
+            name: home-assistant-config
