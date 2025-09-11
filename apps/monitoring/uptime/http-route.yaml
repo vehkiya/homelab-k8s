@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: kuma-ui
+        - name: uptime-kuma-ui
           port: 3001
