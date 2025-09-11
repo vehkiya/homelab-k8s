@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: headlamp-sa
+  # We are creating this in kube-system as it's a cluster-wide utility account.
+  # You can choose another namespace like 'headlamp' if you prefer.
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: headlamp-viewer
+rules:
+  - apiGroups: [""] # Core API group
+    resources: ["pods", "nodes", "services", "namespaces", "configmaps", "secrets", "persistentvolumes", "persistentvolumeclaims", "events", "serviceaccounts", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "daemonsets", "replicasets", "statefulsets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses", "networkpolicies"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["gateways", "httproutes", "grpcroutes", "gatewayclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["*"]
+    verbs: ["get", "list"]
+  - apiGroups: ["cilium.io"] # Added for Cilium CNI
+    resources: ["ciliumendpoints", "ciliumidentities", "ciliumnetworkpolicies", "ciliumnodes"]
+    verbs: ["get", "list", "watch"]
+  - nonResourceURLs: ["/version", "/healthz"]
+    verbs: ["get"]
+---
+# Binding for the Service Account (token login)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: headlamp-sa-viewer-binding
+subjects:
+  - kind: ServiceAccount
+    name: headlamp-sa
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: headlamp-viewer
+  apiGroup: rbac.authorization.k8s.io
+---
+# Binding for your OIDC users/group
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: headlamp-oidc-viewer-binding
+subjects:
+  - kind: Group
+    name: administrators
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io

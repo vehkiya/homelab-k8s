@@ -1,12 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: kubernetes-dashboard
+namespace: kube-system
 helmCharts:
   - name: headlamp
-    repo:  https://kubernetes-sigs.github.io/headlamp/
+    repo: https://kubernetes-sigs.github.io/headlamp/
     version: 0.35.0
     releaseName: headlamp
     includeCRDs: true
+    valuesFile: values/values.yaml
 
 resources:
+  - oidc-secrets.yaml
+  - rbac.yaml
   - http-route.yaml
+  - network-policy.yaml
