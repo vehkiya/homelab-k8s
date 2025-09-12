@@ -12,7 +12,7 @@ data:
         - hass:Doorbell Repeater-B53F
         - ffmpeg:Doorbell#audio=opus
     hass:
-      config: "/config"
+      config: "/config/hass"
     rtsp:
       listen: ":8554"
     webrtc:

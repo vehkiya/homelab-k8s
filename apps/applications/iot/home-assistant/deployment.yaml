@@ -36,6 +36,8 @@ spec:
           volumeMounts:
             - name: hass-config-mount
               mountPath: /config
+            - name: media
+              mountPath: /media
             - name: hass-config-files
               mountPath: /config/configuration.yaml
               subPath: configuration.yaml
@@ -60,6 +62,9 @@ spec:
             - name: go2rtc-config
               mountPath: /config/go2rtc.yaml
               subPath: go2rtc.yaml
+            - name: hass-config-mount
+              mountPath: /config/hass
+              readOnly: true
               
       securityContext:
         runAsUser: 1000
@@ -70,6 +75,9 @@ spec:
         - name: hass-config-mount
           persistentVolumeClaim:
             claimName: home-assistant-config-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: home-assistant-media
         - name: go2rtc-config
           configMap:
             name: go2rtc-config

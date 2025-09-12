@@ -19,6 +19,13 @@ spec:
       containers:
         - image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0
           name: matter-server
+          args:
+            - "--storage-path"
+            - "/data"
+            - "--paa-root-cert-dir"
+            - "/data/credentials"
+            - "--primary-interface"
+            - "bond0.2@bond0"
           volumeMounts:
             - name: data
               mountPath: /data
