@@ -10,5 +10,9 @@ parameters:
   mountPermissions: '0755'
 mountOptions:
   - nfsvers=4.1
+  - async
+  - noatime
+  - rsize=1048576
+  - wsize=1048576
 reclaimPolicy: Retain
 allowVolumeExpansion: true

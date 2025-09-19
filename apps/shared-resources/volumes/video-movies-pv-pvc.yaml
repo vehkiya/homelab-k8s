@@ -6,12 +6,16 @@ metadata:
     pv-name: video-movies-pv
 spec:
   capacity:
-    storage: 15Ti # Adjust the size as needed
+    storage: 16Ti # Adjust the size as needed
   accessModes:
     - ReadOnlyMany # Or ReadOnlyMany if only reading
   persistentVolumeReclaimPolicy: Retain # Or Delete if you want the data deleted when the PV is deleted
   mountOptions:
     - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
   nfs:
     server: 10.10.1.218 # Your NFS server IP
     path: /volume1/video/Movies # The exported path on the NFS server
@@ -27,7 +31,7 @@ spec:
     - ReadOnlyMany # Must match the PV's access modes
   resources:
     requests:
-      storage: 15Ti # Must be less than or equal to the PV's capacity
+      storage: 16Ti # Must be less than or equal to the PV's capacity
   selector:
     # Optional but recommended to bind to a specific PV
     matchLabels:
