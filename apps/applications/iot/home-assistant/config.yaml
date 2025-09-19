@@ -62,5 +62,10 @@ data:
     go2rtc:
       url: https://go2rtc.kerrlab.app/
       
-    
+    homeassistant:
+      allowlist_external_dirs:
+        - /media
+      media_dirs:
+        llmvision: /config/media/llmvision
+        
     

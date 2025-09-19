@@ -10,14 +10,15 @@ spec:
   accessModes:
     - ReadWriteOnce
   capacity:
-    storage: 1Gi
+    storage: 50Gi
   csi:
     driver: csi.san.synology.com
     fsType: btrfs
     volumeAttributes:
       dsm: fortress.kerrlab.app
+      formatOptions: ""
       protocol: iscsi
-    volumeHandle: a2ae08fd-6506-486b-8b00-a2add5584a37
+    volumeHandle: bfef3878-34f7-47f5-86ce-db8603905760
   persistentVolumeReclaimPolicy: Retain
   storageClassName: synology-iscsi-persistent
   volumeMode: Filesystem
@@ -34,7 +35,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 50Gi
   storageClassName: synology-iscsi-persistent
   volumeMode: Filesystem
   volumeName: qbittorrent-config-pv
