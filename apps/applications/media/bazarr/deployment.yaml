@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: bazarr
-          image: ghcr.io/home-operations/bazarr:1.5.2
+          image: ghcr.io/home-operations/bazarr:1.5.3
           env:
             - name: PGID
               value: "100"
