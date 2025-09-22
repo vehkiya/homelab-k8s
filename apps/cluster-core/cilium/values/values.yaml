@@ -146,3 +146,5 @@ pmtuDiscovery:
   # -- Enable path MTU discovery to send ICMP fragmentation-needed replies to
   # the client.
   enabled: true
+
+MTU: 9000

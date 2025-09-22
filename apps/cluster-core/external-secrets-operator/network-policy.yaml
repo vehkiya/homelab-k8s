@@ -1,5 +1,5 @@
 apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
+kind: CiliumClusterwideNetworkPolicy
 metadata:
   name: allow-external-secrets-to-bitwarden
   namespace: external-secrets
@@ -9,8 +9,7 @@ spec:
       app: bitwarden-cli
   ingress:
     - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: external-secrets
+        - {}
       toPorts:
         - ports:
             - port: "8087"
