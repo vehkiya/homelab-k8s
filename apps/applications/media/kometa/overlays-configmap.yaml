@@ -5,30 +5,34 @@ data:
       HDR:
         overlay:
           name: text(HDR)
-          horizontal_offset: 0
-          horizontal_align: center
-          vertical_offset: 150
+          vertical_offset: 20
+          horizontal_offset: 18
+          horizontal_align: left
           vertical_align: bottom
           font_size: 63
           font_color: "#FFFFFF"
           back_color: "#00000099"
           back_radius: 30
           back_padding: 30
+          back_height: 80
+          back_width: 205
         plex_search:
           all:
             hdr: true
       4K:
         overlay:
           name: text(4K)
-          horizontal_offset: 0
-          horizontal_align: center
-          vertical_offset: 150
+          vertical_offset: 20
+          horizontal_offset: 18
+          horizontal_align: left
           vertical_align: bottom
           font_size: 63
           font_color: "#FFFFFF"
           back_color: "#00000099"
           back_radius: 30
           back_padding: 30
+          back_height: 80
+          back_width: 205
         plex_search:
           all:
             resolution: 4K
@@ -38,15 +42,17 @@ data:
           - HDR
         overlay:
           name: text(4K HDR)
-          horizontal_offset: 0
-          horizontal_align: center
-          vertical_offset: 150
+          vertical_offset: 20
+          horizontal_offset: 18
+          horizontal_align: left
           vertical_align: bottom
           font_size: 63
           font_color: "#FFFFFF"
           back_color: "#00000099"
           back_radius: 30
           back_padding: 30
+          back_height: 80
+          back_width: 205
         plex_search:
           all:
             resolution: 4K

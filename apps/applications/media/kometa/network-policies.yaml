@@ -1,0 +1,41 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-kometa-to-media-services
+  namespace: media
+spec:
+  # This policy applies to pods with the 'kometa' app label
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kometa
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: radarr
+      toPorts:
+        - ports:
+            - port: "7878"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: sonarr
+      toPorts:
+        - ports:
+            - port: "8989"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: plex
+      toPorts:
+        - ports:
+            - port: "32400"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: tautulli
+      toPorts:
+        - ports:
+            - port: "8181"
+              protocol: TCP

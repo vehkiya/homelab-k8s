@@ -9,12 +9,21 @@ spec:
       template:
         spec:
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 100
+            runAsNonRoot: true
+            runAsUser: 1026
           initContainers:
             - name: prepare-config
               image: alpine/k8s:1.34.0
+              securityContext:
+                allowPrivilegeEscalation: false
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop:
+                    - ALL
               command:
                 - /bin/sh
                 - -c
@@ -29,43 +38,67 @@ spec:
                   echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
                   echo "--------------------------------------------------"
 
-                  echo "🔎 Debug: Initial contents of /config directory:"
-                  ls -las /config
-                  echo "--------------------------------------------------"
-                  echo "🔎 Debug: Initial contents of /config_templates directory:"
-                  ls -las /config_templates
-                  echo "--------------------------------------------------"
+                  if [ "${DEBUG_ENABLED}" = "true" ]; then
+                    echo "🔎 Debug: Initial contents of /config directory:"
+                    ls -las /config
+                    echo "--------------------------------------------------"
+                    echo "🔎 Debug: Initial contents of /config_templates directory:"
+                    ls -las /config_templates
+                    echo "--------------------------------------------------"
+                  fi
 
                   if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
                     echo "❌ ERROR: Config template '$CONFIG_TEMPLATE_PATH' not found! Aborting."
                     exit 1
                   fi
 
-                  echo "📄 Displaying contents of template '$CONFIG_TEMPLATE_PATH':"
-                  cat "$CONFIG_TEMPLATE_PATH" # Now safe to cat as we've checked it exists
-                  echo "--------------------------------------------------"
+                  if [ "${DEBUG_ENABLED}" = "true" ]; then
+                    echo "📄 Displaying contents of template '$CONFIG_TEMPLATE_PATH':"
+                    cat "$CONFIG_TEMPLATE_PATH"
+                    echo "--------------------------------------------------"
+                  fi
 
                   echo "⚙️  Generating final configuration file from template..."
                   if envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"; then
                     echo "✅ Final configuration file '$FINAL_CONFIG_PATH' generated successfully."
                   else
                     echo "❌ ERROR: Failed to generate configuration file '$FINAL_CONFIG_PATH'."
-                    exit 1 # Exit if generation fails
+                    exit 1
                   fi
                   echo "--------------------------------------------------"
 
-                  echo "📄 Displaying contents of generated configuration file '$FINAL_CONFIG_PATH':"
-                  cat "$FINAL_CONFIG_PATH" # For verification in logs
-                  echo "--------------------------------------------------"
-
-                  echo "🔎 Debug: Contents of /config directory after processing:"
-                  ls -la /config
-                  echo "--------------------------------------------------"
+                  if [ "${DEBUG_ENABLED}" = "true" ]; then
+                    echo "📄 Displaying contents of generated configuration file '$FINAL_CONFIG_PATH':"
+                    cat "$FINAL_CONFIG_PATH"
+                    echo "--------------------------------------------------"
+                    echo "🔎 Debug: Contents of /config directory after processing:"
+                    ls -la /config
+                    echo "--------------------------------------------------"
+                  fi
 
                   echo "🎉 Main configuration processing complete."
                   echo ""
                   echo "--- Processing Additional Configuration Details ---"
-                  ASSETS_FOLDER="/config/assets"
+                  echo "📄 Processing custom fonts..."
+                  FONT_LIST="Montserrat-Medium.ttf"
+                  FONT_SOURCE_DIR="/tmp/fonts"
+                  FONT_DEST_DIR="/config/fonts"
+                  
+                  for FONT_FILENAME in $FONT_LIST; do
+                    FONT_SOURCE_PATH=$(find "$FONT_SOURCE_DIR" -type f -name "$FONT_FILENAME" | head -n 1)
+                    FONT_DEST_PATH="$FONT_DEST_DIR/$FONT_FILENAME"
+                    if [ -n "$FONT_SOURCE_PATH" ] && [ ! -f "$FONT_DEST_PATH" ]; then
+                      echo "ℹ️ Font '$FONT_FILENAME' not found in destination. Copying..."
+                      cp "$FONT_SOURCE_PATH" "$FONT_DEST_PATH"
+                    elif [ -f "$FONT_DEST_PATH" ]; then
+                      echo "Font '$FONT_FILENAME' already exists. Skipping."
+                    else
+                      echo "⚠️ WARNING: Font '$FONT_FILENAME' not found in source directory '$FONT_SOURCE_DIR'."
+                    fi
+                  done
+                  echo "✅ Font processing complete"
+                  
+                  ASSETS_FOLDER="/assets"
                   echo "ℹ️ Target Assets Folder: $ASSETS_FOLDER"
 
                   if [ ! -d "$ASSETS_FOLDER" ]; then
@@ -80,7 +113,10 @@ spec:
                   fi
                   echo "--------------------------------------------------"
                   echo "🏁 All configuration processing finished."
-              envFrom: # This injects all keys from the secret as environment variables
+              env:
+                - name: DEBUG_ENABLED
+                  value: "false"
+              envFrom:
                 - secretRef:
                     name: kometa-secrets
               volumeMounts:
@@ -89,6 +125,11 @@ spec:
                 - name: kometa-config
                   mountPath: /config_templates/config.yml
                   subPath: config.yml
+                - name: assets
+                  mountPath: /assets
+                - name: fonts
+                  mountPath: /tmp/fonts
+                  readOnly: true
           containers:
             - name: kometa
               image: kometateam/kometa:v2.2.1
@@ -101,9 +142,18 @@ spec:
                 requests:
                   cpu: 500m
                   memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop:
+                    - ALL
               volumeMounts:
                 - name: config
                   mountPath: /config
+                - name: assets
+                  mountPath: /assets
                 - name: movie-config
                   mountPath: /config/movies.yaml
                   subPath: movies.yaml
@@ -135,4 +185,10 @@ spec:
             - name: overlay-config
               configMap:
                 name: kometa-overlay-config
+            - name: assets
+              persistentVolumeClaim:
+                claimName: video-assets-pvc
+            - name: fonts
+              persistentVolumeClaim:
+                claimName: fonts-pvc
           restartPolicy: OnFailure
