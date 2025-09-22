@@ -14,6 +14,7 @@ spec:
       labels:
         app: posterizarr
     spec:
+      dnsPolicy: None
       securityContext:
         runAsGroup: 1000
         runAsNonRoot: true
@@ -22,6 +23,16 @@ spec:
         fsGroupChangePolicy: "OnRootMismatch"
         supplementalGroups:
           - 6
+      dnsConfig:
+        searches:
+          - iot.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+        nameservers:
+          - 10.96.0.10
+        options:
+          - name: ndots
+            value: "5"
       terminationGracePeriodSeconds: 30
       initContainers:
         - name: prepare-config
@@ -36,6 +47,16 @@ spec:
 
               CONFIG_TEMPLATE_PATH="/config_templates/config.json.template"
               FINAL_CONFIG_PATH="/config/config.json"
+              SECRETS_DIR="/etc/posterizarr-secrets"
+
+              echo "🔐 Loading secrets from $SECRETS_DIR..."
+              export DISCORD_WEBHOOK=$(cat $SECRETS_DIR/DISCORD_WEBHOOK)
+              export FANART_PERSONAL_API_KEY=$(cat $SECRETS_DIR/FANART_PERSONAL_API_KEY)
+              export PLEX_TOKEN=$(cat $SECRETS_DIR/PLEX_TOKEN)
+              export TMDB_API_TOKEN=$(cat $SECRETS_DIR/TMDB_API_TOKEN)
+              export TVDB_API_KEY=$(cat $SECRETS_DIR/TVDB_API_KEY)
+              echo "✅ Secrets loaded into script environment."
+              echo "--------------------------------------------------"
 
               echo "ℹ️ Template Path: $CONFIG_TEMPLATE_PATH"
               echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
@@ -72,16 +93,40 @@ spec:
                 ls -la /config
                 echo "--------------------------------------------------"
               fi
+              
+              echo "📄 Processing custom fonts..."
+              # Space-separated list of font filenames to copy
+              FONT_LIST="Montserrat-Medium.ttf"
+              FONT_SOURCE_DIR="/tmp/fonts"
+              FONT_DEST_DIR="/config"
+
+              for FONT_FILENAME in $FONT_LIST; do
+                # This uses find to locate the font file within the source directory structure
+                FONT_SOURCE_PATH=$(find "$FONT_SOURCE_DIR" -type f -name "$FONT_FILENAME" | head -n 1)
+                FONT_DEST_PATH="$FONT_DEST_DIR/$FONT_FILENAME"
+                if [ -n "$FONT_SOURCE_PATH" ] && [ ! -f "$FONT_DEST_PATH" ]; then
+                  echo "ℹ️ Font '$FONT_FILENAME' not found in destination. Copying..."
+                  cp "$FONT_SOURCE_PATH" "$FONT_DEST_PATH"
+                elif [ -f "$FONT_DEST_PATH" ]; then
+                  echo "Font '$FONT_FILENAME' already exists. Skipping."
+                else
+                  echo "⚠️ WARNING: Font '$FONT_FILENAME' not found in source directory '$FONT_SOURCE_DIR'."
+                fi
+              done
+              echo "✅ Font processing complete"
 
               echo "🎉 Configuration processing complete."
-          envFrom: # This injects all keys from the secret as environment variables
-            - secretRef:
-                name: posterizarr-secret
           volumeMounts:
             - name: config
               mountPath: /config
             - name: app-config-tpl-volume # Mount the ConfigMap template
               mountPath: /config_templates
+            - name: posterizarr-secret-volume
+              mountPath: /etc/posterizarr-secrets
+              readOnly: true
+            - name: fonts
+              mountPath: /tmp/fonts
+              readOnly: true
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -96,7 +141,7 @@ spec:
             - name: TZ
               value: "Europe/Chisinau"
             - name: RUN_TIME
-              value: "23:30"
+              value: "20:00"
           volumeMounts:
             - name: assets
               mountPath: /assets
@@ -115,10 +160,16 @@ spec:
             claimName: posterizarr-config-pvc
         - name: assets
           persistentVolumeClaim:
-            claimName: posterizarr-data-pvc
+            claimName: video-assets-pvc
+        - name: fonts
+          persistentVolumeClaim:
+            claimName: fonts-pvc
         - name: app-config-tpl-volume
           configMap:
             name: posterizarr-configmap
             items:
               - key: config.json.template
                 path: config.json.template
+        - name: posterizarr-secret-volume
+          secret:
+            secretName: posterizarr-secret

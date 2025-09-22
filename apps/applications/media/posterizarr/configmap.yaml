@@ -21,12 +21,12 @@ data:
         "JellyfinAPIKey": "",
         "EmbyAPIKey": "",
         "PreferredLanguageOrder": [
-          "xx",
-          "en"
+          "en",
+          "xx"
         ],
         "PreferredSeasonLanguageOrder": [
-          "xx",
-          "en"
+          "en",
+          "xx"
         ],
         "PreferredBackgroundLanguageOrder": [
           "xx",
@@ -36,7 +36,7 @@ data:
       "PlexPart": {
         "LibstoExclude": [
         ],
-        "PlexUrl": "https://plex.kerrlab.app",
+        "PlexUrl": "http://plex.media.svc.cluster.local:32400",
         "UsePlex": "true",
         "UploadExistingAssets": "false"
       },
@@ -74,21 +74,21 @@ data:
       },
       "PrerequisitePart": {
         "AssetPath": "/assets",
-        "SkipAddText": "false",
+        "SkipAddText": "true",
         "FollowSymlink": "false",
         "ForceRunningDeletion": "false",
         "AutoUpdatePosterizarr": "false",
         "BackupPath": "/assets/backup",
-        "ManualAssetPath": "/manualassets",
+        "ManualAssetPath": "/assets/manual",
         "PlexUpload": "false",
-        "show_skipped": "false",
+        "show_skipped": "true",
         "magickinstalllocation": "C:\\PosterTemp\\ImageMagickPortable",
         "maxLogs": "5",
         "logLevel": "2",
-        "font": "Colus-Regular.ttf",
+        "font": "Montserrat-Medium.ttf",
         "RTLFont": "Colus-Regular.ttf",
-        "backgroundfont": "Colus-Regular.ttf",
-        "titlecardfont": "Colus-Regular.ttf",
+        "backgroundfont": "Comfortaa-Medium.ttf",
+        "titlecardfont": "Montserrat-Medium.ttf",
         "overlayfile": "overlay-innerglow.png",
         "seasonoverlayfile": "overlay-innerglow.png",
         "backgroundoverlayfile": "backgroundoverlay-innerglow.png",
@@ -99,13 +99,13 @@ data:
         "LibraryFolders": "true",
         "Posters": "true",
         "SeasonPosters": "true",
-        "BackgroundPosters": "false",
-        "TitleCards": "false",
+        "BackgroundPosters": "true",
+        "TitleCards": "true",
         "NewLineOnSpecificSymbols": "false",
         "NewLineSymbols": [
           " - "
         ],
-        "SkipTBA": "false",
+        "SkipTBA": "true",
         "SkipJapTitle": "false",
         "AssetCleanup": "false",
         "AutoUpdateIM": "false",
@@ -173,7 +173,7 @@ data:
         "fontAllCaps": "true",
         "AddOverlay": "true",
         "AddBorder": "true",
-        "AddText": "true",
+        "AddText": "false",
         "AddTextStroke": "false",
         "strokecolor": "black",
         "strokewidth": "6",

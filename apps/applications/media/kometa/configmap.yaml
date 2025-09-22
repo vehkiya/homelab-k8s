@@ -47,6 +47,9 @@ data:
         collection_files:
           - file: config/tv.yaml
     settings:
+      run_order: ['operations', 'metadata', 'collections', 'overlays']
+      overlay_artwork_filetype: webp_lossy
+      overlay_artwork_quality: 92
       cache: true
       cache_expiration: 60
       asset_directory: /assets

@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - storage-config.yaml
-  - storage-assets.yaml
 
 labels:
   - pairs:
