@@ -141,7 +141,7 @@ spec:
             - name: TZ
               value: "Europe/Chisinau"
             - name: RUN_TIME
-              value: "20:00"
+              value: "06:00"
           volumeMounts:
             - name: assets
               mountPath: /assets

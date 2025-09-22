@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: kometa
 spec:
-  schedule: "@daily"
+  schedule: "0 0,12 * * *"
   jobTemplate:
     spec:
       template:
