@@ -48,7 +48,7 @@ spec:
                 - ALL
             readOnlyRootFilesystem: false
         - name: go2rtc
-          image: ghcr.io/alexxit/go2rtc:1.9.9
+          image: ghcr.io/alexxit/go2rtc:1.9.10
           ports:
             - containerPort: 1984
               name: http-api
