@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: romm-pv
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/romm
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: romm-pvc
+  namespace: home
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 50Gi
+  volumeName: romm-pv

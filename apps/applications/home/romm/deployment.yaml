@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: romm
+  namespace: home
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: romm
+  template:
+    metadata:
+      labels:
+        app: romm
+    spec:
+      containers:
+        - name: romm
+          image: rommapp/romm:latest
+          ports:
+            - containerPort: 8080
+              name: http
+          envFrom:
+            - secretRef:
+                name: romm-secret
+          env:
+            - name: HASHEOUS_API_ENABLED
+              value: "true"
+            - name: TZ
+              value: "Europe/Chisinau"
+            - name: OIDC_ENABLED
+              value: "true"
+            - name: OIDC_PROVIDER
+              value: "authelia"
+            - name: OIDC_REDIRECT_URI
+              value: "https://romm.kerrlab.app/api/oauth/openid"
+            - name: OIDC_SERVER_APPLICATION_URL
+              value: "https://auth.kerrlab.app"
+          volumeMounts:
+            - name: config-file
+              mountPath: /romm/config/config.yml
+              subPath: config.yml
+            - name: romm-storage
+              mountPath: /romm/resources
+              subPath: resources
+            - name: romm-storage
+              mountPath: /romm/library
+              subPath: library
+            - name: romm-storage
+              mountPath: /romm/assets
+              subPath: assets
+            - name: romm-storage
+              mountPath: /romm/config
+              subPath: config
+            - name: redis-data
+              mountPath: /redis-data
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 65534
+        fsGroupChangePolicy: Always
+      volumes:
+        - name: romm-storage
+          persistentVolumeClaim:
+            claimName: romm-pvc
+        - name: redis-data
+          emptyDir: {}
+        - name: config-file
+          configMap:
+            name: romm-config
