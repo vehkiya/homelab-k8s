@@ -27,8 +27,8 @@ spec:
             - secretRef:
                 name: vaultwarden-credentials
           env:
-            - name: BW_SYNC_INTERVAL
-              value: 15m
+            - name: BW_DISABLE_SYNC
+              value: "true"
           livenessProbe:
             httpGet:
               path: /healthz
