@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wedding-share-nfs-pv
+  labels:
+    pv-name: wedding-share-nfs-pv
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/wedding-share
+  storageClassName: synostorage-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wedding-share-nfs-pvc
+  namespace: home
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  selector:
+    matchLabels:
+      pv-name: wedding-share-nfs-pv
+  storageClassName: synostorage-nfs

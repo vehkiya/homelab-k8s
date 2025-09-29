@@ -10,6 +10,7 @@ spec:
           - name: bar-assistant
           - name: mealie
           - name: romm
+          - name: wedding-share
   template:
     metadata:
       name: '{{name}}'

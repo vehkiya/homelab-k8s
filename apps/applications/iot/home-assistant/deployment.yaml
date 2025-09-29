@@ -74,7 +74,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 65534
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
         - name: hass-data
           persistentVolumeClaim:

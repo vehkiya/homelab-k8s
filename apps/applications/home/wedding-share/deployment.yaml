@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wedding-share
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: wedding-share
+  template:
+    metadata:
+      labels:
+        app: wedding-share
+    spec:
+      containers:
+        - name: wedding-share
+          image: cirx08/wedding_share:1.7.2
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
+            - name: TITLE
+              value: "Wedding Share"
+            - name: DATABASE_TYPE
+              value: "sqlite"
+            - name: LANGUAGES_ENABLED
+              value: "true"
+            - name: LANGUAGES_DEFAULT
+              value: "ro-RO"
+          envFrom:
+            - secretRef:
+                name: wedding-share-credentials
+            - secretRef:
+                name: wedding-share-keys
+          ports:
+            - name: web-ui
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              subPath: config
+              mountPath: /app/config
+            - name: data
+              subPath: thumbnails
+              mountPath: /app/wwwroot/thumbnails
+            - name: data
+              subPath: uploads
+              mountPath: /app/wwwroot/uploads
+            - name: data
+              subPath: custom-resources
+              mountPath: /app/wwwroot/custom_resources
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wedding-share-nfs-pvc
