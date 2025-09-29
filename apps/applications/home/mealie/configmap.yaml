@@ -22,3 +22,5 @@ data:
   OIDC_ADMIN_GROUP: "administrators"
   OIDC_PROVIDER_NAME: "Authelia"
   OIDC_REMEMBER_ME: "true"
+  SMTP_HOST: "smtp.protonmail.ch"
+  SMTP_PORT: "587"

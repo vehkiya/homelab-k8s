@@ -9,7 +9,7 @@ labels:
 # List of resources to include
 resources:
   - db-external-secret.yaml
-  - oidc-secrets.yaml
+  - secrets.yaml
   - persistence/db.yaml
   - configmap.yaml
   - deployment.yaml

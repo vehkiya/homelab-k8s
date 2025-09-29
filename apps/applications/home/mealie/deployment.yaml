@@ -25,10 +25,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: mealie-config
+            - secretRef:
+                name: mealie-secrets
           env:
-            - name: OIDC_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef: { name: mealie-oidc-credentials, key: OIDC_CLIENT_SECRET }
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef: { name: mealie-db-credentials, key: username }
