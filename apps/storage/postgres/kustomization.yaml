@@ -14,4 +14,3 @@ resources:
   - cluster.yaml
   - tcp-route.yaml
   - authelia-user-password.yaml
-  - mealie-user-password.yaml

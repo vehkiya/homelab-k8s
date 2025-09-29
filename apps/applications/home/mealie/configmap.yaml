@@ -10,8 +10,8 @@ data:
   DB_ENGINE: postgres
   PUID: "1026"
   PGID: "100"
-  POSTGRES_SERVER: postgres-db-rw.postgres.svc
-  POSTGRES_PORT: "5432"
+  POSTGRES_SERVER: fortress.kerrlab.app
+  POSTGRES_PORT: "15432"
   POSTGRES_DB: mealie-db
   OIDC_AUTH_ENABLED: "true"
   OIDC_SIGNUP_ENABLED: "true"

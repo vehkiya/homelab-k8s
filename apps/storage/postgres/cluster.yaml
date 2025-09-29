@@ -12,11 +12,6 @@ spec:
 
   managed:
     roles:
-      - name: mealie_user
-        ensure: present
-        login: true
-        passwordSecret:
-          name: mealie-user-password
       - name: authelia_user
         ensure: present
         login: true
