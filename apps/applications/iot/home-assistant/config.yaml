@@ -15,7 +15,7 @@ data:
         - 10.10.1.0/24
         # 1. Trust Kubernetes Pod Subnet. 
         - 10.244.0.0/16
-        # 2. Trus Kubernetes Service Subnet.
+        # 2. Trust Kubernetes Service Subnet.
         # This covers internal service-to-service communication.
         - 10.96.0.0/12
         

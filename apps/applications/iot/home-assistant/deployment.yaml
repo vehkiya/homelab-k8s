@@ -19,6 +19,8 @@ spec:
             { "name": "iot-vlan-net", "interface": "eth1" }
           ]'
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: lab-1
       dnsPolicy: None
       dnsConfig:
         searches:
@@ -34,13 +36,16 @@ spec:
         - name: homeassistant
           image: ghcr.io/home-operations/home-assistant:2025.9.4
           volumeMounts:
-            - name: hass-config-mount
+            - name: hass-data
               mountPath: /config
-            - name: media
+              subPath: config
+            - name: hass-data
               mountPath: /media
-            - name: hass-config-files
-              mountPath: /config/configuration.yaml
-              subPath: configuration.yaml
+              subPath: media
+#              # temporarily exclude because Home Assistant doesn't like this
+#            - name: hass-config-files
+#              mountPath: /config/configuration.yaml
+#              subPath: configuration.yaml
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -62,25 +67,22 @@ spec:
             - name: go2rtc-config
               mountPath: /config/go2rtc.yaml
               subPath: go2rtc.yaml
-            - name: hass-config-mount
+            - name: hass-data
               mountPath: /config/hass
               readOnly: true
-              
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 65534
-        fsGroupChangePolicy: OnRootMismatch
+        fsGroupChangePolicy: Always
       volumes:
-        - name: hass-config-mount
+        - name: hass-data
           persistentVolumeClaim:
-            claimName: home-assistant-config-pvc
-        - name: media
-          persistentVolumeClaim:
-            claimName: home-assistant-media
+            claimName: home-assistant-pvc
         - name: go2rtc-config
           configMap:
             name: go2rtc-config
-        - name: hass-config-files
-          configMap:
-            name: home-assistant-config
+#        # temporarily exclude because Home Assistant doesn't like this
+#        - name: hass-config-files
+#          configMap:
+#            name: home-assistant-config

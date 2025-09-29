@@ -8,5 +8,5 @@ labels:
       app.kubernetes.io/name: home-assistant
 
 resources:
-  - storage.yaml
   - namespace.yaml
+  - nfs-storage.yaml
