@@ -69,6 +69,7 @@ spec:
               subPath: go2rtc.yaml
             - name: hass-data
               mountPath: /config/hass
+              subPath: config
               readOnly: true
       securityContext:
         runAsUser: 1000
