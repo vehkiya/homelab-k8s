@@ -33,9 +33,13 @@ spec:
             - name: TZ
               value: "Europe/Chisinau"
             - name: N8N_PROTOCOL
-              value: https
+              value: "https"
             - name: N8N_HOST
               value: "n8n.kerrlab.app"
+            - name: WEBHOOK_URL
+              value: "https://n8n.kerrlab.app/"
+            - name: N8N_PROXY_HOPS
+              value: "1"
           volumeMounts:
             - name: data
               mountPath: /home/node/.n8n
