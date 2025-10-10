@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: romm
-          image: rommapp/romm:latest
+          image: rommapp/romm
           ports:
             - containerPort: 8080
               name: http
@@ -35,6 +35,12 @@ spec:
               value: "https://romm.kerrlab.app/api/oauth/openid"
             - name: OIDC_SERVER_APPLICATION_URL
               value: "https://auth.kerrlab.app"
+            - name: DISABLE_SETUP_WIZARD
+              value: "true"
+            - name: OIDC_CLAIM_ROLES
+              value: "groups"
+            - name: OIDC_ROLE_ADMIN
+              value: "administrators"
           volumeMounts:
             - name: config-file
               mountPath: /romm/config/config.yml
