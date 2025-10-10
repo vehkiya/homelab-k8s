@@ -5,3 +5,7 @@ resources:
   - service.yaml
   - deployment.yaml
   - http-route.yaml
+
+images:
+  - name: rommapp/romm
+    newTag: 4.3.1
