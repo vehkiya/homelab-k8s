@@ -15,3 +15,4 @@ resources:
   - bar-assistant-http-routes.yaml
   - salt-rim-deployment.yaml
   - salt-rim-service.yaml
+  - network-policy.yaml
