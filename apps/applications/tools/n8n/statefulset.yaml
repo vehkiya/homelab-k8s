@@ -40,6 +40,8 @@ spec:
               value: "https://n8n.kerrlab.app/"
             - name: N8N_PROXY_HOPS
               value: "1"
+            - name: GENERIC_TIMEZONE
+              value: "Europe/Chisinau"
           volumeMounts:
             - name: data
               mountPath: /home/node/.n8n
