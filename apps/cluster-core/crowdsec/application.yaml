@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crowdsec
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: 'https://crowdsecurity.github.io/helm-charts'
+      chart: 'crowdsec'
+      targetRevision: "0.20.1"
+      helm:
+        valueFiles:
+          - $values/apps/cluster-core/crowdsec/values/values.yaml
+    - repoURL: 'https://github.com/vehkiya/homelab-k8s.git'
+      targetRevision: feature/crowdsec
+      ref: values
+  destination:
+    server: https://kube.kerrlab.app:6443
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

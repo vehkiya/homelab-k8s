@@ -17,6 +17,11 @@ spec:
         login: true
         passwordSecret:
           name: authelia-user-password
+      - name: crowdsec_user
+        ensure: present
+        login: true
+        passwordSecret:
+          name: crowdsec-user-password
 
   # Static provisioning for retained storage
   affinity:

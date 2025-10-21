@@ -1,0 +1,66 @@
+container_runtime: containerd
+agent:
+  # Specify each pod whose logs you want to process
+  acquisition:
+    # The namespace where the pod is located
+    - namespace: traefik
+      # The pod name
+      podName: traefik-*
+      # as in crowdsec configuration, we need to specify the program name to find a matching parser
+      program: traefik
+  env:
+    - name: COLLECTIONS
+      value: "crowdsecurity/traefik"
+  persistentVolume:
+    config:
+      existingClaim: crowdsec-agent-config-pvc
+
+lapi:
+  env:
+    - name: ENROLL_INSTANCE_NAME
+      value: "homecluster"
+    - name: ENROLL_TAGS
+      value: "k8s homecluster"
+  envFrom:
+    - secretRef:
+        name: crowdsec-lapi-secret
+    - secretRef:
+        name: crowdsec-db-secret
+  persistentVolume:
+    data:
+      # Disable the default data volume as it's for sqlite
+      enabled: false
+      existingClaim: crowdsec-lapi-data-pvc
+    config:
+      existingClaim: crowdsec-lapi-config-pvc
+
+config:
+  profiles:
+    - name: traefik
+      filters:
+        - "evt.Meta.log_type == 'traefik_access_log' && evt.Parsed.status_code matches '^[45]'"
+      on_success: "continue"
+      # You can add more parsers or scenarios here if needed
+  
+  db_config:
+    type: postgresql
+    host: postgres-db-rw.postgres.svc.cluster.local
+    port: 5432
+    user: "crowdsec_user"
+    db_name: crowdsec
+    password: ${DB_PASSWORD}
+
+appsec:
+  enabled: true
+  acquisitions:
+    - source: appsec
+      listen_addr: "0.0.0.0:7422"
+      path: /
+      appsec_configs:
+        - crowdsecurity/appsec-default
+        - crowdsecurity/crs
+      labels:
+        type: appsec
+  env:
+    - name: COLLECTIONS
+      value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
