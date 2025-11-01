@@ -241,13 +241,16 @@ data:
             grant_types:
               - 'authorization_code'
             # ---- === Headlamp === ----  
-            # TODO: update after PKCE support is added to Headlamp
             # https://github.com/kubernetes-sigs/headlamp/pull/3692
           - client_id: 'headlamp'
             client_name: 'Headlamp'
             client_secret: '${HEADLAMP_SECRET}'
             public: false
+            require_pkce: true
+            pkce_challenge_method: 'S256'
             authorization_policy: 'two_factor'
+            grant_types:
+              - 'authorization_code'
             consent_mode: 'pre-configured'
             pre_configured_consent_duration: '30 days'
             redirect_uris:
@@ -259,8 +262,6 @@ data:
               - 'email'
             userinfo_signed_response_alg: 'none'
             token_endpoint_auth_method: 'client_secret_basic'
-            grant_types:
-              - 'authorization_code'
             # ---- === RomM === ----  
           - client_id: 'romm'
             client_name: 'RomM'
