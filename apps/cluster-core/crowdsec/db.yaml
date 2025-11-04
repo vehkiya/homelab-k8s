@@ -1,0 +1,11 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: crowdsec-db
+  namespace: postgres # Must be in the same namespace as the CNPG Cluster
+spec:
+  name: crowdsec
+  # Reference the main postgres cluster
+  cluster:
+    name: postgres-db
+  owner: crowdsec_user

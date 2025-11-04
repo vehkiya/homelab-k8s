@@ -1,0 +1,84 @@
+--- # === LAPI DATA ===
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: crowdsec-lapi-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/crowdsec/data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: crowdsec-lapi-data-pvc
+  namespace: traefik
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: crowdsec-lapi-data-pv
+--- # === LAPI Config ===
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: crowdsec-lapi-config-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/crowdsec/lapi-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: crowdsec-lapi-config-pvc
+  namespace: traefik
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: crowdsec-lapi-config-pv
+--- # === Agent Config ===
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: crowdsec-agent-config-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/crowdsec/agent-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: crowdsec-agent-config-pvc
+  namespace: traefik
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: crowdsec-agent-config-pv
