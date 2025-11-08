@@ -4,7 +4,7 @@ metadata:
   name: kubernetes-dashboard-route
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "infra.kerrlab.app"

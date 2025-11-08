@@ -62,9 +62,9 @@ servers:
       - name: cache
         parameters: 600
       - name: forward
-        parameters: . 10.10.1.1 1.1.1.1
+        parameters: . 1.1.1.1 1.0.0.1
         configBlock: |-
-          policy sequential
+          policy random
           max_concurrent 1000
       - name: prometheus
         parameters: 0.0.0.0:9153
@@ -90,22 +90,17 @@ zoneFiles:
       @           IN  NS  ns.kerrlab.app.
       ns          IN  A   127.0.0.1
       ;
-      ; A Records for endpoint services
-      kube    IN  A   10.10.1.250
-      ; A Records for nodes services
-      lab-1.kube    IN  A   10.10.1.101
-      lab-2.kube    IN  A   10.10.1.102
-      lab-3.kube    IN  A   10.10.1.103
       ; A Records for NAS-hosted services
       fortress    IN  A   10.10.1.218
-      nas         IN  A   10.10.1.218
-      ldap        IN  A   10.10.1.218
-      vaultwarden IN  A   10.10.1.218
+      ; CNAMEs for NAS-hosted services
+      nas         IN  CNAME fortress.kerrlab.app.
+      ldap        IN  CNAME fortress.kerrlab.app.
+      vaultwarden IN  CNAME fortress.kerrlab.app.
       ;
       ; A Record for the Reverse Proxy
-      proxy       IN  A   10.10.1.221
+      proxy       IN  A   10.10.1.16
       ; A Records for other services in domain
       mc       IN  A   185.206.149.82
       ;
       ; Wildcard for all other services in the cluster
-      * IN  A   10.10.1.221      
+      * IN  A   10.10.1.16      

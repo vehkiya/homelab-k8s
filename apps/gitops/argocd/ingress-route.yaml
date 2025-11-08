@@ -5,7 +5,7 @@ metadata:
   namespace: argocd # Where your application is deployed
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "argo.kerrlab.app"
@@ -25,7 +25,7 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "argo.kerrlab.app"

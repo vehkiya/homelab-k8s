@@ -1,0 +1,47 @@
+# internal-gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal-gateway
+  namespace: traefik
+  annotations:
+    cert-manager.io/issuer: zerossl-prod
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: websecure
+      protocol: HTTPS
+      port: 9443
+      hostname: "*.kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All # Or "Same" if all internal routes are in 'traefik' ns
+---
+# external-gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: external-gateway
+  namespace: traefik
+  annotations:
+    cert-manager.io/issuer: zerossl-prod
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: dmz
+      protocol: HTTPS
+      port: 8443
+      hostname: "*.kerrlab.app" # Or your public domain
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All # Allows any HTTPRoute from any namespace to attach

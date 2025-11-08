@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring # Namespace where Grafana service runs
 spec:
   parentRefs:
-    - name: traefik-gateway # Your Gateway resource name
+    - name: internal-gateway # Your Gateway resource name
       namespace: traefik # Namespace of your Gateway resource
   hostnames:
     - "grafana.kerrlab.app"

@@ -5,7 +5,7 @@ metadata:
   namespace: core
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "auth.kerrlab.app"

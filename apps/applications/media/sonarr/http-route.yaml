@@ -4,7 +4,7 @@ metadata:
   name: sonarr-route
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "sonarr.kerrlab.app"

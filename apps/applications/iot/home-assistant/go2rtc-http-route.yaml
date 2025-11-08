@@ -5,7 +5,7 @@ metadata:
   namespace: iot
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "go2rtc.kerrlab.app"

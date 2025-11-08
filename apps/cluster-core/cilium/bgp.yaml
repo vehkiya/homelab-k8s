@@ -19,7 +19,7 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
-  name: default-bgp-cluster-config # You can choose a more descriptive name
+  name: default-bgp-cluster-config
   namespace: kube-system
 spec:
   bgpInstances:
@@ -31,11 +31,11 @@ spec:
           peerASN: 65000
           peerConfigRef:
             name: ubiquiti-gateway-peer
----
+--- # === Internal Traefik Advertisement ===
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
-  name: traefik-lb-advertisement
+  name: internal-traefik-lb-advertisement
   namespace: traefik
   labels:
     advertise: "bgp"
@@ -47,8 +47,42 @@ spec:
           - LoadBalancerIP
       selector:
         matchLabels:
-          app.kubernetes.io/name: "traefik"
----
+          pool: internal-traefik-lb-pool
+--- # === Traefik DMZ Advertisement ===
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: traefik-dmz-lb-advertisement
+  namespace: traefik
+  labels:
+    advertise: "bgp"
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          pool: traefik-dmz-pool
+--- # === General DMZ Advertisement ===
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: dmz-lb-advertisement
+  namespace: traefik
+  labels:
+    advertise: "bgp"
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          pool: dmz-lb-pool
+--- # === General LB Advertisement ===
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
@@ -64,4 +98,4 @@ spec:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }          
+          - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }          

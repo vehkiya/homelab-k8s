@@ -4,7 +4,7 @@ metadata:
   name: meilisearch-kubernetes-route
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "meilisearch.kerrlab.app"

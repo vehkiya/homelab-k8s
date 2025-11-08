@@ -1,21 +1,44 @@
+--- # === Default Pool ===
 apiVersion: "cilium.io/v2"
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: "cilium-lb-pool"
+  name: "internal-lb-pool"
 spec:
   blocks:
-    - cidr: "10.10.1.225/27"
+    - cidr: "10.10.1.128/25"
   serviceSelector:
     matchExpressions:
-      - { key: pool, operator: NotIn, values: [ 'cilium-traefik-pool' ] }
----
+      - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }
+--- # === Interal Traefik Pool ===
 apiVersion: "cilium.io/v2"
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: "traefik-lb-pool"
+  name: "internal-traefik-lb-pool"
 spec:
   blocks:
-    - cidr: "10.10.1.221/32"
+    - cidr: "10.10.1.16/32"
   serviceSelector:
     matchLabels:
-      pool: cilium-traefik-pool
+      pool: internal-traefik-lb-pool
+--- # === Traefik DMZ Pool ===
+apiVersion: "cilium.io/v2"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "traefik-dmz-pool"
+spec:
+  blocks:
+    - cidr: "10.20.1.16/32"
+  serviceSelector:
+    matchLabels:
+      pool: traefik-dmz-pool
+--- # === DMZ Pool ===
+apiVersion: "cilium.io/v2"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "dmz-lb-pool"
+spec:
+  blocks:
+    - cidr: "10.20.1.128/25"
+  serviceSelector:
+    matchLabels:
+      pool: dmz-lb-pool

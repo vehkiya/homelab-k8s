@@ -4,7 +4,7 @@ metadata:
   name: posterizarr-route
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "posterizarr.kerrlab.app"

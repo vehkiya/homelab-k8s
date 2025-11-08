@@ -4,7 +4,7 @@ metadata:
   name: plex-route
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "plex.kerrlab.app"

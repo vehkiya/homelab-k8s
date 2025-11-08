@@ -5,7 +5,7 @@ metadata:
   namespace: notifications
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "status.kerrlab.app"

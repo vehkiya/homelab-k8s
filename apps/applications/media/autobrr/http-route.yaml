@@ -4,7 +4,7 @@ metadata:
   name: autobrr-route
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "autobrr.kerrlab.app"

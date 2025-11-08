@@ -5,7 +5,7 @@ metadata:
   namespace: default # Where your application is deployed
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: internal-gateway
       namespace: traefik
   hostnames:
     - "mermaid.kerrlab.app"
