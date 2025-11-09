@@ -31,16 +31,17 @@ spec:
           peerASN: 65000
           peerConfigRef:
             name: ubiquiti-gateway-peer
---- # === Internal Traefik Advertisement ===
+---
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
-  name: internal-traefik-lb-advertisement
-  namespace: traefik
+  name: lb-advertisement
+  namespace: kube-system
   labels:
     advertise: "bgp"
 spec:
   advertisements:
+    # === Rule for internal-traefik-lb-pool ===
     - advertisementType: "Service"
       service:
         addresses:
@@ -48,16 +49,7 @@ spec:
       selector:
         matchLabels:
           pool: internal-traefik-lb-pool
---- # === Traefik DMZ Advertisement ===
-apiVersion: cilium.io/v2
-kind: CiliumBGPAdvertisement
-metadata:
-  name: traefik-dmz-lb-advertisement
-  namespace: traefik
-  labels:
-    advertise: "bgp"
-spec:
-  advertisements:
+    # === Rule for traefik-dmz-pool ===
     - advertisementType: "Service"
       service:
         addresses:
@@ -65,16 +57,7 @@ spec:
       selector:
         matchLabels:
           pool: traefik-dmz-pool
---- # === General DMZ Advertisement ===
-apiVersion: cilium.io/v2
-kind: CiliumBGPAdvertisement
-metadata:
-  name: dmz-lb-advertisement
-  namespace: traefik
-  labels:
-    advertise: "bgp"
-spec:
-  advertisements:
+    # === Rule for dmz-lb-pool ===
     - advertisementType: "Service"
       service:
         addresses:
@@ -82,20 +65,11 @@ spec:
       selector:
         matchLabels:
           pool: dmz-lb-pool
---- # === General LB Advertisement ===
-apiVersion: cilium.io/v2
-kind: CiliumBGPAdvertisement
-metadata:
-  name: general-lb-advertisement
-  namespace: kube-system
-  labels:
-    advertise: "bgp"
-spec:
-  advertisements:
+    # === Rule for all services NOT IN specific pools ===
     - advertisementType: Service
       service:
         addresses:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }          
+          - { key: pool, operator: In, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }          
