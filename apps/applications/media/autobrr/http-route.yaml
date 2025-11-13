@@ -1,7 +1,8 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: autobrr-route
+  name: autobrr-ui-route
+  namespace: media
 spec:
   parentRefs:
     - name: internal-gateway
@@ -14,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: autobrr
+        - name: autobrr-ui
           port: 7474

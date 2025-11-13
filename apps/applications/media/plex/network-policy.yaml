@@ -1,0 +1,49 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: plex-policy
+  namespace: media
+spec:
+  endpointSelector:
+    matchLabels:
+      app: plex
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    # Rule: Allow Internet (plex -> Indexers)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+  # Allow Ingress (Inbound)
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+        - matchLabels:
+            app: sonarr
+        - matchLabels:
+            app: radarr
+        - matchLabels:
+            app: overseerr
+        - matchLabels:
+            app: tautulli
+        - matchLabels:
+            app: bazarr
+      toPorts:
+        - ports:
+            - port: web-ui
+              protocol: "TCP"

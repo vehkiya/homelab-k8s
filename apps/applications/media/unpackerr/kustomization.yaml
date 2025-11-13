@@ -5,6 +5,7 @@ resources:
   - config.yaml
   - secret.yaml
   - deployment.yaml
+  - network-policy.yaml
 
 labels:
   - pairs:

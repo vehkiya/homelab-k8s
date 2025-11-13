@@ -1,7 +1,8 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: plex-route
+  name: plex-ui-route
+  namespace: media
 spec:
   parentRefs:
     - name: internal-gateway
@@ -14,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: plex
+        - name: plex-ui
           port: 32400

@@ -1,12 +1,12 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: posterizarr-policy
+  name: unpackerr-policy
   namespace: media
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: posterizarr
+      app.kubernetes.io/name: unpackerr
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -23,15 +23,8 @@ spec:
     # === Allow access to services ===
     - toServices:
         - k8sService:
-            serviceName: plex-ui
+            serviceName: radarr
             namespace: media
-    # === Allow access to external for metadata ===
-    - toEntities:
-        - "world"
-      toPorts:
-        # Only allow HTTP/S for indexers
-        - ports:
-            - port: "443"
-              protocol: TCP
-            - port: "80"
-              protocol: TCP
+        - k8sService:
+            serviceName: sonarr
+            namespace: media

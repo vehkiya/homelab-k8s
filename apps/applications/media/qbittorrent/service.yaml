@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: qbittorrent-p2p
+  namespace: media
   labels:
     pool: dmz-lb-pool
   annotations:
@@ -27,6 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: qbittorrent-ui
+  namespace: media
 spec:
   selector:
     app: qbittorrent

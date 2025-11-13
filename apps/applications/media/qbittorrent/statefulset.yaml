@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: qbittorrent
+  namespace: media
 spec:
   serviceName: qbittorrent
   replicas: 1
@@ -69,20 +70,20 @@ spec:
             - name: WEBUI_PATH
               value: "/vuetorrent"
           ports:
-            - name: http
+            - name: web-ui
               containerPort: 8080
             - containerPort: 56883
               name: torrent-port
           startupProbe:
             httpGet:
               path: /
-              port: http
+              port: web-ui
             failureThreshold: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: web-ui
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -91,7 +92,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: web-ui
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1

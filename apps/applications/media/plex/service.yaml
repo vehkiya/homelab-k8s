@@ -1,13 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: plex
+  name: plex-ui
+  namespace: media
 spec:
   selector:
     app: plex
   ports:
     - name: web-ui
       port: 32400
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-discovery
+  namespace: media
+spec:
+  selector:
+    app: plex
+  ports:
     - name: gdm-discovery-1
       protocol: UDP
       port: 32410

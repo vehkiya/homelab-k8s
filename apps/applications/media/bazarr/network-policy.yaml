@@ -1,12 +1,24 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: kometa-policy
+  name: bazarr-policy
   namespace: media
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: kometa
+      app: bazarr
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Traefik ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "http"
+              protocol: "TCP"
+
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -23,24 +35,17 @@ spec:
     # === Allow access to services ===
     - toServices:
         - k8sService:
-            serviceName: radarr-ui
+            serviceName: plex-ui
+            namespace: media
+        - k8sService:
+            serviceName: qbittorrent-ui
             namespace: media
         - k8sService:
             serviceName: sonarr-ui
             namespace: media
         - k8sService:
-            serviceName: plex-ui
+            serviceName: radarr-ui
             namespace: media
-        - k8sService:
-            serviceName: tautulli-ui
-            namespace: media
-    # === Allow access to external for metadata ===
+    # === Allow access to external for subtitles ===
     - toEntities:
         - "world"
-      toPorts:
-        # Only allow HTTP/S for indexers
-        - ports:
-            - port: "443"
-              protocol: TCP
-            - port: "80"
-              protocol: TCP

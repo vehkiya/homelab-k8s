@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tautulli
+  namespace: media
 spec:
   replicas: 1
   strategy:
@@ -25,19 +26,19 @@ spec:
             - name: TZ
               value: "Europe/Chisinau"
           ports:
-            - name: http
+            - name: web-ui
               containerPort: 8181
               protocol: TCP
           startupProbe:
             httpGet:
               path: /status
-              port: http
+              port: web-ui
             failureThreshold: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /status
-              port: http
+              port: web-ui
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -46,7 +47,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /status
-              port: http
+              port: web-ui
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
