@@ -1,18 +1,70 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: authelia-to-redis
-  namespace: redis
+  name: authelia-policy
+  namespace: core
 spec:
   endpointSelector:
     matchLabels:
-      app: redis
-  ingress:
-    - fromEndpoints:
+      app: authelia
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "core"
-            "k8s:app": authelia
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "redis"
+            "k8s:app": redis
       toPorts:
         - ports:
             - port: "6379"
               protocol: TCP
+
+    - toCIDR:
+        # ldap.kerrlab.app
+        - 10.10.1.218/32
+      toPorts:
+        - ports:
+            - port: "636"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: cloudnative-pg
+            k8s:io.kubernetes.pod.namespace: postgres
+        - matchLabels:
+            cnpg.io/cluster: postgres-db
+            k8s:io.kubernetes.pod.namespace: postgres
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEntities:
+        - "world"
+      toPorts:
+        # For 2FA/TOTP time-sync and update checks
+        - ports:
+            - port: "443"
+              protocol: TCP
+            # For SMTP (e.g., Gmail)
+            - port: "587"
+              protocol: TCP
+            - port: "465"
+              protocol: TCP
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "9091"
+              protocol: "TCP"

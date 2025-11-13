@@ -12,3 +12,4 @@ resources:
 #  - redis-secret.yaml
   - redis-deployment.yaml
   - service.yaml
+  - network-policy.yaml

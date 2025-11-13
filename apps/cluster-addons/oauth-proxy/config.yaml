@@ -13,6 +13,7 @@ data:
     provider = "oidc"
     oidc_issuer_url = "https://auth.kerrlab.app"
     provider_display_name = "Authelia"
+    oidc_groups_claim = "groups"
 
     # Client Credentials (loaded from the secret)
     # The client ID must match what you configured in Authelia.

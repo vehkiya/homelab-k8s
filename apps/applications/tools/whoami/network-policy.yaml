@@ -1,0 +1,32 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: whoami-policy
+  namespace: default
+spec:
+  endpointSelector:
+    matchLabels:
+      app: whoami
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+  # Allow Ingress (Inbound)
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: "TCP"

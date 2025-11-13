@@ -1,0 +1,127 @@
+# cnp-cnpg-database-policy.yaml
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "cnpg-postgres-db-cluster-policy"
+  namespace: postgres
+spec:
+  description: "Policy for the actual Postgres DB cluster 'postgres-db'"
+  endpointSelector:
+    matchLabels:
+      cnpg.io/cluster: postgres-db
+  
+  ingress:
+    # Rule A: Allow Authelia to connect
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: core
+            app: authelia
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: "TCP"
+    
+    # Rule B: Allow the Operator to connect
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: "TCP"
+            - port: "5432"
+              protocol: "TCP"
+    
+    # Rule C: Allow other DB pods to connect (for replication)
+    - fromEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: postgres-db
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: "TCP"
+            - port: "5432"
+              protocol: "TCP"
+    - fromEntities:
+        - "host"
+  egress:
+    # Rule A: Allow DNS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    
+    # Rule B: Allow DB pods to talk to each other
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: postgres-db
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: "TCP"
+            - port: "5432"
+              protocol: "TCP"
+    - toEntities:
+        - "kube-apiserver"
+    - toCIDR:
+        - 10.96.0.1/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cnpg-policy
+  namespace: postgres
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: cloudnative-pg
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: core
+            app: authelia
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: "TCP"
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - port: "5432" # For SQL/replication
+              protocol: "TCP"
+            - port: "8000" # For /pg/status checks
+              protocol: "TCP"
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    - toEntities:
+        - "kube-apiserver"
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: postgres-db
+      toPorts:
+        - ports:
+            - port: "5432" # For SQL/replication
+              protocol: "TCP"
+            - port: "8000" # For /pg/status checks
+              protocol: "TCP"

@@ -1,0 +1,26 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "cnp-coredns-egress"
+  namespace: kube-system
+spec:
+  description: "Allows CoreDNS to contact kube-apiserver for service discovery and external resolvers for public DNS."
+  endpointSelector:
+    matchLabels:
+      k8s-app: coredns
+  egress:
+    # Rule 1: Allow communication with kube-apiserver
+    - toEntities:
+        - "kube-apiserver"
+    
+    # Rule 2: Allow fallback to Cloudflare DNS
+    - toCIDR:
+        - "1.1.1.1/32"
+        - "1.0.0.1/32"
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+---
