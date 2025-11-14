@@ -36,7 +36,7 @@ data:
       "PlexPart": {
         "LibstoExclude": [
         ],
-        "PlexUrl": "http://plex.media.svc.cluster.local:32400",
+        "PlexUrl": "http://plex-ui.media.svc.cluster.local:32400",
         "UsePlex": "true",
         "UploadExistingAssets": "false"
       },

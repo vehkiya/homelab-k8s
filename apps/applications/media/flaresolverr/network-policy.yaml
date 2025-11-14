@@ -24,7 +24,7 @@ spec:
             app: prowlarr
       toPorts:
         - ports:
-            - port: "flaresolverr-ui"
+            - port: "web-ui"
               protocol: "TCP"
 
   # ----=== Egress ===----

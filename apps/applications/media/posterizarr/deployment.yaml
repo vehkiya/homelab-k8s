@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: posterizarr
+  namespace: media
 spec:
   replicas: 1
   strategy:
@@ -137,6 +138,9 @@ spec:
       containers:
         - name: posterizarr
           image: ghcr.io/fscorrupt/posterizarr:2.1.4
+          ports:
+            - name: web-ui
+              containerPort: 8000
           env:
             - name: TZ
               value: "Europe/Chisinau"

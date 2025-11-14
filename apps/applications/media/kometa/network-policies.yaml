@@ -34,6 +34,9 @@ spec:
         - k8sService:
             serviceName: tautulli-ui
             namespace: media
+        - k8sService:
+            serviceName: longhorn-backend
+            namespace: longhorn-system
     # === Allow access to external for metadata ===
     - toEntities:
         - "world"

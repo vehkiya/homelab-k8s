@@ -43,6 +43,8 @@ spec:
             app: tautulli
         - matchLabels:
             app: bazarr
+        - matchLabels:
+            app: posterizarr
       toPorts:
         - ports:
             - port: web-ui
