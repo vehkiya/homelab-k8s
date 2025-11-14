@@ -6,7 +6,16 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: posterizarr
+      app: posterizarr
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: web-ui
+              protocol: "TCP"
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
