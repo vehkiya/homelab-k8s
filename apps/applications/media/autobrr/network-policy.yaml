@@ -43,6 +43,17 @@ spec:
         - k8sService:
             serviceName: radarr-ui
             namespace: media
+    # === Allow access to Traefik ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "9443" # Traefik container websecure port
+              protocol: TCP
+            - port: "8443" # Traefik container dmz port (just in case)
+              protocol: TCP
     # === Allow access to external for IRC ===
     - toEntities:
         - "world"

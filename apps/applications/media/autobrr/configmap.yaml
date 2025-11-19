@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: autobrr-config
+  namespace: media
+data:
+  AUTOBRR__OIDC_ENABLED: "true"
+  AUTOBRR__OIDC_ISSUER: "https://auth.kerrlab.app"
+  AUTOBRR__OIDC_CLIENT_ID: "autobrr"
+  AUTOBRR__OIDC_REDIRECT_URL: "https://autobrr.kerrlab.app/api/auth/oidc/callback"
+  AUTOBRR__OIDC_DISABLE_BUILT_IN_LOGIN: "true"

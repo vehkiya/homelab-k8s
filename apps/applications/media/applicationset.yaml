@@ -7,6 +7,7 @@ spec:
   generators:
     - list:
         elements:
+          - name: common
           - name: autobrr
           - name: bazarr
           - name: flaresolverr
