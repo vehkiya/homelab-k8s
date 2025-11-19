@@ -9,6 +9,9 @@ data:
     # Authelia Configuration
     server:
       address: 'tcp://0.0.0.0:9091'
+      buffers:
+        read: 32768
+        write: 32768
 
     session:
       name: authelia_session
@@ -22,12 +25,7 @@ data:
       cookies:
         - domain: 'kerrlab.app'
           authelia_url: 'https://auth.kerrlab.app'
-          default_redirection_url: 'https://kerrlab.app'
-          name: 'authelia_session'
           same_site: 'lax'
-          inactivity: '5m'
-          expiration: '1h'
-          remember_me: '1d'
       
       redis:
         host: 'redis-master.redis.svc.cluster.local'
@@ -154,8 +152,9 @@ data:
     webauthn:
       disable: false
       enable_passkey_login: true
-      display_name: 'Kerrlab'
-      attestation_conveyance_preference: 'indirect'
+      experimental_enable_passkey_uv_two_factors: true
+      display_name: 'Kerrlab SSO'
+      attestation_conveyance_preference: 'none'
       timeout: '60 seconds'
       filtering:
         permitted_aaguids: [ ]
@@ -163,7 +162,7 @@ data:
         prohibit_backup_eligibility: false
       selection_criteria:
         attachment: ''
-        discoverability: 'preferred'
+        discoverability: 'required'
         user_verification: 'preferred'
       metadata:
         enabled: false
@@ -202,7 +201,7 @@ data:
               - "name"
               - "groups"
         clients:
-            # ---- === Mealie === ----  
+          # ---- === Mealie === ----  
           - client_id: 'mealie'
             client_name: 'Mealie'
             client_secret: '${MEALIE_SECRET}'
