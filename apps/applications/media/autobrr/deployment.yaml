@@ -21,6 +21,11 @@ spec:
           env:
             - name: TZ
               value: "Europe/Chisinau"
+          envFrom:
+            - configMapRef:
+                name: autobrr-config
+            - secretRef:
+                name: autobrr-secret
           ports:
             - name: web-ui
               containerPort: 7474
