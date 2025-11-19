@@ -8,5 +8,5 @@ resources:
 
 images:
   - name: rommapp/romm
-    newTag: 4.4.0
+    newTag: 4.4.1
     
