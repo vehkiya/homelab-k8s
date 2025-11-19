@@ -17,3 +17,9 @@ spec:
       backendRefs:
         - name: prowlarr-ui
           port: 9696
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: 'traefik.io'
+            kind: 'Middleware'
+            name: 'authelia-forward-auth'
