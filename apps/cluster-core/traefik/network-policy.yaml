@@ -13,11 +13,12 @@ spec:
     # Rule 1: Allow public internet to ports 80/443
     - fromEntities:
         - "world"
+        - "cluster"
       toPorts:
         - ports:
             # === Internal websecure entrypoint ===
             - port: "9443"
-              protocol: "TCP"
+              protocol: "UDP"
             - port: "9443"
               protocol: "TCP"
             # === DMZ entrypoint ===
