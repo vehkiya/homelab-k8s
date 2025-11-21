@@ -18,6 +18,7 @@ resources:
   - services.yaml
   - gateways.yaml
   - tcp-gateway.yaml
+  - network-policy.yaml
 
 patches:
   - target:
