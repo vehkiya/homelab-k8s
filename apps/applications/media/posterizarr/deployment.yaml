@@ -137,7 +137,7 @@ spec:
                 - ALL
       containers:
         - name: posterizarr
-          image: ghcr.io/fscorrupt/posterizarr:2.1.14
+          image: ghcr.io/fscorrupt/posterizarr:2.1.15
           ports:
             - name: web-ui
               containerPort: 8000
