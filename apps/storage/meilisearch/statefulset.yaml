@@ -31,7 +31,7 @@ spec:
                 name: meilisearch-kubernetes-environment
             - secretRef:
                 name: meilisearch-kubernetes-master-key
-          image: getmeili/meilisearch:v1.26.0
+          image: getmeili/meilisearch:v1.27.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
