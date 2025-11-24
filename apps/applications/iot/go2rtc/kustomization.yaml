@@ -5,11 +5,11 @@ namespace: iot
 
 labels:
   - pairs:
-      app.kubernetes.io/name: home-assistant
+      app.kubernetes.io/name: go2rtc
 
 resources:
   - deployment.yaml
+  - config.yaml
   - service.yaml
   - http-route.yaml
-  - nad.yaml
   - network-policy.yaml

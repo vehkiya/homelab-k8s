@@ -1,0 +1,37 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mosquitto-policy
+  namespace: iot
+spec:
+  endpointSelector:
+    matchLabels:
+      app: mosquitto
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Clients ===
+    - fromEndpoints:
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
+        - matchLabels:
+            app: zigbee2mqtt
+            k8s:io.kubernetes.pod.namespace: iot
+      toPorts:
+        - ports:
+            - port: "mqtt"
+              protocol: TCP
+
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP

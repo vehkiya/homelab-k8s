@@ -1,0 +1,62 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: go2rtc-policy
+  namespace: iot
+spec:
+  endpointSelector:
+    matchLabels:
+      app: go2rtc
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Traefik ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "http"
+              protocol: TCP
+            - port: "rtsp"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app: home-assistant
+      toPorts:
+        - ports:
+            - port: "http"
+              protocol: TCP
+    - fromCIDR:
+        - 192.168.1.0/24
+        - 192.168.4.0/24
+        - 10.10.1.0/24
+      toPorts:
+        - ports:
+            - port: "webrtc"
+              protocol: TCP
+            - port: "8555"
+              protocol: UDP
+  # ----=== Egress ===----
+  egress:
+    # === To Home Assistant ===
+    - toServices:
+        - k8sService:
+            serviceName: home-assistant
+            namespace: iot
+      toPorts:
+        - ports:
+            - port: "8123"
+              protocol: TCP
+    # === Camera Ingestion (RTSP/HTTP to LAN) ===
+    - toCIDR:
+        - 192.168.0.0/16
+        - 10.0.0.0/8
+    # 2. STUN/ICE (UDP to World)
+    # Required for WebRTC NAT traversal negotiation
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "1024-65535"
+              protocol: UDP

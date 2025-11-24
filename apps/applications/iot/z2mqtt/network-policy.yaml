@@ -1,37 +1,84 @@
-apiVersion: "cilium.io/v2"
+apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-zigbee2mqtt-egress
+  name: zigbee2mqtt-policy
+  namespace: iot
 spec:
-  # This policy applies ONLY to your Zigbee2MQTT pods
   endpointSelector:
     matchLabels:
       app: zigbee2mqtt
-  # This section defines all required outgoing traffic
-  egress:
-    # Rule 1: Allow DNS
-    - toEndpoints:
-      - matchLabels:
-          "k8s:io.kubernetes.pod.namespace": kube-system
-          "k8s:k8s-app": coredns
-      toPorts:
-      - ports:
-        - port: "53"
-          protocol: UDP
-        - port: "53"
-          protocol: TCP
-    # Rule 2: Allow traffic to Mosquitto
-    - toEndpoints:
+  
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Traefik ===
+    - fromEndpoints:
         - matchLabels:
-            app: mosquitto
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
       toPorts:
         - ports:
-            - port: "1883"
+            - port: "frontend" # 8080
               protocol: TCP
-    # Rule 3: Allow traffic to the Zigbee Coordinator IP
+
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # === Allow access to services ===
+    - toServices:
+        - k8sService:
+            serviceName: mosquitto-svc
+            namespace: iot
+    # === Allow traffic to the Zigbee Coordinator ===
     - toCIDR:
         - 192.168.4.36/32
       toPorts:
         - ports:
             - port: "6638"
-              protocol: TCP              
+              protocol: TCP
+#apiVersion: "cilium.io/v2"
+#kind: CiliumNetworkPolicy
+#metadata:
+#  name: allow-zigbee2mqtt-egress
+#spec:
+#  # This policy applies ONLY to your Zigbee2MQTT pods
+#  endpointSelector:
+#    matchLabels:
+#      app: zigbee2mqtt
+#  # This section defines all required outgoing traffic
+#  egress:
+#    # Rule 1: Allow DNS
+#    - toEndpoints:
+#      - matchLabels:
+#          "k8s:io.kubernetes.pod.namespace": kube-system
+#          "k8s:k8s-app": coredns
+#      toPorts:
+#      - ports:
+#        - port: "53"
+#          protocol: UDP
+#        - port: "53"
+#          protocol: TCP
+#    # Rule 2: Allow traffic to Mosquitto
+#    - toEndpoints:
+#        - matchLabels:
+#            app: mosquitto
+#      toPorts:
+#        - ports:
+#            - port: "1883"
+#              protocol: TCP
+#    # Rule 3: Allow traffic to the Zigbee Coordinator IP
+#    - toCIDR:
+#        - 192.168.4.36/32
+#      toPorts:
+#        - ports:
+#            - port: "6638"
+#              protocol: TCP              

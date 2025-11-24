@@ -13,8 +13,10 @@ data:
         - ffmpeg:Doorbell#audio=opus
     hass:
       config: "/config/hass"
+      api: http://home-assistant.iot.svc.cluster.local:8123
     rtsp:
       listen: ":8554"
     webrtc:
       listen: ":8555"
-      
+      candidates:
+        - 10.10.1.132:8555

@@ -19,8 +19,6 @@ spec:
             { "name": "iot-vlan-net", "interface": "eth1" }
           ]'
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: lab-1
       dnsPolicy: None
       dnsConfig:
         searches:
@@ -55,25 +53,6 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: false
-        - name: go2rtc
-          image: ghcr.io/alexxit/go2rtc:1.9.12
-          ports:
-            - containerPort: 1984
-              name: http-api
-            - containerPort: 8554
-              name: rtsp
-            - containerPort: 8555
-              name: webrtc
-            - containerPort: 1935
-              name: rtmp
-          volumeMounts:
-            - name: go2rtc-config
-              mountPath: /config/go2rtc.yaml
-              subPath: go2rtc.yaml
-            - name: hass-data
-              mountPath: /config/hass
-              subPath: config
-              readOnly: true
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -83,10 +62,3 @@ spec:
         - name: hass-data
           persistentVolumeClaim:
             claimName: home-assistant-pvc
-        - name: go2rtc-config
-          configMap:
-            name: go2rtc-config
-#        # temporarily exclude because Home Assistant doesn't like this
-#        - name: hass-config-files
-#          configMap:
-#            name: home-assistant-config

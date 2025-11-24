@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go2rtc
+  namespace: iot
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: go2rtc
+  template:
+    metadata:
+      labels:
+        app: go2rtc
+    spec:
+      containers:
+        - name: go2rtc
+          image: ghcr.io/alexxit/go2rtc:1.9.12
+          ports:
+            - containerPort: 1984
+              name: http
+            - containerPort: 8554
+              name: rtsp
+            - containerPort: 8555
+              name: webrtc
+            - containerPort: 1935
+              name: rtmp
+          volumeMounts:
+            - name: go2rtc-config
+              mountPath: /config/go2rtc.yaml
+              subPath: go2rtc.yaml
+            - name: hass-data
+              mountPath: /config/hass
+              subPath: config
+              readOnly: true
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - name: hass-data
+          persistentVolumeClaim:
+            claimName: home-assistant-pvc
+        - name: go2rtc-config
+          configMap:
+            name: go2rtc-config

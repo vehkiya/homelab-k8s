@@ -1,0 +1,95 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: home-assistant-policy
+  namespace: iot
+spec:
+  endpointSelector:
+    matchLabels:
+      app: home-assistant
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Traefik ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "http"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app: go2rtc
+      toPorts:
+        - ports:
+            - port: "http"
+              protocol: TCP
+  
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # === Allow access to services ===
+    - toServices:
+        - k8sService:
+            serviceName: mosquitto-svc
+            namespace: iot
+        - k8sService:
+            serviceName: matter-server
+            namespace: iot
+        - k8sService:
+            serviceName: go2rtc-svc
+            namespace: iot
+        - k8sService:
+            serviceName: qbittorrent-ui
+            namespace: media
+        - k8sService:
+            serviceName: plex-ui
+            namespace: media
+        - k8sService:
+            serviceName: overseerr-ui
+            namespace: media
+    # === Allow access too Go2RTC (API Control & WebRTC handshake) ===
+    - toServices:
+        - k8sService:
+            serviceName: go2rtc-svc
+            namespace: iot
+      toPorts:
+        - ports:
+            - port: "1984"
+              protocol: TCP
+    # === Allow Internet Access (Integrations/Updates) ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "443"
+              protocol: UDP
+              # Minecraft server
+            - port: "25579"
+              protocol: TCP
+    # === Allow access to local LAN (if needed) ===
+    - toCIDR:
+        - 192.168.4.0/24 # IoT VLAN
+        - 10.10.1.0/24 # HomeLab VLAN (where your Nodes/Matter Server live)
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "5580" # Matter Server Port
+              protocol: TCP

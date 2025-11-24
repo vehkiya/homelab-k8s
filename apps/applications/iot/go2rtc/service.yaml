@@ -3,9 +3,15 @@ kind: Service
 metadata:
   name: go2rtc-svc
   namespace: iot
+  labels:
+    pool: internal-lb-pool
+  annotations:
+    lbipam.cilium.io/ips: "10.10.1.132"
 spec:
   selector:
-    app: home-assistant
+    app: go2rtc
+  type: LoadBalancer # Changed from default (ClusterIP)
+  externalTrafficPolicy: Local # Preserves client source IP for your Network Policy
   ports:
     - name: http-api
       port: 1984
