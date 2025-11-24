@@ -27,6 +27,8 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+            - port: "443"
+              protocol: UDP
   # Allow Ingress (Inbound)
   ingress:
     - fromEndpoints:
@@ -45,6 +47,9 @@ spec:
             app: bazarr
         - matchLabels:
             app: posterizarr
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
       toPorts:
         - ports:
             - port: web-ui

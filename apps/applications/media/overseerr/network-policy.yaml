@@ -18,7 +18,14 @@ spec:
         - ports:
             - port: "web-ui"
               protocol: "TCP"
-  
+    - fromEndpoints:
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: "TCP"
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -54,5 +61,7 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+            - port: "443"
+              protocol: UDP
             - port: "80"
               protocol: TCP

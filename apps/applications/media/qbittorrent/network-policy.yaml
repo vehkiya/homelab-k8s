@@ -28,6 +28,9 @@ spec:
             app: prowlarr
         - matchLabels:
             app: autobrr
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
       toPorts:
         - ports:
             - port: "web-ui"
