@@ -6,7 +6,7 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: unpackerr
+      app: unpackerr
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -23,8 +23,8 @@ spec:
     # === Allow access to services ===
     - toServices:
         - k8sService:
-            serviceName: radarr
+            serviceName: radarr-ui
             namespace: media
         - k8sService:
-            serviceName: sonarr
+            serviceName: sonarr-ui
             namespace: media

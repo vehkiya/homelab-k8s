@@ -54,6 +54,8 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+            - port: "443"
+              protocol: UDP
             # For SMTP (e.g., Gmail)
             - port: "587"
               protocol: TCP

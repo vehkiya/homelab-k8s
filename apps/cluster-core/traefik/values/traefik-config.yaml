@@ -92,7 +92,8 @@ ports:
     port: 5432
     protocol: TCP
     expose:
-      default: true
+      default: false
+      internal: true
     exposedPort: 5432
 gateway:
   enabled: false # Created manually

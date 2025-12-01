@@ -28,6 +28,8 @@ spec:
             app: autobrr
         - matchLabels:
             app: bazarr
+        - matchLabels:
+            app: unpackerr
       toPorts:
         - ports:
             - port: "web-ui"
