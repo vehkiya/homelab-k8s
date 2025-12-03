@@ -52,6 +52,9 @@ spec:
       toPorts:
         # For 2FA/TOTP time-sync and update checks
         - ports:
+            # for NTP
+            - port: "123"
+              protocol: UDP
             - port: "443"
               protocol: TCP
             - port: "443"
@@ -66,6 +69,13 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "9091"
+              protocol: "TCP"
+    - fromEntities:
+        - host
+        - remote-node
       toPorts:
         - ports:
             - port: "9091"
