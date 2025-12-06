@@ -77,12 +77,6 @@
         "plexinc/pms-docker"
       ],
       "versioning": "loose",
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
       "automerge": true
     },
     {
