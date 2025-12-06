@@ -3,8 +3,72 @@
   "kustomize": {
     "enabled": true
   },
-  "commitMessagePrefix": ":arrow_up_small:",
+  "extends": [
+    "config:recommended",
+    "config:base"
+  ],
+  "labels": [
+    "renovate",
+    "dependencies"
+  ],
+  "prHeader": "## ⬆️ Dependency Updates",
   "packageRules": [
+    {
+      "packagePatterns": [
+        "traefik"
+      ],
+      "groupName": "traefik-group",
+      "automerge": false
+    },
+    {
+      "packagePatterns": [
+        "synology-csi-driver",
+        "iscsi-tools"
+      ],
+      "groupName": "storage-drivers",
+      "automerge": false
+    },
+    {
+      "groupName": "iot-stack",
+      "matchPackageNames": [
+        "ghcr.io/koenkk/zigbee2mqtt",
+        "eclipse-mosquitto",
+        "ghcr.io/home-assistant-libs/python-matter-server",
+        "ghcr.io/home-operations/home-assistant"
+      ],
+      "automerge": false
+    },
+    {
+      "groupName": "db-stack",
+      "matchPackageNames": [
+        "redis",
+        "getmeili/meilisearch"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "matchManagers": [
+        "kubernetes",
+        "docker-compose"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "groupName": "docker"
+    },
+    {
+      "matchManagers": [
+        "helm-values",
+        "helm-release"
+      ],
+      "groupName": "helm"
+    },
     {
       "matchDatasources": [
         "docker"
@@ -12,19 +76,14 @@
       "matchPackageNames": [
         "plexinc/pms-docker"
       ],
-      "versioning": "loose"
-    },
-    {
-      "packagePatterns": [
-        "^ghcr.io\\/hotio\\/"
+      "versioning": "loose",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
       ],
-      "versioning": "regex:^(?<compatibility>.*(\\d+\\.)?)(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
-    },
-    {
-      "packagePatterns": [
-        "^lscr.io\\/linuxserver\\/"
-      ],
-      "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<revision>\\d+)$"
+      "automerge": true
     },
     {
       "packagePatterns": [
@@ -32,9 +91,21 @@
         "kube-prometheus-stack"
       ],
       "schedule": [
-        "* 0-4 * * *"
+        "@daily"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
       ],
       "automerge": true
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": true
     }
   ]
 }
