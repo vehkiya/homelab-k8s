@@ -54,16 +54,6 @@
     },
     {
       "matchManagers": [
-        "kubernetes",
-        "docker-compose"
-      ],
-      "matchDatasources": [
-        "docker"
-      ],
-      "groupName": "docker"
-    },
-    {
-      "matchManagers": [
         "helm-values",
         "helm-release"
       ],
