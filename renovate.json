@@ -91,7 +91,7 @@
         "kube-prometheus-stack"
       ],
       "schedule": [
-        "daily"
+        "1 0 * * *"
       ],
       "matchUpdateTypes": [
         "minor",
