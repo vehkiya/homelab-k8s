@@ -16,4 +16,4 @@ spec:
       containers:
         - name: mermaid
           image: ghcr.io/mermaid-js/mermaid-live-editor:latest@sha256:396e4a1d5913cd906dc59e59d83c0eb322a5dd2aa2f5763af664a01bfe0bcf92
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"

@@ -19,7 +19,7 @@ spec:
       containers:
         - name: bitwarden-cli
           image: ghcr.io/vehkiya/bw-cli:2025.9.0@sha256:beb722d1bddfa33770dc4a92baa50c4e600f9b46b93162318cd52c3816cf1d39
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
           ports:
             - name: api
               containerPort: 8087
