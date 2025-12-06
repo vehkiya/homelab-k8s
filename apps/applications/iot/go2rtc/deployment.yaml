@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: go2rtc
-          image: ghcr.io/alexxit/go2rtc:1.9.12
+          image: ghcr.io/alexxit/go2rtc:1.9.12@sha256:baef0aa19d759fcfd31607b34ce8eaf039d496282bba57731e6ae326896d7640
           ports:
             - containerPort: 1984
               name: http

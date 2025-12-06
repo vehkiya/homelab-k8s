@@ -61,7 +61,7 @@ spec:
           securityContext:
             privileged: true
           imagePullPolicy: Always
-          image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.15.0
+          image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.15.0@sha256:11f199f6bec47403b03cb49c79a41f445884b213b382582a60710b8c6fdc316a
           args:
             - --v=5
             - --csi-address=$(ADDRESS) # the csi socket path inside the pod
@@ -84,7 +84,7 @@ spec:
           securityContext:
             privileged: true
           imagePullPolicy: IfNotPresent
-          image: ghcr.io/zebernst/synology-csi:v1.2.0
+          image: ghcr.io/zebernst/synology-csi:v1.2.0@sha256:6e6fbf9502e5ab3ef38d1f6c4c65ea65297b3fd38fe9cdaa6d1673e64b298855
           args:
             - --nodeid=$(KUBE_NODE_NAME)
             - --endpoint=$(CSI_ENDPOINT)

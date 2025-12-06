@@ -88,7 +88,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: registry.k8s.io/sig-storage/csi-provisioner:v3.6.4
+          image: registry.k8s.io/sig-storage/csi-provisioner:v3.6.4@sha256:e7ad666f1d9b0caa077c7f0c157c9f87d1e73858390732496f66dcc716ff10c5
           args:
             - --timeout=60s
             - --csi-address=$(ADDRESS)
@@ -107,7 +107,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: registry.k8s.io/sig-storage/csi-attacher:v3.5.1
+          image: registry.k8s.io/sig-storage/csi-attacher:v3.5.1@sha256:5f4bfcd75dd26c5d6c31cf1ff438f723aa9bcd30f1697297f93f85e158b54aca
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
@@ -124,7 +124,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: registry.k8s.io/sig-storage/csi-resizer:v1.14.0
+          image: registry.k8s.io/sig-storage/csi-resizer:v1.14.0@sha256:5e7cbb63fd497fa913caa21fee1a69f727c220c6fa83c5f8bb0995e2ad73a474
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
@@ -141,7 +141,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: ghcr.io/zebernst/synology-csi:v1.2.0
+          image: ghcr.io/zebernst/synology-csi:v1.2.0@sha256:6e6fbf9502e5ab3ef38d1f6c4c65ea65297b3fd38fe9cdaa6d1673e64b298855
           args:
             - --nodeid=NotUsed
             - --endpoint=$(CSI_ENDPOINT)
