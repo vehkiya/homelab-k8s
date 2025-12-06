@@ -16,4 +16,4 @@ spec:
       containers:
         - name: excalidraw
           image: excalidraw/excalidraw:latest@sha256:b2b642fdaca652cf23c20e07d3603bed5b22b2e1c88a15bec5f92e8a38d9041c
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
