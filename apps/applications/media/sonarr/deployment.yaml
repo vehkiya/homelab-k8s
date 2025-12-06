@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sonarr
-          image: ghcr.io/home-operations/sonarr:4.0.16
+          image: ghcr.io/home-operations/sonarr:4.0.16@sha256:0a1b8f5cb5b072f7ad8c6ff64a25dc512115d1a114ecf19a58a3b4f870207ddd
           env:
             - name: PGID
               value: "100"
