@@ -28,7 +28,7 @@ spec:
             - -c
             - sleep 5; n8n start
           name: n8n
-          image: docker.n8n.io/n8nio/n8n:1.123.3@sha256:0fe24e854c030088695e4e75afda4d86e52814bb10268968bacd9880c0986862
+          image: docker.n8n.io/n8nio/n8n:2.0.0@sha256:5b143d5ed0df23d295037408a8290872c549033709e375f920b33a94c754ea00
           env:
             - name: TZ
               value: "Europe/Chisinau"
