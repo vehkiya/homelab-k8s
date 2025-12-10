@@ -1,0 +1,92 @@
+# Policy 1: Default policy for the namespace
+# Allows all intra-namespace communication, DNS, and K8s API access.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: argocd-default-policy
+  namespace: argocd
+spec:
+  endpointSelector: { } # Apply to all pods in the namespace
+  # ----=== Ingress ===----
+  ingress:
+    # Allow all communication from within the namespace
+    - fromEndpoints:
+        - matchLabels: { }
+  # ----=== Egress ===----
+  egress:
+    # Allow all communication to within the namespace
+    - toEndpoints:
+        - matchLabels: { }
+    # Allow DNS lookups
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # Allow access to the Kubernetes API server for controllers
+    - toEntities:
+        - "kube-apiserver"
+
+---
+# Policy 2: Allow external ingress to the ArgoCD server and egress to external clusters
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: argocd-server-policy
+  namespace: argocd
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-server
+  # ----=== Ingress ===----
+  ingress:
+    # Allow access from Traefik
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080" # The container port for argocd-server
+              protocol: TCP
+  # ----=== Egress ===----
+  egress:
+    # Allow access to external clusters (including local cluster via external VIP)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+
+---
+# Policy 3: Allow repo-server to access external Git repositories
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: argocd-repo-server-egress-policy
+  namespace: argocd
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-repo-server
+  # ----=== Egress ===----
+  egress:
+    # Allow access to Git repositories over HTTPS and SSH
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+        - ports:
+            - port: "443"
+              protocol: TCP
+        - ports:
+            - port: "22"
+              protocol: TCP
