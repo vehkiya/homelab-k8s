@@ -5,3 +5,4 @@ resources:
   - configmap.yaml
   - external-secret.yaml
   - cron-job.yaml
+  - network-policy.yaml

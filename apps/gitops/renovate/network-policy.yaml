@@ -1,0 +1,36 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: renovate-policy
+  namespace: renovate
+spec:
+  endpointSelector:
+    matchLabels:
+      app: renovate
+  egress:
+    # Allow DNS
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "kube-system"
+            "k8s-app": "coredns"
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    
+    # Allow access to the Kubernetes API server
+    - toEntities:
+        - "kube-apiserver"
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+        - ports:
+            - port: "443"
+              protocol: "UDP"
+        - ports:
+            - port: "80"
+              protocol: "TCP"
