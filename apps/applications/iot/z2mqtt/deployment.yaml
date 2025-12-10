@@ -3,8 +3,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zigbee2mqtt
+  namespace: iot
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: zigbee2mqtt
@@ -27,7 +30,7 @@ spec:
               mountPath: /data
       containers:
         - name: zigbee2mqtt
-          image: ghcr.io/koenkk/zigbee2mqtt:2.7.1@sha256:163e7351430a95d550d5b1bb958527edc1eff115eb013ca627f3545a192e853f
+          image: ghcr.io/koenkk/zigbee2mqtt:2.7.0
           ports:
             - containerPort: 8080
               name: frontend
