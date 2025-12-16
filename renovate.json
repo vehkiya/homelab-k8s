@@ -5,7 +5,7 @@
   },
   "extends": [
     "config:recommended",
-    "config:base"
+    "config:recommended"
   ],
   "labels": [
     "renovate",
@@ -14,19 +14,19 @@
   "prHeader": "## ⬆️ Dependency Updates",
   "packageRules": [
     {
-      "packagePatterns": [
-        "traefik"
-      ],
       "groupName": "traefik-group",
-      "automerge": false
+      "automerge": false,
+      "matchPackageNames": [
+        "/traefik/"
+      ]
     },
     {
-      "packagePatterns": [
-        "synology-csi-driver",
-        "iscsi-tools"
-      ],
       "groupName": "storage-drivers",
-      "automerge": false
+      "automerge": false,
+      "matchPackageNames": [
+        "/synology-csi-driver/",
+        "/iscsi-tools/"
+      ]
     },
     {
       "groupName": "iot-stack",
@@ -70,10 +70,6 @@
       "automerge": true
     },
     {
-      "packagePatterns": [
-        "renovate/renovate",
-        "kube-prometheus-stack"
-      ],
       "schedule": [
         "* 0 * * *"
       ],
@@ -83,7 +79,11 @@
         "pin",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/renovate/renovate/",
+        "/kube-prometheus-stack/"
+      ]
     },
     {
       "matchDatasources": [
