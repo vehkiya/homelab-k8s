@@ -9,36 +9,51 @@ spec:
       app: go2rtc
   # ----=== Ingress ===----
   ingress:
-    # === Allow access from Traefik ===
+    # === Allow access from Traefik (HTTP/API only) ===
+    # Matched against http-route.yaml rules
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
       toPorts:
         - ports:
-            - port: "http"
+            - port: "http" # 1984
               protocol: TCP
-            - port: "rtsp"
-              protocol: TCP
+    # === Allow access from Home Assistant ===
     - fromEndpoints:
         - matchLabels:
             app: home-assistant
       toPorts:
         - ports:
-            - port: "http"
+            - port: "http" # 1984
               protocol: TCP
+    # === Allow access from local networks (Direct LB Access) ===
     - fromCIDR:
         - 192.168.1.0/24
         - 192.168.4.0/24
         - 10.10.1.0/24
       toPorts:
         - ports:
-            - port: "webrtc"
+            - port: "webrtc" # 8555 TCP/UDP
               protocol: TCP
-            - port: "8555"
+            - port: "webrtc" # 8555 TCP/UDP
               protocol: UDP
+            - port: "rtsp"   # 8554 TCP
+              protocol: TCP
+
   # ----=== Egress ===----
   egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
     # === To Home Assistant ===
     - toServices:
         - k8sService:
@@ -52,11 +67,7 @@ spec:
     - toCIDR:
         - 192.168.0.0/16
         - 10.0.0.0/8
-    # 2. STUN/ICE (UDP to World)
+    # === STUN/ICE (UDP to World) ===
     # Required for WebRTC NAT traversal negotiation
     - toEntities:
         - "world"
-      toPorts:
-        - ports:
-            - port: "1024-65535"
-              protocol: UDP

@@ -59,15 +59,6 @@ spec:
         - k8sService:
             serviceName: overseerr-ui
             namespace: media
-    # === Allow access too Go2RTC (API Control & WebRTC handshake) ===
-    - toServices:
-        - k8sService:
-            serviceName: go2rtc-svc
-            namespace: iot
-      toPorts:
-        - ports:
-            - port: "1984"
-              protocol: TCP
     # === Allow Internet Access (Integrations/Updates) ===
     - toEntities:
         - "world"
@@ -92,4 +83,6 @@ spec:
       toPorts:
         - ports:
             - port: "5580" # Matter Server Port
+              protocol: TCP
+            - port: "1984" # go2rtc
               protocol: TCP

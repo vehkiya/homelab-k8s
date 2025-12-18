@@ -60,7 +60,7 @@ data:
               last_updated: "{{ trigger.event.data.last_updated }}"
     
     go2rtc:
-      url: https://go2rtc.kerrlab.app/
+      url: http://go2rtc-svc.iot.svc.cluster.local:1984
       
     homeassistant:
       allowlist_external_dirs:

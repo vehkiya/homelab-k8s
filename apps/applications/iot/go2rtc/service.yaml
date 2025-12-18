@@ -3,27 +3,18 @@ kind: Service
 metadata:
   name: go2rtc-svc
   namespace: iot
-  labels:
-    pool: internal-lb-pool
-  annotations:
-    lbipam.cilium.io/ips: "10.10.1.132"
 spec:
   selector:
     app: go2rtc
-  type: LoadBalancer # Changed from default (ClusterIP)
-  externalTrafficPolicy: Local # Preserves client source IP for your Network Policy
   ports:
     - name: http-api
       port: 1984
-      targetPort: 1984
     - name: rtsp
       port: 8554
       targetPort: 8554
     - name: webrtc-tcp
       port: 8555
-      targetPort: 8555
       protocol: TCP
     - name: webrtc-udp
       port: 8555
-      targetPort: 8555
       protocol: UDP
