@@ -87,7 +87,7 @@ ports:
         - 2a06:98c0::/29
         - 2c0f:f248::/32
     proxyProtocol:
-      trustedIPs:
+      trustedIPs: []
   postgres:
     port: 5432
     protocol: TCP
