@@ -6,13 +6,23 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app: redis
+      "k8s:app": redis
+  # ----=== Ingress ===----
   ingress:
+    # === Allow access from Authelia ===
     - fromEndpoints:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "core"
-            "k8s:app": authelia
+            "k8s:app": "authelia"
       toPorts:
         - ports:
             - port: "6379"
-              protocol: TCP
+              protocol: "TCP"
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "home"
+            "k8s:app": "bar-assistant"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
