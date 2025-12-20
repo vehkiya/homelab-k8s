@@ -16,3 +16,4 @@ resources:
   - salt-rim-deployment.yaml
   - salt-rim-service.yaml
   - network-policy.yaml
+  - secret.yaml

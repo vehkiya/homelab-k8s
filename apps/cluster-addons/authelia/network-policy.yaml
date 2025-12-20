@@ -23,11 +23,11 @@ spec:
     - toEndpoints:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "redis"
-            "k8s:app": redis
+            "k8s:app": "redis"
       toPorts:
         - ports:
             - port: "6379"
-              protocol: TCP
+              protocol: "TCP"
 
     - toCIDR:
         # ldap.kerrlab.app

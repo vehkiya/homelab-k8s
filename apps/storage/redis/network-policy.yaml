@@ -14,11 +14,6 @@ spec:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "core"
             "k8s:app": "authelia"
-      toPorts:
-        - ports:
-            - port: "6379"
-              protocol: "TCP"
-    - fromEndpoints:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "home"
             "k8s:app": "bar-assistant"

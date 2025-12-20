@@ -4,15 +4,15 @@ kind: ConfigMap
 metadata:
   name: mealie-config
 data:
-  BASE_URL: https://recipes.kerrlab.app
+  BASE_URL: "https://recipes.kerrlab.app"
   ALLOW_SIGNUP: "true"
   ALLOW_PASSWORD_LOGIN: "false"
-  DB_ENGINE: postgres
+  DB_ENGINE: "postgres"
   PUID: "1026"
   PGID: "100"
-  POSTGRES_SERVER: fortress.kerrlab.app
+  POSTGRES_SERVER: "fortress.kerrlab.app"
   POSTGRES_PORT: "15432"
-  POSTGRES_DB: mealie-db
+  POSTGRES_DB: "mealie-db"
   OIDC_AUTH_ENABLED: "true"
   OIDC_SIGNUP_ENABLED: "true"
   OIDC_CONFIGURATION_URL: 'https://auth.kerrlab.app/.well-known/openid-configuration'

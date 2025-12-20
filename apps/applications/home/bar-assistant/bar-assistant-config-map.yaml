@@ -3,17 +3,18 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bar-assistant-config
+  namespace: home
 data:
   # --- Common ---
   # Set the external URL where the application will be accessed
-  APP_URL: "https://bar.kerrlab.app/bar"
+  APP_URL: "https://bar.kerrlab.app/api"
   # Set the external URL for Meilisearch (used by Salt Rim frontend)
   # Ensure Meilisearch is also exposed via Traefik at this address
-  MEILISEARCH_URL: "https://meilisearch.kerrlab.app" # Adjust if needed
+  MEILISEARCH_URL: "https://meilisearch.kerrlab.app"
 
   # --- Bar Assistant Server ---
   # Internal hostname for Meilisearch Service within the cluster
-  MEILISEARCH_HOST: "https://meilisearch.kerrlab.app"
+  MEILISEARCH_HOST: "http://meilisearch-kubernetes.default.svc.cluster.local:7700"
   # Internal hostname for Redis Service within the cluster
   REDIS_HOST: "redis-master.redis.svc.cluster.local"
   CACHE_DRIVER: "redis"
@@ -21,6 +22,8 @@ data:
   ALLOW_REGISTRATION: "true"
 
   # --- Salt Rim Frontend ---
-  # API_URL points to the external URL of the backend API (handled by Ingress)
-  # Often the same as APP_URL or a subpath like APP_URL/api
-  API_URL: "https://bar.kerrlab.app/bar" # This matches the Ingress path for the backend
+  # API_URL points to the external URL of the backend API
+  API_URL: "https://bar.kerrlab.app/api" # This matches the Ingress path for the backend
+  AUTHELIA_BASE_URL: "http://auth.kerrlab.app"
+  AUTHELIA_CLIENT_ID: "bar-assistant"
+  AUTHELIA_REDIRECT_URI: "https://bar.kerrlab.app/oauth/callback"

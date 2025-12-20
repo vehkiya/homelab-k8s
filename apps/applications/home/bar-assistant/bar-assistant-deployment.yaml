@@ -37,6 +37,11 @@ spec:
                 secretKeyRef:
                   name: meilisearch-kubernetes-master-key
                   key: MEILI_MASTER_KEY
+            - name: AUTHELIA_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: bar-assistant-secrets
+                  key: OIDC_CLIENT_SECRET
 #            - name: REDIS_PASSWORD
 #              valueFrom:
 #                secretKeyRef:
