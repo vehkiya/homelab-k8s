@@ -31,6 +31,19 @@ spec:
     # Allow access to the Kubernetes API server for controllers
     - toEntities:
         - "kube-apiserver"
+        - "host"          # Needed if API is on the same node
+        - "remote-node"   # Needed if API is on another node
+    - toCIDR:
+        - "10.10.1.250/32" # Your VIP (Since Argo is configured to use this URL)
+        - "10.10.1.101/32" # Node 1
+        - "10.10.1.102/32" # Node 2
+        - "10.10.1.103/32" # Node 3
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "6443"
+              protocol: TCP
 
 ---
 # Policy 2: Allow external ingress to the ArgoCD server and egress to external clusters
@@ -59,8 +72,17 @@ spec:
     # Allow access to external clusters (including local cluster via external VIP)
     - toEntities:
         - "world"
+        - "host"          # Needed if API is on the same node
+        - "remote-node"   # Needed if API is on another node
+    - toCIDR:
+        - "10.10.1.250/32" # Your VIP (Since Argo is configured to use this URL)
+        - "10.10.1.101/32" # Node 1
+        - "10.10.1.102/32" # Node 2
+        - "10.10.1.103/32" # Node 3
       toPorts:
         - ports:
+            - port: "443"
+              protocol: TCP
             - port: "6443"
               protocol: TCP
 
