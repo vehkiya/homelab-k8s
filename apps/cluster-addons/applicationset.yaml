@@ -8,7 +8,7 @@ spec:
     - list:
         elements:
           - name: kubernetes-dashboard
-#          - name: headlamp
+          - name: headlamp
           - name: authelia
           - name: oauth-proxy
   template:
@@ -31,3 +31,5 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+  syncPolicy:
+    preserveResourcesOnDeletion: true

@@ -32,3 +32,5 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+  syncPolicy:
+    preserveResourcesOnDeletion: true

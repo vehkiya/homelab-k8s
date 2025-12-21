@@ -1,0 +1,5 @@
+# Creating ns for gitops before everything
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
