@@ -1,16 +1,262 @@
 apiVersion: cilium.io/v2
-kind: CiliumClusterwideNetworkPolicy
+kind: CiliumNetworkPolicy
 metadata:
-  name: allow-external-secrets-to-bitwarden
+  name: external-secrets-all-policies
   namespace: external-secrets
 spec:
+  description: "Combined policy for External Secrets components"
   endpointSelector:
-    matchLabels:
-      app: bitwarden-cli
-  ingress:
-    - fromEndpoints:
-        - {}
+    matchExpressions:
+      # Match ANY of the External Secrets pods
+      - { key: app.kubernetes.io/name, operator: In, values: [ external-secrets, external-secrets-cert-controller, external-secrets-webhook ] }
+  egress:
+    # 1. DNS Access
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
       toPorts:
         - ports:
-            - port: "8087"
-              protocol: TCP
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+
+    # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
+    - toEntities:
+        - "kube-apiserver"
+        - "host"          # Needed for Talos host network API
+        - "remote-node"   # Needed if API is on another node
+    - toCIDR:
+        - 10.96.0.1/32     # Service IP
+        - 10.10.1.250/32   # VIP
+        - 10.10.1.101/32   # Node 1
+        - 10.10.1.102/32   # Node 2
+        - 10.10.1.103/32   # Node 3
+      toPorts:
+        - ports:
+            - port: "443"  # Service Port
+              protocol: "TCP"
+            - port: "6443" # Actual Backend Port
+              protocol: "TCP"
+
+    # 3. External Webhook Access (for Main Controller)
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: external-secrets-webhook
+      toPorts:
+        - ports:
+            - port: "9443"
+              protocol: "TCP"
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets-webhook-ingress
+  namespace: external-secrets
+spec:
+  description: "Allow K8s API Server to reach the Webhook"
+  endpointSelector:
+    matchLabels:
+      # Matches the label we saw in your logs:
+      app.kubernetes.io/name: external-secrets-webhook
+  ingress:
+    - fromEntities:
+        - "kube-apiserver"
+        - "host"          # Critical for Talos: Traffic often appears from the Node IP
+        - "remote-node"   # Critical: If API server is on a different node
+      toPorts:
+        - ports:
+            - port: "9443"
+              protocol: "TCP"# Rule: Allow traffic from the Node IPs (where API Server lives)
+    - fromCIDR:
+        - "10.10.1.101/32"
+        - "10.10.1.102/32"
+        - "10.10.1.103/32"
+        # Also allow the VIP just in case source NAT is happening
+        - "10.10.1.250/32"
+      toPorts:
+        - ports:
+            - port: "9443"
+              protocol: "TCP"
+#apiVersion: cilium.io/v2
+#kind: CiliumNetworkPolicy
+#metadata:
+#  name: external-secrets-controller-policy
+#  namespace: external-secrets
+#spec:
+#  endpointSelector:
+#    matchLabels:
+#      app.kubernetes.io/name: external-secrets
+#      app.kubernetes.io/component: controller
+#  # ----=== Egress ===----
+#  egress:
+#    # === Allow DNS ===
+#    - toEndpoints:
+#        - matchLabels:
+#            k8s:io.kubernetes.pod.namespace: kube-system
+#            k8s-app: coredns
+#      toPorts:
+#        - ports:
+#            - port: "53"
+#              protocol: "UDP"
+#            - port: "53"
+#              protocol: "TCP"
+#    # === Allow access to the Kubernetes API server ===
+#    - toEntities:
+#        - "kube-apiserver"
+#        - "host"
+#        - "remote-node"
+#    - toCIDR:
+#        - 10.96.0.1/32 # K8s API ClusterIP
+#        - 10.10.1.250/32   # VIP
+#        - 10.10.1.101/32   # Node 1
+#        - 10.10.1.102/32   # Node 2
+#        - 10.10.1.103/32   # Node 3
+#      toPorts:
+#        - ports:
+#            - port: "443"
+#              protocol: "TCP"
+#            - port: "6443"
+#              protocol: "TCP"
+#    # === Allow access to external secret stores (e.g., Bitwarden) ===
+#    - toEntities:
+#        - "world"
+#      toPorts:
+#        - ports:
+#            - port: "443"
+#              protocol: "TCP"
+#            - port: "443"
+#              protocol: UDP
+#---
+#apiVersion: cilium.io/v2
+#kind: CiliumNetworkPolicy
+#metadata:
+#  name: external-secrets-webhook-policy
+#  namespace: external-secrets
+#spec:
+#  endpointSelector:
+#    matchLabels:
+#      app.kubernetes.io/name: external-secrets
+#      app.kubernetes.io/component: webhook
+#  # ----=== Ingress ===----
+#  ingress:
+#    # === Allow webhook access from the API server ===
+#    - fromEntities:
+#        - "kube-apiserver"
+#      toPorts:
+#        - ports:
+#            - port: "9443" # Standard webhook port
+#              protocol: "TCP"
+#  # ----=== Egress ===----
+#  egress:
+#    # === Allow DNS ===
+#    - toEndpoints:
+#        - matchLabels:
+#            k8s:io.kubernetes.pod.namespace: kube-system
+#            k8s-app: coredns
+#      toPorts:
+#        - ports:
+#            - port: "53"
+#              protocol: "UDP"
+#            - port: "53"
+#              protocol: "TCP"
+#    # === Allow access to the Kubernetes API server ===
+#    - toEntities:
+#        - "kube-apiserver"
+#        - "host"
+#        - "remote-node"
+#    - toCIDR:
+#        - 10.96.0.1/32 # K8s API ClusterIP
+#        - 10.10.1.250/32   # VIP
+#        - 10.10.1.101/32   # Node 1
+#        - 10.10.1.102/32   # Node 2
+#        - 10.10.1.103/32   # Node 3
+#      toPorts:
+#        - ports:
+#            - port: "443"
+#              protocol: "TCP"
+#            - port: "6443"
+#              protocol: "TCP"
+#---
+#apiVersion: cilium.io/v2
+#kind: CiliumNetworkPolicy
+#metadata:
+#  name: external-secrets-certcontroller-policy
+#  namespace: external-secrets
+#spec:
+#  endpointSelector:
+#    matchLabels:
+#      app.kubernetes.io/name: external-secrets
+#      app.kubernetes.io/component: certcontroller
+#  # ----=== Egress ===----
+#  egress:
+#    # === Allow DNS ===
+#    - toEndpoints:
+#        - matchLabels:
+#            k8s:io.kubernetes.pod.namespace: kube-system
+#            k8s-app: coredns
+#      toPorts:
+#        - ports:
+#            - port: "53"
+#              protocol: "UDP"
+#            - port: "53"
+#              protocol: "TCP"
+#    # === Allow access to the Kubernetes API server ===
+#    - toEntities:
+#        - "kube-apiserver"
+#        - "host"
+#        - "remote-node"
+#    - toCIDR:
+#        - 10.96.0.1/32 # K8s API ClusterIP
+#        - 10.10.1.250/32   # VIP
+#        - 10.10.1.101/32   # Node 1
+#        - 10.10.1.102/32   # Node 2
+#        - 10.10.1.103/32   # Node 3
+#      toPorts:
+#        - ports:
+#            - port: "443"
+#              protocol: "TCP"
+#            - port: "6443"
+#              protocol: "TCP"
+#---
+#apiVersion: cilium.io/v2
+#kind: CiliumNetworkPolicy
+#metadata:
+#  name: bitwarden-cli-policy
+#  namespace: external-secrets
+#spec:
+#  endpointSelector:
+#    matchLabels:
+#      app: bitwarden-cli
+#  # ----=== Egress ===----
+#  egress:
+#    # === Allow DNS ===
+#    - toEndpoints:
+#        - matchLabels:
+#            k8s:io.kubernetes.pod.namespace: kube-system
+#            k8s-app: coredns
+#      toPorts:
+#        - ports:
+#            - port: "53"
+#              protocol: "UDP"
+#            - port: "53"
+#              protocol: "TCP"
+#    # === Allow access to the Bitwarden server ===
+#    - toEntities:
+#        - "world"
+#      toPorts:
+#        - ports:
+#            - port: "443"
+#              protocol: "TCP"
+#            - port: "443"
+#              protocol: UDP
+#    # === Allow access to the external-secrets controller ===
+#    - toEndpoints:
+#        - matchLabels:
+#            app.kubernetes.io/name: external-secrets
+#            app.kubernetes.io/component: controller
+#      toPorts:
+#        - ports:
+#            - port: "8087" # Port for the external-secrets controller webhook
+#              protocol: "TCP"

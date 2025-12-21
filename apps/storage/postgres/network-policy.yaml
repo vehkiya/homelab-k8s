@@ -11,6 +11,14 @@ spec:
       cnpg.io/cluster: postgres-db
   
   ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: "TCP"
     # Rule A: Allow Authelia to connect
     - fromEndpoints:
         - matchLabels:
@@ -86,6 +94,14 @@ spec:
     matchLabels:
       app.kubernetes.io/name: cloudnative-pg
   ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: "TCP"
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: core

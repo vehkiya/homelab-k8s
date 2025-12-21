@@ -1,0 +1,45 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cert-manager-policy
+  namespace: cert-manager
+spec:
+  endpointSelector: {}
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow webhook access from the API server ===
+    - fromEntities:
+        - "kube-apiserver"
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: "TCP"
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    # === Allow access to the Kubernetes API server ===
+    - toEntities:
+        - "kube-apiserver"
+    # === Allow access to the world for ACME challenges ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+            - port: "443"
+              protocol: "UDP"
+            - port: "80"
+              protocol: "TCP"
+            - port: "53"
+              protocol: "TCP"

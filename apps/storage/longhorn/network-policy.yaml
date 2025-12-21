@@ -1,0 +1,65 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: longhorn-policy
+  namespace: longhorn-system
+spec:
+  endpointSelector: { }
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Traefik for the UI ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: "TCP"
+    # === Allow internal communication within the namespace ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: longhorn-system
+    - fromEntities:
+        - "host" # Allows the Kubelet on the node           
+        - "cluster"
+        - "health"
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    # === Allow access to the Kubernetes API server ===
+    - toEntities:
+        - "kube-apiserver"
+    - toCIDR:
+        - 10.96.0.1/32 # K8s API ClusterIP
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+    # === Allow internal communication within the namespace ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: longhorn-system
+    # === Allow access to the host for Kubelet ===
+    - toEntities:
+        - "host"
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "443" # S3 / AWS
+              protocol: TCP
+            - port: "80"
+              protocol: TCP
+            - port: "2049" # NFS
+              protocol: TCP

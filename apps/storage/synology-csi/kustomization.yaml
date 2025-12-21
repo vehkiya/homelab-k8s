@@ -9,4 +9,4 @@ resources:
   - nfs-storage-class.yml
   - synology-iscsi.yaml
   - synology-iscsi-persistent.yaml
-  
+  - network-policy.yaml

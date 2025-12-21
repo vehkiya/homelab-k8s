@@ -11,3 +11,4 @@ helmCharts:
 resources:
   - longhorn-namespace.yaml
   - longhorn-http-route.yaml
+  - network-policy.yaml

@@ -1,0 +1,63 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: synology-csi-policy
+  namespace: synology-csi
+spec:
+  endpointSelector: { }
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from the host for Kubelet ===
+    - fromEntities:
+        - "host"
+    # === Allow webhooks from the API server ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-apiserver
+      toPorts:
+        - ports:
+            - port: "9808" # Adjust if your webhook port is different
+              protocol: "TCP"
+    - fromEntities:
+        - "host" # Allows the Kubelet on the node
+  
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    # === Allow access to the Kubernetes API server ===
+    - toEntities:
+        - "kube-apiserver"
+    - toCIDR:
+        - 10.96.0.1/32 # K8s API ClusterIP
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+    # === Allow access to the Synology NAS ===
+    - toCIDR:
+        - 10.10.1.218/32 # Synology NAS IP
+      toPorts:
+        - ports:
+            - port: "5001" # DSM API
+              protocol: "TCP"
+            - port: "2049" # NFS
+              protocol: "TCP"
+            - port: "2049" # NFS
+              protocol: "UDP"
+            - port: "3260" # iSCSI
+              protocol: "TCP"
+            - port: "111"  # Portmapper
+              protocol: "TCP"
+            - port: "111"  # Portmapper
+              protocol: "UDP"
