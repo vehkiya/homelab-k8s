@@ -8,3 +8,12 @@ metadata:
 data:
   # Run server without TLS
   server.insecure: "true"
+  controller.diff.server.side: "true"
+  controller.status.processors: "50"
+  controller.operation.processors: "25"
+  
+  redis.compression: "gzip"
+  
+  server.log.level: "warn"
+  reposerver.log.level: "warn"
+  controller.log.level: "warn"

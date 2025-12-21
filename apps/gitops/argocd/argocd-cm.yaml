@@ -10,10 +10,13 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
-  url: https://argo.kerrlab.app
+  url: "https://argo.kerrlab.app"
   # Specifies the label key used by Argo CD Application controller
   # to identify the Application resource (optional, default is shown)
-  application.instanceLabelKey: argocd.argoproj.io/instance
+  application.instanceLabelKey: "argocd.argoproj.io/instance"
+  application.resourceTrackingMethod: "annotation"
+  application.sync.options: |
+    ServerSideApply=true
 
   # Configuration for resource exclusions
   # This prevents Argo CD from managing certain resource kinds/groups.
@@ -23,9 +26,35 @@ data:
       - cilium.io
       kinds:
       - CiliumIdentity
+      - CiliumEndpoint # High churn, low GitOps value
       clusters:
-      - '*' # Apply exclusion to all clusters managed by this Argo CD instance
-  kustomize.buildOptions: --enable-helm
+      - '*'
+    - apiGroups:
+      - ""
+      kinds:
+      - Event # Never GitOps events
+      clusters:
+      - '*'
+    - apiGroups:
+      - metrics.k8s.io
+      kinds:
+      - "*"
+      clusters:
+      - "*"
+  resource.customizations: |
+    external-secrets.io/ExternalSecret:
+      ignoreDifferences: |
+        jsonPointers:
+        - /status
+    external-secrets.io/SecretStore:
+      ignoreDifferences: |
+        jsonPointers:
+        - /status
+    external-secrets.io/ClusterSecretStore:
+      ignoreDifferences: |
+        jsonPointers:
+        - /status
+  kustomize.buildOptions: "--enable-helm"
   
   # Enables application status badge feature
   statusbadge.enabled: "true"
