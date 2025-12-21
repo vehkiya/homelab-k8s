@@ -1,4 +1,26 @@
-# 6-z2m-pvc.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zigbee2mqtt-data-pv
+  labels:
+    pv-name: zigbee2mqtt-data-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/iot/zigbee2mqtt
+  storageClassName: synostorage-nfs
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,8 +28,11 @@ metadata:
   namespace: iot
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi # 1GB is usually plenty
-  storageClassName: longhorn
+      storage: 2Gi
+  selector:
+    matchLabels:
+      pv-name: zigbee2mqtt-data-pv
+  storageClassName: synostorage-nfs

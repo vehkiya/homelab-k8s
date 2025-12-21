@@ -18,7 +18,7 @@ spec:
     - wsize=1048576
   nfs:
     server: fortress.kerrlab.app
-    path: /volume1/cluster/home-assistant
+    path: /volume1/cluster/iot/home-assistant
   storageClassName: synostorage-nfs
 ---
 apiVersion: v1

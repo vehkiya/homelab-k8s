@@ -5,3 +5,5 @@ resources:
   - video-anime-pv-pvc.yaml
   - video-movies-pv-pvc.yaml
   - video-series-pv-pvc.yaml
+  - video-assets-pv-pvc.yaml
+  - fonts-pv-pvc.yaml

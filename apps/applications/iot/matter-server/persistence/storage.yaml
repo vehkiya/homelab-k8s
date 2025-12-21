@@ -1,4 +1,26 @@
-# 3-mosquitto-pvc.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: matter-server-pv
+  labels:
+    pv-name: matter-server-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/iot/matter-server
+  storageClassName: synostorage-nfs
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,8 +28,11 @@ metadata:
   namespace: iot
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
-  storageClassName: longhorn
+      storage: 2Gi
+  selector:
+    matchLabels:
+      pv-name: matter-server-pv
+  storageClassName: synostorage-nfs
