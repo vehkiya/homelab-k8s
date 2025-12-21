@@ -17,6 +17,9 @@ spec:
         - k8sService:
             serviceName: bar-assistant
             namespace: home
+        - k8sService:
+            serviceName: meilisearch-kubernetes
+            namespace: default
       toPorts:
         - ports:
             - port: "8080"

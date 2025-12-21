@@ -10,8 +10,8 @@ labels:
 resources:
   - db-external-secret.yaml
   - secrets.yaml
-  - persistence/db.yaml
   - configmap.yaml
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - network-policy.yaml

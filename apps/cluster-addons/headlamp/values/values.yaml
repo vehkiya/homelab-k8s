@@ -1,6 +1,5 @@
 config:
   oidc:
-    usePKCE: true
     secret:
       create: false
     externalSecret:

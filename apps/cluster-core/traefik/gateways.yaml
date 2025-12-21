@@ -5,7 +5,7 @@ metadata:
   name: internal-gateway
   namespace: traefik
   annotations:
-    cert-manager.io/issuer: zerossl-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   gatewayClassName: traefik
   listeners:
@@ -29,7 +29,7 @@ metadata:
   name: external-gateway
   namespace: traefik
   annotations:
-    cert-manager.io/issuer: zerossl-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   gatewayClassName: traefik
   listeners:

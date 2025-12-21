@@ -1,0 +1,60 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: romm-policy
+  namespace: home
+spec:
+  endpointSelector:
+    matchLabels:
+      app: romm
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Traefik ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # === Allow Egress to Traefik for Hairpinning (for OIDC) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    # === Allow Egress to fortress.kerrlab.app:3306 ===
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "3306"
+              protocol: TCP
+    # === Allow Internet Access ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP

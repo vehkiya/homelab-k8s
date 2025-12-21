@@ -1,13 +1,41 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-headlamp-to-kube-apiserver
-  namespace: kube-system
+  name: headlamp-egress
+  namespace: kubernetes-dashboard
 spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: headlamp
-      app.kubernetes.io/instance: headlamp
   egress:
+    # 1. Allow API Access (Critical)
     - toEntities:
         - kube-apiserver
+        - host
+        - remote-node
+    - toCIDR:
+        - 10.96.0.1/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+    
+    # 2. Allow DNS (Always needed)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+
+    # 3. Allow OIDC Provider (If you use Google/Dex/etc for login)
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
