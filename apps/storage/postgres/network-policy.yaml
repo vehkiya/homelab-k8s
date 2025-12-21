@@ -51,7 +51,32 @@ spec:
             - port: "5432"
               protocol: "TCP"
     - fromEntities:
+        - "kube-apiserver"
         - "host"
+        - "remote-node"
+    - fromCIDR:
+        - "10.10.1.101/32"
+        - "10.10.1.102/32"
+        - "10.10.1.103/32"
+        - "10.10.1.250/32"
+      toPorts:
+        - ports:
+            - port: "9443"
+              protocol: "TCP"
+            # Allow Metrics/Status if needed
+            - port: "8080"
+              protocol: "TCP"
+
+    # 2. Allow monitoring/scraping (Optional, if you have Prometheus)
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: "TCP"
+
+  # ----=== Egress ===----
   egress:
     # Rule A: Allow DNS
     - toEndpoints:
@@ -118,6 +143,23 @@ spec:
             - port: "5432" # For SQL/replication
               protocol: "TCP"
             - port: "8000" # For /pg/status checks
+              protocol: "TCP"
+    - fromEntities:
+        - "kube-apiserver"
+        - "host"
+        - "remote-node"
+        # Explicitly whitelist Control Plane IPs (Talos/Cilium fix)
+    - fromCIDR:
+        - "10.10.1.101/32"
+        - "10.10.1.102/32"
+        - "10.10.1.103/32"
+        - "10.10.1.250/32"
+      toPorts:
+        - ports:
+            - port: "9443"
+              protocol: "TCP"
+            # Allow Metrics/Status ports just in case
+            - port: "8000"
               protocol: "TCP"
   egress:
     - toEndpoints:

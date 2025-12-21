@@ -15,6 +15,9 @@ spec:
             "k8s:io.kubernetes.pod.namespace": "core"
             "k8s:app": "authelia"
         - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "core"
+            "k8s:app": "oauth-proxy"
+        - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "home"
             "k8s:app": "bar-assistant"
       toPorts:

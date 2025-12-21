@@ -1,18 +1,80 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: oauth-proxy-to-redis
-  namespace: redis
+  name: oauth-proxy-policy
+  namespace: core
 spec:
   endpointSelector:
     matchLabels:
-      app: redis
-  ingress:
-    - fromEndpoints:
+      app: oauth-proxy
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "core"
-            "k8s:app": oauth-proxy
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "redis"
+            "k8s:app": "redis"
       toPorts:
         - ports:
             - port: "6379"
+              protocol: "TCP"
+    # Allow egress to Traefik for hairpinning
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "443"
               protocol: TCP
+            - port: "9443"  # traefik-internal targetPort
+              protocol: TCP
+            - port: "8443"  # traefik-dmz targetPort
+              protocol: TCP
+            - port: "8443"
+              protocol: UDP
+            - port: "9443"
+              protocol: UDP
+    - toEntities:
+        - "world"
+      toPorts:
+        # For 2FA/TOTP time-sync and update checks
+        - ports:
+            # for NTP
+            - port: "123"
+              protocol: UDP
+            - port: "443"
+              protocol: TCP
+            - port: "443"
+              protocol: UDP
+            # For SMTP (e.g., Gmail)
+            - port: "587"
+              protocol: TCP
+            - port: "465"
+              protocol: TCP
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "4180"
+              protocol: "TCP"
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "4180"
+              protocol: "TCP"
