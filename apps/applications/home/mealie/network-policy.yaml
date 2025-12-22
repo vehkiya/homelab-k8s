@@ -7,7 +7,6 @@ spec:
   endpointSelector:
     matchLabels:
       app: mealie
-  # ----=== Ingress ===----
   ingress:
     # === Allow access from Traefik ===
     - fromEndpoints:
@@ -18,20 +17,52 @@ spec:
         - ports:
             - port: "9000"
               protocol: TCP
-  # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
+    # ------------------------------------------------------------------
+    # We allow DNS to the world/cluster without inspecting the packet content.
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: kube-system
             k8s-app: coredns
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: node-local-dns
       toPorts:
         - ports:
             - port: "53"
-              protocol: UDP
+              protocol: ANY
+    # Backup: Allow UDP/53 to the CoreDNS ClusterIP directly
+    - toCIDR:
+        - "10.96.0.10/32"
+      toPorts:
+        - ports:
             - port: "53"
+              protocol: ANY
+    
+    # ------------------------------------------------------------------
+    # 2. INTERNAL SERVICES
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app: traefik
+      toPorts:
+        - ports:
+            - port: "443"
               protocol: TCP
-    # === Allow access to PostgreSQL database ===
+            - port: "80"
+              protocol: TCP
+    - toCIDR:
+        - "10.10.1.16/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    
+    # ------------------------------------------------------------------
+    # 3. POSTGRES
     - toEndpoints:
         - matchLabels:
             cnpg.io/cluster: postgres-db
@@ -40,20 +71,18 @@ spec:
         - ports:
             - port: "5432"
               protocol: TCP
-    # === Allow Egress to fortress.kerrlab.app:15432 ===
+    
+    # ------------------------------------------------------------------
+    # 4. EXTERNAL HOSTS
     - toCIDR:
         - "10.10.1.218/32"
       toPorts:
         - ports:
             - port: "15432"
               protocol: TCP
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "15432"
-              protocol: TCP
-    # === Allow Internet Access for recipe scraping ===
+    
+    # ------------------------------------------------------------------
+    # 5. PUBLIC INTERNET
     - toEntities:
         - "world"
       toPorts:
