@@ -14,5 +14,6 @@ spec:
       protocol: TCP
       name: http
   externalTrafficPolicy: Local
+  trafficDistribution: PreferSameNode # 1.35 feature
   selector:
     app: authelia

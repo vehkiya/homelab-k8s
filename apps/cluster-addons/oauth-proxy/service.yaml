@@ -12,5 +12,6 @@ spec:
       targetPort: http
       protocol: TCP
   externalTrafficPolicy: Local
+  trafficDistribution: PreferSameNode # 1.35 feature
   selector:
     app: oauth-proxy

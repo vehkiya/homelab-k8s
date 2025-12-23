@@ -10,6 +10,7 @@ spec:
   selector:
     app.kubernetes.io/name: "traefik"
   externalTrafficPolicy: Local
+  trafficDistribution: PreferSameNode # 1.35 feature
   ports:
     - name: websecure
       port: 443
@@ -32,6 +33,7 @@ spec:
   selector:
     app.kubernetes.io/name: "traefik"
   externalTrafficPolicy: Local
+  trafficDistribution: PreferSameNode # 1.35 feature
   ports:
     - name: dmz
       port: 443
