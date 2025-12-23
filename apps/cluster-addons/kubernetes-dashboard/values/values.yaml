@@ -8,7 +8,7 @@ app:
     pathType: ImplementationSpecific
     path: /
     issuer:
-      name: letsencrypt-prod
+      name: zerossl-prod
       scope: cluster
     tls:
       enabled: true
