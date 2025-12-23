@@ -15,5 +15,4 @@ resources:
   - acme-issuer-cf-solver.yaml
   - zerossl-eab-external-secret.yaml
   - zerossl-issuer-cf-solver.yaml
-  - certificate-config.yaml
   - network-policy.yaml
