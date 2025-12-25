@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
             - name: renovate
-              image: renovate/renovate:42.66.1@sha256:58e9bc16bd56818fdc3ee5aeea1e2708551d884b654f385352cec519eada742e
+              image: renovate/renovate:42.66.5@sha256:52851058b1f7e583368a999b3534b034fa776bcbc1fa9d6dc1983bb49a644f70
               env:
                 - name: LOG_LEVEL
                   value: info
