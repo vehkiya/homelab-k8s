@@ -14,6 +14,25 @@
   "prHeader": "## ⬆️ Dependency Updates",
   "packageRules": [
     {
+      "matchManagers": [
+        "helm-values",
+        "helm-release"
+      ],
+      "groupName": "helm"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": true
+    },
+    {
+      "groupName": "bar-assistant",
+      "matchPaths": [
+        "apps/applications/home/bar-assistant/**"
+      ]
+    },
+    {
       "groupName": "traefik-group",
       "automerge": false,
       "matchPackageNames": [
@@ -21,11 +40,10 @@
       ]
     },
     {
-      "groupName": "storage-drivers",
+      "groupName": "synology-csi-drivers",
       "automerge": false,
-      "matchPackageNames": [
-        "/synology-csi-driver/",
-        "/iscsi-tools/"
+      "matchPaths": [
+        "apps/storage/synology-csi/**"
       ]
     },
     {
@@ -53,13 +71,6 @@
       "automerge": true
     },
     {
-      "matchManagers": [
-        "helm-values",
-        "helm-release"
-      ],
-      "groupName": "helm"
-    },
-    {
       "matchDatasources": [
         "docker"
       ],
@@ -84,12 +95,6 @@
         "/renovate/renovate/",
         "/kube-prometheus-stack/"
       ]
-    },
-    {
-      "matchDatasources": [
-        "docker"
-      ],
-      "pinDigests": true
     }
   ]
 }

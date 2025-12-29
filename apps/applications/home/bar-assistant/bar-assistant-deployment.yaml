@@ -26,7 +26,7 @@ spec:
               mountPath: /var/www/cocktails/storage/bar-assistant
       containers:
         - name: bar-assistant-server
-          image: ghcr.io/karlomikus/barassistant:5.11.1@sha256:2b9499e1e66ca68344afa892fb15b39ae2cc8f7158556427f0513098dc3d6e2c
+          image: ghcr.io/karlomikus/barassistant:5.11.2@sha256:0f2b1a8cd148e4a5ec24e8fa601b48a9d63f935942ca0b1ab8e4d5d348dfbb5d
           envFrom:
             - configMapRef:
                 name: bar-assistant-config
