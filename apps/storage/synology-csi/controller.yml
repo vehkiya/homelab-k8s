@@ -88,7 +88,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: registry.k8s.io/sig-storage/csi-provisioner:v3.6.4@sha256:e7ad666f1d9b0caa077c7f0c157c9f87d1e73858390732496f66dcc716ff10c5
+          image: registry.k8s.io/sig-storage/csi-provisioner:v6.1.0@sha256:e5900dc98b0d02f317ea9572f3824983c47a2fb5d5fe2b160aedf1b99c14c9e4
           args:
             - --timeout=60s
             - --csi-address=$(ADDRESS)
@@ -107,7 +107,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: registry.k8s.io/sig-storage/csi-attacher:v3.5.1@sha256:5f4bfcd75dd26c5d6c31cf1ff438f723aa9bcd30f1697297f93f85e158b54aca
+          image: registry.k8s.io/sig-storage/csi-attacher:v4.10.0@sha256:be59d0556508d3dd419cc34c53062f170a28902ef36e832b947c7796458a083d
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
@@ -124,7 +124,7 @@ spec:
             capabilities:
               add: [ "SYS_ADMIN" ]
             allowPrivilegeEscalation: true
-          image: registry.k8s.io/sig-storage/csi-resizer:v1.14.0@sha256:5e7cbb63fd497fa913caa21fee1a69f727c220c6fa83c5f8bb0995e2ad73a474
+          image: registry.k8s.io/sig-storage/csi-resizer:v2.0.0@sha256:4a95d94e57ad82f6977cd8d4fdcfcfc0b83f02d990e4e7715b688c20970a906d
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
