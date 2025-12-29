@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mealie-service
+  namespace: home
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
