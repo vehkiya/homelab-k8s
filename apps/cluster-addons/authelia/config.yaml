@@ -216,6 +216,7 @@ data:
               - 'email'
               - 'profile'
               - 'groups'
+              - 'offline_access'
             userinfo_signed_response_alg: 'none'
             token_endpoint_auth_method: 'client_secret_post'
           # ---- === Mealie === ----  
@@ -236,6 +237,7 @@ data:
               - 'email'
               - 'profile'
               - 'groups'
+              - 'offline_access'
             response_types:
               - 'code'
             grant_types:
@@ -260,6 +262,7 @@ data:
               - 'email'
               - 'profile'
               - 'groups'
+              - 'offline_access'
             response_types:
               - 'code'
             grant_types:
@@ -284,6 +287,7 @@ data:
               - 'profile'
               - 'email'
               - 'groups'
+              - 'offline_access'
             claims_policy: 'with_groups'
             response_types:
               - 'code'
@@ -309,6 +313,7 @@ data:
               - 'profile'
               - 'email'
               - 'groups'
+              - 'offline_access'
             userinfo_signed_response_alg: 'none'
             token_endpoint_auth_method: 'client_secret_post'
             # ---- === RomM === ----  
@@ -328,5 +333,8 @@ data:
               - 'openid'
               - 'email'
               - 'profile'
+              - 'groups'
+              - 'offline_access'
             userinfo_signed_response_alg: 'none'
             token_endpoint_auth_method: 'client_secret_basic'
+            
