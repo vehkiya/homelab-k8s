@@ -1,2 +1,3 @@
 ### Intellij ###
 .idea/**
+/talos/cluster-config/backup/

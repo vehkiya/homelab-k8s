@@ -1,7 +1,7 @@
 backup_machine_config() {
     local node_name=$1
-    local backup_dir="backup"
-    local lastconfig_dir="backup/lastconfig"
+    local backup_dir="backup/history"
+    local lastconfig_dir="backup"
     local base_filename="machineconfig-${node_name}"
     local timestamp=$(date +%Y%m%d-%H%M%S)
     local talos_version=$(talosctl get version -n "$node_name" -o json | jq -r .spec.version)
