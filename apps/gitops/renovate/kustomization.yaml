@@ -6,3 +6,7 @@ resources:
   - external-secret.yaml
   - cron-job.yaml
   - network-policy.yaml
+
+images:
+  - name: renovate/renovate
+    newTag: 42.71.0@sha256:00b07c100a298085126b9e59f0d0004edb0cf827c22b59f18dd7385399482e9d
