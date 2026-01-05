@@ -15,3 +15,7 @@ resources:
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+
+images:
+  - name: ghcr.io/mealie-recipes/mealie
+    newTag: v3.9.2@sha256:57713693dceca9a124f00f165eaf8f5c41de757e7f63f8a7b80625488605dc61

@@ -13,3 +13,6 @@ resources:
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+images:
+  - name: ghcr.io/alexxit/go2rtc
+    newTag: 1.9.13@sha256:f394f6329f5389a4c9a7fc54b09fdec9621bbb78bf7a672b973440bbdfb02241
