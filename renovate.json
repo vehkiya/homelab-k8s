@@ -28,7 +28,7 @@
     },
     {
       "groupName": "bar-assistant",
-      "matchPaths": [
+      "matchFileNames": [
         "apps/applications/home/bar-assistant/**"
       ]
     },
@@ -42,7 +42,7 @@
     {
       "groupName": "synology-csi-drivers",
       "automerge": false,
-      "matchPaths": [
+      "matchFileNames": [
         "apps/storage/synology-csi/**"
       ]
     },
