@@ -4,6 +4,10 @@ kind: Kustomization
 resources:
   - https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/refs/tags/v4.2.2/deployments/multus-daemonset-thick.yml
 
+images:
+  - name: ghcr.io/siderolabs/install-cni
+    newTag: v1.9.0@sha256:53bdeb6c8d238dd593ee75f265baf4625925a034d8d18f10ffeae88d7fcf2c3e
+
 patches:
   - patch: |-
       apiVersion: apps/v1
@@ -32,7 +36,7 @@ patches:
             initContainers:
               - command:
                   - /install-cni.sh
-                image: ghcr.io/siderolabs/install-cni:v1.9.0@sha256:53bdeb6c8d238dd593ee75f265baf4625925a034d8d18f10ffeae88d7fcf2c3e  # adapt to your talos version
+                image: ghcr.io/siderolabs/install-cni
                 name: install-cni
                 securityContext:
                   privileged: true
@@ -67,4 +71,4 @@ patches:
     target:
       kind: DaemonSet
       name: kube-multus-ds
-      namespace: kube-system 
+      namespace: kube-system

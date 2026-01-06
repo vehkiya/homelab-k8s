@@ -13,3 +13,6 @@ resources:
   - http-route.yaml
   - nad.yaml
   - network-policy.yaml
+images:
+  - name: ghcr.io/home-operations/home-assistant
+    newTag: 2025.12.5@sha256:6be0843b06ad82233639e56f261b2377f78df140e3d16d2d08b2c29c8889b697

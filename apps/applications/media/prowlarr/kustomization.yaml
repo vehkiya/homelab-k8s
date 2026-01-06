@@ -11,3 +11,6 @@ labels:
   - pairs:
       app.kubernetes.io/name: prowlarr
       app.kubernetes.io/part-of: media-services
+images:
+  - name: ghcr.io/home-operations/prowlarr
+    newTag: 2.3.1@sha256:4394dff2311238bf5c31e006872122ed4e5f6bf042d33528d80acd44a09c57f7

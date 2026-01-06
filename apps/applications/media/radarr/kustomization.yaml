@@ -11,3 +11,6 @@ labels:
   - pairs:
       app.kubernetes.io/name: radarr
       app.kubernetes.io/part-of: media-services
+images:
+  - name: ghcr.io/home-operations/radarr
+    newTag: 6.1.0@sha256:ba33a817917792a589f1223e2da9d336692f9eb626b15ff8c7f06afcab4356bd
