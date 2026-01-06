@@ -9,4 +9,4 @@ resources:
   - network-policy.yaml
 images:
   - name: rommapp/romm
-    newTag: 4.4.1@sha256:79d2ab75ce6bdb8f0c7b1d8bb33a456566de5470d5d0e451fbc0919cc84679e8
+    newTag: 4.5.0@sha256:79d2ab75ce6bdb8f0c7b1d8bb33a456566de5470d5d0e451fbc0919cc84679e8
