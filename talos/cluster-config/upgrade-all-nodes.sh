@@ -4,7 +4,7 @@
 
 # --- Configuration ---
 # List your Talos node hostnames or IP addresses here
-NODES=("lab-1.kube.kerrlab.app" "lab-2.kube.kerrlab.app" "lab-3.kube.kerrlab.app")
+NODES=("lab-1.kube.kerrlab.app" "lab-2.kube.kerrlab.app" "lab-3.kube.kerrlab.app", "worker-1.kube.kerrlab.app")
 
 # Name of your script that upgrades a single node
 # This script should accept two arguments: <node_host> <version>

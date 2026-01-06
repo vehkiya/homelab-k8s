@@ -11,9 +11,9 @@ customization:
             - siderolabs/i915
             - siderolabs/intel-ucode
             - siderolabs/iscsi-tools
-            - siderolabs/lldpd
             - siderolabs/mei
             - siderolabs/nut-client
             - siderolabs/realtek-firmware
             - siderolabs/util-linux-tools
             - siderolabs/wasmedge
+            - siderolabs/xe

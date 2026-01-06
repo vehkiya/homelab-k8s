@@ -33,6 +33,7 @@ spec:
         - 10.10.1.101/32   # Node 1
         - 10.10.1.102/32   # Node 2
         - 10.10.1.103/32   # Node 3
+        - 10.10.1.201/32 # Worker 1
       toPorts:
         - ports:
             - port: "443"  # Service Port
@@ -73,6 +74,7 @@ spec:
         - "10.10.1.101/32"
         - "10.10.1.102/32"
         - "10.10.1.103/32"
+        - "10.10.1.201/32" # Worker 1
         # Also allow the VIP just in case source NAT is happening
         - "10.10.1.250/32"
       toPorts:
@@ -114,6 +116,7 @@ spec:
         - 10.10.1.101/32   # Node 1
         - 10.10.1.102/32   # Node 2
         - 10.10.1.103/32   # Node 3
+        - "10.10.1.201/32" # Worker 1
       toPorts:
         - ports:
             - port: "443"
@@ -173,6 +176,7 @@ spec:
         - 10.10.1.101/32   # Node 1
         - 10.10.1.102/32   # Node 2
         - 10.10.1.103/32   # Node 3
+        - "10.10.1.201/32" # Worker 1
       toPorts:
         - ports:
             - port: "443"
@@ -214,6 +218,7 @@ spec:
         - 10.10.1.101/32   # Node 1
         - 10.10.1.102/32   # Node 2
         - 10.10.1.103/32   # Node 3
+        - 10.10.1.201/32 # Worker 1
       toPorts:
         - ports:
             - port: "443"

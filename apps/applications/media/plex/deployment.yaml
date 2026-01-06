@@ -15,6 +15,16 @@ spec:
       labels:
         app: plex
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - performance
       terminationGracePeriodSeconds: 30
       containers:
         - name: plex
@@ -71,6 +81,9 @@ spec:
             - name: transcode
               mountPath: /transcode
           resources:
+            # only rune on nodes that have Intel GPU
+            requests:
+              gpu.intel.com/i915: "1"
             limits:
               gpu.intel.com/i915: "1"
       dnsConfig:
