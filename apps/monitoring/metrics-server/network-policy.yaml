@@ -1,0 +1,54 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: metrics-server-policy
+  namespace: kube-system  # Adjust if you install metrics-server in a different namespace
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: metrics-server
+  
+  # --- Ingress ---
+  ingress:
+    # 1. Allow the Control Plane (kube-apiserver) to scrape metrics-server
+    #    metrics-server usually listens on port 443 or 4443.
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "4443"
+              protocol: TCP
+
+  # --- Egress ---
+  egress:
+    # 2. Allow egress to the Kubernetes API Server
+    #    Required for service discovery and resource listing.
+    - toEntities:
+        - kube-apiserver
+    
+    # 3. Allow egress to Kubelets (Nodes) to scrape container metrics
+    #    'host' covers the node the pod is running on.
+    #    'remote-node' covers all other nodes in the cluster.
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
+
+    # 4. Allow DNS Resolution
+    #    Even with ccnp-allow-dns-queries, your global default-deny requires
+    #    an explicit egress rule from the source pod.
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP

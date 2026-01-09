@@ -1,0 +1,86 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+      app.kubernetes.io/instance: kube-prometheus-stack
+
+  # --- Ingress ---
+  ingress:
+    # 1. Allow access from Traefik (Web UI)
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "3000" # Standard Grafana container port
+              protocol: TCP
+
+  # --- Egress ---
+  egress:
+    # 1. Kubernetes API Server
+    - toEntities:
+        - kube-apiserver
+    - toServices:
+        - k8sService:
+            serviceName: kubernetes
+            namespace: default
+    - toCIDR:
+        - 10.96.0.1/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+
+    # 2. DNS Resolution (Requested)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: coredns
+            namespace: kube-system
+
+    # 3. Prometheus (Datasource)
+    #    Allow Grafana to fetch data from Prometheus in the same namespace.
+    - toServices:
+        - k8sService:
+            serviceName: kube-prometheus-stack-prometheus
+            namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+
+    # 4. Internet Access
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    
+    # 5. Allow Grafana Test Pod
+    #    Allow the test pod to connect to Grafana for health checks.
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+            app.kubernetes.io/instance: kube-prometheus-stack
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP

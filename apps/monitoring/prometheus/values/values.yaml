@@ -29,3 +29,29 @@ grafana:
     existingSecret: "app-secrets-grafana"
     userKey: user
     passwordKey: password
+  sidecar:
+    dashboards:
+      startupProbe:
+        httpGet:
+          port: 8081
+    datasources:
+      startupProbe:
+        httpGet:
+          port: 8082
+
+coreDns:
+  enabled: true
+  service:
+    enabled: true
+    port: 9153
+    targetPort: 9153
+
+    ipDualStack:
+      enabled: false
+      ipFamilies: [ "IPv6", "IPv4" ]
+      ipFamilyPolicy: "PreferDualStack"
+    selector:
+      k8s-app: coredns
+
+kubeProxy:
+  enabled: false

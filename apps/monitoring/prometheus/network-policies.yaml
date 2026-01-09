@@ -1,0 +1,297 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: grafana-rules
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+      app.kubernetes.io/instance: kube-prometheus-stack
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+    - toServices:
+        - k8sService:
+            serviceName: kubernetes
+            namespace: default
+    - toCIDR:
+        - "10.96.0.1/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: coredns
+            namespace: kube-system
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            app.kubernetes.io/instance: kube-prometheus-stack-prometheus
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+        # 6. Allow connecting to Alertmanager
+        - toServices:
+            - k8sService:
+                serviceName: kube-prometheus-stack-alertmanager
+                namespace: monitoring
+          toPorts:
+            - ports:
+                - port: "9093"
+                  protocol: TCP
+        # 7. Allow connecting to Loki
+        - toServices:
+            - k8sService:
+                serviceName: loki
+                namespace: monitoring
+          toPorts:
+            - ports:
+                - port: "3100"
+                  protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-operator-rules
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
+  egress:
+    - toEntities:
+        - kube-apiserver
+    - toServices:
+        - k8sService:
+            serviceName: kubernetes
+            namespace: default
+    - toCIDR:
+        - "10.96.0.1/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-server-rules
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+      prometheus: kube-prometheus-stack-prometheus
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+            app.kubernetes.io/instance: kube-prometheus-stack
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+    - toServices:
+        - k8sService:
+            serviceName: kubernetes
+            namespace: default
+    - toCIDR:
+        - "10.96.0.1/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: alertmanager
+            alertmanager: kube-prometheus-stack-alertmanager
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP
+    # 4. Allow scraping of in-namespace targets
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kube-state-metrics
+        - matchLabels:
+            app.kubernetes.io/name: prometheus-node-exporter
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "8081"
+              protocol: TCP
+            - port: "9100"
+              protocol: TCP
+    # 5. Allow scraping of kubelets
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
+    # 6. Allow scraping of coredns
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "9153"
+              protocol: TCP
+    # 7. Allow scraping of etcd
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            component: etcd
+      toPorts:
+        - ports:
+            - port: "2379"
+              protocol: TCP
+    # 8. Allow scraping of metrics-server
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            app.kubernetes.io/name: metrics-server
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: alertmanager-rules
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: alertmanager
+      toPorts:
+        - ports:
+            - port: "9094"
+              protocol: TCP
+            - port: "9094"
+              protocol: UDP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "80"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kube-state-metrics-rules
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+    - toServices:
+        - k8sService:
+            serviceName: kubernetes
+            namespace: default
+    - toCIDR:
+        - "10.96.0.1/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
