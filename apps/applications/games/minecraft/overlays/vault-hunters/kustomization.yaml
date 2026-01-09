@@ -5,7 +5,6 @@ namespace: games
 # 1. Base Logic
 resources:
   - ../../base
-  - backup-pv.yaml
 
 # 2. Add Name Suffix
 nameSuffix: -vh
