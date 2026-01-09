@@ -324,6 +324,8 @@ data:
             authorization_policy: 'two_factor'
             grant_types:
               - 'authorization_code'
+            response_types:
+              - 'code'
             consent_mode: 'pre-configured'
             pre_configured_consent_duration: '30 days'
             redirect_uris:

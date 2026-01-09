@@ -42,9 +42,21 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: authelia
+            namespace: core
+      toPorts:
+        - ports:
+            - port: "9091"
+              protocol: "TCP"
     # === Allow Egress to fortress.kerrlab.app:3306 ===
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
+    - toCIDR:
+        - "10.10.1.218/32"
       toPorts:
         - ports:
             - port: "3306"

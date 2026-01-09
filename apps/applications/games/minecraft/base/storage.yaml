@@ -11,6 +11,28 @@ spec:
     requests:
       storage: 20Gi
 ---
+# === Backup ===
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: minecraft-backup-nfs
+  labels:
+    pv-name: minecraft-backup-nfs
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - async
+    - noatime
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/minecraft/base/backups #unique path
+  storageClassName: synostorage-nfs
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -22,4 +44,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
+  selector:
+    matchLabels:
+      pv-name: minecraft-backup-nfs
   storageClassName: synostorage-nfs

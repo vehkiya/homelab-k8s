@@ -64,8 +64,22 @@ patches:
         resources:
           requests:
             storage: 64Gi # Increased from the base 20Gi
-
-    # === Patch base PVC so it refers the defined PV and deployment refers to renamed PVC ===
+  # === Update backup PV for overlay ===
+  - target:
+      kind: PersistentVolume
+      name: minecraft-backup-nfs
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: minecraft-backup-nfs
+        labels:
+          pv-name: minecraft-backup-nfs-vh # Add suffix to label
+      spec:
+        nfs:
+          # Using a folder for this instance of minecraft
+          path: /volume1/cluster/minecraft/vault-hunters/backups
+  # === Patch base PVC so it refers the defined PV and deployment refers to renamed PVC ===
   - target:
       kind: PersistentVolumeClaim
       name: minecraft-backup-pvc
@@ -77,7 +91,7 @@ patches:
       spec:
         selector:
           matchLabels:
-            pv-name: minecraft-vh-backup-nfs-pv
+            pv-name: minecraft-backup-nfs-vh
   # === Patch Service to assign static IP in pool ===
   - target:
       kind: Service
