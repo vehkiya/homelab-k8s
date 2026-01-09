@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: romm-policy
-  namespace: home
+  namespace: games
 spec:
   endpointSelector:
     matchLabels:

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: romm-config
-  namespace: home
+  namespace: games
 data:
   config.yml: |
     exclude:

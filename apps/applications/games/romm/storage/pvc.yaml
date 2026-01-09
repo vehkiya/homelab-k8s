@@ -16,7 +16,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-pvc
-  namespace: home
+  namespace: games
 spec:
   accessModes:
     - ReadWriteMany
