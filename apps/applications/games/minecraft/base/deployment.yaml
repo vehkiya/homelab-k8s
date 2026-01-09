@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+  namespace: games
+  labels:
+    app: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - performance
+      
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        # --- Game Server ---
+        - name: minecraft
+          image: itzg/minecraft-server
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 25565
+              name: minecraft
+              protocol: TCP
+            - containerPort: 24454
+              name: voice-tcp
+              protocol: TCP
+            - containerPort: 24454
+              name: voice-udp
+              protocol: UDP
+          envFrom:
+            - configMapRef:
+                name: minecraft-config
+            - secretRef:
+                name: minecraft-secret
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          startupProbe:
+            tcpSocket:
+              port: 25565
+            failureThreshold: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "12Gi"
+              cpu: "2000m" # Requesting 2 full cores discourages E-core placement
+            limits:
+              memory: "16Gi"
+              cpu: "4000m"
+        # --- Backup Sidecar ---
+        - name: backup-sidecar
+          image: alpine:latest
+          securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: true
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - |# Install tools
+              apk add --no-cache inotify-tools rsync
+
+              echo "Starting Backup Watcher..."
+              
+              # Watch the source directory for new files (event: close_write)
+              # -m: Monitor indefinitely
+              # -r: Recursive (optional, if plugin uses subfolders)
+              # -e close_write: Only trigger when a file is fully written/closed
+              inotifywait -m /source -e close_write |
+              while read path action file; do
+                  echo "New backup detected: $file"
+                  # Use rsync to copy to NFS (avoids re-copying if script restarts)
+                  rsync -av --no-o --no-g /source/ /dest/
+                  echo "Synced to NFS."
+              done
+          volumeMounts:
+            - name: data
+              mountPath: /source
+              subPath: simplebackups
+              readOnly: true
+            - name: backups
+              mountPath: /dest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: minecraft-data-pvc
+        # 'backups' volume is defined in overlay patches or mapped here if generic
+        - name: backups
+          persistentVolumeClaim:
+            claimName: minecraft-backup-pvc

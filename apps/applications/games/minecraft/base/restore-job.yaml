@@ -1,0 +1,78 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: restore-last-backup
+  # requires manual scaling down of deployment
+spec:
+  # 1. Disable automatic execution
+  suspend: true
+  # 2. Schedule is required but ignored due to suspend (put anything)
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      # Do not restart if the script crashes (prevents loops)
+      backoffLimit: 0
+      template:
+        spec:
+          securityContext:
+            runAsUser: 0
+          containers:
+            - name: restorer
+              image: alpine:latest
+              env:
+                - name: TARGET_DEPLOYMENT
+                  value: "minecraft"
+                - name: BACKUP_DIRECTORY # from minecraft-backup-pvc
+                  value: "/backups"
+                - name: RESTORE_DIRECTORY # from minecraft-data-pvc
+                  value: "/data"
+              command: [ "/bin/sh", "-c" ]
+              args:
+                - |
+                  set -e
+                  
+                  # 1. Install Unzip
+                  apk add --no-cache unzip
+                  
+                  # 2. Configuration
+                  # You can override these paths via Env Vars in overlays if needed
+                  BACKUP_DIR="${BACKUP_DIRECTORY:-/backups}"
+                  RESTORE_DIR="${RESTORE_DIRECTORY:-/data}"
+                  
+                  echo "📂 Scanning $BACKUP_DIR for backups..."
+                  ls -las "${BACKUP_DIRECTORY}"
+                  
+                  # 3. Find latest zip (sort by time, take last)
+                  LATEST_ZIP=$(find "$BACKUP_DIR" -maxdepth 1 -name "*.zip" -type f | xargs ls -t | head -n 1)
+                  
+                  if [ -z "$LATEST_ZIP" ]; then
+                    echo "❌ No .zip backup files found!"
+                    exit 1
+                  fi
+                  
+                  echo "Found backup: $LATEST_ZIP"
+                  echo "♻️  Restoring to: $RESTORE_DIR..."
+                  
+                  # 4. Unzip
+                  # -o: overwrite existing files without prompting
+                  unzip -qo "$LATEST_ZIP" -d "$RESTORE_DIR"
+                  
+                  # 5. Fix permissions
+                  echo "👤 Fixing ownership to 1000:1000..."
+                  # Recursive chown to ensure the 'minecraft' user can read/write the new files
+                  chown -R 1000:1000 "$RESTORE_DIR"
+
+                  echo "✅ Restore Complete."
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+                - name: backup
+                  mountPath: /backups
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: minecraft-data-pvc
+            - name: backup
+              persistentVolumeClaim:
+                claimName: minecraft-backup-pvc
+          restartPolicy: Never

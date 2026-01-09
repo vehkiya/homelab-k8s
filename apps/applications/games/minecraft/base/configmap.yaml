@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minecraft-config
+  namespace: games
+data:
+  EULA: "TRUE"
+  TZ: "Europe/Chisinau"
+  MEMORY: "4G"
+  ENABLE_WHITELIST: "true"

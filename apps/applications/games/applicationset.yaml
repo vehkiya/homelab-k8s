@@ -1,15 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: home-applications
+  name: games-applications
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
-          - name: bar-assistant
-          - name: mealie
-          - name: wedding-share
+          # Standard app structure
+          - name: romm
+            path: apps/applications/games/romm
+          
+          # Nested overlay structure
+          - name: minecraft-vh
+            path: apps/applications/games/minecraft/overlays/vault-hunters
+
   template:
     metadata:
       name: '{{name}}'
@@ -19,10 +24,11 @@ spec:
       source:
         repoURL: https://github.com/vehkiya/homelab-k8s.git
         targetRevision: HEAD
-        path: 'apps/applications/home/{{name}}'
+        # Use the specific path defined in the list above
+        path: '{{path}}'
       destination:
         server: https://kube.kerrlab.app:6443
-        namespace: home
+        namespace: games
       syncPolicy:
         automated:
           prune: true

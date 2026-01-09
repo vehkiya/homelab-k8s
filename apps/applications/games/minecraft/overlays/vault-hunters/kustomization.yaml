@@ -1,0 +1,117 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: games
+
+# 1. Base Logic
+resources:
+  - ../../base
+  - backup-pv.yaml
+
+# 2. Add Name Suffix
+nameSuffix: -vh
+
+configurations:
+  - kustomize-config.yaml
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app: minecraft-vh
+
+images:
+  - name: itzg/minecraft-server
+    newTag: java17
+
+# 3. Patches
+patches:
+  # === Override config ===
+  - target:
+      kind: ConfigMap
+      name: minecraft-config
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: minecraft-config
+      data:
+        #  CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/vault-hunters-1-18-2"
+        CF_SLUG: "vault-hunters-1-18-2"
+        CF_FORCE_SYNCHRONIZE: "TRUE"
+        TYPE: "AUTO_CURSEFORGE"
+        VERSION: "1.18.2"
+        OPS: "Kerrlab,JusApee"
+        SERVER_NAME: "Vault Hunters S4 Server"
+        DIFFICULTY: "hard"
+        SPAWN_PROTECTION: "0"
+        USE_AIKAR_FLAGS: "TRUE"
+        USE_MEOWICE_FLAGS: "TRUE"
+        # USE_MEOWICE_GRAALVM_FLAGS: "TRUE"
+        INIT_MEMORY: "6G"
+        MAX_MEMORY: "12G"
+        VIEW_DISTANCE: "16"
+        MODE: "survival"
+        WHITELIST: "Kerrlab,JusApee"
+        OVERRIDE_WHITELIST: "true"
+  # === Increase default storage size ===
+  - target:
+      kind: PersistentVolumeClaim
+      name: minecraft-data-pvc
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: minecraft-data-pvc
+      spec:
+        resources:
+          requests:
+            storage: 64Gi # Increased from the base 20Gi
+
+    # === Patch base PVC so it refers the defined PV and deployment refers to renamed PVC ===
+  - target:
+      kind: PersistentVolumeClaim
+      name: minecraft-backup-pvc
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: minecraft-backup-pvc # Matches Base Name
+      spec:
+        selector:
+          matchLabels:
+            pv-name: minecraft-vh-backup-nfs-pv
+  # === Patch Service to assign static IP in pool ===
+  - target:
+      kind: Service
+      name: minecraft-vh # Matches the nameSuffix version if targeted correctly, or use base name
+    patch: |-
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: minecraft-vh
+        labels:
+          pool: dmz-lb-pool
+        annotations:
+          lbipam.cilium.io/ips: "10.20.1.140"
+  # === Patch restore backup job parameters ===
+  - target:
+      kind: CronJob # Changed from Job
+      name: restore-last-backup
+    patch: |-
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: restore-last-backup
+      spec:
+        jobTemplate:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: restorer
+                    env:
+                      - name: TARGET_DEPLOYMENT
+                        value: "minecraft-vh"
+                      - name: BACKUP_DIRECTORY
+                        value: "/backups"
+                      - name: RESTORE_DIRECTORY
+                        value: "/data"

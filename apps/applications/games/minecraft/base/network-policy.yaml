@@ -1,0 +1,61 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: minecraft-policy
+  namespace: games
+spec:
+  endpointSelector:
+    matchLabels:
+      app: minecraft
+  ingress:
+    # Allow Game Clients from Internet
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
+            - port: "24454"
+              protocol: TCP
+            - port: "24454"
+              protocol: UDP
+  egress:
+    # Allow DNS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    - toCIDR:
+        - "fd00:11:0:0:0:0:0:a/128" # The IPv6 DNS IP from your logs
+        - "10.96.0.10/32"         # Standard IPv4 DNS IP (optional but good practice)
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # Allow HTTP/HTTPS to World (CurseForge/Updates)
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: coredns
+            namespace: kube-system
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP              
