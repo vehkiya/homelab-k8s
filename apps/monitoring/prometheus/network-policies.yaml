@@ -61,23 +61,23 @@ spec:
             - port: "443"
               protocol: TCP
         # 6. Allow connecting to Alertmanager
-        - toServices:
-            - k8sService:
-                serviceName: kube-prometheus-stack-alertmanager
-                namespace: monitoring
-          toPorts:
-            - ports:
-                - port: "9093"
-                  protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: kube-prometheus-stack-alertmanager
+            namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP
         # 7. Allow connecting to Loki
-        - toServices:
-            - k8sService:
-                serviceName: loki
-                namespace: monitoring
-          toPorts:
-            - ports:
-                - port: "3100"
-                  protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: loki
+            namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "3100"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
