@@ -37,7 +37,7 @@ spec:
       terminationGracePeriodSeconds: 30
       initContainers:
         - name: prepare-config
-          image: alpine/k8s:1.35.0@sha256:18bc02c1e0df04451f4f9194eb7b7341c1165da5495459b52f85f72fb9545032
+          image: alpine/k8s
           command:
             - /bin/sh
             - -c
@@ -137,7 +137,7 @@ spec:
                 - ALL
       containers:
         - name: posterizarr
-          image: ghcr.io/fscorrupt/posterizarr:2.2.19@sha256:f7bf33751554db6a0cc557881ade8d3e5205b52d98ae20b155de9de33fddc44b
+          image: ghcr.io/fscorrupt/posterizarr
           ports:
             - name: web-ui
               containerPort: 8000

@@ -19,7 +19,7 @@ spec:
       # This container runs first to prepare the config with correct permissions
       initContainers:
         - name: prepare-config
-          image: busybox:1.37@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+          image: busybox
           command: [ "/bin/sh", "-c" ]
           args:
             - |
@@ -43,7 +43,7 @@ spec:
               mountPath: /mosquitto-init/config
       containers:
         - name: mosquitto
-          image: eclipse-mosquitto:2.0.22@sha256:077fe4ff4c49df1e860c98335c77dda08360629e0e2a718147027e4db3eace9d
+          image: eclipse-mosquitto
           ports:
             - containerPort: 1883
               name: mqtt

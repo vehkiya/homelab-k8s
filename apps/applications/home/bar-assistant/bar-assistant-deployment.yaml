@@ -19,14 +19,14 @@ spec:
     spec:
       initContainers:
         - name: volume-permissions
-          image: busybox:1.37@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+          image: busybox
           command: [ "sh", "-c", "chown 33:33 /var/www/cocktails/storage/bar-assistant" ]
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant
       containers:
         - name: bar-assistant-server
-          image: ghcr.io/karlomikus/barassistant:5.11.2@sha256:0f2b1a8cd148e4a5ec24e8fa601b48a9d63f935942ca0b1ab8e4d5d348dfbb5d
+          image: ghcr.io/karlomikus/barassistant
           envFrom:
             - configMapRef:
                 name: bar-assistant-config

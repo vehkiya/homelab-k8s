@@ -18,7 +18,7 @@ spec:
     spec:
       initContainers:
         - name: copy-config
-          image: busybox:1.37@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+          image: busybox
           command:
             - "sh"
             - "-c"
@@ -30,7 +30,7 @@ spec:
               mountPath: /data
       containers:
         - name: zigbee2mqtt
-          image: ghcr.io/koenkk/zigbee2mqtt:2.7.2@sha256:60a295b40f4e7fb7ab4d995932369e50f2529837272fa4979e986ec1ffdb7fce
+          image: ghcr.io/koenkk/zigbee2mqtt
           ports:
             - containerPort: 8080
               name: frontend

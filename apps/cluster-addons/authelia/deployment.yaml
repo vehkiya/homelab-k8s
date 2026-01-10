@@ -18,7 +18,7 @@ spec:
       enableServiceLinks: false
       initContainers:
         - name: prepare-config
-          image: alpine/k8s:1.35.0@sha256:18bc02c1e0df04451f4f9194eb7b7341c1165da5495459b52f85f72fb9545032
+          image: alpine/k8s
           command:
             - /bin/sh
             - -c
@@ -86,7 +86,7 @@ spec:
                 - ALL
       containers:
         - name: authelia
-          image: ghcr.io/authelia/authelia:4.39.15@sha256:d23ee3c721d465b4749cc58541cda4aebe5aa6f19d7b5ce0afebb44ebee69591
+          image: ghcr.io/authelia/authelia
           ports:
             - name: http
               containerPort: 9091

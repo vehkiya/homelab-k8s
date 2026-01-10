@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: prowlarr
-          image: ghcr.io/home-operations/prowlarr:2.3.2@sha256:7bdb5470232e8bdf2cf3cd9de60fb1d7180062386163a6c5ad4ea4d2aeddad70
+          image: ghcr.io/home-operations/prowlarr
           env:
             - name: PGID
               value: "100"

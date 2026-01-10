@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: uptime-kuma
-          image: ghcr.io/louislam/uptime-kuma:2.1.0-beta.1@sha256:e690e9f4fc46bb2f24f9619c56c9d96e1d8eddd1f6563480a4b9787c582da762
+          image: ghcr.io/louislam/uptime-kuma
           volumeMounts:
             - name: config
               mountPath: /app/data

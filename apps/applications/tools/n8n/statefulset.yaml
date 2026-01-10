@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
         - name: volume-permissions
-          image: busybox:1.37@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+          image: busybox
           command: [ "sh", "-c", "chown 1000:1000 /data" ]
           volumeMounts:
             - name: data
@@ -28,7 +28,7 @@ spec:
             - -c
             - sleep 5; n8n start
           name: n8n
-          image: docker.n8n.io/n8nio/n8n:2.3.2@sha256:aba343e23c1c757c535c73f33f1b7a5c940b1495d8910bf6cde9c2b5e4ac53a7
+          image: docker.n8n.io/n8nio/n8n
           env:
             - name: TZ
               value: "Europe/Chisinau"

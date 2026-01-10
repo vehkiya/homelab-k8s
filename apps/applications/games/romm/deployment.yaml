@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: romm
-          image: rommapp/romm@sha256:79d2ab75ce6bdb8f0c7b1d8bb33a456566de5470d5d0e451fbc0919cc84679e8
+          image: rommapp/romm
           ports:
             - containerPort: 8080
               name: http
