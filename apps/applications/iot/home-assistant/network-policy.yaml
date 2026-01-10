@@ -59,6 +59,9 @@ spec:
         - k8sService:
             serviceName: overseerr-ui
             namespace: media
+        - k8sService:
+            serviceName: minecraft-vh
+            namespace: games
     # === Allow Internet Access (Integrations/Updates) ===
     - toEntities:
         - "world"
