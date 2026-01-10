@@ -8,6 +8,15 @@ spec:
     matchLabels:
       app: minecraft
   ingress:
+    # Allow access from Home Assistant
+    - fromEndpoints:
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
     # Allow Game Clients from Internet
     - fromEntities:
         - world
