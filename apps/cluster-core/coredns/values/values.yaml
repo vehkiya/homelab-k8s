@@ -7,10 +7,10 @@ service:
   clusterIP: "10.96.0.10" # Default coredns service IP in the 10.96.0.0/12 range
   # K8s 1.35 feature
   trafficDistribution: PreferSameNode
-  ipFamilyPolicy: PreferDualStack
+  ipFamilyPolicy: SingleStack
   ipFamilies:
     - IPv4
-    - IPv6
+#    - IPv6
 
 # Ensure pods are spread across different nodes for high availability.
 affinity:
@@ -60,14 +60,23 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
           ttl 30
-      # Serves a /metrics endpoint on :9153, required for serviceMonitor
-      - name: cache
-        parameters: 600
+      # === IPv6 disabled, fail fast ===
+      - name: template
+        parameters: ANY AAAA
+        config:
+          rcode: NXDOMAIN
+      # === Block reverse DNS for LAN IPs ===
+      - name: template
+        parameters: ANY PTR 10.in-addr.arpa 168.192.in-addr.arpa
+        config:
+          rcode: NXDOMAIN
       - name: forward
-        parameters: . 1.1.1.1 1.0.0.1
+        parameters: . /etc/resolv.conf
         configBlock: |-
           policy random
           max_concurrent 1000
+      - name: cache
+        parameters: 600
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: loop

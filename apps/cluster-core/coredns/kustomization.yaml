@@ -12,3 +12,19 @@ helmCharts:
     
 resources:
   - network-policy.yaml
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: coredns
+      namespace: kube-system
+    patch: |-
+      - op: replace
+        path: /kind
+        value: DaemonSet
+      - op: remove
+        path: /spec/replicas
+      - op: remove
+        path: /spec/strategy

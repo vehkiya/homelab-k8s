@@ -4,6 +4,7 @@ customization:
         - iommu.passthrough=1
         - intel_iommu=on
         - iommu=pt
+        - cpufreq.default_governor=performance
     systemExtensions:
         officialExtensions:
             - siderolabs/btrfs
