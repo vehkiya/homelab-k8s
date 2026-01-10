@@ -30,7 +30,8 @@ spec:
     - noatime
     - rsize=1048576
     - wsize=1048576
-    - soft- timeo=30    # 3 second timeout
+    - soft
+    - timeo=30    # 3 second timeout
     - retrans=3         # Retry 3 times then give up
   nfs:
     server: fortress.kerrlab.app

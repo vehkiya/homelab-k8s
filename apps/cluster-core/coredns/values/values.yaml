@@ -65,11 +65,6 @@ servers:
         parameters: ANY AAAA
         config:
           rcode: NXDOMAIN
-      # === Block reverse DNS for LAN IPs ===
-      - name: template
-        parameters: ANY PTR 10.in-addr.arpa 168.192.in-addr.arpa
-        config:
-          rcode: NXDOMAIN
       - name: forward
         parameters: . /etc/resolv.conf
         configBlock: |-
