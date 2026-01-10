@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: mealie
-          image: ghcr.io/mealie-recipes/mealie
+          image: ghcr.io/mealie-recipes/mealie@sha256:57713693dceca9a124f00f165eaf8f5c41de757e7f63f8a7b80625488605dc61
           envFrom:
             - configMapRef:
                 name: mealie-config

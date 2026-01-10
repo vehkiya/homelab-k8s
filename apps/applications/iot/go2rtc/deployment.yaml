@@ -19,7 +19,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: go2rtc
-          image: ghcr.io/alexxit/go2rtc
+          image: ghcr.io/alexxit/go2rtc@sha256:f394f6329f5389a4c9a7fc54b09fdec9621bbb78bf7a672b973440bbdfb02241
           ports:
             - containerPort: 1984
               name: http

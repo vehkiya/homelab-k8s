@@ -19,7 +19,7 @@ labels:
 
 images:
   - name: itzg/minecraft-server
-    newTag: java17
+    newTag: java17@sha256:f2dc8419060277f5a6f641f691c5c753968313e353e755caf2d891b9a03035bb
 
 # 3. Patches
 patches:

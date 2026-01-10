@@ -86,7 +86,7 @@ spec:
                 - ALL
       containers:
         - name: authelia
-          image: ghcr.io/authelia/authelia
+          image: ghcr.io/authelia/authelia@sha256:d23ee3c721d465b4749cc58541cda4aebe5aa6f19d7b5ce0afebb44ebee69591
           ports:
             - name: http
               containerPort: 9091

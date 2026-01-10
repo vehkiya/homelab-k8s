@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: wedding-share
-          image: cirx08/wedding_share
+          image: cirx08/wedding_share@sha256:d5e1477868c439f172617dd328a49a1f346fd0cf1a3a1c76e1e98c46aab3525a
           env:
             - name: TZ
               value: "Europe/Chisinau"
