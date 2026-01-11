@@ -5,8 +5,10 @@
   },
   "extends": [
     "config:recommended",
-    "config:recommended"
+    ":dependencyDashboard"
   ],
+  "timezone": "Europe/Chisinau",
+  "minimumReleaseAge": "1 day",
   "labels": [
     "renovate",
     "dependencies"
@@ -23,7 +25,8 @@
     {
       "matchDatasources": [
         "docker"
-      ]
+      ],
+      "pinDigests": false
     },
     {
       "matchManagers": [
