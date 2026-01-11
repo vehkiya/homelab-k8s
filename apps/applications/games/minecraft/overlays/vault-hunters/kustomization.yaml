@@ -45,12 +45,13 @@ patches:
         USE_AIKAR_FLAGS: "TRUE"
         USE_MEOWICE_FLAGS: "TRUE"
         # USE_MEOWICE_GRAALVM_FLAGS: "TRUE"
-        INIT_MEMORY: "6G"
+        INIT_MEMORY: "8G"
         MAX_MEMORY: "12G"
         VIEW_DISTANCE: "16"
         MODE: "survival"
         WHITELIST: "Kerrlab,JusApee"
         OVERRIDE_WHITELIST: "true"
+        CF_FORCE_INCLUDE_MODS: "spark"
   # === Increase default storage size ===
   - target:
       kind: PersistentVolumeClaim

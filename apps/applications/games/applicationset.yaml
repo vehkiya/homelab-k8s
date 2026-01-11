@@ -30,9 +30,6 @@ spec:
         server: https://kube.kerrlab.app:6443
         namespace: games
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
