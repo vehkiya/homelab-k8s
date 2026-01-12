@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: renovate/renovate
-    newTag: 42.76.5@sha256:a9113a2361ba6c372e4a4efa2d0b0341263f98109d35474ff27b3baff8af2dce
+    newTag: 42.78.1@sha256:14ba2fe2b288848b671b21045f416385c55271b43e7e85819375580494d1d25d
