@@ -6,7 +6,7 @@ resources:
   - namespace.yaml
   - argocd-secret.yaml
   # renovate: datasource=github-tags depName=argoproj/argo-cd
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.3/manifests/ha/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.5/manifests/ha/install.yaml
   - argocd-repositories-external-secret.yaml
   - ingress-route.yaml
   - network-policy.yaml
