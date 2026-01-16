@@ -8,9 +8,6 @@
     ":dependencyDashboard"
   ],
   "timezone": "Europe/Chisinau",
-  "schedule": [
-    "after 10pm and before 6am"
-  ],
   "automergeSchedule": [],
   "labels": [
     "renovate",
@@ -105,6 +102,9 @@
       "matchPackageNames": [
         "/renovate/renovate/",
         "/kube-prometheus-stack/"
+      ],
+      "schedule": [
+        "after 10pm and before 6am"
       ]
     }
   ]
