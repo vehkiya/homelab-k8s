@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Renovate Config
+        run: npx --yes --package renovate renovate-config-validator
+
+      - name: Lint YAML
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_data: |
+            extends: default
+            rules:
+              line-length: disable
+              document-start: disable
+              truthy: disable
+
+      - name: Install Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Install Kubeconform
+        run: |
+          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
+          tar xf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Build & Validate Kustomize Layers
+        run: |
+          # Find all kustomization.yaml files and build them
+          find . -type f -name kustomization.yaml -print0 | xargs -0 -I {} dirname {} | while read layer; do
+            echo "Validating $layer..."
+            kustomize build "$layer" > /dev/null 2>&1 || { echo "Kustomize build failed for $layer"; exit 1; }
+            # Only run kubeconform on success, and ignore CRDs/missing schemas often found in homelabs
+            kustomize build "$layer" | kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" || { echo "Kubeconform failed for $layer"; exit 1; }
+          done
