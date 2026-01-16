@@ -104,7 +104,8 @@
         "/kube-prometheus-stack/"
       ],
       "schedule": [
-        "after 10pm and before 6am"
+        "after 10pm",
+        "before 6am"
       ]
     }
   ]
