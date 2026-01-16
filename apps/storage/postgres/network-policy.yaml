@@ -9,7 +9,7 @@ spec:
   endpointSelector:
     matchLabels:
       cnpg.io/cluster: postgres-db
-  
+
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -28,7 +28,7 @@ spec:
         - ports:
             - port: "5432"
               protocol: "TCP"
-    
+
     # Rule B: Allow the Operator to connect
     - fromEndpoints:
         - matchLabels:
@@ -39,7 +39,7 @@ spec:
               protocol: "TCP"
             - port: "5432"
               protocol: "TCP"
-    
+
     # Rule C: Allow other DB pods to connect (for replication)
     - fromEndpoints:
         - matchLabels:
@@ -90,7 +90,7 @@ spec:
               protocol: "UDP"
             - port: "53"
               protocol: "TCP"
-    
+
     # Rule B: Allow DB pods to talk to each other
     - toEndpoints:
         - matchLabels:

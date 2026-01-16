@@ -33,22 +33,22 @@ spec:
             - |
               VERSION="v2.28.2"
               DOWNLOAD_URL="https://github.com/VueTorrent/VueTorrent/releases/download/${VERSION}/vuetorrent.zip"
-              
+
               echo "Downloading VueTorrent version ${VERSION}..."
               curl -L "$DOWNLOAD_URL" -o /tmp/vuetorrent.zip
-              
+
               if [ ! -f /tmp/vuetorrent.zip ]; then
                 echo "Download failed. Exiting."
                 exit 1
               fi
-              
+
               echo "Unpacking to /vuetorrent..."
               # Now the unzip command will work
               unzip /tmp/vuetorrent.zip -d /
-              
+
               # Clean up
               rm /tmp/vuetorrent.zip
-              
+
               echo "VueTorrent installation complete."
           volumeMounts:
             - name: vuetorrent-webui
@@ -129,4 +129,4 @@ spec:
           persistentVolumeClaim:
             claimName: qbittorrent-config-pvc
         - name: vuetorrent-webui
-          emptyDir: { } 
+          emptyDir: { }

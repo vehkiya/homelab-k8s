@@ -21,7 +21,7 @@ spec:
               protocol: "TCP"
     - fromEntities:
         - "host" # Allows the Kubelet on the node
-  
+
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===

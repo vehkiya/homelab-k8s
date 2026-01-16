@@ -7,7 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app: zigbee2mqtt
-  
+
   # ----=== Ingress ===----
   ingress:
     # === Allow access from Traefik ===
@@ -44,4 +44,4 @@ spec:
       toPorts:
         - ports:
             - port: "6638"
-              protocol: TCP      
+              protocol: TCP

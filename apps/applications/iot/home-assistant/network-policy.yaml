@@ -25,7 +25,7 @@ spec:
         - ports:
             - port: "http"
               protocol: TCP
-  
+
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -39,7 +39,7 @@ spec:
               protocol: UDP
             - port: "53"
               protocol: TCP
-    # === Allow access to services ===
+    # === Allow access to services ===Try
     - toServices:
         - k8sService:
             serviceName: mosquitto-svc

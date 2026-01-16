@@ -6,7 +6,7 @@ metadata:
 spec:
   target:
     name: meilisearch-kubernetes-master-key
-  
+
   secretStoreRef:
     name: vaultwarden-fields
     kind: ClusterSecretStore

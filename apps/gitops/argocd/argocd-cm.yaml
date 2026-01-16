@@ -55,10 +55,9 @@ data:
         jsonPointers:
         - /status
   kustomize.buildOptions: "--enable-helm"
-  
+
   # Enables application status badge feature
   statusbadge.enabled: "true"
-  
+
   # cluster.inClusterEnabled indicates whether to allow in-cluster server address. This is enabled by default.
   cluster.inClusterEnabled: "false"
-  

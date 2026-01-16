@@ -111,4 +111,4 @@ zoneFiles:
       mc       IN  A   185.206.149.82
       ;
       ; Wildcard for all other services in the cluster
-      * IN  A   10.10.1.16      
+      * IN  A   10.10.1.16

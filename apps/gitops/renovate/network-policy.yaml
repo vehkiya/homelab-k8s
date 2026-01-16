@@ -19,7 +19,7 @@ spec:
               protocol: "UDP"
             - port: "53"
               protocol: "TCP"
-    
+
     # Allow access to the Kubernetes API server
     - toEntities:
         - "kube-apiserver"

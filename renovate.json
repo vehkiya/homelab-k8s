@@ -21,7 +21,7 @@
     {
       "matchManagers": [
         "helm-values",
-        "helm-release"
+        "helmv3"
       ],
       "groupName": "helm"
     },
@@ -102,7 +102,6 @@
         "digest"
       ],
       "automerge": true,
-      "ignoreTests": true,
       "matchPackageNames": [
         "/renovate/renovate/",
         "/kube-prometheus-stack/"

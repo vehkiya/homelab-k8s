@@ -8,7 +8,7 @@ helmCharts:
     releaseName: intel-device-plugins-operator
     namespace: inteldeviceplugins-system
     includeCRDs: true
-    
+
   - name: intel-device-plugins-gpu
     repo: https://intel.github.io/helm-charts/
     version: 0.34.1

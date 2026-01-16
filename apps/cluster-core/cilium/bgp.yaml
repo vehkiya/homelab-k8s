@@ -72,4 +72,4 @@ spec:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }          
+          - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }

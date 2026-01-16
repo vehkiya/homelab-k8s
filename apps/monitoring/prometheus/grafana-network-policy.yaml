@@ -73,7 +73,7 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
-    
+
     # 5. Allow Grafana Test Pod
     #    Allow the test pod to connect to Grafana for health checks.
     - toEndpoints:

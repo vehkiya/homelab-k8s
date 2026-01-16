@@ -33,4 +33,4 @@ spec:
       port: 32414
     - name: dlna
       protocol: UDP
-      port: 1900 
+      port: 1900

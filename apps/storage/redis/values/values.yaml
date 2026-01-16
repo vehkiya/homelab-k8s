@@ -12,7 +12,7 @@ master:
 replica:
   persistence:
     enabled: false
-    
+
 image:
   registry: docker.io
   repository: bitnamilegacy/redis

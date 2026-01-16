@@ -138,7 +138,7 @@ prometheus:
 wellKnownIdentities:
   enabled: true
 
-# Required for Multus  
+# Required for Multus
 cni:
   exclusive: false
 

@@ -7,7 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: metrics-server
-  
+
   # --- Ingress ---
   ingress:
     # 1. Allow the Control Plane (kube-apiserver) to scrape metrics-server
@@ -27,7 +27,7 @@ spec:
     #    Required for service discovery and resource listing.
     - toEntities:
         - kube-apiserver
-    
+
     # 3. Allow egress to Kubelets (Nodes) to scrape container metrics
     #    'host' covers the node the pod is running on.
     #    'remote-node' covers all other nodes in the cluster.

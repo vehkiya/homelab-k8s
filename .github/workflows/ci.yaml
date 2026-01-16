@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Renovate Config
+        run: npx --yes --package renovate renovate-config-validator
+
+      - name: Lint YAML
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_data: |
+            extends: default
+            rules:
+              line-length: disable
+              document-start: disable
+              truthy: disable
+              new-line-at-end-of-file: disable
+              comments: disable
+              comments-indentation: disable
+              braces: disable
+              brackets: disable
+              empty-lines: disable
+
+      - name: Setup Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/kubeconform
+            ~/.cache/kustomize
+          key: ${{ runner.os }}-k8s-cache-${{ hashFiles('**/kustomization.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-k8s-cache-
+
+      - name: Install Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Install Kubeconform
+        run: |
+          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
+          tar xf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+          rm kubeconform-linux-amd64.tar.gz
+
+      - name: Build & Validate Kustomize Layers
+        run: |
+          mkdir -p ~/.cache/kubeconform
+          set -o pipefail
+          # Find all kustomization.yaml files and build them
+          find . -type f -name kustomization.yaml -print0 | xargs -0 -I {} dirname {} | while read layer; do
+            echo "Validating $layer..."
+            kustomize build "$layer" --enable-helm | \
+            kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" \
+            -cache ~/.cache/kubeconform || \
+            { echo "Validation failed for $layer"; exit 1; }
+          done

@@ -56,4 +56,4 @@ spec:
             claimName: zigbee2mqtt-data-pvc
         - name: config
           configMap:
-            name: zigbee2mqtt-config            
+            name: zigbee2mqtt-config

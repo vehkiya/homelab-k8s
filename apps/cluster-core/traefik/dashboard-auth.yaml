@@ -8,8 +8,8 @@ spec:
     name: traefik-dashboard-auth-secret
     template:
       type: kubernetes.io/basic-auth
-  
-  
+
+
   secretStoreRef:
     name: vaultwarden-store
     kind: ClusterSecretStore

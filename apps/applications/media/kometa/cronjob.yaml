@@ -95,7 +95,7 @@ spec:
                   FONT_LIST="Montserrat-Medium.ttf"
                   FONT_SOURCE_DIR="/tmp/fonts"
                   FONT_DEST_DIR="/config/fonts"
-                  
+
                   for FONT_FILENAME in $FONT_LIST; do
                     FONT_SOURCE_PATH=$(find "$FONT_SOURCE_DIR" -type f -name "$FONT_FILENAME" | head -n 1)
                     FONT_DEST_PATH="$FONT_DEST_DIR/$FONT_FILENAME"
@@ -109,7 +109,7 @@ spec:
                     fi
                   done
                   echo "✅ Font processing complete"
-                  
+
                   ASSETS_FOLDER="/assets"
                   echo "ℹ️ Target Assets Folder: $ASSETS_FOLDER"
 

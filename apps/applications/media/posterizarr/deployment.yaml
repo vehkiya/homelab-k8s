@@ -94,7 +94,7 @@ spec:
                 ls -la /config
                 echo "--------------------------------------------------"
               fi
-              
+
               echo "📄 Processing custom fonts..."
               # Space-separated list of font filenames to copy
               FONT_LIST="Montserrat-Medium.ttf"

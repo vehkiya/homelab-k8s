@@ -7,26 +7,26 @@ data:
   configuration.yaml: |
     # Loads default set of integrations. Do not remove.
     default_config:
-    
+
     http:
       use_x_forwarded_for: true
       trusted_proxies:
         - 100.64.0.0/10
         - 10.10.1.0/24
-        # 1. Trust Kubernetes Pod Subnet. 
+        # 1. Trust Kubernetes Pod Subnet.
         - 10.244.0.0/16
         # 2. Trust Kubernetes Service Subnet.
         # This covers internal service-to-service communication.
         - 10.96.0.0/12
-        
-        # 3. Trust entire HomeLab VLAN. 
+
+        # 3. Trust entire HomeLab VLAN.
         # This covers K8s node IPs and the Traefik LoadBalancer IP (10.10.1.221).
         - 10.10.1.0/24
-        
+
         # 4. Standard loopback addresses (always good to include)
         - 127.0.0.1
         - ::1
-    
+
     # Load frontend themes from the themes folder
     frontend:
       themes: !include_dir_merge_named themes
@@ -34,18 +34,18 @@ data:
         - /local/card-mod.js
         - /hacsfiles/Bubble-Card/bubble-pop-up-fix.js
         - /hacsfiles/material-you-utilities/material-you-utilities.min.js
-    
+
     panel_custom:
       - name: material-you-panel
         url_path: material-you-configuration
         sidebar_title: Material You Utilities
         sidebar_icon: mdi:material-design
         module_url: /hacsfiles/material-you-utilities/material-you-utilities.min.js
-    
+
     automation: !include automations.yaml
     script: !include scripts.yaml
     scene: !include scenes.yaml
-    
+
     # Storage for Bubble Card Modules
     template:
       - trigger:
@@ -58,14 +58,13 @@ data:
             attributes:
               modules: "{{ trigger.event.data.modules }}"
               last_updated: "{{ trigger.event.data.last_updated }}"
-    
+
     go2rtc:
       url: http://go2rtc-svc.iot.svc.cluster.local:1984
-      
+
     homeassistant:
       allowlist_external_dirs:
         - /media
       media_dirs:
         llmvision: /config/media/llmvision
-        
-    
+

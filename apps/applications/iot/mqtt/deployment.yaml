@@ -27,12 +27,12 @@ spec:
               echo "Copying config and password files..."
               cp /mnt/config-ro/mosquitto.conf /mosquitto-init/config/mosquitto.conf
               cp /mnt/secret-ro/password_key /mosquitto-init/config/passwordfile
-              
+
               echo "Setting permissions and ownership..."
               # The 'mosquitto' user in the official image has UID/GID 1883
               chown -R 1883:1883 /mosquitto-init/config
               chmod 0700 /mosquitto-init/config/passwordfile
-              
+
               echo "Preparation complete."
           volumeMounts:
             - name: config-ro
@@ -62,7 +62,7 @@ spec:
               port: 1883
             initialDelaySeconds: 15
             periodSeconds: 20
-      
+
       volumes:
         # Read-only volume for the original ConfigMap
         - name: config-ro

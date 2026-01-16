@@ -262,7 +262,7 @@ spec:
         - ports:
             - port: "8087"
               protocol: "TCP"
-    
+
     # === Allow External Secrets Controller to talk to this pod ===
     - fromEndpoints:
         - matchLabels:

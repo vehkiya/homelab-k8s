@@ -20,7 +20,7 @@ data:
     # client_id = "oauth2-proxy"
     # client_secret is loaded from the environment variable
     code_challenge_method = "S256"
-    
+
     session_store_type = "redis"
     redis_connection_url = "redis://redis-master.redis.svc.cluster.local:6379/2"
     # Cookie Settings
@@ -34,7 +34,7 @@ data:
 
     # Email / User Settings
     email_domains = "kerrlab.app"
-    
+
     # Upstream / Forwarding Settings
     # We let Traefik handle the upstream, so we just need a static code.
     upstreams = [ "static://200" ]
