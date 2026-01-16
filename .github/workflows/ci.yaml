@@ -89,8 +89,7 @@ jobs:
 
           for layer in $LAYERS; do
             echo "Validating $layer..."
-            kustomize build "$layer" --enable-helm | \
-            kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" \
-            -cache ~/.cache/kubeconform || \
-            { echo "Validation failed for $layer"; exit 1; }
+            kustomize build "$layer" --enable-helm > /dev/null 2>&1 || { echo "Kustomize build failed for $layer"; exit 1; }
+            # Only run kubeconform on success, and ignore CRDs/missing schemas often found in homelabs
+            kustomize build "$layer" --enable-helm | kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" || { echo "Kubeconform failed for $layer"; exit 1; }
           done
