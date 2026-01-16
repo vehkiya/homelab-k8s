@@ -57,39 +57,11 @@ jobs:
         run: |
           mkdir -p ~/.cache/kubeconform
           set -o pipefail
-
-          # Determine changed files
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            git fetch origin ${{ github.base_ref }}
-            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD)
-          else
-            # For push to master/main, compare with previous commit
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
-          fi
-
-          # Find unique directories with kustomization.yaml closest to changed files
-          LAYERS=$(echo "$CHANGED_FILES" | while read file; do
-            dir=$(dirname "$file")
-            while [ "$dir" != "." ] && [ "$dir" != "/" ]; do
-              if [ -f "$dir/kustomization.yaml" ]; then
-                echo "$dir"
-                break
-              fi
-              dir=$(dirname "$dir")
-            done
-          done | sort -u)
-
-          if [ -z "$LAYERS" ]; then
-            echo "No Kustomize layers affected by changes."
-            exit 0
-          fi
-
-          echo "Validating the following layers:"
-          echo "$LAYERS"
-
-          for layer in $LAYERS; do
+          # Find all kustomization.yaml files and build them
+          find . -type f -name kustomization.yaml -print0 | xargs -0 -I {} dirname {} | while read layer; do
             echo "Validating $layer..."
-            kustomize build "$layer" --enable-helm > /dev/null 2>&1 || { echo "Kustomize build failed for $layer"; exit 1; }
-            # Only run kubeconform on success, and ignore CRDs/missing schemas often found in homelabs
-            kustomize build "$layer" --enable-helm | kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" || { echo "Kubeconform failed for $layer"; exit 1; }
+            kustomize build "$layer" --enable-helm | \
+            kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" \
+            -cache ~/.cache/kubeconform || \
+            { echo "Validation failed for $layer"; exit 1; }
           done
