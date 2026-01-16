@@ -8,7 +8,10 @@
     ":dependencyDashboard"
   ],
   "timezone": "Europe/Chisinau",
-  "minimumReleaseAge": "1 day",
+  "schedule": [
+    "after 10pm and before 6am"
+  ],
+  "automergeSchedule": [],
   "labels": [
     "renovate",
     "dependencies"
@@ -92,9 +95,6 @@
       "automerge": true
     },
     {
-      "schedule": [
-        "* 0 * * *"
-      ],
       "matchUpdateTypes": [
         "minor",
         "patch",
