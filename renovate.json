@@ -103,9 +103,9 @@
         "/renovate/renovate/",
         "/kube-prometheus-stack/"
       ],
+      "description": "Daily maintenance window for core GitOps and monitoring components to minimize daytime disruption",
       "schedule": [
-        "after 10pm",
-        "before 6am"
+        "before 4am"
       ]
     }
   ]
