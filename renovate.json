@@ -102,6 +102,7 @@
         "digest"
       ],
       "automerge": true,
+      "ignoreTests": true,
       "matchPackageNames": [
         "/renovate/renovate/",
         "/kube-prometheus-stack/"
