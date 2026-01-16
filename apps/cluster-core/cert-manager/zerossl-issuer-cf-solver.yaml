@@ -6,17 +6,17 @@ spec:
   acme:
     server: https://acme.zerossl.com/v2/DV90
     email: sergiu@kerrlab.app
-    
+
     privateKeySecretRef:
       name: zerossl-prod
-    
+
     # for each cert-manager new EAB credencials are required
     externalAccountBinding:
       keyID: OjxSLvGJsQGvVPIWwf3C0A
       keySecretRef:
         name: zero-ssl-eabsecret
         key: secret
-    
+
     solvers:
       - dns01:
           cloudflare:

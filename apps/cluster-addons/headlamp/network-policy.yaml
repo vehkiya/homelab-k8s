@@ -19,7 +19,7 @@ spec:
         - ports:
             - port: "443"
               protocol: "TCP"
-    
+
     # 2. Allow DNS (Always needed)
     - toEndpoints:
         - matchLabels:

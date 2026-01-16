@@ -26,7 +26,7 @@ spec:
                     operator: In
                     values:
                       - performance
-      
+
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -75,11 +75,12 @@ spec:
             allowPrivilegeEscalation: true
           command: [ "/bin/sh", "-c" ]
           args:
-            - |# Install tools
+            - |
+              # Install tools
               apk add --no-cache inotify-tools rsync
 
               echo "Starting Backup Watcher..."
-              
+
               # Watch the source directory for new files (event: close_write)
               # -m: Monitor indefinitely
               # -r: Recursive (optional, if plugin uses subfolders)

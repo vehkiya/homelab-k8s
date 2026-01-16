@@ -9,7 +9,7 @@ helmCharts:
     namespace: kube-system
     valuesFile: values/values.yaml
     includeCRDs: true
-    
+
 resources:
   - network-policy.yaml
 

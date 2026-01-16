@@ -9,14 +9,14 @@ data:
         summary: "TV shows currently trending, according to Trakt."
         sort_title: "+01_Trending TV (Trakt)"
         sync_mode: sync
-      
+
       The Futurama Collection:
         # Use the TMDB ID for the TV Show
         tmdb_show: 615
         summary: "The adventures of a late-20th-century New York City pizza delivery boy, Philip J. Fry, who, after being unwittingly cryogenically frozen for one thousand years, finds employment at Planet Express, an interplanetary delivery company in the retro-futuristic 31st century."
         # Sort the items within the collection chronologically by their release date
         collection_order: release
-      
+
       Star Wars Collection:
         trakt_list: https://trakt.tv/users/docteur-dream/lists/star-wars-chronology?sort=rank,asc
         summary: "The epic space opera franchise created by George Lucas."

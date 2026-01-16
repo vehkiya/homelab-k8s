@@ -38,7 +38,7 @@ spec:
         - ports:
             - port: "53"
               protocol: ANY
-    
+
     # ------------------------------------------------------------------
     # 2. INTERNAL SERVICES
     - toEndpoints:
@@ -60,7 +60,7 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
-    
+
     # ------------------------------------------------------------------
     # 3. POSTGRES
     - toEndpoints:
@@ -71,7 +71,7 @@ spec:
         - ports:
             - port: "5432"
               protocol: TCP
-    
+
     # ------------------------------------------------------------------
     # 4. EXTERNAL HOSTS
     - toCIDR:
@@ -80,7 +80,7 @@ spec:
         - ports:
             - port: "15432"
               protocol: TCP
-    
+
     # ------------------------------------------------------------------
     # 5. PUBLIC INTERNET
     - toEntities:

@@ -10,7 +10,7 @@ spec:
           # Standard app structure
           - name: romm
             path: apps/applications/games/romm
-          
+
           # Nested overlay structure
           - name: minecraft-vh
             path: apps/applications/games/minecraft/overlays/vault-hunters

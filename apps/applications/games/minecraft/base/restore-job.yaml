@@ -30,33 +30,33 @@ spec:
               args:
                 - |
                   set -e
-                  
+
                   # 1. Install Unzip
                   apk add --no-cache unzip
-                  
+
                   # 2. Configuration
                   # You can override these paths via Env Vars in overlays if needed
                   BACKUP_DIR="${BACKUP_DIRECTORY:-/backups}"
                   RESTORE_DIR="${RESTORE_DIRECTORY:-/data}"
-                  
+
                   echo "📂 Scanning $BACKUP_DIR for backups..."
                   ls -las "${BACKUP_DIRECTORY}"
-                  
+
                   # 3. Find latest zip (sort by time, take last)
                   LATEST_ZIP=$(find "$BACKUP_DIR" -maxdepth 1 -name "*.zip" -type f | xargs ls -t | head -n 1)
-                  
+
                   if [ -z "$LATEST_ZIP" ]; then
                     echo "❌ No .zip backup files found!"
                     exit 1
                   fi
-                  
+
                   echo "Found backup: $LATEST_ZIP"
                   echo "♻️  Restoring to: $RESTORE_DIR..."
-                  
+
                   # 4. Unzip
                   # -o: overwrite existing files without prompting
                   unzip -qo "$LATEST_ZIP" -d "$RESTORE_DIR"
-                  
+
                   # 5. Fix permissions
                   echo "👤 Fixing ownership to 1000:1000..."
                   # Recursive chown to ensure the 'minecraft' user can read/write the new files

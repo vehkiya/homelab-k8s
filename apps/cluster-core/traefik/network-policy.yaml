@@ -8,7 +8,7 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: traefik
-  
+
   ingress:
     # Rule 1: Allow public internet to ports 80/443
     - fromEntities:
@@ -26,8 +26,8 @@ spec:
               protocol: "UDP"
             - port: "8443"
               protocol: "TCP"
-  
-  
+
+
   egress:
     # Rule 1: Allow Traefik to talk to kube-apiserver
     - toEntities:

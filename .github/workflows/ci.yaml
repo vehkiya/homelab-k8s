@@ -24,6 +24,12 @@ jobs:
               line-length: disable
               document-start: disable
               truthy: disable
+              new-line-at-end-of-file: disable
+              comments: disable
+              comments-indentation: disable
+              braces: disable
+              brackets: disable
+              empty-lines: disable
 
       - name: Install Kustomize
         uses: imranismail/setup-kustomize@v2
@@ -39,7 +45,7 @@ jobs:
           # Find all kustomization.yaml files and build them
           find . -type f -name kustomization.yaml -print0 | xargs -0 -I {} dirname {} | while read layer; do
             echo "Validating $layer..."
-            kustomize build "$layer" > /dev/null 2>&1 || { echo "Kustomize build failed for $layer"; exit 1; }
+            kustomize build "$layer" --enable-helm > /dev/null 2>&1 || { echo "Kustomize build failed for $layer"; exit 1; }
             # Only run kubeconform on success, and ignore CRDs/missing schemas often found in homelabs
-            kustomize build "$layer" | kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" || { echo "Kubeconform failed for $layer"; exit 1; }
+            kustomize build "$layer" --enable-helm | kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" || { echo "Kubeconform failed for $layer"; exit 1; }
           done

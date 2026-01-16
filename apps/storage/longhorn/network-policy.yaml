@@ -21,7 +21,7 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: longhorn-system
     - fromEntities:
-        - "host" # Allows the Kubelet on the node           
+        - "host" # Allows the Kubelet on the node
         - "cluster"
         - "health"
   # ----=== Egress ===----
