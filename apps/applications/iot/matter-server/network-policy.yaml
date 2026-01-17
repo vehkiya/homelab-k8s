@@ -20,6 +20,27 @@ spec:
             - port: "5580"
               protocol: TCP
 
+    # === Allow mDNS (Ingress) ===
+    - fromCIDR:
+        - 192.168.4.0/24
+        - fd00:2:244::/64
+      toPorts:
+        - ports:
+            - port: "5353"
+              protocol: UDP
+    
+    # === Allow Matter Device Traffic (Ingress) ===
+    - fromCIDR:
+        - 192.168.4.0/24
+        - fd00:2:244::/64
+        - fd2f:741e:f59b:1::/64
+      toPorts:
+        - ports:
+            - port: "5540" # Standard Matter Port
+              protocol: TCP
+            - port: "5540"
+              protocol: UDP
+  
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -44,7 +65,17 @@ spec:
             - port: "443"
               protocol: TCP
 
-    # === Allow access to IoT VLAN for Matter devices ===
+    # === Allow access to IoT VLAN & Thread Network for Matter devices ===
     - toCIDR:
         - 192.168.4.0/24
         - fd00:2:244::/64
+        - fd2f:741e:f59b:1::/64
+
+    # === Allow mDNS (Egress) ===
+    - toCIDR:
+        - 192.168.4.0/24
+        - fd00:2:244::/64
+      toPorts:
+        - ports:
+            - port: "5353"
+              protocol: UDP
