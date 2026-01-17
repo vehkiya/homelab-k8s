@@ -14,3 +14,5 @@ resources:
 images:
   - name: ghcr.io/home-assistant-libs/python-matter-server
     newTag: 8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
+  - name: busybox
+    newTag: 1.37.0@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1

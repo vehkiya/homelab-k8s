@@ -4,7 +4,8 @@ metadata:
   name: macvlan-iot
   namespace: iot
 spec:
-  config: '{
+  config: |-
+    {
       "cniVersion": "0.3.1",
       "type": "macvlan",
       "master": "bond0.2",
@@ -34,7 +35,6 @@ spec:
           { "dst": "::/0" }
         ]
       }
-    }'
-
-  # Note: No "0.0.0.0/0" route here.
-  # This forces IPv4 (DNS/HA) to use the Cluster Network (eth0).
+    }
+# Note: No "0.0.0.0/0" route here.
+# This forces IPv4 (DNS/HA) to use the Cluster Network (eth0).
