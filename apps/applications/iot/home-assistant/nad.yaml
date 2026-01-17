@@ -1,25 +1,40 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
-  name: iot-vlan-net
+  name: macvlan-iot
   namespace: iot
 spec:
-  config: |-
-    {
+  config: '{
       "cniVersion": "0.3.1",
-      "name": "multus-iot",
-      "plugins": [
-        {
-          "type": "macvlan",
-          "master": "bond0.2",
-          "mode": "bridge",
-          "ipam": {
-            "type": "host-local",
-            "subnet": "192.168.4.0/24",
-            "rangeStart": "192.168.4.100",
-            "rangeEnd": "192.168.4.130",
-            "gateway": "192.168.4.1"
-          }
-        }
-      ]
-    }
+      "type": "macvlan",
+      "master": "bond0.2",
+      "mode": "bridge",
+      "mtu": 1280,
+      "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [
+             {
+               "subnet": "192.168.4.0/24",
+               "rangeStart": "192.168.4.220",
+               "rangeEnd": "192.168.4.230",
+               "gateway": "192.168.4.1"
+             }
+          ],
+          [
+             {
+               "subnet": "fd00:2:244::/64",
+               "rangeStart": "fd00:2:244::220",
+               "rangeEnd": "fd00:2:244::230",
+               "gateway": "fd00:2:244::1"
+             }
+          ]
+        ],
+        "routes": [
+          { "dst": "::/0" }
+        ]
+      }
+    }'
+  
+  # Note: No "0.0.0.0/0" route here. 
+  # This forces IPv4 (DNS/HA) to use the Cluster Network (eth0).

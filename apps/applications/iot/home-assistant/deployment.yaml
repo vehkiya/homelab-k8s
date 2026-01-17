@@ -15,9 +15,7 @@ spec:
       labels:
         app: home-assistant
       annotations:
-        k8s.v1.cni.cncf.io/networks: '[
-            { "name": "iot-vlan-net", "interface": "eth1" }
-          ]'
+        k8s.v1.cni.cncf.io/networks: macvlan-iot
     spec:
       dnsPolicy: None
       dnsConfig:
