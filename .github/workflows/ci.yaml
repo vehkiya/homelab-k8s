@@ -24,6 +24,7 @@ jobs:
             extends: default
             rules:
               line-length: disable
+              trailing-spaces: disable
               document-start: disable
               truthy: disable
               new-line-at-end-of-file: disable

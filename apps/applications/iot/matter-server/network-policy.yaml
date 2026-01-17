@@ -28,7 +28,7 @@ spec:
         - ports:
             - port: "5353"
               protocol: UDP
-    
+
     # === Allow Matter Device Traffic (Ingress) ===
     - fromCIDR:
         - 192.168.4.0/24
@@ -40,7 +40,7 @@ spec:
               protocol: TCP
             - port: "5540"
               protocol: UDP
-  
+
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
