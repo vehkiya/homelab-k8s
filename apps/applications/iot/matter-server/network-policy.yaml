@@ -7,7 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app: matter-server
-  
+
   # ----=== Ingress ===----
   ingress:
     # === Allow access from Home Assistant ===
@@ -33,7 +33,7 @@ spec:
               protocol: UDP
             - port: "53"
               protocol: TCP
-    
+
     # === Allow Internet Access (for PAA certificates) ===
     - toEntities:
         - "world"
@@ -43,7 +43,7 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
-    
+
     # === Allow access to IoT VLAN for Matter devices ===
     - toCIDR:
         - 192.168.4.0/24

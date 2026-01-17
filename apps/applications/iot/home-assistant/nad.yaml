@@ -35,6 +35,6 @@ spec:
         ]
       }
     }'
-  
-  # Note: No "0.0.0.0/0" route here. 
+
+  # Note: No "0.0.0.0/0" route here.
   # This forces IPv4 (DNS/HA) to use the Cluster Network (eth0).
