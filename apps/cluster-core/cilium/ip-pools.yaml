@@ -5,7 +5,7 @@ metadata:
   name: "internal-lb-pool"
 spec:
   blocks:
-    - cidr: "10.10.1.128/25"
+    - cidr: "10.10.1.128/26"
   serviceSelector:
     matchExpressions:
       - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }
