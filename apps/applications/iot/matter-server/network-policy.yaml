@@ -1,0 +1,50 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: matter-server-policy
+  namespace: iot
+spec:
+  endpointSelector:
+    matchLabels:
+      app: matter-server
+
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Home Assistant ===
+    - fromEndpoints:
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
+      toPorts:
+        - ports:
+            - port: "5580"
+              protocol: TCP
+
+  # ----=== Egress ===----
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+
+    # === Allow Internet Access (for PAA certificates) ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+
+    # === Allow access to IoT VLAN for Matter devices ===
+    - toCIDR:
+        - 192.168.4.0/24
+        - fd00:2:244::/64

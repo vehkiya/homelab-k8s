@@ -14,9 +14,21 @@ spec:
     metadata:
       labels:
         app: matter-server
+      annotations:
+        k8s.v1.cni.cncf.io/networks: macvlan-iot
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: false
+      initContainers:
+        - name: init-sysctl
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              sysctl -w net.ipv6.conf.net1.accept_ra=2
+              sysctl -w net.ipv6.conf.net1.accept_ra_rt_info_max_plen=64
+          securityContext:
+            privileged: true
       containers:
         - image: ghcr.io/home-assistant-libs/python-matter-server
           name: matter-server
@@ -26,14 +38,14 @@ spec:
             - "--paa-root-cert-dir"
             - "/data/credentials"
             - "--primary-interface"
-            - "bond0.2@bond0"
+            - "net1"
           volumeMounts:
             - name: data
               mountPath: /data
           securityContext:
             capabilities:
-              drop:
-                - ALL
+              add:
+                - NET_ADMIN
       securityContext:
         runAsUser: 0
         runAsGroup: 0
