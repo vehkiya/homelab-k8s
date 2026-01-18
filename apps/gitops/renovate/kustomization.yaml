@@ -2,11 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: renovate
 resources:
-  - configmap.yaml
   - external-secret.yaml
-  - cron-job.yaml
   - network-policy.yaml
+  - redis.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
 
 images:
-  - name: renovate/renovate
-    newTag: 42.83.1@sha256:3a9ea4918241e4a78728f2fa3fc59720c59f4a2b91d4cc90e64baf37431b2347
+  - name: ghcr.io/mend/renovate-ce
+    newTag: 13.3.0@sha256:5e7252befdc0b83bc62b50fed68be81e41064f8fbdf35f3e4624b215f7264580
+  - name: redis
+    newTag: 8.4.0@sha256:73dad4271642c5966db88db7a7585fae7cf10b685d1e48006f31e0294c29fdd7

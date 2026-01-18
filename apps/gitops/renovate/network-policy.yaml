@@ -1,12 +1,22 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: renovate-policy
+  name: renovate-server-policy
   namespace: renovate
 spec:
   endpointSelector:
     matchLabels:
-      app: renovate
+      app: renovate-server
+  ingress:
+    # Allow webhook traffic from Traefik
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     # Allow DNS
     - toEndpoints:
@@ -20,7 +30,7 @@ spec:
             - port: "53"
               protocol: "TCP"
 
-    # Allow access to the Kubernetes API server
+    # Allow access to the Kubernetes API server and Internet (GitHub)
     - toEntities:
         - "kube-apiserver"
         - "world"
@@ -34,3 +44,33 @@ spec:
         - ports:
             - port: "80"
               protocol: "TCP"
+
+    # Allow access to local Redis
+    - toEndpoints:
+        - matchLabels:
+            app: renovate-redis
+            io.kubernetes.pod.namespace: renovate
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: renovate-redis-policy
+  namespace: renovate
+spec:
+  endpointSelector:
+    matchLabels:
+      app: renovate-redis
+  ingress:
+    # Allow access from Renovate Server
+    - fromEndpoints:
+        - matchLabels:
+            app: renovate-server
+            io.kubernetes.pod.namespace: renovate
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP

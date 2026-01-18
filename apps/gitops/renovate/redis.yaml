@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: renovate-redis
+  namespace: renovate
+spec:
+  selector:
+    matchLabels:
+      app: renovate-redis
+  template:
+    metadata:
+      labels:
+        app: renovate-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: renovate-redis
+  namespace: renovate
+spec:
+  ports:
+    - port: 6379
+  selector:
+    app: renovate-redis
