@@ -15,7 +15,9 @@ spec:
       labels:
         app: matter-server
       annotations:
-        k8s.v1.cni.cncf.io/networks: macvlan-iot
+        k8s.v1.cni.cncf.io/networks: '[
+          { "name": "macvlan-iot", "mac": "02:00:00:00:20:00" }
+        ]'
     spec:
       hostNetwork: false
       initContainers:
