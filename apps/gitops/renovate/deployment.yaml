@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: renovate-server
+  namespace: renovate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: renovate-server
+  template:
+    metadata:
+      labels:
+        app: renovate-server
+    spec:
+      containers:
+        - name: renovate-server
+          image: ghcr.io/mend/renovate-ce
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MEND_RNV_PLATFORM
+              value: "github"
+            - name: MEND_RNV_ADMIN_API_ENABLED
+              value: "false"
+            - name: MEND_RNV_SERVER_PORT
+              value: "8080"
+            - name: MEND_RNV_REDIS_URL
+              value: "redis://renovate-redis:6379"
+            - name: MEND_RNV_CRON_JOB_SCHEDULER_ALL
+              value: "0 * * * *"
+            - name: MEND_RNV_ACCEPT_TOS
+              value: "y"
+            - name: MEND_RNV_ACCEPT_PLUGINS
+              value: "true"
+            - name: MEND_RNV_GITHUB_APP_ID
+              value: "2668553"
+            - name: MEND_RNV_GITHUB_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: RENOVATE_PRIVATE_KEY
+            - name: MEND_RNV_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: RENOVATE_WEBHOOK_SECRET
+            - name: MEND_RNV_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: RENOVATE_LICENSE_KEY
+            - name: MEND_RNV_DOCKER_HUB_ID
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: DOCKER_USERNAME
+            - name: MEND_RNV_DOCKER_HUB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: DOCKER_PASSWORD
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              memory: 2Gi

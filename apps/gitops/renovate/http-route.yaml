@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: renovate-webhook
+  namespace: renovate
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: traefik
+  hostnames:
+    - "renovate.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /webhook
+      backendRefs:
+        - name: renovate-server
+          port: 8080

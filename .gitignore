@@ -1,4 +1,4 @@
 ### Intellij ###
 .idea/**
-/talos/cluster-config/backup/
+/talos/cluster-config/
 /apps/**/charts/**
