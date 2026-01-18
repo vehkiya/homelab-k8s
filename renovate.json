@@ -5,9 +5,9 @@
   },
   "extends": [
     "config:recommended",
-    ":dependencyDashboard",
     ":semanticCommits"
   ],
+  "dependencyDashboard": true,
   "timezone": "Europe/Chisinau",
   "dependencyDashboardApproval": true,
   "rebaseWhen": "behind-base-branch",
