@@ -19,6 +19,8 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            - name: RENOVATE_CONFIG_FILE
+              value: "/usr/src/app/config.js"
             - name: MEND_RNV_PLATFORM
               value: "github"
             - name: MEND_RNV_ADMIN_API_ENABLED
@@ -50,19 +52,27 @@ spec:
                 secretKeyRef:
                   name: renovate-secrets
                   key: RENOVATE_LICENSE_KEY
-            - name: MEND_RNV_DOCKER_HUB_ID
+            - name: DOCKER_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: renovate-secrets
                   key: DOCKER_USERNAME
-            - name: MEND_RNV_DOCKER_HUB_PASSWORD
+            - name: DOCKER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: renovate-secrets
                   key: DOCKER_PASSWORD
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/src/app/config.js
+              subPath: config.js
           resources:
             requests:
               cpu: 500m
               memory: 512Mi
             limits:
               memory: 2Gi
+      volumes:
+        - name: config-volume
+          configMap:
+            name: renovate-config
