@@ -8,7 +8,6 @@ labels:
 
 resources:
   - persistence/
-  - db-user.yaml
   - db-external-secret.yaml
   - secrets.yaml
   - configmap.yaml
