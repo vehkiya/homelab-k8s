@@ -8,6 +8,7 @@ spec:
     - list:
         elements:
           - name: bar-assistant
+          - name: lubelogger
           - name: mealie
           - name: wedding-share
   template:

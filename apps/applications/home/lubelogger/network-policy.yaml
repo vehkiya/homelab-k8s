@@ -1,0 +1,63 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: lubelogger-policy
+  namespace: home
+spec:
+  endpointSelector:
+    matchLabels:
+      app: lubelogger
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+    # Postgres (External/Synology)
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    # Postgres (Internal - just in case)
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: postgres-db
+            k8s:io.kubernetes.pod.namespace: postgres
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    # OIDC (Authelia)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "80"
+              protocol: TCP
+    # Public Internet
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP

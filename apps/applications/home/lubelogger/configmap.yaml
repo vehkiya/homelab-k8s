@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lubelogger-config
+  namespace: home
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  # OIDC Configuration
+  Authentication__OpenIdConnect__Authority: "https://auth.kerrlab.app"
+  Authentication__OpenIdConnect__ClientId: "lubelogger"
+  Authentication__OpenIdConnect__CallbackPath: "/signin-oidc"
+  Authentication__OpenIdConnect__ResponseType: "code"
+  Authentication__OpenIdConnect__Scope: "openid profile email groups"
+  Authentication__UserNameClaim: "preferred_username"
+  Authentication__UserEmailClaim: "email"

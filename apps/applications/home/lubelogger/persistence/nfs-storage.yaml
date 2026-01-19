@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lubelogger-pv
+  labels:
+    pv-name: lubelogger-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/lubelogger
+  storageClassName: synostorage-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lubelogger-pvc
+  namespace: home
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      pv-name: lubelogger-pv
+  storageClassName: synostorage-nfs

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lubelogger
+  namespace: home
+  labels:
+    app: lubelogger
+spec:
+  selector:
+    app: lubelogger
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lubelogger
+  namespace: home
+  labels:
+    app: lubelogger
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: lubelogger
+  template:
+    metadata:
+      labels:
+        app: lubelogger
+    spec:
+      containers:
+        - name: lubelogger
+          image: ghcr.io/hargata/lubelogger:v1.5.7@sha256:5998d88211abd0675d4707be125f788c4332ad46f8de366c72e8a371b52ee092
+          envFrom:
+            - configMapRef:
+                name: lubelogger-config
+            - secretRef:
+                name: lubelogger-db-credentials
+            - secretRef:
+                name: lubelogger-secrets
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /App/wwwroot/documents
+              subPath: documents
+            - name: data
+              mountPath: /App/wwwroot/images
+              subPath: images
+            - name: data
+              mountPath: /App/wwwroot/temp
+              subPath: temp
+            - name: data
+              mountPath: /App/wwwroot/log
+              subPath: log
+          resources:
+            limits:
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 1654
+        runAsGroup: 1654
+        runAsNonRoot: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: lubelogger-pvc
