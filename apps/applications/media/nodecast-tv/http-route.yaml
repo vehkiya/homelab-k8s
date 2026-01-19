@@ -1,0 +1,25 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nodecast-tv-route
+  namespace: media
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "nodecast.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: nodecast-tv
+          port: 3000
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: 'traefik.io'
+            kind: 'Middleware'
+            name: 'authelia-forward-auth'

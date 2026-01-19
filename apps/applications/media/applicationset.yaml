@@ -12,6 +12,7 @@ spec:
           - name: bazarr
           - name: flaresolverr
           - name: kometa
+          - name: nodecast-tv
           - name: overseerr
           - name: plex
           - name: posterizarr
