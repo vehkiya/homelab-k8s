@@ -268,7 +268,7 @@ data:
             grant_types:
               - 'authorization_code'
             access_token_signed_response_alg: 'none'
-            userinfo_signed_response_alg: 'none'
+            userinfo_signed_response_alg: 'RS256'
             token_endpoint_auth_method: 'client_secret_post'
             # ---- === OAuth2 Proxy === ----
           - client_id: 'oauth2-proxy'
@@ -314,7 +314,7 @@ data:
               - 'email'
               - 'groups'
               - 'offline_access'
-            userinfo_signed_response_alg: 'none'
+            userinfo_signed_response_alg: 'RS256'
             token_endpoint_auth_method: 'client_secret_post'
             # ---- === RomM === ----
           - client_id: 'romm'
@@ -337,7 +337,7 @@ data:
               - 'profile'
               - 'groups'
               - 'offline_access'
-            userinfo_signed_response_alg: 'none'
+            userinfo_signed_response_alg: 'RS256'
             token_endpoint_auth_method: 'client_secret_basic'
           # ---- === NodeCast === ----
           - client_id: 'nodecast'
@@ -355,5 +355,5 @@ data:
               - 'profile'
               - 'groups'
               - 'offline_access'
-            userinfo_signed_response_alg: 'none'
+            userinfo_signed_response_alg: 'RS256'
             token_endpoint_auth_method: 'client_secret_post'
