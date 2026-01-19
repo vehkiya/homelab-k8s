@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: media
+resources:
+  - persistence/
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - network-policy.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: nodecast-tv
+      app.kubernetes.io/part-of: media-services
+images:
+  - name: ghcr.io/technomancer702/nodecast-tv
+    newTag: 1.5.0@sha256:5a1baec30c4f58102ca1138c82201f02c31d4de38ee1c60ee662ad866834ee24
