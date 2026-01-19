@@ -37,6 +37,11 @@ spec:
               value: "true"
             - name: MEND_RNV_GITHUB_APP_ID
               value: "2668553"
+            - name: RENOVATE_REVIEWERS
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: DEFAULT_PR_REVIEWERS
             - name: MEND_RNV_GITHUB_APP_KEY
               valueFrom:
                 secretKeyRef:
