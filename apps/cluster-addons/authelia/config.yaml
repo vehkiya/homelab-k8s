@@ -331,6 +331,18 @@ data:
             redirect_uris:
               - 'https://romm.kerrlab.app/api/oauth/openid'
             claims_policy: 'with_email'
+            userinfo_signed_response_alg: 'none'
+            token_endpoint_auth_method: 'client_secret_basic'
+          # ---- === LubeLogger === ----
+          - client_id: 'lubelogger'
+            client_name: 'LubeLogger'
+            client_secret: '${LUBELOGGER_SECRET}'
+            public: false
+            authorization_policy: 'two_factor'
+            consent_mode: 'pre-configured'
+            pre_configured_consent_duration: '30 days'
+            redirect_uris:
+              - 'https://lubelogger.kerrlab.app/signin-oidc'
             scopes:
               - 'openid'
               - 'email'
@@ -338,4 +350,4 @@ data:
               - 'groups'
               - 'offline_access'
             userinfo_signed_response_alg: 'none'
-            token_endpoint_auth_method: 'client_secret_basic'
+            token_endpoint_auth_method: 'client_secret_post'
