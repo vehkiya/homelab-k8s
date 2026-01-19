@@ -16,4 +16,4 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: ghcr.io/technomancer702/nodecast-tv
-    newTag: 2.1.0@sha256:74f22a9856a0a0c170c53aab17f41a19af69b478500f3a43776a93d5946df6f2
+    newTag: 2.1.1@sha256:9937173524774d718c998a768d27bb3b7bf9d2575277715c7230307d6e99904a
