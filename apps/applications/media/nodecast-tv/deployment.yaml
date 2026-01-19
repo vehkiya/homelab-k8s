@@ -23,6 +23,17 @@ spec:
               value: "Europe/Chisinau"
             - name: NODE_ENV
               value: "production"
+            - name: OIDC_ISSUER_URL
+              value: "https://auth.kerrlab.app"
+            - name: OIDC_CLIENT_ID
+              value: "nodecast"
+            - name: OIDC_CALLBACK_URL
+              value: "https://nodecast.kerrlab.app/api/auth/oidc/callback"
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nodecast-secrets
+                  key: OIDC_CLIENT_SECRET
           ports:
             - name: web-ui
               containerPort: 3000

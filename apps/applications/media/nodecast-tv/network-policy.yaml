@@ -35,3 +35,14 @@ spec:
     # === Allow access to external ===
     - toEntities:
         - "world"
+    # === Allow access to Traefik (for OIDC) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+            - port: "80"
+              protocol: "TCP"
