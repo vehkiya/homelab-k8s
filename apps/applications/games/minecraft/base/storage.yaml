@@ -35,7 +35,7 @@ spec:
     - retrans=3         # Retry 3 times then give up
   nfs:
     server: fortress.kerrlab.app
-    path: /volume1/cluster/minecraft/base/backups #unique path
+    path: /volume1/cluster/minecraft/base #unique path
   storageClassName: synostorage-nfs
 ---
 apiVersion: v1

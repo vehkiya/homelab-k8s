@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minecraft-backup-script
+  namespace: games
+data:
+  backup.sh: |
+    #!/bin/sh
+    set -e
+
+    # Ensure dependencies
+    if ! command -v rsync >/dev/null; then
+      echo "Installing rsync..."
+      apk add --no-cache rsync
+    fi
+
+    TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+    BACKUP_NAME="backup-$TIMESTAMP"
+    BACKUP_PATH="/backups/$BACKUP_NAME"
+
+    echo "⏳ Starting Backup: $BACKUP_NAME"
+
+    # Ensure save is always turned back on
+    trap 'rcon-cli --password "$RCON_PASSWORD" "save-on"' EXIT
+
+    # RCON: Save Off & Flush
+    # rcon-cli is provided by the image
+    rcon-cli --password "$RCON_PASSWORD" "save-off"
+    rcon-cli --password "$RCON_PASSWORD" "save-all"
+
+    # Rsync Data
+    DEFAULT_EXCLUDES="cache .cache logs crash-reports dynmap session.lock"
+    EXCLUDE_FLAGS=""
+    for item in $DEFAULT_EXCLUDES; do
+      EXCLUDE_FLAGS="$EXCLUDE_FLAGS --exclude=$item"
+    done
+
+    mkdir -p "$BACKUP_PATH"
+    rsync -a --no-o --no-g --delete --progress --stats $EXCLUDE_FLAGS /data/ "$BACKUP_PATH/"
+
+    echo "✅ Backup Complete: $BACKUP_PATH"
+
+    # Prune (Keep last 10)
+    cd /backups
+    ls -dt backup-*/ 2>/dev/null | tail -n +11 | xargs -r rm -rf
+
+    echo "🧹 Pruning complete."
