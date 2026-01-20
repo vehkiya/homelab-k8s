@@ -14,6 +14,26 @@ data:
       apk add --no-cache rsync
     fi
 
+    # Check for player activity to skip idle backups
+    # 1. Check if 0 players are online currently
+    if rcon-cli --password "$RCON_PASSWORD" "list" | grep -q "There are 0"; then
+      echo "ℹ️  0 players online. Checking for recent activity..."
+    
+      # Ensure 'find' supports -mmin (install findutils if needed)
+      if ! find --help 2>&1 | grep -q "mmin"; then
+        echo "Installing findutils..."
+        apk add --no-cache findutils
+      fi
+
+      # 2. Check if any playerdata file was modified in the last 60 minutes
+      #    Standard path: /data/world/playerdata/
+      if [ -z "$(find /data -type f -path "*/playerdata/*" -mmin -60 -print -quit)" ]; then
+        echo "💤 No active players in the last hour. Skipping backup."
+        exit 0
+      fi
+      echo "ℹ️  Recent activity detected (files changed <1h). Proceeding..."
+    fi
+
     TIMESTAMP=$(date +%Y%m%d-%H%M%S)
     BACKUP_NAME="backup-$TIMESTAMP"
     BACKUP_PATH="/backups/$BACKUP_NAME"
@@ -23,8 +43,9 @@ data:
     # Ensure save is always turned back on
     trap 'rcon-cli --password "$RCON_PASSWORD" "save-on"' EXIT
 
-    # RCON: Save Off & Flush
+    # RCON: Announce, Save Off & Flush
     # rcon-cli is provided by the image
+    rcon-cli --password "$RCON_PASSWORD" "say §6[Backup] §fStarting server backup..."
     rcon-cli --password "$RCON_PASSWORD" "save-off"
     rcon-cli --password "$RCON_PASSWORD" "save-all"
 
@@ -38,6 +59,7 @@ data:
     mkdir -p "$BACKUP_PATH"
     rsync -a --no-o --no-g --delete --progress --stats $EXCLUDE_FLAGS /data/ "$BACKUP_PATH/"
 
+    rcon-cli --password "$RCON_PASSWORD" "say §6[Backup] §fServer backup completed!"
     echo "✅ Backup Complete: $BACKUP_PATH"
 
     # Prune (Keep last 10)

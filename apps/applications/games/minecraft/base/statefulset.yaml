@@ -139,13 +139,19 @@ spec:
               echo "✅ RCON Connected."
 
               # 3. Save environment vars for Cron
-              printenv > /container.env
+              # Explicitly export needed vars to avoid parsing issues with special chars
+              {
+                echo "export RCON_PASSWORD='$RCON_PASSWORD'"
+                echo "export RCON_HOST='$RCON_HOST'"
+                echo "export RCON_PORT='$RCON_PORT'"
+              } > /container.env
 
               # 4. Setup Crontab
               # Use BACKUP_SCHEDULE or fallback to hourly
               SCHEDULE="${BACKUP_SCHEDULE:-0 * * * *}"
               echo "✅ Setting up backup schedule: $SCHEDULE"
-              echo "$SCHEDULE set -a; . /container.env; set +a; /bin/sh /scripts/backup.sh >> /proc/1/fd/1 2>&1" > /etc/crontabs/root
+              # Source env and run backup, redirecting to stdout
+              echo "$SCHEDULE . /container.env; /bin/sh /scripts/backup.sh >> /dev/stdout 2>&1" > /etc/crontabs/root
 
               echo "✅ Backup Sidecar Started (Cron Mode)."
               
