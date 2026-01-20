@@ -11,9 +11,11 @@ spec:
           - name: romm
             path: apps/applications/games/romm
 
-          # Nested overlay structure
+          # Minecraft Instances
           - name: minecraft-vh
             path: apps/applications/games/minecraft/overlays/vault-hunters
+          - name: minecraft-vanilla
+            path: apps/applications/games/minecraft/overlays/vanilla
 
   template:
     metadata:
