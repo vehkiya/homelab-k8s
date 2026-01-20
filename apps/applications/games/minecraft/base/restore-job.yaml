@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: restore-last-backup
-  # requires manual scaling down of deployment
+  # requires manual scaling down of statefulset
 spec:
   # 1. Disable automatic execution
   suspend: true
@@ -20,7 +20,7 @@ spec:
             - name: restorer
               image: alpine:latest
               env:
-                - name: TARGET_DEPLOYMENT
+                - name: TARGET_STATEFULSET
                   value: "minecraft"
                 - name: BACKUP_DIRECTORY # from minecraft-backup-pvc
                   value: "/backups"
@@ -30,36 +30,29 @@ spec:
               args:
                 - |
                   set -e
+                  apk add --no-cache rsync
 
-                  # 1. Install Unzip
-                  apk add --no-cache unzip
-
-                  # 2. Configuration
-                  # You can override these paths via Env Vars in overlays if needed
                   BACKUP_DIR="${BACKUP_DIRECTORY:-/backups}"
                   RESTORE_DIR="${RESTORE_DIRECTORY:-/data}"
 
                   echo "📂 Scanning $BACKUP_DIR for backups..."
-                  ls -las "${BACKUP_DIRECTORY}"
 
-                  # 3. Find latest zip (sort by time, take last)
-                  LATEST_ZIP=$(find "$BACKUP_DIR" -maxdepth 1 -name "*.zip" -type f | xargs ls -t | head -n 1)
+                  # Find latest directory
+                  LATEST_BACKUP=$(ls -td "${BACKUP_DIR}"/backup-*/ 2>/dev/null | head -n 1)
 
-                  if [ -z "$LATEST_ZIP" ]; then
-                    echo "❌ No .zip backup files found!"
+                  if [ -z "$LATEST_BACKUP" ]; then
+                    echo "❌ No backup directories found in $BACKUP_DIR!"
                     exit 1
                   fi
 
-                  echo "Found backup: $LATEST_ZIP"
+                  echo "Found latest backup: $LATEST_BACKUP"
                   echo "♻️  Restoring to: $RESTORE_DIR..."
 
-                  # 4. Unzip
-                  # -o: overwrite existing files without prompting
-                  unzip -qo "$LATEST_ZIP" -d "$RESTORE_DIR"
+                  # Rsync back
+                  # --delete ensures files deleted in backup are removed from data (clean state)
+                  rsync -av --delete "$LATEST_BACKUP/" "$RESTORE_DIR/"
 
-                  # 5. Fix permissions
                   echo "👤 Fixing ownership to 1000:1000..."
-                  # Recursive chown to ensure the 'minecraft' user can read/write the new files
                   chown -R 1000:1000 "$RESTORE_DIR"
 
                   echo "✅ Restore Complete."
@@ -68,6 +61,7 @@ spec:
                   mountPath: /data
                 - name: backup
                   mountPath: /backups
+                  subPath: backups
           volumes:
             - name: data
               persistentVolumeClaim:

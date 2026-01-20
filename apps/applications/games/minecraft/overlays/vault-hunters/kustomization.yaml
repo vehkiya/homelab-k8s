@@ -5,6 +5,7 @@ namespace: games
 # 1. Base Logic
 resources:
   - ../../base
+  - external-secret.yaml
 
 # 2. Add Name Suffix
 nameSuffix: -vh
@@ -18,8 +19,8 @@ labels:
       app: minecraft-vh
 
 images:
-  - name: itzg/minecraft-server
-    newTag: java17@sha256:49d266b0ce4311dd8c2dba0fe1a42beb3ab4bf0325f3b14ea74b29cb2905bb36
+  - name: ghcr.io/itzg/minecraft-server
+    newTag: stable-java17@sha256:f66adca331988c553350c83a7b80505d0621c8ef566ffe8281c030a6c8a97494
 
 # 3. Patches
 patches:
@@ -52,6 +53,7 @@ patches:
         WHITELIST: "Kerrlab,JusApee"
         OVERRIDE_WHITELIST: "true"
         CF_FORCE_INCLUDE_MODS: "spark"
+
   # === Increase default storage size ===
   - target:
       kind: PersistentVolumeClaim
@@ -65,6 +67,7 @@ patches:
         resources:
           requests:
             storage: 64Gi # Increased from the base 20Gi
+
   # === Update backup PV for overlay ===
   - target:
       kind: PersistentVolume
@@ -79,7 +82,8 @@ patches:
       spec:
         nfs:
           # Using a folder for this instance of minecraft
-          path: /volume1/cluster/minecraft/vault-hunters/backups
+          path: /volume1/cluster/minecraft/vault-hunters
+
   # === Patch base PVC so it refers the defined PV and deployment refers to renamed PVC ===
   - target:
       kind: PersistentVolumeClaim
@@ -93,6 +97,40 @@ patches:
         selector:
           matchLabels:
             pv-name: minecraft-backup-nfs-vh
+
+  # === Patch Deployment (Aux Mount + Unique Secret) ===
+  - target:
+      kind: StatefulSet
+      name: minecraft
+    patch: |-
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: minecraft
+      spec:
+        template:
+          spec:
+            containers:
+              - name: minecraft
+                envFrom:
+                  - configMapRef:
+                      name: minecraft-config
+                  - secretRef:
+                      name: minecraft-vh-secret
+                env:
+                  - name: RCON_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: minecraft-vh-secret
+                        key: RCON_PASSWORD
+              - name: backup-sidecar
+                env:
+                  - name: RCON_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: minecraft-vh-secret
+                        key: RCON_PASSWORD
+
   # === Patch Service to assign static IP in pool ===
   - target:
       kind: Service
@@ -106,26 +144,3 @@ patches:
           pool: dmz-lb-pool
         annotations:
           lbipam.cilium.io/ips: "10.20.1.140"
-  # === Patch restore backup job parameters ===
-  - target:
-      kind: CronJob # Changed from Job
-      name: restore-last-backup
-    patch: |-
-      apiVersion: batch/v1
-      kind: CronJob
-      metadata:
-        name: restore-last-backup
-      spec:
-        jobTemplate:
-          spec:
-            template:
-              spec:
-                containers:
-                  - name: restorer
-                    env:
-                      - name: TARGET_DEPLOYMENT
-                        value: "minecraft-vh"
-                      - name: BACKUP_DIRECTORY
-                        value: "/backups"
-                      - name: RESTORE_DIRECTORY
-                        value: "/data"

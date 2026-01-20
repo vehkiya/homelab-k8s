@@ -4,9 +4,9 @@ namespace: games
 
 resources:
   - configmap.yaml
-  - deployment.yaml
+  - backup-script.yaml
+  - statefulset.yaml
   - network-policy.yaml
-  - secret.yaml
   - service.yaml
   - storage.yaml
   - restore-job.yaml

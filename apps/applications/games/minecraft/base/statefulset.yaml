@@ -1,14 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: minecraft
   namespace: games
   labels:
     app: minecraft
 spec:
+  serviceName: minecraft
   replicas: 1
-  strategy:
-    type: Recreate
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: minecraft
@@ -32,10 +33,20 @@ spec:
         runAsGroup: 1000
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: install-rcon
+          image: ghcr.io/itzg/minecraft-server
+          imagePullPolicy: IfNotPresent
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - "cp $(which rcon-cli) /tools/rcon-cli && chmod +x /tools/rcon-cli"
+          volumeMounts:
+            - name: rcon-tools
+              mountPath: /tools
       containers:
         # --- Game Server ---
         - name: minecraft
-          image: itzg/minecraft-server
+          image: ghcr.io/itzg/minecraft-server
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 25565
@@ -50,8 +61,20 @@ spec:
           envFrom:
             - configMapRef:
                 name: minecraft-config
-            - secretRef:
-                name: minecraft-secret
+          env:
+            - name: ENABLE_RCON
+              value: "true"
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minecraft-secret
+                  key: RCON_PASSWORD
+            - name: RCON_HOST
+              value: "localhost"
+            - name: RCON_PORT
+              value: "25575"
+            - name: BACKUP_SCHEDULE
+              value: "0 * * * *"
           volumeMounts:
             - name: data
               mountPath: /data
@@ -87,39 +110,62 @@ spec:
         # --- Backup Sidecar ---
         - name: backup-sidecar
           image: alpine:latest
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
-            allowPrivilegeEscalation: true
+          env:
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minecraft-secret
+                  key: RCON_PASSWORD
+            - name: RCON_HOST
+              value: "localhost"
+            - name: RCON_PORT
+              value: "25575"
+            - name: BACKUP_SCHEDULE
+              value: "0 * * * *"
           command: [ "/bin/sh", "-c" ]
           args:
             - |
-              # Install tools
-              apk add --no-cache inotify-tools rsync
+              # 1. Install dependencies (rsync)
+              apk add --no-cache rsync
 
-              echo "Starting Backup Watcher..."
-
-              # Watch the source directory for new files (event: close_write)
-              # -m: Monitor indefinitely
-              # -r: Recursive (optional, if plugin uses subfolders)
-              # -e close_write: Only trigger when a file is fully written/closed
-              inotifywait -m /source -e close_write |
-              while read path action file; do
-                  echo "New backup detected: $file"
-                  # Use rsync to copy to NFS (avoids re-copying if script restarts)
-                  rsync -av --no-o --no-g /source/ /dest/
-                  echo "Synced to NFS."
+              # 2. Wait for RCON to be ready
+              echo "⏳ Waiting for RCON..."
+              until rcon-cli --password "$RCON_PASSWORD" list >/dev/null 2>&1; do
+                  sleep 10
               done
+              echo "✅ RCON Connected."
+
+              # 3. Save environment vars for Cron
+              printenv > /container.env
+
+              # 4. Setup Crontab
+              # Use BACKUP_SCHEDULE or fallback to hourly
+              SCHEDULE="${BACKUP_SCHEDULE:-0 * * * *}"
+              echo "✅ Setting up backup schedule: $SCHEDULE"
+              echo "$SCHEDULE set -a; . /container.env; set +a; /bin/sh /scripts/backup.sh >> /proc/1/fd/1 2>&1" > /etc/crontabs/root
+
+              echo "✅ Backup Sidecar Started (Cron Mode)."
+              
+              # 5. Start Crond in foreground
+              crond -f
           volumeMounts:
             - name: data
-              mountPath: /source
-              subPath: simplebackups
+              mountPath: /data
               readOnly: true
             - name: backups
-              mountPath: /dest
+              mountPath: /backups
+              subPath: backups
+            - name: backup-script
+              mountPath: /scripts
+            - name: rcon-tools
+              mountPath: /usr/local/bin
           resources:
             limits:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "256Mi"
+              cpu: "200m"
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -128,3 +174,9 @@ spec:
         - name: backups
           persistentVolumeClaim:
             claimName: minecraft-backup-pvc
+        - name: backup-script
+          configMap:
+            name: minecraft-backup-script
+            defaultMode: 0755
+        - name: rcon-tools
+          emptyDir: { }
