@@ -16,3 +16,4 @@ helmCharts:
     namespace: inteldeviceplugins-system
     valuesInline:
       nodeFeatureRule: true
+      sharedDevNum: 5
