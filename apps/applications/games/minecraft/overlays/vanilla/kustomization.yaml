@@ -1,0 +1,149 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: games
+
+resources:
+  - ../../base
+  - external-secret.yaml
+
+nameSuffix: -vanilla
+
+configurations:
+  - kustomize-config.yaml
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app: minecraft-vanilla
+
+images:
+  - name: ghcr.io/itzg/minecraft-server
+    newTag: stable-java25@sha256:b27a382b660ffee91866c1441ca3f2166461921bff4284c48674e0d143c5f6fb
+
+patches:
+  # === Override config ===
+  - target:
+      kind: ConfigMap
+      name: minecraft-config
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: minecraft-config
+      data:
+        TYPE: "MODRINTH"
+        # File provided via NFS aux mount
+        MODRINTH_MODPACK: "/nfs/Server 1.21.11 1.0.0.mrpack"
+        EULA: "TRUE"
+        VERSION: "LATEST"
+        MOTD: "Vanilla Modpack Server"
+        INIT_MEMORY: "8G"
+        MAX_MEMORY: "12G"
+        DIFFICULTY: "hard"
+        SPAWN_PROTECTION: "0"
+        VIEW_DISTANCE: "24"
+        SIMULATION_DISTANCE: "24"
+        USE_AIKAR_FLAGS: "TRUE"
+        USE_MEOWICE_FLAGS: "TRUE"
+        # Optional: Force re-download/sync on startup
+        FORCE_SYNCHRONIZE: "true"
+        OPS: "Kerrlab"
+        WHITELIST: "Kerrlab,QtpDiana,JusApee"
+        LEVEL: "sushi-world"
+  
+  # === Increase default storage size ===
+  - target:
+      kind: PersistentVolumeClaim
+      name: minecraft-data-pvc
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: minecraft-data-pvc
+      spec:
+        resources:
+          requests:
+            storage: 64Gi
+
+  # === Update backup PV for overlay ===
+  - target:
+      kind: PersistentVolume
+      name: minecraft-backup-nfs
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: minecraft-backup-nfs
+        labels:
+          pv-name: minecraft-backup-nfs-vanilla
+      spec:
+        nfs:
+          # Point to parent folder so we can access sibling files
+          path: /volume1/cluster/minecraft/vanilla
+
+  # === Patch base PVC so it refers the defined PV ===
+  - target:
+      kind: PersistentVolumeClaim
+      name: minecraft-backup-pvc
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: minecraft-backup-pvc
+      spec:
+        selector:
+          matchLabels:
+            pv-name: minecraft-backup-nfs-vanilla
+
+  # === Patch Deployment (Aux Mount + Unique Secret) ===
+  - target:
+      kind: StatefulSet
+      name: minecraft
+    patch: |-
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: minecraft
+      spec:
+        template:
+          spec:
+            containers:
+              # Main Container
+              - name: minecraft
+                volumeMounts:
+                  - name: backups
+                    mountPath: /nfs
+                    readOnly: true
+                envFrom:
+                  - configMapRef:
+                      name: minecraft-config
+                  - secretRef:
+                      name: minecraft-vanilla-secret
+                env:
+                  - name: RCON_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: minecraft-vanilla-secret
+                        key: RCON_PASSWORD
+              # Sidecar
+              - name: backup-sidecar
+                env:
+                  - name: RCON_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: minecraft-vanilla-secret
+                        key: RCON_PASSWORD
+
+  # === Patch Service ===
+  - target:
+      kind: Service
+      name: minecraft
+    patch: |-
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: minecraft
+        labels:
+          pool: dmz-lb-pool
+        annotations:
+          lbipam.cilium.io/ips: "10.20.1.141"
