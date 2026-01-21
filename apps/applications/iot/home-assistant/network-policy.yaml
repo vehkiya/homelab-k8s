@@ -62,6 +62,9 @@ spec:
         - k8sService:
             serviceName: minecraft-vh
             namespace: games
+        - k8sService:
+            serviceName: minecraft-vanilla
+            namespace: games
     # === Allow Internet Access (Integrations/Updates) ===
     - toEntities:
         - "world"
