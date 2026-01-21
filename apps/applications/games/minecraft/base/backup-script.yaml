@@ -57,7 +57,7 @@ data:
     done
 
     mkdir -p "$BACKUP_PATH"
-    rsync -a --no-o --no-g --delete --progress --stats $EXCLUDE_FLAGS /data/ "$BACKUP_PATH/"
+    rsync -a --no-o --no-g --delete --info=progress2 --stats $EXCLUDE_FLAGS /data/ "$BACKUP_PATH/"
 
     rcon-cli --password "$RCON_PASSWORD" "say §6[Backup] §fServer backup completed!"
     echo "✅ Backup Complete: $BACKUP_PATH"
