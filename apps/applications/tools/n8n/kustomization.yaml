@@ -8,6 +8,6 @@ resources:
   - network-policy.yaml
 images:
   - name: busybox
-    newTag: 1.37@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+    newTag: 1.37@sha256:b86c79d6d337dcaa4cad3cfc704d5e6ae5ba725f3e0674d96f65af7a8f5e2761
   - name: docker.n8n.io/n8nio/n8n
     newTag: 2.5.0@sha256:9d39c4702a3dc94e57e8627cf5e02c679db04d5ffe604404d8d7fc2cdf998313
