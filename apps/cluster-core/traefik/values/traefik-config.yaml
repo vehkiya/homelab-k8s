@@ -44,6 +44,14 @@ ports:
   websecure:
     port: 9443
     http:
+      encodedCharacters:
+        allowEncodedSlash: false
+        allowEncodedBackSlash: false
+        allowEncodedNullCharacter: false
+        allowEncodedSemicolon: false
+        allowEncodedPercent: false
+        allowEncodedQuestionMark: false
+        allowEncodedHash: false
       tls:
         enabled: true
     http3:
@@ -60,6 +68,14 @@ ports:
     expose:
       default: true
     http:
+      encodedCharacters:
+        allowEncodedSlash: false
+        allowEncodedBackSlash: false
+        allowEncodedNullCharacter: false
+        allowEncodedSemicolon: false
+        allowEncodedPercent: false
+        allowEncodedQuestionMark: false
+        allowEncodedHash: false
       # We will terminate TLS here
       tls:
         enabled: true
@@ -150,6 +166,4 @@ extraObjects:
 
 experimental:
   fastProxy:
-    enabled: true
-  kubernetesGateway:
     enabled: true
