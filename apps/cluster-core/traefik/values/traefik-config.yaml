@@ -43,22 +43,26 @@ ports:
     port: 8000
   websecure:
     port: 9443
-    tls:
-      enabled: true
+    http:
+      tls:
+        enabled: true
     http3:
       enabled: true
       advertisedPort: 9443
     forwardedHeaders:
-      trustedIPs:
+      trustedIPs: [ ]
     proxyProtocol:
-      trustedIPs:
+      trustedIPs: [ ]
+    observability:
+      metrics: true
   dmz:
     port: 8443
     expose:
       default: true
-    # We will terminate TLS here
-    tls:
-      enabled: true
+    http:
+      # We will terminate TLS here
+      tls:
+        enabled: true
     http3:
       enabled: true
       advertisedPort: 8443
@@ -87,14 +91,15 @@ ports:
         - 2a06:98c0::/29
         - 2c0f:f248::/32
     proxyProtocol:
-      trustedIPs: []
+      trustedIPs: [ ]
+    observability:
+      metrics: true
   postgres:
     port: 5432
     protocol: TCP
     expose:
       default: false
       internal: true
-    exposedPort: 5432
 gateway:
   enabled: false # Created manually
   name: traefik-gateway
@@ -146,4 +151,5 @@ extraObjects:
 experimental:
   fastProxy:
     enabled: true
-
+  kubernetesGateway:
+    enabled: true
