@@ -11,3 +11,5 @@ helmCharts:
     releaseName: traefik-crds
     namespace: traefik
     includeCRDs: true
+    valuesInline:
+      gatewayAPIExperimental: true
