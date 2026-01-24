@@ -10,6 +10,7 @@ helmCharts:
     version: 39.0.0
     releaseName: traefik
     namespace: traefik
+    includeCRDs: true
     valuesFile: values/traefik-config.yaml
 
 resources:
