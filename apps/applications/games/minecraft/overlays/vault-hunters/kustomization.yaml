@@ -53,7 +53,8 @@ patches:
         WHITELIST: "Kerrlab,JusApee"
         OVERRIDE_WHITELIST: "true"
         CF_FORCE_INCLUDE_MODS: "spark"
-
+        CF_OVERRIDES_SKIP_EXISTING: "true"
+  
   # === Increase default storage size ===
   - target:
       kind: PersistentVolumeClaim

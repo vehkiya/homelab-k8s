@@ -81,22 +81,34 @@ spec:
           # --- PROBES ---
           # 1. Startup Probe: Gives the server time to load mods (up to 10 mins here)
           startupProbe:
-            tcpSocket:
-              port: 25565
+            exec:
+              command:
+                - /usr/local/bin/mc-monitor
+                - status
+                - --host
+                - localhost
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 60
           # 2. Liveness Probe: Recreates pod if port closes (server crash)
           livenessProbe:
-            tcpSocket:
-              port: 25565
+            exec:
+              command:
+                - /usr/local/bin/mc-monitor
+                - status
+                - --host
+                - localhost
             initialDelaySeconds: 5
             periodSeconds: 30
             failureThreshold: 3
           # 3. Readiness Probe: Removes from Service endpoint if temporarily unreachable
           readinessProbe:
-            tcpSocket:
-              port: 25565
+            exec:
+              command:
+                - /usr/local/bin/mc-monitor
+                - status
+                - --host
+                - localhost
             initialDelaySeconds: 5
             periodSeconds: 10
             failureThreshold: 3
