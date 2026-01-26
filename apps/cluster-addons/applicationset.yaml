@@ -11,6 +11,7 @@ spec:
           - name: headlamp
           - name: authelia
           - name: oauth-proxy
+          - name: spegel
   template:
     metadata:
       name: '{{name}}'
