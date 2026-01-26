@@ -10,4 +10,4 @@ images:
   - name: busybox
     newTag: 1.37@sha256:e226d6308690dbe282443c8c7e57365c96b5228f0fe7f40731b5d84d37a06839
   - name: docker.n8n.io/n8nio/n8n
-    newTag: 2.5.2@sha256:54c34f83b2294f3bef7fd684913873f575e51975e7443cf835dce5ede8a175df
+    newTag: 2.6.0@sha256:a06334ab5b5e7116cb93008c2c6f7379eddb6a4e0b2e3ac9a6666e81905561d7
