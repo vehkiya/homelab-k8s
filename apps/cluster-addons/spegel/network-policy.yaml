@@ -1,0 +1,74 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: spegel-policy
+  namespace: spegel
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: spegel
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    # 1. Allow DNS (Managed by global policy but added for clarity/completeness)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+
+    # 2. Allow peer communication (all nodes)
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: "TCP"
+            - port: "5001"
+              protocol: "TCP"
+            - port: "6000"
+              protocol: "TCP"
+
+    # 3. Allow access to Kubernetes API server
+    - toEntities:
+        - kube-apiserver
+        - host
+        - remote-node
+
+    # 4. Allow pulling images from external registries (world)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+
+  # This defines the allowed inbound (ingress) traffic
+  ingress:
+    # 1. Allow peer communication
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: "TCP"
+            - port: "5001"
+              protocol: "TCP"
+            - port: "6000"
+              protocol: "TCP"
+
+    # 2. Allow Containerd on Host/Nodes to access registry
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: "TCP"
