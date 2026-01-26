@@ -50,7 +50,18 @@ patches:
         OPS: "Kerrlab"
         WHITELIST: "Kerrlab,QtpDiana,JusApee"
         LEVEL: "sushi-world"
-  
+
+  # === Override backup schedule ===
+  - target:
+      kind: ConfigMap
+      name: minecraft-backup-script
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: minecraft-backup-script
+      data:
+        DEFAULT_BACKUP_SCHEDULE: "10 * * * *"
   # === Increase default storage size ===
   - target:
       kind: PersistentVolumeClaim

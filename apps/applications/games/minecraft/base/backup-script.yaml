@@ -4,6 +4,7 @@ metadata:
   name: minecraft-backup-script
   namespace: games
 data:
+  DEFAULT_BACKUP_SCHEDULE: "0 * * * *"
   backup.sh: |
     #!/bin/sh
     set -e

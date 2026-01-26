@@ -54,7 +54,19 @@ patches:
         OVERRIDE_WHITELIST: "true"
         CF_FORCE_INCLUDE_MODS: "spark"
         CF_OVERRIDES_SKIP_EXISTING: "true"
-  
+
+  # === Override backup schedule ===
+  - target:
+      kind: ConfigMap
+      name: minecraft-backup-script
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: minecraft-backup-script
+      data:
+        DEFAULT_BACKUP_SCHEDULE: "20 * * * *"
+
   # === Increase default storage size ===
   - target:
       kind: PersistentVolumeClaim

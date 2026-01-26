@@ -135,8 +135,11 @@ spec:
               value: "localhost"
             - name: RCON_PORT
               value: "25575"
-            - name: BACKUP_SCHEDULE
-              value: "0 * * * *"
+            - name: MC_BACKUP_SCHEDULE
+              valueFrom:
+                configMapKeyRef:
+                  key: DEFAULT_BACKUP_SCHEDULE
+                  name: minecraft-backup-script
           command: [ "/bin/sh", "-c" ]
           args:
             - |
@@ -159,8 +162,8 @@ spec:
               } > /container.env
 
               # 4. Setup Crontab
-              # Use BACKUP_SCHEDULE or fallback to hourly
-              SCHEDULE="${BACKUP_SCHEDULE:-0 * * * *}"
+              # Use MC_BACKUP_SCHEDULE or fallback to hourly
+              SCHEDULE="${MC_BACKUP_SCHEDULE:-0 * * * *}"
               echo "✅ Setting up backup schedule: $SCHEDULE"
               # Source env and run backup, redirecting to stdout
               echo "$SCHEDULE . /container.env; /bin/sh /scripts/backup.sh >> /dev/stdout 2>&1" > /etc/crontabs/root
