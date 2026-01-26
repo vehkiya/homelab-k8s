@@ -1,0 +1,4 @@
+spegel:
+  # Required for Talos
+  containerdRegistryConfigPath: /etc/cri/conf.d/hosts
+  appendMirrors: true
