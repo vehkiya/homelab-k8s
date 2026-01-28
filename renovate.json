@@ -87,7 +87,7 @@
         "plexinc/pms-docker"
       ],
       "versioning": "loose",
-      "allowedVersions": "/^((?!arm).)*$/"
+      "allowedVersions": "^((?!arm).)*$"
     },
     {
       "matchUpdateTypes": [
