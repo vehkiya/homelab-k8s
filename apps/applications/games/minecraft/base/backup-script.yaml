@@ -65,6 +65,6 @@ data:
 
     # Prune (Keep last 10)
     cd /backups
-    ls -dt backup-*/ 2>/dev/null | tail -n +11 | xargs -r rm -rf
+    ls -d backup-*/ 2>/dev/null | sort -r | tail -n +11 | xargs -r rm -rf
 
     echo "🧹 Pruning complete."
