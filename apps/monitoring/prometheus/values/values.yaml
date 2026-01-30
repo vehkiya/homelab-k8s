@@ -1,10 +1,18 @@
 prometheus:
   prometheusSpec:
+    securityContext:
+      fsGroup: 2000
+      runAsNonRoot: true
+      runAsUser: 1000
+    containers:
+      - name: prometheus
+        securityContext:
+          readOnlyRootFilesystem: false
     storageSpec:
       volumeClaimTemplate:
         spec:
           storageClassName: longhorn
-          accessModes: [ "ReadWriteMany" ]
+          accessModes: [ "ReadWriteOnce" ]
           resources:
             requests:
               storage: 50Gi # Adjust size as needed
@@ -15,7 +23,7 @@ alertmanager:
       volumeClaimTemplate:
         spec:
           storageClassName: longhorn
-          accessModes: [ "ReadWriteMany" ]
+          accessModes: [ "ReadWriteOnce" ]
           resources:
             requests:
               storage: 10Gi # Adjust
@@ -23,7 +31,7 @@ grafana:
   persistence:
     enabled: true
     storageClassName: longhorn
-    accessModes: [ "ReadWriteMany" ]
+    accessModes: [ "ReadWriteOnce" ]
     size: 10Gi
   admin:
     existingSecret: "app-secrets-grafana"
