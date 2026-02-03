@@ -14,6 +14,6 @@ resources:
   - service.yaml
 images:
   - name: busybox
-    newTag: 1.37@sha256:e226d6308690dbe282443c8c7e57365c96b5228f0fe7f40731b5d84d37a06839
+    newTag: 1.37@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
   - name: eclipse-mosquitto
     newTag: 2.0.22@sha256:e011726bdfa757011bc8b8716e03b7c35d2c3f623d9f658c2c6bf66e909ea42e
