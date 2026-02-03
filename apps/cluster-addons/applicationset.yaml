@@ -7,7 +7,6 @@ spec:
   generators:
     - list:
         elements:
-          - name: kubernetes-dashboard
           - name: headlamp
           - name: authelia
           - name: oauth-proxy
