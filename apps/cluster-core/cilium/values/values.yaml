@@ -43,7 +43,7 @@ ipv4NativeRoutingCIDR: "10.244.0.0/16"  # Pods CIDR
 
 bpf:
   datapathMode: netkit
-  tproxy: true
+  tproxy: false
   preallocateMaps: true
   hostLegacyRouting: false
   masquerade: true
