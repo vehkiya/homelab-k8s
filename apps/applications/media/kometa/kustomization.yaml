@@ -20,4 +20,4 @@ images:
   - name: alpine/k8s
     newTag: 1.35.0@sha256:18bc02c1e0df04451f4f9194eb7b7341c1165da5495459b52f85f72fb9545032
   - name: kometateam/kometa
-    newTag: v2.2.2@sha256:32992226d1a505da3ed5d4e9c97bed8a6deb7aef36cd5ef8b1f519762607df45
+    newTag: v2.3.0@sha256:340e4176e1d75f04d2b55ce177326710f28770b5f56537fd539a034b143fe66d
