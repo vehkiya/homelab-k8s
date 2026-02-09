@@ -18,11 +18,10 @@
   "prHeader": "## 🤖 Renovate: Dependency Maintenance",
   "packageRules": [
     {
-      "matchManagers": [
-        "helm-values",
-        "helmv3"
+      "matchDatasources": [
+        "helm"
       ],
-      "groupName": "helm"
+      "pinDigests": false
     },
     {
       "matchDatasources": [
