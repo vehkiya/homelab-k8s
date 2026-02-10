@@ -17,6 +17,6 @@ resources:
   - bw-sync-cronjob.yaml
 images:
   - name: ghcr.io/vehkiya/bw-cli
-    newTag: 2026.1.0@sha256:a0ac73d4b45688f97bf0ad02227b262f949e7226f78d3b008eef96d58e67fefc
+    newTag: 2026.1.0@sha256:5d88c104e793454ea15e29389d42ec2f24ed3cc4c7e3e155138c5a69eda425dd
   - name: alpine/k8s
     newTag: 1.35.0@sha256:18bc02c1e0df04451f4f9194eb7b7341c1165da5495459b52f85f72fb9545032
