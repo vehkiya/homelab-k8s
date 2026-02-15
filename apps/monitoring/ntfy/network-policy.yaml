@@ -1,0 +1,27 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: ntfy-policy
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: ntfy
+
+  # Allow Ingress from Traefik
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+
+  # Allow all Egress for ntfy to function (upstream, email, push servers)
+  # Restricting this might break notifications if IP ranges change.
+  egress:
+    - toEntities:
+        - world
+        - cluster

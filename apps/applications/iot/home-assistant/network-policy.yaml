@@ -39,7 +39,22 @@ spec:
               protocol: UDP
             - port: "53"
               protocol: TCP
-    # === Allow access to services ===Try
+    # === Allow Egress to Traefik for Hairpinning (for OIDC) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    # === Allow access to services ===
     - toServices:
         - k8sService:
             serviceName: mosquitto-svc
