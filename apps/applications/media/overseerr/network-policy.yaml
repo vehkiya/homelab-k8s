@@ -53,9 +53,14 @@ spec:
         - k8sService:
             serviceName: tautulli-ui
             namespace: media
-        - k8sService:
-            serviceName: ntfy
-            namespace: monitoring
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: ntfy
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
     # === Allow access to external for metadata ===
     - toEntities:
         - "world"

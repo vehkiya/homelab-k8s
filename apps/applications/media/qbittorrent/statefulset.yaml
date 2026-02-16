@@ -111,6 +111,33 @@ spec:
             capabilities:
               drop:
                 - ALL
+        - name: qbit-ntfy
+          image: ghcr.io/vehkiya/qbit-ntfy-sidecar
+          env:
+            - name: QBIT_HOST
+              value: "http://localhost:8080"
+            - name: NTFY_SERVER
+              value: "http://ntfy.monitoring.svc.cluster.local"
+            - name: NTFY_TOPIC
+              value: "downloads"
+            - name: NTFY_PRIORITY_PROGRESS
+              value: "low"
+            - name: NTFY_PRIORITY_COMPLETE
+              value: "default"
+            - name: NOTIFY_COMPLETE
+              value: "true"
+            - name: PROGRESS_FORMAT
+              value: "bar"
+          envFrom:
+            - secretRef:
+                name: ntfy-credentials
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
       dnsConfig:
         options:
           - name: ndots
