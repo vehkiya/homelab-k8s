@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: overseerr
-          image: sctx/overseerr
+          image: ghcr.io/seerr-team/seerr
           env:
             - name: PGID
               value: "1000"
