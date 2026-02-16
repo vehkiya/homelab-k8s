@@ -19,4 +19,4 @@ images:
   - name: ghcr.io/home-operations/qbittorrent
     newTag: 5.1.4@sha256:56ecd30a7f5e1357daf5eea2a6935134d329b7b268a3a9b9c67041b65fb87fc6
   - name: ghcr.io/vehkiya/qbit-ntfy-sidecar
-    newTag: 0.0.6@sha256:32758946f39c579c43ed90e1706fc3baa993a3ca44205aeeae451dd30602b719
+    newTag: 0.0.9@sha256:6e1b73313efad44175cead0251150870433b961ea6cdffb6c6ee879ba28173a0
