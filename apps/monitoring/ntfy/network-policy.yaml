@@ -12,7 +12,7 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            io.kubernetes.pod.namespace: traefik
+            k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
       toPorts:
         - ports:
@@ -22,31 +22,31 @@ spec:
     # Allow Ingress from client apps
     - fromEndpoints:
         - matchLabels:
-            io.kubernetes.pod.namespace: iot
+            k8s:io.kubernetes.pod.namespace: iot
             app: home-assistant
         - matchLabels:
-            io.kubernetes.pod.namespace: media
+            k8s:io.kubernetes.pod.namespace: media
             app: radarr
         - matchLabels:
-            io.kubernetes.pod.namespace: media
+            k8s:io.kubernetes.pod.namespace: media
             app: sonarr
         - matchLabels:
-            io.kubernetes.pod.namespace: media
+            k8s:io.kubernetes.pod.namespace: media
             app: overseerr
         - matchLabels:
-            io.kubernetes.pod.namespace: notifications
+            k8s:io.kubernetes.pod.namespace: notifications
             app: uptime-kuma
         - matchLabels:
-            io.kubernetes.pod.namespace: media
+            k8s:io.kubernetes.pod.namespace: media
             app: autobrr
         - matchLabels:
-            io.kubernetes.pod.namespace: default
+            k8s:io.kubernetes.pod.namespace: default
             app: n8n
         - matchLabels:
-            io.kubernetes.pod.namespace: media
+            k8s:io.kubernetes.pod.namespace: media
             app: bazarr
         - matchLabels:
-            io.kubernetes.pod.namespace: media
+            k8s:io.kubernetes.pod.namespace: media
             app: tautulli
       toPorts:
         - ports:
