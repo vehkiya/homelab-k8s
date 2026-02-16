@@ -46,6 +46,9 @@ spec:
         - k8sService:
             serviceName: radarr-ui
             namespace: media
+        - k8sService:
+            serviceName: ntfy
+            namespace: monitoring
     # === Allow access to external for subtitles ===
     - toEntities:
         - "world"

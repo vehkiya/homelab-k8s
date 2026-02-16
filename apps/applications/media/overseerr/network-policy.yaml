@@ -53,6 +53,9 @@ spec:
         - k8sService:
             serviceName: tautulli-ui
             namespace: media
+        - k8sService:
+            serviceName: ntfy
+            namespace: monitoring
     # === Allow access to external for metadata ===
     - toEntities:
         - "world"

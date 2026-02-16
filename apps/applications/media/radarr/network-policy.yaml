@@ -59,6 +59,9 @@ spec:
         - k8sService:
             serviceName: prowlarr-ui
             namespace: media
+        - k8sService:
+            serviceName: ntfy
+            namespace: monitoring
     # === Allow access to external for indexers ===
     - toEntities:
         - "world"

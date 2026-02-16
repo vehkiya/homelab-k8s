@@ -80,6 +80,9 @@ spec:
         - k8sService:
             serviceName: minecraft-vanilla
             namespace: games
+        - k8sService:
+            serviceName: ntfy
+            namespace: monitoring
     # === Allow Internet Access (Integrations/Updates) ===
     - toEntities:
         - "world"

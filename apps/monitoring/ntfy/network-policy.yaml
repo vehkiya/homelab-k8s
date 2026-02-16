@@ -19,6 +19,40 @@ spec:
             - port: "80"
               protocol: TCP
 
+    # Allow Ingress from client apps
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: iot
+            app: home-assistant
+        - matchLabels:
+            io.kubernetes.pod.namespace: media
+            app: radarr
+        - matchLabels:
+            io.kubernetes.pod.namespace: media
+            app: sonarr
+        - matchLabels:
+            io.kubernetes.pod.namespace: media
+            app: overseerr
+        - matchLabels:
+            io.kubernetes.pod.namespace: notifications
+            app: uptime-kuma
+        - matchLabels:
+            io.kubernetes.pod.namespace: media
+            app: autobrr
+        - matchLabels:
+            io.kubernetes.pod.namespace: default
+            app: n8n
+        - matchLabels:
+            io.kubernetes.pod.namespace: media
+            app: bazarr
+        - matchLabels:
+            io.kubernetes.pod.namespace: media
+            app: tautulli
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+
   # Allow all Egress for ntfy to function (upstream, email, push servers)
   # Restricting this might break notifications if IP ranges change.
   egress:
