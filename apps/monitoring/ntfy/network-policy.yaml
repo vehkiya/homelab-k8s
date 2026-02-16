@@ -48,6 +48,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: tautulli
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: qbittorrent
       toPorts:
         - ports:
             - port: "80"

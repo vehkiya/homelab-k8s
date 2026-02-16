@@ -61,3 +61,12 @@ spec:
     # === Allow access to the world for torrenting ===
     - toEntities:
         - "world"
+    # === Allow access to ntfy ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: ntfy
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
