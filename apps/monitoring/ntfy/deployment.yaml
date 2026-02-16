@@ -15,19 +15,62 @@ spec:
       labels:
         app.kubernetes.io/name: ntfy
     spec:
-      containers:
-        - name: ntfy
-          image: binwiederhier/ntfy:latest
-          args: ["serve"]
+      initContainers:
+        - name: prepare-config
+          image: alpine:latest
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - |
+              apk add --no-cache yq gettext
+
+              echo "Generating config..."
+
+              if [ -n "$NTFY_AUTH_USERS" ]; then
+                # 1. We export the variable so yq can see it via env()
+                export NTFY_AUTH_USERS
+
+                # 2. Use 'env(NTFY_AUTH_USERS)' to read it safely
+                # We add a leading newline (\n) so it drops to the next line in YAML
+                NTFY_AUTH_USERS_FORMATTED="
+              $(yq e -n 'env(NTFY_AUTH_USERS) | split(",")' | sed 's/^/  /')"
+              else
+                # Fallback for empty list
+                NTFY_AUTH_USERS_FORMATTED=" []"
+              fi
+
+              # Export the formatted string for envsubst
+              export NTFY_AUTH_USERS_FORMATTED
+
+              if [ ! -f /etc/ntfy-template/server.yml.template ]; then
+                echo "Template not found!"
+                exit 1
+              fi
+
+              envsubst < /etc/ntfy-template/server.yml.template > /etc/ntfy/server.yml
+
+              echo "Config generated:"
+              cat /etc/ntfy/server.yml
           envFrom:
             - secretRef:
                 name: ntfy-secret
             - configMapRef:
                 name: ntfy-config
+          volumeMounts:
+            - name: config-template
+              mountPath: /etc/ntfy-template
+            - name: config
+              mountPath: /etc/ntfy
+      containers:
+        - name: ntfy
+          image: binwiederhier/ntfy
+          args: [ "serve" ]
           ports:
             - name: http
               containerPort: 80
           volumeMounts:
+            - name: config
+              mountPath: /etc/ntfy/server.yml
+              subPath: server.yml
             - name: data
               mountPath: /var/lib/ntfy
             - name: cache
@@ -40,6 +83,11 @@ spec:
               memory: 256Mi
               cpu: 500m
       volumes:
+        - name: config-template
+          configMap:
+            name: ntfy-config
+        - name: config
+          emptyDir: { }
         - name: data
           persistentVolumeClaim:
             claimName: ntfy-data

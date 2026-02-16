@@ -1,0 +1,25 @@
+base-url: "https://ntfy.kerrlab.app"
+listen-http: ":80"
+cache-file: "/var/cache/ntfy/cache.db"
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+auth-file: "/var/lib/ntfy/auth.db"
+auth-default-access: "deny-all"
+behind-proxy: true
+enable-login: true
+upstream-base-url: "https://ntfy.sh"
+web-push-file: "/var/lib/ntfy/webpush.db"
+log-level: "warn"
+
+# Web Push Keys
+web-push-public-key: "$NTFY_WEB_PUSH_PUBLIC_KEY"
+web-push-private-key: "$NTFY_WEB_PUSH_PRIVATE_KEY"
+web-push-email-address: "$NTFY_WEB_PUSH_EMAIL_ADDRESS"
+
+# Auth Users
+auth-users: $NTFY_AUTH_USERS_FORMATTED
+
+# Auth Access
+auth-access:
+  - "*:announcements:ro"
+  - "diana:*:ro"
+  - "kerrlab-bot:*:rw"
