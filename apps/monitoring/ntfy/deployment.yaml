@@ -18,7 +18,7 @@ spec:
       initContainers:
         - name: prepare-config
           image: alpine:latest
-          command: [ "/bin/sh", "-c" ]
+          command: ["/bin/sh", "-c"]
           args:
             - |
               apk add --no-cache yq gettext
@@ -63,7 +63,7 @@ spec:
       containers:
         - name: ntfy
           image: binwiederhier/ntfy
-          args: [ "serve" ]
+          args: ["serve"]
           ports:
             - name: http
               containerPort: 80
@@ -81,13 +81,13 @@ spec:
               memory: 64Mi
             limits:
               memory: 256Mi
-              cpu: 500m
+              cpu: 1000m
       volumes:
         - name: config-template
           configMap:
             name: ntfy-config
         - name: config
-          emptyDir: { }
+          emptyDir: {}
         - name: data
           persistentVolumeClaim:
             claimName: ntfy-data

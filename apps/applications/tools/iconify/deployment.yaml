@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iconify
+  namespace: applications
+  labels:
+    app: iconify
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iconify
+  template:
+    metadata:
+      labels:
+        app: iconify
+    spec:
+      containers:
+        - name: iconify
+          image: iconify/api
+          ports:
+            - containerPort: 3000
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
