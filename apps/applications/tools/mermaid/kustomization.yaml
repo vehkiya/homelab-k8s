@@ -7,4 +7,4 @@ resources:
   - http-route.yaml
 images:
   - name: ghcr.io/mermaid-js/mermaid-live-editor
-    newTag: latest@sha256:9bc923d07397066d94e85028143859553bf9a32c9bb429e30198924a5ac5bc77
+    newTag: latest@sha256:39604ae9e5900b929e19239e45e9a5f691d72732be629ae88e797bda6f7502fb
