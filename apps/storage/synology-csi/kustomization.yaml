@@ -14,10 +14,10 @@ images:
   - name: registry.k8s.io/sig-storage/csi-provisioner
     newTag: v6.1.1@sha256:d992c36d4ddd6dfa37c81b487e5a673920e1360e2977eb779051df8da1c5787d
   - name: registry.k8s.io/sig-storage/csi-attacher
-    newTag: v4.10.0@sha256:be59d0556508d3dd419cc34c53062f170a28902ef36e832b947c7796458a083d
+    newTag: v4.11.0@sha256:b74b05b39501565022883fc128002b4cb857a7bb6c858606bcb3fdedba0b0b80
   - name: registry.k8s.io/sig-storage/csi-resizer
     newTag: v2.1.0@sha256:589e525cddef6d768e68da1f0bc9ffd0a24bf3add3dd010648eb7189976fde79
   - name: ghcr.io/zebernst/synology-csi
     newTag: v1.2.0@sha256:6e6fbf9502e5ab3ef38d1f6c4c65ea65297b3fd38fe9cdaa6d1673e64b298855
   - name: registry.k8s.io/sig-storage/csi-node-driver-registrar
-    newTag: v2.15.0@sha256:11f199f6bec47403b03cb49c79a41f445884b213b382582a60710b8c6fdc316a
+    newTag: v2.16.0@sha256:ab482308a4921e28a6df09a16ab99a457e9af9641ff44fb1be1a690d07ce8b70
