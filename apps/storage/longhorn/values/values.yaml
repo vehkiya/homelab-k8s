@@ -2,3 +2,11 @@ persistence:
   defaultClassReplicaCount: 3
 ingress:
   enabled: false
+
+defaultSettings:
+  # Do not automatically create disks on all nodes. 
+  # This allows us to control which nodes provide storage via labels.
+  createDefaultDiskLabeledNodes: true
+  # Ensure control planes aren't used by default unless necessary.
+  # We will keep this false for now because we need lab-2 and lab-3.
+  disableSchedulingOnControlPlane: false

@@ -7,14 +7,6 @@ metadata:
     pv.kubernetes.io/provisioned-by: csi.san.synology.com
   name: cnpg-cluster-pv-1
 spec:
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname # Standard label for node hostname
-              operator: In # Operator to check if the value is in the list
-              values:
-                - lab-1
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -39,14 +31,6 @@ metadata:
     pv.kubernetes.io/provisioned-by: csi.san.synology.com
   name: cnpg-cluster-pv-2
 spec:
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname # Standard label for node hostname
-              operator: In # Operator to check if the value is in the list
-              values:
-                - lab-2
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -71,14 +55,6 @@ metadata:
     pv.kubernetes.io/provisioned-by: csi.san.synology.com
   name: cnpg-cluster-pv-3
 spec:
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname # Standard label for node hostname
-              operator: In # Operator to check if the value is in the list
-              values:
-                - lab-3
   accessModes:
     - ReadWriteOnce
   capacity:

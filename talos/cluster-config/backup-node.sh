@@ -45,4 +45,6 @@ backup_machine_config() {
     fi
 }
 
-backup_machine_config $1 || exit 1;
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    backup_machine_config "$@" || exit 1
+fi

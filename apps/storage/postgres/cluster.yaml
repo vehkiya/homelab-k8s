@@ -18,18 +18,6 @@ spec:
         passwordSecret:
           name: authelia-user-password
 
-  # Static provisioning for retained storage
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                  - lab-1
-                  - lab-2
-                  - lab-3
   storage:
     pvcTemplate:
       accessModes:
