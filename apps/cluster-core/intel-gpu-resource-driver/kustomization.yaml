@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - resource-claims.yaml
+
+helmCharts:
+  - name: intel-device-plugins-operator
+    repo: https://intel.github.io/helm-charts/
+    version: 0.35.0
+    releaseName: intel-device-plugins-operator
+    namespace: inteldeviceplugins-system
+    includeCRDs: true
+
+  - name: intel-gpu-resource-driver
+    repo: https://intel.github.io/helm-charts/
+    version: 0.9.0
+    releaseName: intel-gpu-resource-driver
+    namespace: inteldeviceplugins-system
+    valuesInline:
+      namespaceOverride: inteldeviceplugins-system
+      kubeletPlugin:
+        cdiRoot: /var/cdi/static
+
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: DaemonSet
+      metadata:
+        name: intel-gpu-resource-driver-kubelet-plugin
+        namespace: inteldeviceplugins-system
+      spec:
+        template:
+          spec:
+            containers:
+            - name: kubelet-plugin
+              volumeMounts:
+              - mountPath: /etc/cdi
+                name: cdi
+            volumes:
+            - name: cdi
+              hostPath:
+                path: /var/cdi/static

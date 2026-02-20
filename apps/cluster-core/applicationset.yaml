@@ -11,7 +11,7 @@ spec:
           - name: coredns
           - name: cert-manager
           - name: multus
-#          - name: tailscale
+          #          - name: tailscale
           - name: traefik
           - name: traefik-crds
           - name: external-secrets-operator
@@ -19,14 +19,14 @@ spec:
           - name: intel-device-plugin
   template:
     metadata:
-      name: '{{name}}'
+      name: "{{name}}"
       namespace: argocd
     spec:
       project: default
       source:
         repoURL: https://github.com/vehkiya/homelab-k8s.git
         targetRevision: HEAD
-        path: 'apps/cluster-core/{{name}}'
+        path: "apps/cluster-core/{{name}}"
       destination:
         server: https://kube.kerrlab.app:6443
         namespace: argocd

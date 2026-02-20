@@ -1,0 +1,25 @@
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: intel-gpu-claim-template
+  namespace: media # Need one in media
+spec:
+  spec:
+    devices:
+      requests:
+        - name: intel-gpu
+          exactly:
+            deviceClassName: gpu.intel.com
+---
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: intel-gpu-claim-template
+  namespace: iot # Need one in iot for Frigate
+spec:
+  spec:
+    devices:
+      requests:
+        - name: intel-gpu
+          exactly:
+            deviceClassName: gpu.intel.com
