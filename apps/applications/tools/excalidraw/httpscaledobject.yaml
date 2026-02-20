@@ -1,0 +1,17 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: excalidraw
+  namespace: default
+spec:
+  hosts:
+    - excalidraw.kerrlab.app
+  scaleTargetRef:
+    name: excalidraw
+    kind: Deployment
+    apiVersion: apps/v1
+    service: excalidraw-ui
+    port: 80
+  replicas:
+    min: 0
+    max: 1
