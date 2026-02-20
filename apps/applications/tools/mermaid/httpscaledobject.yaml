@@ -1,0 +1,17 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: mermaid
+  namespace: default
+spec:
+  hosts:
+    - mermaid.kerrlab.app
+  scaleTargetRef:
+    name: mermaid
+    kind: Deployment
+    apiVersion: apps/v1
+    service: mermaid-ui
+    port: 8080
+  replicas:
+    min: 0
+    max: 1
