@@ -13,7 +13,7 @@ helmCharts:
 
   - name: intel-gpu-resource-driver
     repo: https://intel.github.io/helm-charts/
-    version: 0.9.0
+    version: 0.7.0
     releaseName: intel-gpu-resource-driver
     namespace: inteldeviceplugins-system
     valuesInline:
