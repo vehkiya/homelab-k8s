@@ -17,6 +17,7 @@ spec:
           - name: external-secrets-operator
           - name: nfd
           - name: intel-device-plugin
+          - name: keda
   template:
     metadata:
       name: "{{name}}"
