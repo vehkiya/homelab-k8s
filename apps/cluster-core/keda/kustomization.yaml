@@ -18,3 +18,4 @@ helmCharts:
 resources:
   - namespace.yaml
   - network-policy.yaml
+  - reference-grant.yaml

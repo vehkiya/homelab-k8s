@@ -26,6 +26,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: keda
+            app.kubernetes.io/component: interceptor
       toPorts:
         - ports:
             - port: "80"
