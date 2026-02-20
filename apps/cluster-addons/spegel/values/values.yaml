@@ -2,3 +2,7 @@ spegel:
   # Required for Talos
   containerdRegistryConfigPath: /etc/cri/conf.d/hosts
   appendMirrors: true
+
+service:
+  registry:
+    usePreferSameNodeTrafficDistribution: true
