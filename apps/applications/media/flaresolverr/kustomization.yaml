@@ -6,6 +6,7 @@ resources:
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+  - hpa.yaml
 
 labels:
   - pairs:
