@@ -14,3 +14,10 @@ spec:
       containers:
         - name: whoami
           image: traefik/whoami
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "64Mi"
