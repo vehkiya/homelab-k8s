@@ -5,6 +5,8 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - httpscaledobject.yaml
+  - network-policy.yaml
 images:
   - name: ghcr.io/mermaid-js/mermaid-live-editor
     newTag: latest@sha256:39604ae9e5900b929e19239e45e9a5f691d72732be629ae88e797bda6f7502fb
