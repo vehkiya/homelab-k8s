@@ -1,0 +1,35 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: thelounge-policy
+  namespace: default
+spec:
+  endpointSelector:
+    matchLabels:
+      app: thelounge
+
+  # This defines the allowed outbound (egress) traffic
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+  # Allow Ingress (Inbound)
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: keda
+            app.kubernetes.io/component: interceptor
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: "TCP"

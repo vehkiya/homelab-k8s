@@ -4,7 +4,6 @@ metadata:
   name: thelounge
   namespace: default
 spec:
-  replicas: 1
   strategy:
     type: Recreate
   selector:

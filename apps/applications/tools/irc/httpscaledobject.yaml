@@ -1,0 +1,17 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: thelounge
+  namespace: default
+spec:
+  hosts:
+    - irc.kerrlab.app
+  scaleTargetRef:
+    name: thelounge
+    kind: Deployment
+    apiVersion: apps/v1
+    service: thelounge-ui
+    port: 9000
+  replicas:
+    min: 0
+    max: 1
