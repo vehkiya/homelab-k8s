@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: wedding-share
 spec:
-  replicas: 1
   strategy:
     type: Recreate
   selector:
