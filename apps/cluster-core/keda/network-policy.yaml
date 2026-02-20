@@ -1,0 +1,67 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: keda-policy
+  namespace: keda
+spec:
+  endpointSelector: {}
+
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow intra-namespace communication ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: keda
+
+    # === Allow webhook and metrics access from the Kube API server ===
+    - fromEntities:
+        - "kube-apiserver"
+
+    # === Allow traffic from Traefik (for HTTP Add-on interceptor proxying) ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+
+    # === Allow Prometheus monitoring (from monitoring namespace) ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+
+  # ----=== Egress ===----
+  egress:
+    # === Allow intra-namespace communication ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: keda
+
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+
+    # === Allow access to the Kubernetes API server ===
+    - toEntities:
+        - "kube-apiserver"
+
+    # === Allow HTTP Interceptor to proxy to workloads in the cluster ===
+    # === and KEDA Operator to reach internal metric sources ===
+    - toEntities:
+        - "cluster"
+
+    # === Allow access to the world for external scalers (AWS, Datadog, etc) ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
