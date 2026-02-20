@@ -60,6 +60,45 @@ spec:
             capabilities:
               drop:
                 - ALL
+        - name: gluetun
+          image: qmcgaw/gluetun
+          restartPolicy: Always # Declares this as a native sidecar
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+            capabilities:
+              add:
+                - NET_ADMIN
+            allowPrivilegeEscalation: false
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: "protonvpn"
+            - name: VPN_TYPE
+              value: "wireguard"
+            - name: SERVER_COUNTRIES
+              value: "Switzerland"
+            - name: PORT_FORWARDING
+              value: "on"
+            - name: PORT_FORWARD_ONLY
+              value: "on"
+            - name: FIREWALL_INPUT_PORTS
+              value: "8080"
+            - name: FIREWALL_OUTBOUND_SUBNETS
+              value: "10.244.0.0/16,10.96.0.0/12,10.10.0.0/16"
+            - name: DNS_ADDRESS
+              value: "10.96.0.10"
+            - name: DOT
+              value: "off"
+            - name: VPN_PORT_FORWARDING
+              value: "on"
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gluetun-secret
+                  key: WIREGUARD_PRIVATE_KEY
+          volumeMounts:
+            - name: gluetun-port-data
+              mountPath: /tmp/gluetun
       containers:
         - name: qbittorrent
           image: ghcr.io/home-operations/qbittorrent
@@ -105,6 +144,9 @@ spec:
             - name: vuetorrent-webui
               mountPath: /vuetorrent
           securityContext:
+            runAsGroup: 100
+            runAsNonRoot: true
+            runAsUser: 1026
             allowPrivilegeEscalation: false
             seccompProfile:
               type: RuntimeDefault
@@ -145,9 +187,6 @@ spec:
       securityContext:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 100
-        runAsNonRoot: true
-        runAsUser: 1026
       volumes:
         - name: downloads-mount
           persistentVolumeClaim:
@@ -156,4 +195,6 @@ spec:
           persistentVolumeClaim:
             claimName: qbittorrent-config-pvc
         - name: vuetorrent-webui
-          emptyDir: { }
+          emptyDir: {}
+        - name: gluetun-port-data
+          emptyDir: {}

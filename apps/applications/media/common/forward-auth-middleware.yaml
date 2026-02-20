@@ -6,10 +6,10 @@ metadata:
   namespace: media
 spec:
   forwardAuth:
-    address: 'http://authelia.core.svc.cluster.local:9091/api/authz/forward-auth'
+    address: "http://authelia.core.svc.cluster.local:9091/api/authz/forward-auth"
     trustForwardHeader: true
     authResponseHeaders:
-      - 'Remote-User'
-      - 'Remote-Groups'
-      - 'Remote-Email'
-      - 'Remote-Name'
+      - "Remote-User"
+      - "Remote-Groups"
+      - "Remote-Email"
+      - "Remote-Name"

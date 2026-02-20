@@ -18,6 +18,13 @@ spec:
         - ports:
             - port: web-ui
               protocol: "TCP"
+    # === Allow health checks from the host ===
+    - fromEntities:
+        - "host"
+      toPorts:
+        - ports:
+            - port: web-ui
+              protocol: "TCP"
     # === Allow access from other apps ===
     - fromEndpoints:
         - matchLabels:

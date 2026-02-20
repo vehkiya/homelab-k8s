@@ -8,6 +8,7 @@ resources:
   - http-route.yaml
   - network-policy.yaml
   - ntfy-credentials-secret.yaml
+  - vpn-secret.yaml
 
 labels:
   - pairs:
@@ -20,3 +21,5 @@ images:
     newTag: 5.1.4@sha256:56ecd30a7f5e1357daf5eea2a6935134d329b7b268a3a9b9c67041b65fb87fc6
   - name: ghcr.io/vehkiya/qbit-ntfy-sidecar
     newTag: 0.0.10@sha256:f5ef2c50e56aef058bf6a573c0f6e21707fd9573ee86cba69378c94d7e8bd3f8
+  - name: qmcgaw/gluetun
+    newTag: v3.41.1@sha256:1a5bf4b4820a879cdf8d93d7ef0d2d963af56670c9ebff8981860b6804ebc8ab
