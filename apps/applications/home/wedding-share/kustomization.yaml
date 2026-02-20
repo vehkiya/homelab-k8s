@@ -14,4 +14,4 @@ resources:
   - http-route.yaml
 images:
   - name: cirx08/wedding_share
-    newTag: 1.8.2@sha256:a09103657891d044a5f8ce01b02d7b9b3b2d6e5a952311061827dee818372fef
+    newTag: 1.8.2@sha256:2dc94c0510b3b47c8b7b76535270bfffa898b688c890d8199496dcf38dacf063
