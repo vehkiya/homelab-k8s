@@ -24,4 +24,4 @@ images:
   - name: ghcr.io/karlomikus/barassistant
     newTag: 5.13.1@sha256:ea29353c6f6c12d6e64b6db6a46cc4763532b954a2836a7c7f29b7cbcc3802aa
   - name: ghcr.io/karlomikus/salt-rim
-    newTag: 4.14.0@sha256:0092392882e5d5979262d95ff3c30aaeb4f512af4212a2e872dffdcec6dc6c12
+    newTag: 4.14.1@sha256:c5d8ab7c0119176361e40907e5162fec0e666244a86294d7d3974e7ad85c332e
