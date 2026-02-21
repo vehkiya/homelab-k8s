@@ -157,10 +157,12 @@ spec:
         - name: qbit-port-sync
           image: ghcr.io/vehkiya/qbit-gluetun-sync
           env:
-            - name: QBITTORRENT_SERVER
+            - name: QBIT_ADDR
               value: "http://localhost:8080"
-            - name: GLUETUN_PORT_FILE
+            - name: PORT_FILE
               value: "/tmp/gluetun/forwarded_port"
+            - name: LISTEN_PORT
+              value: "9090"
           volumeMounts:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
