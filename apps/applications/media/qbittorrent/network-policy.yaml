@@ -42,15 +42,6 @@ spec:
         - ports:
             - port: "web-ui"
               protocol: "TCP"
-    # === Allow access from the world for torrenting ===
-    - fromEntities:
-        - "world"
-      toPorts:
-        - ports:
-            - port: "56883"
-              protocol: "TCP"
-            - port: "56883"
-              protocol: "UDP"
 
   # ----=== Egress ===----
   egress:
