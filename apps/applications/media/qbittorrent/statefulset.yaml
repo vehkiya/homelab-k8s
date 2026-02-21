@@ -165,6 +165,13 @@ spec:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
               readOnly: true
+          resources:
+            requests:
+              cpu: "5m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "64Mi"
           securityContext:
             runAsUser: 1026
             runAsGroup: 100
