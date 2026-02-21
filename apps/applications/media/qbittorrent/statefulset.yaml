@@ -162,7 +162,7 @@ spec:
             - name: PORT_FILE
               value: "/tmp/gluetun/forwarded_port"
             - name: LISTEN_PORT
-              value: "9090"
+              value: "9091"
           volumeMounts:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
