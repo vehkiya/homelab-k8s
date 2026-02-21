@@ -155,31 +155,12 @@ spec:
               drop:
                 - ALL
         - name: qbit-port-sync
-          image: alpine/k8s
-          command:
-            - /bin/sh
-            - -c
-            - |
-              #!/bin/sh
-              FILE=/tmp/gluetun/forwarded_port
-              OLD_PORT=""
-
-              while true; do
-                if [ -f "$FILE" ]; then
-                  PORT=$(cat "$FILE")
-                  if [ "$PORT" != "$OLD_PORT" ]; then
-                    echo "Port changed from '$OLD_PORT' to '$PORT'. Updating qBitTorrent..."
-                    # Update both the listening port and ensure it is not randomized on restart
-                    # Bypass auth is expected to be enabled for localhost in qbit config
-                    curl -s -X POST "http://localhost:8080/api/v2/app/setPreferences" \
-                      --data-urlencode "json={\"listen_port\": $PORT, \"random_port\": false}"
-                    OLD_PORT=$PORT
-                  fi
-                else
-                  echo "Waiting for $FILE to be created by gluetun..."
-                fi
-                sleep 60
-              done
+          image: ghcr.io/soerenschneider/gluetun-qbittorrent-port-manager
+          env:
+            - name: QBITTORRENT_SERVER
+              value: "http://localhost:8080"
+            - name: GLUETUN_PORT_FILE
+              value: "/tmp/gluetun/forwarded_port"
           volumeMounts:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
