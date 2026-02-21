@@ -155,7 +155,7 @@ spec:
               drop:
                 - ALL
         - name: qbit-port-sync
-          image: ghcr.io/soerenschneider/gluetun-qbittorrent-port-manager
+          image: ghcr.io/vehkiya/qbit-gluetun-sync
           env:
             - name: QBITTORRENT_SERVER
               value: "http://localhost:8080"
