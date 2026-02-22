@@ -9,7 +9,7 @@ spec:
       "k8s:app": redis
   # ----=== Ingress ===----
   ingress:
-    # === Allow access from Authelia ===
+    # === Allow access from clients ===
     - fromEndpoints:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "core"
@@ -20,6 +20,9 @@ spec:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "home"
             "k8s:app": "bar-assistant"
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "default"
+            "k8s:app": "n8n"
       toPorts:
         - ports:
             - port: "6379"

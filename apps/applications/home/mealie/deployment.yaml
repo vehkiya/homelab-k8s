@@ -45,6 +45,10 @@ spec:
           resources:
             limits:
               memory: "1Gi"
+              cpu: "1000m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
           securityContext:
             runAsNonRoot: true
             allowPrivilegeEscalation: false

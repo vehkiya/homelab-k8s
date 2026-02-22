@@ -25,6 +25,15 @@ spec:
         - ports:
             - port: "http"
               protocol: TCP
+    # === Allow access from n8n ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: default
+            app: n8n
+      toPorts:
+        - ports:
+            - port: "8123"
+              protocol: TCP
 
   # ----=== Egress ===----
   egress:
