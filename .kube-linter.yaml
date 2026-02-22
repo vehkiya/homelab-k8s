@@ -3,5 +3,7 @@
 checks:
   # Enable all default checks
   all: true
-  # You can exclude specific checks here if they are too noisy
-  exclude: []
+  # Exclude checks that are often too noisy or restrictive for a HomeLab environment
+  exclude:
+    - "no-read-only-root-fs" # Too many apps need writable /tmp or cache without easy config
+    - "run-as-non-root"     # Some images/init containers (like chown) need root to function
