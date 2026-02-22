@@ -16,7 +16,32 @@
   ],
   "automergeType": "pr",
   "prHeader": "## 🤖 Renovate: Dependency Maintenance",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)kustomization\\.yaml$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+-\\s+https://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?:refs/tags/)?(?<currentValue>[^/]+)/"
+      ]
+    }
+  ],
   "packageRules": [
+    {
+      "groupName": "argocd",
+      "matchPackageNames": [
+        "quay.io/argoproj/argocd",
+        "argoproj/argo-cd"
+      ]
+    },
+    {
+      "groupName": "multus",
+      "matchPackageNames": [
+        "k8snetworkplumbingwg/multus-cni",
+        "ghcr.io/siderolabs/install-cni"
+      ]
+    },
     {
       "matchDatasources": [
         "helm"
