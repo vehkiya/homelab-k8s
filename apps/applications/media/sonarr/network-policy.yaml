@@ -30,6 +30,9 @@ spec:
             app: bazarr
         - matchLabels:
             app: unpackerr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: default
+            app: n8n
       toPorts:
         - ports:
             - port: "web-ui"

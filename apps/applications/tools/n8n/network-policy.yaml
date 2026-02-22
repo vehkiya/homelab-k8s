@@ -47,6 +47,31 @@ spec:
         - ports:
             - port: "6379"
               protocol: TCP
+    # === Allow egress to ntfy, sonarr, radarr ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: ntfy
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: sonarr
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: radarr
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
     # === Allow Internet Access ===
     - toEntities:
         - "world"
