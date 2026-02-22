@@ -7,7 +7,7 @@ metadata:
 data:
   # --- Common ---
   # Set the external URL where the application will be accessed
-  APP_URL: "https://bar.kerrlab.app/api"
+  APP_URL: "https://bar.kerrlab.app"
   # Set the external URL for Meilisearch (used by Salt Rim frontend)
   # Ensure Meilisearch is also exposed via Traefik at this address
   MEILISEARCH_URL: "https://meilisearch.kerrlab.app"
@@ -22,8 +22,9 @@ data:
   ALLOW_REGISTRATION: "true"
 
   # --- Salt Rim Frontend ---
-  # API_URL points to the external URL of the backend API
-  API_URL: "https://bar.kerrlab.app/api" # This matches the Ingress path for the backend
-  AUTHELIA_BASE_URL: "http://auth.kerrlab.app"
+  # API_URL points to the base domain; Salt Rim appends /api internally
+  API_URL: "https://bar.kerrlab.app/bar"
+  # This matches the Ingress path for the backend
+  AUTHELIA_BASE_URL: "https://auth.kerrlab.app"
   AUTHELIA_CLIENT_ID: "bar-assistant"
   AUTHELIA_REDIRECT_URI: "https://bar.kerrlab.app/oauth/callback"

@@ -13,13 +13,13 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /api
+            value: /bar
       filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: /
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: bar-assistant-strip-prefix
       backendRefs:
         - name: bar-assistant
           port: 8080
@@ -28,5 +28,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: salt-rim # Frontend service
+        - name: salt-rim
           port: 8080

@@ -1,85 +1,101 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: salt-rim-policy
-  namespace: home
-spec:
-  endpointSelector:
-    matchLabels:
-      "k8s:app": salt-rim
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "core"
-            "k8s:app.kubernetes.io/name": "traefik"
-  egress:
-    - toServices:
-        - k8sService:
-            serviceName: bar-assistant
-            namespace: home
-        - k8sService:
-            serviceName: meilisearch-kubernetes
-            namespace: default
-      toPorts:
-        - ports:
-            - port: "8080"
-              protocol: "TCP"
-    - toEndpoints:
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "kube-system"
-            "k8s-app": "coredns"
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
   name: bar-assistant-policy
   namespace: home
 spec:
   endpointSelector:
     matchLabels:
-      "k8s:app": bar-assistant
+      app: bar-assistant
   ingress:
+    # Allow access from Traefik
     - fromEndpoints:
         - matchLabels:
-            "k8s:app": salt-rim
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    # Allow access from Salt Rim frontend (in case it proxies)
+    - fromEndpoints:
+        - matchLabels:
+            app: salt-rim
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
     # Allow loopback
     - fromEndpoints:
         - matchLabels:
-            "k8s:app": "bar-assistant"
+            app: bar-assistant
   egress:
+    # Allow DNS
     - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "redis"
-            "k8s:app": "redis"
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+    # Allow access to Redis
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: redis
+            app: redis
       toPorts:
         - ports:
             - port: "6379"
-              protocol: "TCP"
-    - toServices:
-        - k8sService:
-            serviceName: meilisearch-kubernetes
-            namespace: default
+              protocol: TCP
+    # Allow access to Meilisearch
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: default
+            app.kubernetes.io/name: meilisearch
       toPorts:
         - ports:
             - port: "7700"
-              protocol: "TCP"
-    - toEndpoints:
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "kube-system"
-            "k8s-app": "coredns"
+              protocol: TCP
+    # Allow access to Authelia (via Traefik or World) for OIDC validation
+    - toEntities:
+        - world
       toPorts:
         - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
+            - port: "443"
+              protocol: TCP
     # Allow loopback
     - toEndpoints:
         - matchLabels:
-            "k8s:app": "bar-assistant"
+            app: bar-assistant
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: salt-rim-policy
+  namespace: home
+spec:
+  endpointSelector:
+    matchLabels:
+      app: salt-rim
+  ingress:
+    # Allow access from Traefik
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    # Allow DNS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+    # Frontend only needs to serve static files, but may need DNS for probes etc.

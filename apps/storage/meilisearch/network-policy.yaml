@@ -9,11 +9,11 @@ spec:
       app.kubernetes.io/name: meilisearch
   # ----=== Ingress ===----
   ingress:
-    # === Allow access from Traefik (Dashboard) ===
+    # === Allow access from Traefik (Dashboard / Frontend Proxy) ===
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
+            "k8s:io.kubernetes.pod.namespace": traefik
+            "app.kubernetes.io/name": traefik
       toPorts:
         - ports:
             - port: "7700"
@@ -21,8 +21,8 @@ spec:
     # === Allow access from Bar Assistant ===
     - fromEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "home"
-            "k8s:app": "bar-assistant"
+            "k8s:io.kubernetes.pod.namespace": home
+            "app": bar-assistant
       toPorts:
         - ports:
             - port: "7700"
@@ -32,8 +32,8 @@ spec:
     # === Allow DNS ===
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
+            "k8s:io.kubernetes.pod.namespace": kube-system
+            "k8s-app": coredns
       toPorts:
         - ports:
             - port: "53"

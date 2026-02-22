@@ -163,6 +163,33 @@ spec:
               value: "/tmp/gluetun/forwarded_port"
             - name: LISTEN_PORT
               value: "9091"
+          ports:
+            - name: health
+              containerPort: 9091
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
           volumeMounts:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
