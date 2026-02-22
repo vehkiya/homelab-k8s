@@ -14,21 +14,58 @@ spec:
       labels:
         app: n8n
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       initContainers:
         - name: volume-permissions
           image: busybox
           command: ["sh", "-c", "chown 1000:1000 /data"]
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - FOWNER
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
           volumeMounts:
             - name: data
               mountPath: /data
       containers:
-        - command:
+        - name: n8n
+          image: docker.n8n.io/n8nio/n8n
+          command:
             - /bin/sh
           args:
             - -c
             - sleep 5; n8n start
-          name: n8n
-          image: docker.n8n.io/n8nio/n8n
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
           env:
             - name: TZ
               value: "Europe/Chisinau"
