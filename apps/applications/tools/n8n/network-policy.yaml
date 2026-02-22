@@ -1,18 +1,56 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: n8n-to-redis
-  namespace: redis
+  name: n8n-policy
+  namespace: default
 spec:
   endpointSelector:
     matchLabels:
-      app: redis
+      app: n8n
   ingress:
+    # === Allow access from Traefik ===
     - fromEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "default"
-            "k8s:app": n8n
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "5678"
+              protocol: TCP
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # === Allow egress to Home Assistant ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: iot
+            app: home-assistant
+      toPorts:
+        - ports:
+            - port: "8123"
+              protocol: TCP
+    # === Allow egress to Redis ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: redis
+            app: redis
       toPorts:
         - ports:
             - port: "6379"
+              protocol: TCP
+    # === Allow Internet Access ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
               protocol: TCP
