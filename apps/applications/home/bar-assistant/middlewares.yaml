@@ -1,0 +1,9 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: bar-assistant-strip-prefix
+  namespace: home
+spec:
+  stripPrefix:
+    prefixes:
+      - /bar

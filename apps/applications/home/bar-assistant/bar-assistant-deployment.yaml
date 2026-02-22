@@ -20,7 +20,8 @@ spec:
       initContainers:
         - name: volume-permissions
           image: busybox
-          command: [ "sh", "-c", "chown 33:33 /var/www/cocktails/storage/bar-assistant" ]
+          command:
+            ["sh", "-c", "chown 33:33 /var/www/cocktails/storage/bar-assistant"]
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant
@@ -42,14 +43,21 @@ spec:
                 secretKeyRef:
                   name: bar-assistant-secrets
                   key: OIDC_CLIENT_SECRET
-#            - name: REDIS_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: redis-secret
-#                  key: redis-password
+          #            - name: REDIS_PASSWORD
+          #              valueFrom:
+          #                secretKeyRef:
+          #                  name: redis-secret
+          #                  key: redis-password
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
       volumes:
         - name: bar-data
           persistentVolumeClaim:

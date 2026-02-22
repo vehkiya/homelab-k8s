@@ -17,6 +17,7 @@ resources:
   - salt-rim-service.yaml
   - network-policy.yaml
   - secret.yaml
+  - middlewares.yaml
 
 images:
   - name: busybox
