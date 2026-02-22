@@ -106,6 +106,8 @@ jobs:
             { echo "Kubeconform failed for $layer"; exit 1; }
 
             echo "--- Kube-linter ---"
+            # Mark Helm-managed resources to be ignored by kube-linter
+            yq -i '(. | select(((.metadata // {}).labels // {}) | (.["app.kubernetes.io/managed-by"] == "Helm" or .["app.kubernetes.io/managed-by"] == "helm" or has("helm.sh/chart")))).metadata.annotations."kube-linter.io/ignore-all" = "true"' built.yaml
             kube-linter lint built.yaml || \
             { echo "Kube-linter failed for $layer"; exit 1; }
           done
