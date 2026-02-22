@@ -17,7 +17,7 @@ spec:
       initContainers:
         - name: volume-permissions
           image: busybox
-          command: [ "sh", "-c", "chown 1000:1000 /data" ]
+          command: ["sh", "-c", "chown 1000:1000 /data"]
           volumeMounts:
             - name: data
               mountPath: /data
@@ -42,8 +42,6 @@ spec:
               value: "1"
             - name: GENERIC_TIMEZONE
               value: "Europe/Chisinau"
-#            - name: N8N_MIGRATE_FS_STORAGE_PATH
-#              value: "true"
           volumeMounts:
             - name: data
               mountPath: /home/node/.n8n
