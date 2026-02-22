@@ -8,4 +8,4 @@ resources:
   - http-route.yaml
 images:
   - name: iconify/api
-    newTag: 3.2.0
+    newTag: 3.2.0@sha256:417eb2435d52bbbcc7f4cff998c1a30e84d509f4f51d25535860db41daa03f5f
