@@ -57,12 +57,12 @@ jobs:
       - name: Install Kustomize
         uses: imranismail/setup-kustomize@v2
 
-      - name: Install Kubeconform
+      - name: Install Kube-linter
         run: |
-          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
-          tar xf kubeconform-linux-amd64.tar.gz
-          sudo mv kubeconform /usr/local/bin/
-          rm kubeconform-linux-amd64.tar.gz
+          wget https://github.com/stackrox/kube-linter/releases/download/v0.7.1/kube-linter-linux.tar.gz
+          tar xf kube-linter-linux.tar.gz
+          sudo mv kube-linter /usr/local/bin/
+          rm kube-linter-linux.tar.gz
 
       - name: Build & Validate Kustomize Layers
         run: |
@@ -99,8 +99,15 @@ jobs:
 
           for layer in $LAYERS; do
             echo "Validating $layer..."
-            kustomize build "$layer" --enable-helm | \
+            # Build once and store in a temporary file
+            kustomize build "$layer" --enable-helm > built.yaml
+
+            echo "--- Kubeconform ---"
             kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" \
-            -cache ~/.cache/kubeconform || \
-            { echo "Validation failed for $layer"; exit 1; }
+            -cache ~/.cache/kubeconform built.yaml || \
+            { echo "Kubeconform failed for $layer"; exit 1; }
+
+            echo "--- Kube-linter ---"
+            kube-linter lint built.yaml || \
+            { echo "Kube-linter failed for $layer"; exit 1; }
           done

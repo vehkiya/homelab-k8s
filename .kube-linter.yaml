@@ -1,0 +1,7 @@
+# Kube-linter configuration
+# For more information, see https://docs.kubelinter.io
+checks:
+  # Enable all default checks
+  all: true
+  # You can exclude specific checks here if they are too noisy
+  exclude: []
