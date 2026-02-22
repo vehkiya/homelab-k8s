@@ -14,6 +14,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Install Kubeconform
+        run: |
+          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
+          tar xf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+          rm kubeconform-linux-amd64.tar.gz
+
+      - name: Install Kube-linter
+        run: |
+          wget https://github.com/stackrox/kube-linter/releases/download/v0.7.1/kube-linter-linux.tar.gz
+          tar xf kube-linter-linux.tar.gz
+          sudo mv kube-linter /usr/local/bin/
+          rm kube-linter-linux.tar.gz
+
       - name: Get Renovate version
         id: renovate-version
         run: echo "VERSION=$(npm view renovate version)" >> $GITHUB_OUTPUT
@@ -53,16 +70,6 @@ jobs:
           key: ${{ runner.os }}-k8s-cache-${{ hashFiles('**/kustomization.yaml') }}
           restore-keys: |
             ${{ runner.os }}-k8s-cache-
-
-      - name: Install Kustomize
-        uses: imranismail/setup-kustomize@v2
-
-      - name: Install Kube-linter
-        run: |
-          wget https://github.com/stackrox/kube-linter/releases/download/v0.7.1/kube-linter-linux.tar.gz
-          tar xf kube-linter-linux.tar.gz
-          sudo mv kube-linter /usr/local/bin/
-          rm kube-linter-linux.tar.gz
 
       - name: Build & Validate Kustomize Layers
         run: |
