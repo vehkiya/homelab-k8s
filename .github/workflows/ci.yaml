@@ -35,15 +35,6 @@ jobs:
         id: renovate-version
         run: echo "VERSION=$(npm view renovate version)" >> $GITHUB_OUTPUT
 
-      - name: Cache Renovate
-        uses: actions/cache@v5
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-renovate-${{ steps.renovate-version.outputs.VERSION }}
-
-      - name: Validate Renovate Config
-        run: npx --prefer-offline --yes --package renovate@${{ steps.renovate-version.outputs.VERSION }} renovate-config-validator
-
       - name: Lint YAML
         uses: ibiqlik/action-yamllint@v3
         with:
@@ -118,3 +109,12 @@ jobs:
             kube-linter lint built.yaml || \
             { echo "Kube-linter failed for $layer"; exit 1; }
           done
+
+      - name: Cache Renovate
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-renovate-${{ steps.renovate-version.outputs.VERSION }}
+
+      - name: Validate Renovate Config
+        run: npx --prefer-offline --yes --package renovate@${{ steps.renovate-version.outputs.VERSION }} renovate-config-validator
