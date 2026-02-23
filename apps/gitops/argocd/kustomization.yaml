@@ -15,7 +15,7 @@ images:
   - name: quay.io/argoproj/argocd
     newTag: v3.3.2@sha256:5882f28f7aaeaac397949c4511fdc1ad66c1260af44166ccf7e57aca3d7b9797
   - name: redis
-    newTag: 8.6.0@sha256:7b6fb55d8b0adcd77269dc52b3cfffe5f59ca5d43dec3c90dbe18aacce7942e1
+    newTag: 8.6.1@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb
   - name: busybox
     newTag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
 
