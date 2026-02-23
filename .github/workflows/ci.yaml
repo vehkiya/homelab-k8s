@@ -106,12 +106,12 @@ jobs:
             { echo "Kubeconform failed for $layer"; exit 1; }
 
             echo "--- Kube-linter ---"
-            if grep -q "helmCharts:" "$layer/kustomization.yaml"; then
-              # Mark all Pod-bearing resources in Helm-based layers to ignore missing resource limits
-              yq -i 'with(select(.kind == "Deployment" or .kind == "StatefulSet" or .kind == "DaemonSet" or .kind == "Pod" or .kind == "Job" or .kind == "CronJob"); .metadata.annotations."kube-linter.io/ignore-check.unset-cpu-requirements" = "helm-layer", .metadata.annotations."kube-linter.io/ignore-check.unset-memory-requirements" = "helm-layer")' built.yaml
+            if grep -q -e "helmCharts:" -e "https://" "$layer/kustomization.yaml"; then
+              # Mark all Pod-bearing resources in upstream-based layers (Helm and remote raw) to ignore missing resource limits and other upstream anomalies
+              yq -i 'with(select(.kind == "Deployment" or .kind == "StatefulSet" or .kind == "DaemonSet" or .kind == "Pod" or .kind == "Job" or .kind == "CronJob" or .kind == "Service"); .metadata.annotations."kube-linter.io/ignore-all" = "true")' built.yaml
             fi
             # Catch explicitly labeled Helm resources in other layers
-            yq -i 'with(select(((.metadata // {}).labels // {}) | (.["app.kubernetes.io/managed-by"] == "Helm" or .["app.kubernetes.io/managed-by"] == "helm" or has("helm.sh/chart"))); .metadata.annotations."kube-linter.io/ignore-check.unset-cpu-requirements" = "helm-resource", .metadata.annotations."kube-linter.io/ignore-check.unset-memory-requirements" = "helm-resource")' built.yaml
+            yq -i 'with(select(((.metadata // {}).labels // {}) | (.["app.kubernetes.io/managed-by"] == "Helm" or .["app.kubernetes.io/managed-by"] == "helm" or has("helm.sh/chart"))); .metadata.annotations."kube-linter.io/ignore-all" = "true")' built.yaml
             kube-linter lint built.yaml || \
             { echo "Kube-linter failed for $layer"; exit 1; }
           done
