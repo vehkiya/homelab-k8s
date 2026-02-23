@@ -24,4 +24,4 @@ images:
   - name: qmcgaw/gluetun
     newTag: v3.41.1@sha256:1a5bf4b4820a879cdf8d93d7ef0d2d963af56670c9ebff8981860b6804ebc8ab
   - name: ghcr.io/vehkiya/qbit-gluetun-sync
-    newTag: 0.3.0@sha256:24a94d281a0f7083e6385b54c04cfe4676d08ec7459d7aa0246593e7b0f1d613
+    newTag: 1.0.0@sha256:761dbf9af3d8eb2ea3892e8b2e7d43ab6262ffd9dc08933502280cbe424ee5ee
