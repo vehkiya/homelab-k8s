@@ -53,6 +53,13 @@ spec:
           volumeMounts:
             - name: vuetorrent-webui
               mountPath: /vuetorrent
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "50m"
+              memory: "128Mi"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -99,6 +106,13 @@ spec:
           volumeMounts:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
       containers:
         - name: qbittorrent
           image: ghcr.io/home-operations/qbittorrent
@@ -144,6 +158,13 @@ spec:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
               readOnly: true
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "256Mi"
+            limits:
+              cpu: "3000m"
+              memory: "6Gi"
           securityContext:
             runAsGroup: 100
             runAsNonRoot: true
