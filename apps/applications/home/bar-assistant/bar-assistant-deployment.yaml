@@ -25,6 +25,13 @@ spec:
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
       containers:
         - name: bar-assistant-server
           image: ghcr.io/karlomikus/barassistant
