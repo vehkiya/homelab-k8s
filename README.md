@@ -1,187 +1,84 @@
-## Set-up Talos OS
+# Kerrlab Homelab 🚀
 
-1. Cilium
-2. Sealed secrets
-4. Traefik CRDs
-5. Traefik
-6. cert-manager
-7. Synology
-8. Argo
-9. Intel drivers
+A robust, GitOps-managed Kubernetes homelab running on **Talos OS**. This repository serves as the single source of truth for the entire cluster configuration, utilizing a modern cloud-native stack to host a wide variety of personal services, media applications, and home automation tools.
 
-## Set-up Cilium CNI
-1. Add repo
-```shell
-    helm repo add cilium https://helm.cilium.io/
-```
-2. Install
-```shell
-    helm install \
-        cilium \
-        cilium/cilium \
-        --version 1.16.6 \
-        --namespace kube-system \
-        --values cilium/values.yaml
-```
+## 🏗️ Architecture & Core Components
 
-**_In case of DNS failures, make sure you're using the correct CoreDNS ConfigMap_**
+The cluster is built on a foundation of security, automation, and high availability.
 
-### If needed, restore SealedSecrets with master key
+### Base Infrastructure
+- **Operating System:** [Talos OS](https://www.talos.dev/) - A secure, immutable, and minimal Linux distribution built for Kubernetes.
+- **GitOps Engine:** [ArgoCD](https://argoproj.github.io/cd/) - Automatically synchronizes the cluster state with this repository.
+- **Networking (CNI):** [Cilium](https://cilium.io/) - Advanced networking with BGP peering, IP address management (IPAM), and network policies.
+- **Ingress Controller:** [Traefik](https://doc.traefik.io/traefik/) - Gateway API and Ingress management with automatic TLS.
 
-Secret example
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-secrets
-  namespace: default
-stringData:
-  key: value
-```
+### Security & Identity
+- **Secrets Management:** [External Secrets Operator](https://external-secrets.io/) - Integrates with a Vaultwarden backend to securely inject secrets without hardcoding them in Git.
+- **Certificate Management:** [Cert-Manager](https://cert-manager.io/) - Automated SSL/TLS certificates via Cloudflare (DNS-01 challenge) and ZeroSSL.
+- **Authentication:** [Authelia](https://www.authelia.com/) - Single Sign-On (SSO) with OpenID Connect (OIDC) and 2FA protection for all internal services.
+- **VPN:** [Tailscale](https://tailscale.com/) - Secure remote access to the cluster and internal services.
 
-## Install Traefik
-1. Add repo
-```shell
-    helm repo add traefik https://traefik.github.io/charts
-```
-2. Install with values
-```shell
-    helm upgrade --install -n traefik --create-namespace traefik traefik/traefik -f traefik/values/traefik-config.yaml
-```
+### Storage Strategy
+- **Synology CSI:** Direct integration with Synology NAS for high-performance persistent storage via iSCSI.
+- **Longhorn:** Distributed block storage for cluster-native data resiliency.
+- **Databases:** Automated management of PostgreSQL (CloudNativePG) and Redis instances.
 
-## Install Cert Manager
-1. Add repo
-```shell
-    helm repo add jetstack https://charts.jetstack.io --force-update
-```
-2. Install cert-manager
-```shell
-    helm install \
-      cert-manager jetstack/cert-manager \
-      --namespace cert-manager \
-      --create-namespace \
-      --version v1.17.1 \
-      --values cert-manager/values/values.yaml
-```
-3. Provision Cloudflare API Token secret
-```shell
-    kubectl apply -f cert-manager/00-sealed-cloudflare-token.yaml
-```
-4. Create cluster issuer
-```shell
-    kubectl apply -f cert-manager/01-acme-issuer-cf-solver.yaml
-```
-5. Create certificate config
-```shell
-    kubectl apply -f cert-manager/02-certificate-config.yaml
+---
+
+## 📱 Application Gallery
+
+The cluster hosts a diverse ecosystem of applications, organized by domain:
+
+### 🎬 Media & Entertainment
+- **Streaming:** Plex Media Server (with Intel QuickSync hardware transcoding).
+- **Automation:** Radarr, Sonarr, Bazarr, Prowlarr, and Overseerr.
+- **Management:** Kometa (Plex Meta Manager), Tautulli, and Posterizarr.
+- **Downloaders:** qBittorrent, Autobrr, and Unpackerr.
+
+### 🏠 Home & IoT
+- **Automation:** Home Assistant, Zigbee2MQTT, and go2rtc.
+- **Management:** Mealie (Recipe Manager), Bar Assistant (Cocktail management), and Wedding Share.
+- **Connectivity:** Matter Server and MQTT broker.
+
+### 🛠️ Developer & Power Tools
+- **Automation:** n8n, Renovate (for automated dependency updates).
+- **Utilities:** IT-Tools, Excalidraw, Speedtest, and Mermaid.
+- **Communication:** IRC client and ntfy for push notifications.
+
+---
+
+## 📂 Repository Structure
+
+```text
+├── apps/
+│   ├── cluster-core/       # Foundation (Cilium, Cert-Manager, Traefik)
+│   ├── cluster-addons/     # Common services (Authelia, OAuth-Proxy)
+│   ├── gitops/             # ArgoCD & Renovate configuration
+│   ├── storage/            # Synology CSI, Longhorn, Databases
+│   ├── monitoring/         # Prometheus, Metrics-Server, Uptime
+│   └── applications/       # End-user services (Media, Home, IoT, Games)
+├── talos/
+│   └── cluster-config/     # Talos machine configurations and backup scripts
+└── README.md
 ```
 
-# Configuration Storage
-## Synology CSI Driver
-https://github.com/SynologyOpenSource/synology-csi
+---
 
-## Talos Synology CSI Driver
-https://github.com/zebernst/synology-csi-talos
+## 🔧 Maintenance & Management
 
-In deploy/kubernetes/v1.20/node.yaml add for `csi-plugin `
-```yaml
-            - '--chroot-dir=/host'
-            - '--iscsiadm-path=/usr/local/sbin/iscsiadm'
-```
-Install
-```shell
-  ./scripts/deploy.sh build && ./scripts/deploy.sh install --basic
-```
-Install StorageClass
+### Automated Updates
+[Renovate](https://www.whitesource.com/free-developer-tools/renovate/) is configured to automatically monitor this repository and create Pull Requests for:
+- Docker image updates
+- Helm chart version increments
+- Talos OS and Kubernetes version upgrades
 
-# Kubernetes Dashboard
-1. Add repo
-```shell
-    helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
-```
-2. Install 
-```shell
-    helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
-      --create-namespace \
-      --namespace kubernetes-dashboard
-```
-3. Provision dashboard credentials
-```shell
-  kubectl apply -f kubernetes-dashboard/dashboard-data.yaml
-```
-4. Generate token for your user
-```shell
-  kubectl -n kubernetes-dashboard create token vehkiya
-```
-Get long-lived token
-```shell
-    kubectl get secret vehkiya -n kubernetes-dashboard -o jsonpath="{.data.token}" | base64 -d
-```
+### Hardware Acceleration
+The cluster utilizes Intel GPU hardware for media transcoding:
+- **NFD (Node Feature Discovery):** Detects hardware capabilities.
+- **Intel Device Plugin:** Exposes the i915 GPU to containers for Plex and other media tools.
 
-5. FW dashboard
-```shell
-  kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
-```
+### Backup Strategy
+Cluster state and critical configurations are backed up using the scripts provided in `talos/cluster-config/`, ensuring quick recovery in the event of hardware failure.
 
-# Tailscale
-## Operator
-https://tailscale.com/kb/1236/kubernetes-operator
-```shell
-    helm upgrade \
-      --install \
-      tailscale-operator \
-      tailscale/tailscale-operator \
-      --namespace=tailscale \
-      --create-namespace \
-      --set-string oauth.clientId="kN6GWhA23g11CNTRL" \
-      --set-string oauth.clientSecret="tskey-client-kN6GWhA23g11CNTRL-HQzzF7oWZjVRrQSYeBEQkVPnZen64ZEuP" \
-      --wait
-```
-
-## Ingress
-https://tailscale.com/kb/1439/kubernetes-operator-cluster-ingress
-
-## Dashboard
-https://tailscale.com/kb/1437/kubernetes-operator-api-server-proxy
-
-
-# ArgoCD
-https://argo-cd.readthedocs.io/en/stable/getting_started/
-
-```shell
-    kubectl create namespace argocd
-#    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/ha/install.yaml
-```
-
-Create ingress-route
-
-
-# Plex
-
-## Install Intel GPU Driver
-_Requires Talos I915 driver_
-_Requires inteldeviceplugins-system namespace to run as root_
-https://github.com/intel/intel-device-plugins-for-kubernetes/blob/main/INSTALL.md
-```shell
-    helm repo add jetstack https://charts.jetstack.io # for cert-manager
-    helm repo add nfd https://kubernetes-sigs.github.io/node-feature-discovery/charts # for NFD
-    helm repo add intel https://intel.github.io/helm-charts/ # for device-plugin-operator and plugins
-    helm repo update
-```
-
-```shell
-    helm upgrade --install nfd nfd/node-feature-discovery --namespace node-feature-discovery --create-namespace --version 0.16.4
-```
-
-```shell
-    helm upgrade --install dp-operator intel/intel-device-plugins-operator --namespace inteldeviceplugins-system --create-namespace
-```
-
-```shell
-    helm upgrade --install gpu intel/intel-device-plugins-gpu --namespace inteldeviceplugins-system --create-namespace --set nodeFeatureRule=true
-```
-
-Label: `intel.feature.node.kubernetes.io/gpu: true`
-
-
+---
+*Maintained with ❤️ by vehkiya*
