@@ -6,12 +6,28 @@ metadata:
 data:
   config.js: |-
     module.exports = {
-      hostRules: [
-        {
-          hostType: 'docker',
-          matchHost: 'docker.io',
-          username: process.env.DOCKER_USERNAME,
-          password: process.env.DOCKER_PASSWORD,
+        platform: 'github',
+        autodiscover: true,
+        autodiscoverNamespaces: ['vehkiya', 'hononeko'],
+        
+        gitAuthor: 'Kerrlab Renovate Bot <renovate-bot@kerrlab.app>',
+        gitPrivateKey: process.env.RENOVATE_GIT_PRIVATE_KEY,
+        
+        optimizeForDisabled: true,
+        
+        onboardingConfig: {
+            $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+            extends: ['config:recommended', ":semanticCommits", "mergeConfidence:all-badges"],
         },
-      ],
+        repositoryCache: 'enabled',
+        requireConfig: 'required',
+        hostRules: [
+          {
+            hostType: 'docker',
+                matchHost: 'docker.io',
+                username: process.env.DOCKER_USERNAME,
+                password: process.env.DOCKER_PASSWORD,
+          },
+        ],
     };
+      
