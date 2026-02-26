@@ -18,6 +18,12 @@ spec:
       containers:
         - name: bazarr
           image: ghcr.io/home-operations/bazarr
+          resources:
+            requests:
+              cpu: 10m
+              memory: 250Mi
+            limits:
+              memory: 500Mi
           env:
             - name: PGID
               value: "100"
