@@ -8,12 +8,12 @@ data:
     module.exports = {
         platform: 'github',
         autodiscover: true,
-        autodiscoverNamespaces: ['vehkiya', 'hononeko'],
+        autodiscoverFilter: ["vehkiya/*", "hononeko/*"],
         
         gitAuthor: 'Kerrlab Renovate Bot <renovate-bot@kerrlab.app>',
         
         optimizeForDisabled: true,
-        
+        prHourlyLimit: 10,
         onboardingConfig: {
             $schema: 'https://docs.renovatebot.com/renovate-schema.json',
             extends: ['config:recommended', ":semanticCommits", "mergeConfidence:all-badges"],
