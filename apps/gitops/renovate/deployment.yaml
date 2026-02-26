@@ -78,6 +78,9 @@ spec:
               subPath: config.js
             - name: cache-volume
               mountPath: "/tmp/renovate/cache"
+            - name: gpg-key-volume
+              mountPath: /usr/src/app/gpg
+              readOnly: true
           resources:
             requests:
               cpu: 500m
@@ -90,3 +93,6 @@ spec:
             name: renovate-config
         - name: cache-volume
           emptyDir: {}
+        - name: gpg-key-volume
+          secret:
+            secretName: renovate-gpg
