@@ -11,7 +11,7 @@ data:
         autodiscoverNamespaces: ['vehkiya', 'hononeko'],
         
         gitAuthor: 'Kerrlab Renovate Bot <renovate-bot@kerrlab.app>',
-        gitPrivateKey: process.env.RENOVATE_GIT_PRIVATE_KEY,
+        gitPrivateKey: `${process.env.RENOVATE_GIT_PRIVATE_KEY}`,
         
         optimizeForDisabled: true,
         
