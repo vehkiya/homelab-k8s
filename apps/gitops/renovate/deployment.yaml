@@ -71,6 +71,8 @@ spec:
             - name: config-volume
               mountPath: /usr/src/app/config.js
               subPath: config.js
+            - name: cache-volume
+              mountPath: "/tmp/renovate/cache"
           resources:
             requests:
               cpu: 500m
@@ -81,3 +83,5 @@ spec:
         - name: config-volume
           configMap:
             name: renovate-config
+        - name: cache-volume
+          emptyDir: {}
