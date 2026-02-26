@@ -67,6 +67,11 @@ spec:
                 secretKeyRef:
                   name: renovate-secrets
                   key: DOCKER_PASSWORD
+            - name: RENOVATE_GIT_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: RENOVATE_GIT_PRIVATE_KEY
           volumeMounts:
             - name: config-volume
               mountPath: /usr/src/app/config.js
