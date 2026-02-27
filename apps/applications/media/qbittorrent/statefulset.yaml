@@ -176,7 +176,7 @@ spec:
               drop:
                 - ALL
         - name: qbit-port-sync
-          image: ghcr.io/vehkiya/qbit-gluetun-sync
+          image: ghcr.io/hononeko/qbit-gluetun-sync
           env:
             - name: QBIT_ADDR
               value: "http://localhost:8080"
@@ -232,7 +232,7 @@ spec:
               drop:
                 - ALL
         - name: qbit-ntfy
-          image: ghcr.io/vehkiya/qbit-ntfy-sidecar
+          image: ghcr.io/hononeko/qbit-ntfy-sidecar
           env:
             - name: QBIT_HOST
               value: "http://localhost:8080"
