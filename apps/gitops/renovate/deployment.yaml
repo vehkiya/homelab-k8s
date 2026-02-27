@@ -53,9 +53,6 @@ spec:
                   name: renovate-secrets
                   key: DOCKER_PASSWORD
           volumeMounts:
-            - name: config-volume
-              mountPath: /usr/src/app/config.js
-              subPath: config.js
             - name: cache-volume
               mountPath: "/tmp/renovate/cache"
           resources:
@@ -63,10 +60,8 @@ spec:
               cpu: 500m
               memory: 512Mi
             limits:
+              cpu: 1000m
               memory: 2Gi
       volumes:
-        - name: config-volume
-          configMap:
-            name: renovate-config
         - name: cache-volume
           emptyDir: {}

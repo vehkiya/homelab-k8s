@@ -128,6 +128,13 @@ spec:
             - name: fonts
               mountPath: /tmp/fonts
               readOnly: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 50m
+              memory: 128Mi
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
