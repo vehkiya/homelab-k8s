@@ -18,25 +18,10 @@ spec:
           image: ghcr.io/mend/renovate-ce
           ports:
             - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: renovate-env
           env:
-            - name: RENOVATE_CONFIG_FILE
-              value: "/usr/src/app/config.js"
-            - name: MEND_RNV_PLATFORM
-              value: "github"
-            - name: MEND_RNV_ADMIN_API_ENABLED
-              value: "false"
-            - name: MEND_RNV_SERVER_PORT
-              value: "8080"
-            - name: MEND_RNV_REDIS_URL
-              value: "redis://renovate-redis:6379"
-            - name: MEND_RNV_CRON_JOB_SCHEDULER_ALL
-              value: "0 * * * *"
-            - name: MEND_RNV_ACCEPT_TOS
-              value: "y"
-            - name: MEND_RNV_ACCEPT_PLUGINS
-              value: "true"
-            - name: MEND_RNV_GITHUB_APP_ID
-              value: "2668553"
             - name: RENOVATE_REVIEWERS
               valueFrom:
                 secretKeyRef:
