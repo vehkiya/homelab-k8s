@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: bitwarden-cli
-          image: ghcr.io/vehkiya/bw-cli
+          image: ghcr.io/hononeko/bw-cli
           imagePullPolicy: "IfNotPresent"
           ports:
             - name: api
