@@ -4,7 +4,6 @@ metadata:
   name: renovate-env
   namespace: renovate
 data:
-  RENOVATE_CONFIG_FILE: "/usr/src/app/config.js"
   MEND_RNV_PLATFORM: "github"
   MEND_RNV_AUTODISCOVER_FILTER: "vehkiya/*,hononeko/*,Test-Forge/*"
   MEND_RNV_ADMIN_API_ENABLED: "false"
