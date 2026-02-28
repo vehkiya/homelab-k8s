@@ -29,6 +29,13 @@ spec:
               containerPort: 4180
               hostPort: 4180
               protocol: TCP
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
           volumeMounts:
             - name: config
               mountPath: /etc/oauth2-proxy

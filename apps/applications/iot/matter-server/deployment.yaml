@@ -15,9 +15,7 @@ spec:
       labels:
         app: matter-server
       annotations:
-        k8s.v1.cni.cncf.io/networks: '[
-          { "name": "macvlan-iot", "mac": "02:00:00:00:20:00" }
-        ]'
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:20:00" }]'
     spec:
       hostNetwork: false
       initContainers:
@@ -46,6 +44,13 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           securityContext:
             capabilities:
               add:

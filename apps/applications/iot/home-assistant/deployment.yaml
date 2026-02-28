@@ -41,10 +41,17 @@ spec:
             - name: hass-data
               mountPath: /media
               subPath: media
-#              # temporarily exclude because Home Assistant doesn't like this
-#            - name: hass-config-files
-#              mountPath: /config/configuration.yaml
-#              subPath: configuration.yaml
+          #              # temporarily exclude because Home Assistant doesn't like this
+          #            - name: hass-config-files
+          #              mountPath: /config/configuration.yaml
+          #              subPath: configuration.yaml
+          resources:
+            requests:
+              cpu: 10m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
