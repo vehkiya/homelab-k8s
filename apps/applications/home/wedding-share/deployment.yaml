@@ -49,6 +49,13 @@ spec:
             - name: data
               subPath: custom-resources
               mountPath: /app/wwwroot/custom_resources
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:

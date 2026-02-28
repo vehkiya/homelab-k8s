@@ -37,6 +37,13 @@ spec:
               mountPath: /config/hass
               subPath: config
               readOnly: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

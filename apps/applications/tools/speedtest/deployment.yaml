@@ -25,3 +25,10 @@ spec:
       containers:
         - name: speedtest
           image: openspeedtest/latest
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi

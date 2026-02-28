@@ -20,7 +20,7 @@ spec:
       initContainers:
         - name: prepare-config
           image: busybox
-          command: [ "/bin/sh", "-c" ]
+          command: ["/bin/sh", "-c"]
           args:
             - |
               set -e
@@ -52,6 +52,13 @@ spec:
               mountPath: /mosquitto/config
             - name: data
               mountPath: /mosquitto/data
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 128Mi
           readinessProbe:
             tcpSocket:
               port: 1883
@@ -74,7 +81,7 @@ spec:
             secretName: mosquitto-passwordfile
         # Writable emptyDir volume shared between init and main containers
         - name: config-rw
-          emptyDir: { }
+          emptyDir: {}
         # Persistent volume for mosquitto data
         - name: data
           persistentVolumeClaim:
