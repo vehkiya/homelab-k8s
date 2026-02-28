@@ -28,6 +28,13 @@ spec:
               mountPath: /config
             - name: data # Mount the read-write persistent volume
               mountPath: /data
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       containers:
         - name: zigbee2mqtt
           image: ghcr.io/koenkk/zigbee2mqtt

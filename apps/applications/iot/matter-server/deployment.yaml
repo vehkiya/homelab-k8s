@@ -31,6 +31,13 @@ spec:
               ip -6 route add ff00::/8 dev net1 || true
           securityContext:
             privileged: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       containers:
         - image: ghcr.io/home-assistant-libs/python-matter-server
           name: matter-server

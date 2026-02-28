@@ -8,3 +8,5 @@ checks:
     - "no-read-only-root-fs" # Too many apps need writable /tmp or cache without easy config
     - "run-as-non-root" # Some images/init containers (like chown) need root to function
     - "drop-net-raw-capability" # Needed for VPN sidecar
+    - "privilege-escalation-container" # Needed for sysctls on dynamically added interfaces (like macvlan)
+    - "privileged-container" # Needed for sysctls on dynamically added interfaces (like macvlan)

@@ -41,6 +41,13 @@ spec:
               mountPath: /mnt/secret-ro
             - name: config-rw
               mountPath: /mosquitto-init/config
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       containers:
         - name: mosquitto
           image: eclipse-mosquitto
