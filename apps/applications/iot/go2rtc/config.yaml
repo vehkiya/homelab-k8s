@@ -18,3 +18,5 @@ data:
       listen: ":8554"
     webrtc:
       listen: ":8555"
+      candidates:
+        - "10.10.1.130:8555"

@@ -3,7 +3,12 @@ kind: Service
 metadata:
   name: go2rtc-svc
   namespace: iot
+  labels:
+    pool: internal-lb-pool
+  annotations:
+    lbipam.cilium.io/ips: "10.10.1.130"
 spec:
+  type: LoadBalancer
   selector:
     app: go2rtc
   ports:
