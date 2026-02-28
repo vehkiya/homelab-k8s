@@ -10,3 +10,5 @@ defaultSettings:
   # Ensure control planes aren't used by default unless necessary.
   # We will keep this false for now because we need lab-2 and lab-3.
   disableSchedulingOnControlPlane: false
+  # Set to 15% for smaller disks
+  storageMinimalAvailablePercentage: 15
