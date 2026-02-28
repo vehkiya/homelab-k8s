@@ -131,6 +131,13 @@ spec:
               envFrom:
                 - secretRef:
                     name: kometa-secrets
+              resources:
+                requests:
+                  cpu: "10m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "50m"
+                  memory: "128Mi"
               volumeMounts:
                 - name: config
                   mountPath: /config
@@ -146,7 +153,7 @@ spec:
             - name: kometa
               image: kometateam/kometa
               imagePullPolicy: IfNotPresent
-              args: [ "--run", "--read-only-config" ]
+              args: ["--run", "--read-only-config"]
               resources:
                 limits:
                   cpu: 500m

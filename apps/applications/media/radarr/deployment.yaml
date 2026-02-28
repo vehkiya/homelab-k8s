@@ -53,6 +53,13 @@ spec:
             timeoutSeconds: 1
             successThreshold: 1
             failureThreshold: 3
+          resources:
+            requests:
+              cpu: 10m
+              memory: 250Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
           volumeMounts:
             - name: downloads-mount
               mountPath: /downloads # Path inside the container

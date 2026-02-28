@@ -83,8 +83,12 @@ spec:
           resources:
             # only rune on nodes that have Intel GPU
             requests:
+              cpu: 1000m
+              memory: 2Gi
               gpu.intel.com/i915: "1"
             limits:
+              cpu: 8000m
+              memory: 8Gi
               gpu.intel.com/i915: "1"
       dnsConfig:
         options:
