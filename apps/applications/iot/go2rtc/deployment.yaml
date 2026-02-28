@@ -15,8 +15,6 @@ spec:
       labels:
         app: go2rtc
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: go2rtc
           image: ghcr.io/alexxit/go2rtc
