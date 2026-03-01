@@ -20,6 +20,9 @@ spec:
               protocol: "UDP"
             - port: "53"
               protocol: "TCP"
+    # Rule: Allow Internet (to connect to external IRC servers)
+    - toEntities:
+        - "world"
   # Allow Ingress (Inbound)
   ingress:
     - fromEndpoints:
