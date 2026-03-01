@@ -26,7 +26,7 @@ spec:
                   value: "/backups"
                 - name: RESTORE_DIRECTORY # from minecraft-data-pvc
                   value: "/data"
-              command: [ "/bin/sh", "-c" ]
+              command: ["/bin/sh", "-c"]
               args:
                 - |
                   set -e
@@ -62,6 +62,10 @@ spec:
                 - name: backup
                   mountPath: /backups
                   subPath: backups
+              resources:
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"
           volumes:
             - name: data
               persistentVolumeClaim:
