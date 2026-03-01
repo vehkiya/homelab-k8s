@@ -37,12 +37,16 @@ spec:
         - name: install-rcon
           image: ghcr.io/itzg/minecraft-server
           imagePullPolicy: IfNotPresent
-          command: [ "/bin/sh", "-c" ]
+          command: ["/bin/sh", "-c"]
           args:
             - "cp $(which rcon-cli) /tools/rcon-cli && chmod +x /tools/rcon-cli"
           volumeMounts:
             - name: rcon-tools
               mountPath: /tools
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
       containers:
         # --- Game Server ---
         - name: minecraft
@@ -140,7 +144,7 @@ spec:
                 configMapKeyRef:
                   key: DEFAULT_BACKUP_SCHEDULE
                   name: minecraft-backup-script
-          command: [ "/bin/sh", "-c" ]
+          command: ["/bin/sh", "-c"]
           args:
             - |
               # 1. Install dependencies (rsync)
@@ -169,7 +173,7 @@ spec:
               echo "$SCHEDULE . /container.env; /bin/sh /scripts/backup.sh >> /dev/stdout 2>&1" > /etc/crontabs/root
 
               echo "✅ Backup Sidecar Started (Cron Mode)."
-              
+
               # 5. Start Crond in foreground
               crond -f
           volumeMounts:
@@ -200,4 +204,4 @@ spec:
             name: minecraft-backup-script
             defaultMode: 0755
         - name: rcon-tools
-          emptyDir: { }
+          emptyDir: {}
