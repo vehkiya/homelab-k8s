@@ -60,6 +60,13 @@ spec:
               mountPath: /etc/ntfy-template
             - name: config
               mountPath: /etc/ntfy
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
       containers:
         - name: ntfy
           image: binwiederhier/ntfy
