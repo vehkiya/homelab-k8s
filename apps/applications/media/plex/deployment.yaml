@@ -106,7 +106,7 @@ spec:
             claimName: video-anime-pvc
         - name: config
           persistentVolumeClaim:
-            claimName: plex-config-pvc
+            claimName: plex-config-longhorn-pvc
         - name: transcode
           persistentVolumeClaim:
             claimName: plex-transcode-pvc

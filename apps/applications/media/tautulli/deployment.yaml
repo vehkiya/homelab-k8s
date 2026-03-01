@@ -79,4 +79,4 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: tautulli-config-pvc
+            claimName: tautulli-config-longhorn-pvc

@@ -99,4 +99,4 @@ spec:
             claimName: video-anime-pvc
         - name: config
           persistentVolumeClaim:
-            claimName: sonarr-config-pvc
+            claimName: sonarr-config-longhorn-pvc

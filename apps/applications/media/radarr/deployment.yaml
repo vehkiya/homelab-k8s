@@ -99,4 +99,4 @@ spec:
             claimName: video-anime-pvc
         - name: config
           persistentVolumeClaim:
-            claimName: radarr-config-pvc
+            claimName: radarr-config-longhorn-pvc

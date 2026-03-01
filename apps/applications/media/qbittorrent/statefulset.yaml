@@ -164,7 +164,7 @@ spec:
               memory: "256Mi"
             limits:
               cpu: "3000m"
-              memory: "6Gi"
+              memory: "8Gi"
           securityContext:
             runAsGroup: 100
             runAsNonRoot: true
@@ -271,7 +271,7 @@ spec:
             claimName: downloads-pvc
         - name: config
           persistentVolumeClaim:
-            claimName: qbittorrent-config-pvc
+            claimName: qbittorrent-config-longhorn-pvc
         - name: vuetorrent-webui
           emptyDir: {}
         - name: gluetun-port-data
