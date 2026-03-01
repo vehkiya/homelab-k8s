@@ -80,4 +80,4 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: autobrr-config-pvc
+            claimName: autobrr-config-longhorn-pvc

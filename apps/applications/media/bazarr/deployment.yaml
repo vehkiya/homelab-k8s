@@ -89,4 +89,4 @@ spec:
             claimName: video-anime-pvc
         - name: config
           persistentVolumeClaim:
-            claimName: bazarr-config-pvc
+            claimName: bazarr-config-longhorn-pvc
