@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
         - name: prepare-config
-          image: alpine:latest
+          image: alpine
           command: ["/bin/sh", "-c"]
           args:
             - |
