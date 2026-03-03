@@ -12,7 +12,7 @@ resources:
   - network-policy.yaml
 images:
   - name: registry.k8s.io/sig-storage/csi-provisioner
-    newTag: v6.1.1@sha256:d992c36d4ddd6dfa37c81b487e5a673920e1360e2977eb779051df8da1c5787d
+    newTag: v6.2.0@sha256:6be9f63ca4caa6c46aae55aa372500949d8a21473d72f819da1f746076b32d4e
   - name: registry.k8s.io/sig-storage/csi-attacher
     newTag: v4.11.0@sha256:b74b05b39501565022883fc128002b4cb857a7bb6c858606bcb3fdedba0b0b80
   - name: registry.k8s.io/sig-storage/csi-resizer
