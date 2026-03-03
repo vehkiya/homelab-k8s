@@ -16,6 +16,13 @@ spec:
       containers:
         - name: romm
           image: rommapp/romm
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
           ports:
             - containerPort: 8080
               name: http
