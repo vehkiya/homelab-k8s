@@ -9,45 +9,45 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: synology-csi-controller-role
 rules:
-  - apiGroups: [ "" ]
-    resources: [ "events" ]
-    verbs: [ "get", "list", "watch", "create", "update", "patch" ]
-  - apiGroups: [ "" ]
-    resources: [ "persistentvolumeclaims" ]
-    verbs: [ "get", "list", "watch", "update", "patch" ]
-  - apiGroups: [ "" ]
-    resources: [ "persistentvolumeclaims/status" ]
-    verbs: [ "get", "list", "watch", "update", "patch" ]
-  - apiGroups: [ "" ]
-    resources: [ "persistentvolumes" ]
-    verbs: [ "get", "list", "watch", "create", "update", "patch", "delete" ]
-  - apiGroups: [ "" ]
-    resources: [ "nodes" ]
-    verbs: [ "get", "list", "watch" ]
-  - apiGroups: [ "" ]
-    resources: [ "pods" ]
-    verbs: [ "get", "list", "watch" ]
-  - apiGroups: [ "storage.k8s.io" ]
-    resources: [ "csinodes" ]
-    verbs: [ "get", "list", "watch" ]
-  - apiGroups: [ "csi.storage.k8s.io" ]
-    resources: [ "csinodeinfos" ]
-    verbs: [ "get", "list", "watch" ]
-  - apiGroups: [ "storage.k8s.io" ]
-    resources: [ "volumeattachments", "volumeattachments/status" ]
-    verbs: [ "get", "list", "watch", "update", "patch" ]
-  - apiGroups: [ "storage.k8s.io" ]
-    resources: [ "storageclasses" ]
-    verbs: [ "get", "list", "watch" ]
-  - apiGroups: [ "snapshot.storage.k8s.io" ]
-    resources: [ "volumesnapshots" ]
-    verbs: [ "get", "list" ]
-  - apiGroups: [ "snapshot.storage.k8s.io" ]
-    resources: [ "volumesnapshotcontents" ]
-    verbs: [ "get", "list" ]
-  - apiGroups: [ "" ]
-    resources: [ "secrets" ]
-    verbs: [ "get" ]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims/status"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["csinodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["csi.storage.k8s.io"]
+    resources: ["csinodeinfos"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["volumeattachments", "volumeattachments/status"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["snapshot.storage.k8s.io"]
+    resources: ["volumesnapshots"]
+    verbs: ["get", "list"]
+  - apiGroups: ["snapshot.storage.k8s.io"]
+    resources: ["volumesnapshotcontents"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -83,10 +83,16 @@ spec:
       hostNetwork: true
       containers:
         - name: csi-provisioner
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+            limits:
+              memory: 100Mi
           securityContext:
             privileged: true
             capabilities:
-              add: [ "SYS_ADMIN" ]
+              add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           image: registry.k8s.io/sig-storage/csi-provisioner
           args:
@@ -102,10 +108,16 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: csi-attacher
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+            limits:
+              memory: 100Mi
           securityContext:
             privileged: true
             capabilities:
-              add: [ "SYS_ADMIN" ]
+              add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           image: registry.k8s.io/sig-storage/csi-attacher
           args:
@@ -119,10 +131,16 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: csi-resizer
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+            limits:
+              memory: 100Mi
           securityContext:
             privileged: true
             capabilities:
-              add: [ "SYS_ADMIN" ]
+              add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           image: registry.k8s.io/sig-storage/csi-resizer
           args:
@@ -136,10 +154,16 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: csi-plugin
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+            limits:
+              memory: 250Mi
           securityContext:
             privileged: true
             capabilities:
-              add: [ "SYS_ADMIN" ]
+              add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           image: ghcr.io/zebernst/synology-csi
           args:
@@ -160,7 +184,7 @@ spec:
               readOnly: true
       volumes:
         - name: socket-dir
-          emptyDir: { }
+          emptyDir: {}
         - name: client-info
           secret:
             secretName: client-info-secret

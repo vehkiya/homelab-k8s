@@ -10,3 +10,6 @@ checks:
     - "drop-net-raw-capability" # Needed for VPN sidecar
     - "privilege-escalation-container" # Needed for sysctls on dynamically added interfaces (like macvlan)
     - "privileged-container" # Needed for sysctls on dynamically added interfaces (like macvlan)
+    - "host-network" # Needed for CSI drivers (like synology-csi) and network plugins
+    - "host-pid" # Needed for CSI node plugins to manage mounts
+    - "sensitive-host-mounts" # Needed for CSI node plugins to interact with host devices and mounts
