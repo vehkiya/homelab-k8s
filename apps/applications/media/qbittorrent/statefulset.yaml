@@ -248,6 +248,8 @@ spec:
               value: "true"
             - name: PROGRESS_FORMAT
               value: "bar"
+            - name: ALLOWED_SUBNETS
+              value: "127.0.0.1/32,::1/128"
           envFrom:
             - secretRef:
                 name: ntfy-credentials
