@@ -9,6 +9,7 @@ helmCharts:
     releaseName: external-secrets
     namespace: external-secrets
     includeCRDs: true
+    valuesFile: values.yaml
 
 resources:
   - bitwarden-cli.yaml
