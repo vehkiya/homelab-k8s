@@ -18,9 +18,22 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "2000"
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: cloudflared
+                topologyKey: kubernetes.io/hostname
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:latest # or specific version like 2024.1.5
+          image: cloudflare/cloudflared
+          ports:
+            - name: metrics
+              containerPort: 2000
+              protocol: TCP
           args:
             - tunnel
             - --metrics
