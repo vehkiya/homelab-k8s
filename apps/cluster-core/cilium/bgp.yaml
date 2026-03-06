@@ -17,6 +17,24 @@ spec:
           advertise: "bgp"
 ---
 apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: ubiquiti-gateway-peer-v6 # Name referenced in CiliumBGPNodeConfig
+  namespace: kube-system
+spec:
+  ebgpMultihop: 1
+  timers:
+    connectRetryTimeSeconds: 120
+    holdTimeSeconds: 90
+    keepAliveTimeSeconds: 30
+  families:
+    - afi: ipv6
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
   name: default-bgp-cluster-config
@@ -31,6 +49,11 @@ spec:
           peerASN: 65000
           peerConfigRef:
             name: ubiquiti-gateway-peer
+        - name: "ubiquiti-gateway-peer-v6"
+          peerAddress: "fd00:10:244::1"
+          peerASN: 65000
+          peerConfigRef:
+            name: ubiquiti-gateway-peer-v6
 ---
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
@@ -72,4 +95,4 @@ spec:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: pool, operator: NotIn, values: [ 'internal-traefik-lb-pool', 'traefik-dmz-pool', 'dmz-lb-pool' ] }
+          - { key: pool, operator: NotIn, values: ["internal-traefik-lb-pool", "traefik-dmz-pool", "dmz-lb-pool"] }
