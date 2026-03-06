@@ -7,5 +7,6 @@ resources:
   - ./multus
   - ./tailscale
   - ./traefik
+  - ./cloudflare-tunnel
   - ./external-secrets-operator
   - ./keda
