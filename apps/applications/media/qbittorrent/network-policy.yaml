@@ -38,6 +38,9 @@ spec:
         - matchLabels:
             app: home-assistant
             k8s:io.kubernetes.pod.namespace: iot
+        - matchLabels:
+            app: n8n
+            k8s:io.kubernetes.pod.namespace: default
       toPorts:
         - ports:
             - port: "web-ui"
@@ -67,4 +70,13 @@ spec:
       toPorts:
         - ports:
             - port: "80"
+              protocol: TCP
+    # === Allow access to n8n ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: default
+            app: n8n
+      toPorts:
+        - ports:
+            - port: "5678"
               protocol: TCP
