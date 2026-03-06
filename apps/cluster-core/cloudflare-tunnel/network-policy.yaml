@@ -31,5 +31,3 @@ spec:
         - ports:
             - port: "8443" # DMZ entrypoint
               protocol: TCP
-            - port: "9443" # Internal entrypoint (just in case)
-              protocol: TCP
