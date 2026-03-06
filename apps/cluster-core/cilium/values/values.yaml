@@ -83,6 +83,13 @@ hubble:
 rollOutCiliumPods: true
 operator:
   rollOutPods: true
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
 
 bgpControlPlane:
   enabled: true
