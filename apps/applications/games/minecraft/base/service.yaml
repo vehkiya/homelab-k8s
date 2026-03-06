@@ -6,9 +6,13 @@ metadata:
   labels:
     pool: dmz-lb-pool
   annotations:
-    lbipam.cilium.io/ips: "10.20.1.140"
+    lbipam.cilium.io/ips: "10.20.1.140,2a00:1858:104b:8558::1"
 spec:
   type: LoadBalancer
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv6
+    - IPv4
   externalTrafficPolicy: Local
   selector:
     app: minecraft

@@ -5,7 +5,7 @@ ipv4:
   enabled: true
 
 ipv6:
-  enabled: false
+  enabled: true
 
 # -- Kubernetes service host endpoint for Cilium agent to connect to
 k8sServiceHost: "localhost"
@@ -25,21 +25,21 @@ ipam:
     clusterPoolIPv4PodCIDRList:
       - 10.244.0.0/16
     clusterPoolIPv4MaskSize: 24
-#    clusterPoolIPv6PodCIDRList:
-#      - "fdf0:10:244::/48"
-#    clusterPoolIPv6MaskSize: 64
+    clusterPoolIPv6PodCIDRList:
+      - "fdf0:10:244::/48"
+    clusterPoolIPv6MaskSize: 64
 
 k8s:
   requireIPv4PodCIDR: true
-  requireIPv6PodCIDR: false
+  requireIPv6PodCIDR: true
 
 autoDirectNodeRoutes: true
 routingMode: native
 endpointRoutes:
   enabled: true
 
-ipv4NativeRoutingCIDR: "10.244.0.0/16"  # Pods CIDR
-#ipv6NativeRoutingCIDR: "fdf0:10:244::/48"
+ipv4NativeRoutingCIDR: "10.244.0.0/16" # Pods CIDR
+ipv6NativeRoutingCIDR: "fdf0:10:244::/48"
 
 bpf:
   datapathMode: netkit
@@ -60,15 +60,15 @@ ipMasqAgent:
     nonMasqueradeCIDRs:
       - 10.244.0.0/16 # Pods CIDR
       - 10.96.0.0/12
-#      - "fdf0:10:244::/48"
+      - "fdf0:10:244::/48"
 
 bandwidthManager:
   enabled: true
   bbr: true
 
 enableIPv4Masquerade: true
-#enableIPv6Masquerade: true
-#enableMasqueradeRouteSource: true
+enableIPv6Masquerade: true
+# enableMasqueradeRouteSource: true
 
 externalIPs:
   enabled: true

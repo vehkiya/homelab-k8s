@@ -30,6 +30,10 @@ metadata:
     pool: traefik-dmz-pool
 spec:
   type: LoadBalancer
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv6
+    - IPv4
   selector:
     app.kubernetes.io/name: "traefik"
   externalTrafficPolicy: Local

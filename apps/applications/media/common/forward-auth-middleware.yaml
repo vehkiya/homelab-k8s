@@ -8,6 +8,7 @@ spec:
   forwardAuth:
     address: "http://authelia.core.svc.cluster.local:9091/api/authz/forward-auth"
     trustForwardHeader: true
+    maxResponseBodySize: 2097152
     authResponseHeaders:
       - "Remote-User"
       - "Remote-Groups"
