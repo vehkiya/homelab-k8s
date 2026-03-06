@@ -14,6 +14,7 @@ spec:
           #          - name: tailscale
           - name: traefik
           - name: traefik-crds
+          - name: cloudflare-tunnel
           - name: external-secrets-operator
           - name: nfd
           - name: intel-device-plugin

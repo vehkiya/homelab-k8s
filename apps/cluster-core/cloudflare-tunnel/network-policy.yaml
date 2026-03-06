@@ -1,0 +1,35 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cloudflared-policy
+  namespace: cloudflare-tunnel
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: cloudflared
+  egress:
+    # === Allow DNS ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # === Allow access to the world (Cloudflare Edge) ===
+    - toEntities:
+        - world
+    # === Allow access to Traefik DMZ (for proxied requests) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8443" # DMZ entrypoint
+              protocol: TCP
+            - port: "9443" # Internal entrypoint (just in case)
+              protocol: TCP
