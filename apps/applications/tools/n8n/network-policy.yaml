@@ -27,6 +27,17 @@ spec:
             - port: "5678"
               protocol: TCP
   egress:
+    # === Allow egress to Traefik (Hairpinning) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "websecure"
+              protocol: TCP
+            - port: "dmz"
+              protocol: TCP
     # === Allow DNS ===
     - toEndpoints:
         - matchLabels:
