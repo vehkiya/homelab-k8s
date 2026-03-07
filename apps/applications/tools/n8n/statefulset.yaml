@@ -73,7 +73,7 @@ spec:
             - name: N8N_HOST
               value: "n8n.kerrlab.app"
             - name: WEBHOOK_URL
-              value: "https://n8n.kerrlab.app/"
+              value: "https://n8n.kerrlab.app"
             - name: N8N_PROXY_HOPS
               value: "1"
             - name: GENERIC_TIMEZONE
