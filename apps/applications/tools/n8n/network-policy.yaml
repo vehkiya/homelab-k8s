@@ -98,7 +98,7 @@ spec:
             app: qbittorrent
       toPorts:
         - ports:
-            - port: "web-ui"
+            - port: "8080"
               protocol: TCP
     # === Allow Internet Access ===
     - toEntities:
