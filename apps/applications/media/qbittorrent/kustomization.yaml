@@ -10,6 +10,7 @@ resources:
   - ntfy-credentials-secret.yaml
   - vpn-secret.yaml
   - qbit-secrets.yaml
+  - scripts-configmap.yaml
 
 labels:
   - pairs:
