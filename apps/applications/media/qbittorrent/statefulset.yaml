@@ -126,6 +126,11 @@ spec:
                 secretKeyRef:
                   name: qbit-secrets
                   key: WEBHOOK_SECRET
+            - name: WEBHOOK_ID
+              valueFrom:
+                secretKeyRef:
+                  name: qbit-secrets
+                  key: WEBHOOK_ID
           ports:
             - name: web-ui
               containerPort: 8080
@@ -163,6 +168,8 @@ spec:
             - name: gluetun-port-data
               mountPath: /tmp/gluetun
               readOnly: true
+            - name: scripts-volume
+              mountPath: /scripts
           resources:
             requests:
               cpu: "50m"
@@ -283,3 +290,7 @@ spec:
           emptyDir: {}
         - name: gluetun-port-data
           emptyDir: {}
+        - name: scripts-volume
+          configMap:
+            name: qbittorrent-scripts
+            defaultMode: 0755
