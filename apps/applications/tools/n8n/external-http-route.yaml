@@ -17,6 +17,9 @@ spec:
         - path:
             type: PathPrefix
             value: /webhook-test
+        - path:
+            type: PathPrefix
+            value: /webhook-waiting
       filters:
         - type: ExtensionRef
           extensionRef:
