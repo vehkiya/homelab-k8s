@@ -121,6 +121,11 @@ spec:
               value: "Europe/Chisinau"
             - name: WEBUI_PATH
               value: "/vuetorrent"
+            - name: WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: qbit-secrets
+                  key: WEBHOOK_SECRET
           ports:
             - name: web-ui
               containerPort: 8080
