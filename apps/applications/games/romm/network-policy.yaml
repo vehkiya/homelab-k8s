@@ -25,21 +25,7 @@ spec:
               protocol: TCP
             - port: "9443"
               protocol: TCP
-    # === Allow Egress to Traefik for Hairpinning (for OIDC) ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-            - port: "8443"
-              protocol: TCP
-            - port: "9443"
-              protocol: TCP
+
     # === Allow Egress to fortress.kerrlab.app:3306 ===
     - toCIDR:
         - "10.10.1.218/32"
