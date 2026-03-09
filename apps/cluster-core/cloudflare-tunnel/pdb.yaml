@@ -4,6 +4,7 @@ metadata:
   name: cloudflared
   namespace: cloudflare-tunnel
 spec:
+  unhealthyPodEvictionPolicy: AlwaysAllow
   maxUnavailable: 1
   selector:
     matchLabels:
