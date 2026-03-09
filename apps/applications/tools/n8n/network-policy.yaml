@@ -29,6 +29,7 @@ spec:
               protocol: TCP
             - port: "dmz"
               protocol: TCP
+
     # === Allow egress to Home Assistant ===
     - toEndpoints:
         - matchLabels:

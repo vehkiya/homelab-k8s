@@ -20,18 +20,6 @@ spec:
             - port: "443"
               protocol: "TCP"
 
-    # 2. Allow DNS (Always needed)
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
-
     # 3. Allow OIDC Provider (If you use Google/Dex/etc for login)
     - toEntities:
         - world

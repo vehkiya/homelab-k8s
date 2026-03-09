@@ -7,29 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app: renovate-server
-  ingress:
-    # Allow webhook traffic from Traefik
-    - fromEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "8080"
-              protocol: TCP
   egress:
-    # Allow DNS
-    - toEndpoints:
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "kube-system"
-            "k8s-app": "coredns"
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
-
     # Allow access to the Kubernetes API server and Internet (GitHub)
     - toEntities:
         - "kube-apiserver"

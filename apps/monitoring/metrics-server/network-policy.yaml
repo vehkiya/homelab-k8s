@@ -40,17 +40,3 @@ spec:
         - ports:
             - port: "10250"
               protocol: TCP
-
-    # 4. Allow DNS Resolution
-    #    Even with ccnp-allow-dns-queries, your global default-deny requires
-    #    an explicit egress rule from the source pod.
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP

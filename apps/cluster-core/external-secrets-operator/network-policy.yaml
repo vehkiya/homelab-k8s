@@ -9,20 +9,7 @@ spec:
     matchExpressions:
       # Match ANY of the External Secrets pods
       - { key: app.kubernetes.io/name, operator: In, values: [ external-secrets, external-secrets-cert-controller, external-secrets-webhook ] }
-  egress:
-    # 1. DNS Access
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
-
-    # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
+  egress:    # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
     - toEntities:
         - "kube-apiserver"
         - "host"          # Needed for Talos host network API
@@ -94,17 +81,6 @@ spec:
       app.kubernetes.io/component: controller
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
     # === Allow access to the Kubernetes API server ===
     - toEntities:
         - "kube-apiserver"
@@ -154,17 +130,6 @@ spec:
               protocol: "TCP"
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
     # === Allow access to the Kubernetes API server ===
     - toEntities:
         - "kube-apiserver"
@@ -196,17 +161,6 @@ spec:
       app.kubernetes.io/component: certcontroller
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
     # === Allow access to the Kubernetes API server ===
     - toEntities:
         - "kube-apiserver"
@@ -237,15 +191,6 @@ spec:
       app: bitwarden-cli
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "ANY"
     # === Allow access to the Bitwarden server ===
     - toCIDR:
         - "10.10.1.218/32"
