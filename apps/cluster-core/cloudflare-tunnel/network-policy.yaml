@@ -8,17 +8,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: cloudflared
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP
     # === Allow access to the world (Cloudflare Edge) ===
     - toEntities:
         - world

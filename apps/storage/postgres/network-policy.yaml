@@ -11,14 +11,6 @@ spec:
       cnpg.io/cluster: postgres-db
 
   ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "5432"
-              protocol: "TCP"
     # Rule A: Allow Authelia to connect
     - fromEndpoints:
         - matchLabels:
@@ -28,7 +20,6 @@ spec:
         - ports:
             - port: "5432"
               protocol: "TCP"
-
     # Rule B: Allow the Operator to connect
     - fromEndpoints:
         - matchLabels:
@@ -79,18 +70,6 @@ spec:
 
   # ----=== Egress ===----
   egress:
-    # Rule A: Allow DNS
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
-
     # Rule B: Allow DB pods to talk to each other
     - toEndpoints:
         - matchLabels:
@@ -120,14 +99,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: cloudnative-pg
   ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "5432"
-              protocol: "TCP"
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: core
@@ -164,16 +135,6 @@ spec:
             - port: "8000"
               protocol: "TCP"
   egress:
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
     - toEntities:
         - "kube-apiserver"
     - toEndpoints:

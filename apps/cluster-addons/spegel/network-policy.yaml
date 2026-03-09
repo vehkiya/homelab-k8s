@@ -9,20 +9,7 @@ spec:
       app.kubernetes.io/name: spegel
 
   # This defines the allowed outbound (egress) traffic
-  egress:
-    # 1. Allow DNS (Managed by global policy but added for clarity/completeness)
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
-
-    # 2. Allow peer communication (all nodes)
+  egress:    # 2. Allow peer communication (all nodes)
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: spegel

@@ -10,24 +10,6 @@ spec:
 
   # This defines the allowed outbound (egress) traffic
   egress:
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
-    - toEndpoints:
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "redis"
-            "k8s:app": "redis"
-      toPorts:
-        - ports:
-            - port: "6379"
-              protocol: "TCP"
     # Allow egress to Traefik for hairpinning
     - toEndpoints:
         - matchLabels:
@@ -45,6 +27,16 @@ spec:
               protocol: UDP
             - port: "9443"
               protocol: UDP
+
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "redis"
+            "k8s:app": "redis"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
+
     - toEntities:
         - "world"
       toPorts:
@@ -63,14 +55,6 @@ spec:
             - port: "465"
               protocol: TCP
   ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "4180"
-              protocol: "TCP"
     - fromEntities:
         - host
         - remote-node
