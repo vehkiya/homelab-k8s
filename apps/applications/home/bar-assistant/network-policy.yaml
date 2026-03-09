@@ -8,15 +8,6 @@ spec:
     matchLabels:
       app: bar-assistant
   ingress:
-    # Allow access from Traefik
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "8080"
-              protocol: TCP
     # Allow access from Salt Rim frontend (in case it proxies)
     - fromEndpoints:
         - matchLabels:
@@ -30,15 +21,6 @@ spec:
         - matchLabels:
             app: bar-assistant
   egress:
-    # Allow DNS
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: ANY
     # Allow access to Redis
     - toEndpoints:
         - matchLabels:
@@ -78,24 +60,3 @@ spec:
   endpointSelector:
     matchLabels:
       app: salt-rim
-  ingress:
-    # Allow access from Traefik
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "8080"
-              protocol: TCP
-  egress:
-    # Allow DNS
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: ANY
-    # Frontend only needs to serve static files, but may need DNS for probes etc.

@@ -4,7 +4,6 @@ metadata:
   name: iot-applications
   namespace: argocd
 spec:
-
   generators:
     - list:
         elements:
@@ -15,14 +14,14 @@ spec:
           - name: z2mqtt
   template:
     metadata:
-      name: '{{name}}'
+      name: "{{name}}"
       namespace: argocd
     spec:
       project: default
       source:
         repoURL: https://github.com/vehkiya/homelab-k8s.git
         targetRevision: HEAD
-        path: 'apps/applications/iot/{{name}}'
+        path: "apps/applications/iot/{{name}}"
       destination:
         server: https://kube.kerrlab.app:6443
         namespace: iot

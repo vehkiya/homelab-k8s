@@ -22,16 +22,4 @@ spec:
             - port: "mqtt"
               protocol: TCP
 
-  # ----=== Egress ===----
-  egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP
+
