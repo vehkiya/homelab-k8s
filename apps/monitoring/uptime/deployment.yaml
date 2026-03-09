@@ -18,6 +18,13 @@ spec:
       containers:
         - name: uptime-kuma
           image: ghcr.io/louislam/uptime-kuma
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
           volumeMounts:
             - name: config
               mountPath: /app/data
