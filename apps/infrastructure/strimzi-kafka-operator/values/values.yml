@@ -1,0 +1,16 @@
+# values.yaml for strimzi-kafka-operator chart
+
+watchNamespaces: 
+  - renovate
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Standard leader election for the operator itself
+leaderElection:
+  enabled: true
