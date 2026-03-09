@@ -82,7 +82,7 @@ spec:
             app: sonarr
       toPorts:
         - ports:
-            - port: "web-ui"
+            - port: "8989"
               protocol: TCP
     - toEndpoints:
         - matchLabels:
@@ -90,7 +90,7 @@ spec:
             app: radarr
       toPorts:
         - ports:
-            - port: "web-ui"
+            - port: "7878"
               protocol: TCP
     - toEndpoints:
         - matchLabels:
