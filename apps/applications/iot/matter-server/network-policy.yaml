@@ -43,18 +43,6 @@ spec:
 
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP
-
     # === Allow Internet Access (for PAA certificates) ===
     - toEntities:
         - "world"

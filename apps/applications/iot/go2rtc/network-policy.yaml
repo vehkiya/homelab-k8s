@@ -9,16 +9,6 @@ spec:
       app: go2rtc
   # ----=== Ingress ===----
   ingress:
-    # === Allow access from Traefik (HTTP/API only) ===
-    # Matched against http-route.yaml rules
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "http" # 1984
-              protocol: TCP
     # === Allow access from Home Assistant ===
     - fromEndpoints:
         - matchLabels:
@@ -43,17 +33,6 @@ spec:
 
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP
     # === To Home Assistant ===
     - toServices:
         - k8sService:

@@ -7,30 +7,9 @@ spec:
   endpointSelector:
     matchLabels:
       app: romm
-  # ----=== Ingress ===----
-  ingress:
-    # === Allow access from Traefik ===
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "8080"
-              protocol: TCP
+
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP
     # === Allow Egress to Traefik for Hairpinning (for OIDC) ===
     - toEndpoints:
         - matchLabels:
@@ -46,14 +25,6 @@ spec:
               protocol: TCP
             - port: "9443"
               protocol: TCP
-    - toServices:
-        - k8sService:
-            serviceName: authelia
-            namespace: core
-      toPorts:
-        - ports:
-            - port: "9091"
-              protocol: "TCP"
     # === Allow Egress to fortress.kerrlab.app:3306 ===
     - toCIDR:
         - "10.10.1.218/32"
