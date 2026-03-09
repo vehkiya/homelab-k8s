@@ -7,31 +7,10 @@ spec:
   endpointSelector:
     matchLabels:
       app: autobrr
-  # ----=== Ingress ===----
-  ingress:
-    # === Allow access from Traefik ===
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "web-ui"
-              protocol: "TCP"
+
 
   # ----=== Egress ===----
   egress:
-    # === Allow DNS ===
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
     # === Allow access to services ===
     - toServices:
         - k8sService:
