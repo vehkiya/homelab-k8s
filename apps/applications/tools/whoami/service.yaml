@@ -3,6 +3,10 @@ kind: Service
 metadata:
   name: whoami
 spec:
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+  - IPv6
+  - IPv4
   selector:
     app: whoami
   ports:

@@ -64,27 +64,3 @@ spec:
               protocol: TCP
             - port: "465"
               protocol: TCP
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "9091"
-              protocol: "TCP"
-    - fromEndpoints:
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "games"
-            app: "romm"
-      toPorts:
-        - ports:
-            - port: "9091"
-              protocol: "TCP"
-    - fromEntities:
-        - host
-        - remote-node
-      toPorts:
-        - ports:
-            - port: "9091"
-              protocol: "TCP"
