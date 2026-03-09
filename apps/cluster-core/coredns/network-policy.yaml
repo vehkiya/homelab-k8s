@@ -1,13 +1,23 @@
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
-  name: "cnp-coredns-egress"
+  name: "cnp-coredns"
   namespace: kube-system
 spec:
-  description: "Allows CoreDNS to contact kube-apiserver for service discovery and external resolvers for public DNS."
+  description: "Allows CoreDNS to receive queries, contact kube-apiserver for service discovery, and external resolvers for public DNS."
   endpointSelector:
     matchLabels:
       k8s-app: coredns
+  ingress:
+    # Rule 1: Allow DNS Queries from all endpoints
+    - fromEndpoints:
+        - {}
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
   egress:
     # Rule 1: Allow communication with kube-apiserver
     - toEntities:

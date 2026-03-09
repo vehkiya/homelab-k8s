@@ -4,11 +4,11 @@ metadata:
   name: "ccnp-global-default-deny"
 spec:
   description: "This policy establishes the cluster-wide zero-trust baseline. It selects all endpoints and applies a default-deny for all ingress and egress traffic."
-  endpointSelector: { }
+  endpointSelector: {}
   ingress:
-    - { }
+    - {}
   egress:
-    - { }
+    - {}
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
@@ -16,7 +16,7 @@ metadata:
   name: "ccnp-allow-health-probes"
 spec:
   description: "Allows kubelet liveness/readiness probes and host-level communication from the 'host' and 'health' entities."
-  endpointSelector: { }
+  endpointSelector: {}
   ingress:
     - fromEntities:
         - "host"
@@ -25,19 +25,73 @@ spec:
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: "ccnp-allow-dns-queries"
+  name: "ccnp-allow-egress-dns"
 spec:
-  description: "Allows all Cilium-managed endpoints to send DNS queries to CoreDNS pods in the kube-system namespace."
-  endpointSelector:
-    matchLabels:
-      k8s:io.kubernetes.pod.namespace: kube-system
-      k8s-app: coredns
-  ingress:
-    - fromEndpoints:
-        - { }
-    - toPorts:
+  description: "Allows all Cilium-managed endpoints to send DNS queries to CoreDNS."
+  endpointSelector: {}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
         - ports:
             - port: "53"
               protocol: "UDP"
             - port: "53"
+              protocol: "TCP"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "ccnp-allow-ingress-traefik"
+spec:
+  description: "Allows all Cilium-managed endpoints to receive ingress traffic from Traefik."
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "ccnp-allow-egress-authelia"
+spec:
+  description: "Allows all Cilium-managed endpoints to send egress traffic to Authelia."
+  endpointSelector: {}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: core
+            app: authelia
+      toPorts:
+        - ports:
+            - port: "9091"
+              protocol: "TCP"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "ccnp-allow-ingress-authelia"
+spec:
+  description: "Allows ingress to Authelia from any endpoint"
+  endpointSelector:
+    matchLabels:
+      app: authelia
+      k8s:io.kubernetes.pod.namespace: core
+  ingress:
+    - fromEndpoints:
+        - {}
+      toPorts:
+        - ports:
+            - port: "9091"
+              protocol: "TCP"
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "9091"
               protocol: "TCP"

@@ -10,15 +10,6 @@ spec:
 
   # === INGRESS: Who can reach Iconify? ===
   ingress:
-    # Allow Traefik (Web UI via Ingress)
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "3000"
-              protocol: TCP
     # Allow Prometheus / Monitoring (Optional)
     - fromEndpoints:
         - matchLabels:
@@ -30,16 +21,6 @@ spec:
 
   # === EGRESS: Who can Iconify talk to? ===
   egress:
-    # 1. Allow access to Kubernetes DNS
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: ANY
-
     # 2. Allow access to external internet (HTTP/HTTPS) to fetch icons if needed
     # Iconify API might need to fetch collections from remote sources or sync.
     - toEntities:

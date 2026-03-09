@@ -10,25 +10,12 @@ spec:
 
   # This defines the allowed outbound (egress) traffic
   egress:
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
     # Rule: Allow Internet (to connect to external IRC servers)
     - toEntities:
         - "world"
   # Allow Ingress (Inbound)
   ingress:
     - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: keda
             app.kubernetes.io/component: interceptor
