@@ -11,12 +11,14 @@ spec:
   ingress:
     # Allow all communication from within the namespace
     - fromEndpoints:
-        - matchLabels: { }
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: argocd
   # ----=== Egress ===----
   egress:
     # Allow all communication to within the namespace
     - toEndpoints:
-        - matchLabels: { }
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: argocd
     # Allow access to the Kubernetes API server for controllers
     - toEntities:
         - "kube-apiserver"
