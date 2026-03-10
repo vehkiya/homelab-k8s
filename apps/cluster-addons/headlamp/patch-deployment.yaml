@@ -15,3 +15,9 @@ spec:
             - name: web-ui
               containerPort: 4466
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: web-ui
+          readinessProbe:
+            httpGet:
+              port: web-ui
