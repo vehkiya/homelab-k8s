@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: automation
+resources:
+  - statefulset.yaml
+  - service.yaml
+  - http-route.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
+  - network-policy.yaml
+images:
+  - name: busybox
+    newTag: 1.37@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
+  - name: docker.n8n.io/n8nio/n8n
+    newTag: 2.12.0@sha256:8d88665e460edcc545dee9a85e848147cd49ea064c2711ebeacbfb4a515bf35d

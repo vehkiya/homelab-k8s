@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: automation
+resources:
+  - pvc.yaml
+  - secret.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - network-policy.yaml
+
+images:
+  - name: binwiederhier/ntfy
+    newTag: v2.18.0@sha256:bf4b67bea925d80e8400ae2997111c933772c8c5f16d7b49f33aa2d27d837098
+  - name: alpine
+    newTag: 3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+
+configMapGenerator:
+  - name: ntfy-config
+    files:
+      - server.yml.template=template/server.yml

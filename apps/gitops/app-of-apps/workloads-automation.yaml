@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: workloads-automation
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        revision: HEAD
+        directories:
+          - path: apps/workloads/automation/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: https://kube.kerrlab.app:6443
+        namespace: 'automation'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+  syncPolicy:
+    preserveResourcesOnDeletion: true

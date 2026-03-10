@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tools
+resources:
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - httpscaledobject.yaml
+  - network-policy.yaml
+images:
+  - name: ghcr.io/mermaid-js/mermaid-live-editor
+    newTag: latest@sha256:5a121737396b248623757420ee9bef9229aeb7c3ca37cdd5197907b73a71eccc
