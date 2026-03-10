@@ -10,6 +10,8 @@ spec:
         revision: HEAD
         directories:
           - path: apps/system/networking/*
+          - path: apps/system/networking/traefik-crds
+            exclude: true
   template:
     metadata:
       name: '{{path.basename}}'
