@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-prometheus-stack-grafana
+  namespace: monitoring
+spec:
+  template:
+    metadata:
+      labels:
+        networking/expose-web-ui: "true"
+    spec:
+      containers:
+        - name: grafana
+          ports:
+            - name: web-ui
+              containerPort: 3000
+              protocol: TCP

@@ -24,6 +24,7 @@ spec:
         app.kubernetes.io/component: search-engine
         app.kubernetes.io/instance: meilisearch-kubernetes
         app.kubernetes.io/name: meilisearch
+        networking/expose-http-api: "true"
     spec:
       containers:
         - envFrom:
@@ -33,25 +34,35 @@ spec:
                 name: meilisearch-kubernetes-master-key
           image: getmeili/meilisearch
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /health
-              port: http
-              scheme: HTTP
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           name: meilisearch
           ports:
             - containerPort: 7700
-              name: http
+              name: http-api
               protocol: TCP
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /health
+              port: http-api
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 1
           readinessProbe:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: http
+              port: http-api
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http-api
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 1
@@ -69,16 +80,6 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-          startupProbe:
-            failureThreshold: 60
-            httpGet:
-              path: /health
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 1
-            periodSeconds: 1
-            successThreshold: 1
-            timeoutSeconds: 1
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:

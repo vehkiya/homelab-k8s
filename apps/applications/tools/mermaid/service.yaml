@@ -8,3 +8,4 @@ spec:
     app: mermaid
   ports:
     - port: 8080
+      name: web-ui

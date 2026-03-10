@@ -8,3 +8,4 @@ spec:
     app: n8n
   ports:
     - port: 5678
+      name: web-ui

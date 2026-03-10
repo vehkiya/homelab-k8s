@@ -12,3 +12,7 @@ resources:
   - longhorn-namespace.yaml
   - longhorn-http-route.yaml
   - network-policy.yaml
+
+patches:
+  - path: patch-longhorn-ui-deployment.yaml
+  - path: patch-longhorn-frontend-service.yaml

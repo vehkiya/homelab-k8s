@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app: wedding-share
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: wedding-share

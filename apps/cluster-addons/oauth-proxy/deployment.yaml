@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: oauth-proxy
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: oauth-proxy
@@ -25,7 +26,7 @@ spec:
             - secretRef:
                 name: oauth-proxy-secrets
           ports:
-            - name: http
+            - name: web-ui
               containerPort: 4180
               hostPort: 4180
               protocol: TCP

@@ -10,10 +10,10 @@ metadata:
 spec:
   internalTrafficPolicy: Cluster
   ports:
-    - name: http
+    - name: http-api
       port: 7700
       protocol: TCP
-      targetPort: http
+      targetPort: http-api
   selector:
     app.kubernetes.io/instance: meilisearch-kubernetes
     app.kubernetes.io/name: meilisearch

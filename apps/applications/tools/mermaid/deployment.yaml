@@ -11,11 +11,15 @@ spec:
     metadata:
       labels:
         app: mermaid
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: mermaid
           image: ghcr.io/mermaid-js/mermaid-live-editor
           imagePullPolicy: "IfNotPresent"
+          ports:
+            - name: web-ui
+              containerPort: 8080
           resources:
             requests:
               cpu: 10m

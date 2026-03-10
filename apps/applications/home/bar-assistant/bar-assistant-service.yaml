@@ -11,5 +11,6 @@ spec:
     app: bar-assistant
   ports:
     - protocol: TCP
-      port: 8080 # Service port
-  type: ClusterIP # Only needs internal cluster access
+      name: http-api
+      port: 8080
+  type: ClusterIP

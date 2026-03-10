@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: thelounge
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: thelounge
@@ -24,6 +25,9 @@ spec:
             limits:
               cpu: 100m
               memory: 256Mi
+          ports:
+            - name: web-ui
+              containerPort: 9000
           volumeMounts:
             - name: config
               mountPath: /var/opt/thelounge

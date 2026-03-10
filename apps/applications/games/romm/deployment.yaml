@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app: romm
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: romm
@@ -25,7 +26,7 @@ spec:
               memory: 2Gi
           ports:
             - containerPort: 8080
-              name: http
+              name: web-ui
           envFrom:
             - secretRef:
                 name: romm-secret

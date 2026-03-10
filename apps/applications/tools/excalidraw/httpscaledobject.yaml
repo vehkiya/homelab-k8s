@@ -11,7 +11,7 @@ spec:
     kind: Deployment
     apiVersion: apps/v1
     service: excalidraw-ui
-    port: 80
+    port: 8080
   replicas:
     min: 0
     max: 1

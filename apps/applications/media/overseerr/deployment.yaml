@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: overseerr
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: overseerr

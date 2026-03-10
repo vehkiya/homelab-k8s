@@ -8,3 +8,4 @@ spec:
     app: speedtest
   ports:
     - port: 3000
+      name: web-ui

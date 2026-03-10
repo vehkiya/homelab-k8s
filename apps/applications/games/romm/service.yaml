@@ -7,5 +7,5 @@ spec:
   selector:
     app: romm
   ports:
-    - name: http
+    - name: web-ui
       port: 8080

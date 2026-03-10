@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: bazarr
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: bazarr
@@ -33,19 +34,19 @@ spec:
             - name: TZ
               value: "Europe/Chisinau"
           ports:
-            - name: http
+            - name: web-ui
               containerPort: 6767
               protocol: TCP
           startupProbe:
             httpGet:
               path: /api/system/ping
-              port: http
+              port: web-ui
             failureThreshold: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /api/system/ping
-              port: http
+              port: web-ui
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -54,7 +55,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/system/ping
-              port: http
+              port: web-ui
           volumeMounts:
             - name: video-series-mount
               mountPath: /tv # Path inside the container

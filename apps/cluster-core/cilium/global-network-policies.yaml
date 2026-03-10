@@ -44,15 +44,40 @@ spec:
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: "ccnp-allow-ingress-traefik"
+  name: "ccnp-allow-web-ui-ingress-traefik"
 spec:
   description: "Allows all Cilium-managed endpoints to receive ingress traffic from Traefik."
-  endpointSelector: {}
+  endpointSelector:
+    matchLabels:
+      networking/expose-web-ui: "true"
   ingress:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: "TCP"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "ccnp-allow-http-api-ingress-traefik"
+spec:
+  description: "Allows all Cilium-managed endpoints to receive ingress traffic from Traefik."
+  endpointSelector:
+    matchLabels:
+      networking/expose-http-api: "true"
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "http-api"
+              protocol: "TCP"
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy

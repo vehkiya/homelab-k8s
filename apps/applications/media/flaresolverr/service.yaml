@@ -7,5 +7,5 @@ spec:
   selector:
     app: flaresolverr
   ports:
-    - name: flaresolverr-ui
+    - name: http-api
       port: 8191

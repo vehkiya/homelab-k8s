@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-ui
+  namespace: longhorn-system
+spec:
+  template:
+    metadata:
+      labels:
+        networking/expose-web-ui: "true"
+    spec:
+      containers:
+        - name: longhorn-ui
+          ports:
+            - name: web-ui
+              containerPort: 8000
+              protocol: TCP

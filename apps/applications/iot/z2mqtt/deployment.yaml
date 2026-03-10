@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: zigbee2mqtt
+        networking/expose-web-ui: "true"
     spec:
       initContainers:
         - name: copy-config
@@ -40,7 +41,7 @@ spec:
           image: ghcr.io/koenkk/zigbee2mqtt
           ports:
             - containerPort: 8080
-              name: frontend
+              name: web-ui
           env:
             - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
               value: "mqtt://mosquitto-svc.iot.svc.cluster.local"

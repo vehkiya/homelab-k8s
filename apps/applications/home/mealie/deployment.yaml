@@ -6,8 +6,6 @@ metadata:
   namespace: home
   labels:
     app: mealie
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: 1
   strategy:
@@ -19,6 +17,7 @@ spec:
     metadata:
       labels:
         app: mealie
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: mealie
@@ -42,6 +41,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /app/data
+          ports:
+            - containerPort: 9000
+              name: web-ui
           resources:
             limits:
               memory: "1Gi"

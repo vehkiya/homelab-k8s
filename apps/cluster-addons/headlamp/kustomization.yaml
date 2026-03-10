@@ -14,3 +14,8 @@ resources:
   - rbac.yaml
   - http-route.yaml
   - network-policy.yaml
+
+
+patches:
+  - path: patch-deployment.yaml
+  - path: patch-service.yaml

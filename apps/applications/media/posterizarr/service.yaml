@@ -6,5 +6,5 @@ spec:
   selector:
     app: posterizarr
   ports:
-    - name: posterizarr-ui
+    - name: web-ui
       port: 8000
