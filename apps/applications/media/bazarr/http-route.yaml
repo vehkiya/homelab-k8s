@@ -20,6 +20,6 @@ spec:
       filters:
         - type: ExtensionRef
           extensionRef:
-            group: 'traefik.io'
-            kind: 'Middleware'
-            name: 'authelia-forward-auth'
+            group: "traefik.io"
+            kind: "Middleware"
+            name: "authelia-forward-auth"

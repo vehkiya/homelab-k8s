@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         app: salt-rim
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: salt-rim-frontend
@@ -32,6 +33,9 @@ spec:
                 configMapKeyRef:
                   name: bar-assistant-config
                   key: MEILISEARCH_URL
+          ports:
+            - containerPort: 8080
+              name: web-ui
           resources:
             requests:
               cpu: 10m

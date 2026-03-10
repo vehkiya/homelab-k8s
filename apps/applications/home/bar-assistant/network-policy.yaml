@@ -60,3 +60,5 @@ spec:
   endpointSelector:
     matchLabels:
       app: salt-rim
+  ingress:
+    []

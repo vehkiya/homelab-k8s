@@ -17,4 +17,3 @@ spec:
       backendRefs:
         - name: flaresolverr
           port: 8191
-

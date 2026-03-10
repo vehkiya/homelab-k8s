@@ -10,10 +10,14 @@ spec:
     metadata:
       labels:
         app: whoami
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: whoami
           image: traefik/whoami
+          ports:
+            - name: web-ui
+              containerPort: 80
           resources:
             requests:
               cpu: "10m"

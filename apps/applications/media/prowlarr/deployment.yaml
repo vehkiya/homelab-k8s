@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: prowlarr
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: prowlarr

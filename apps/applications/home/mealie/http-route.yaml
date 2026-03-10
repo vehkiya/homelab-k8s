@@ -3,8 +3,6 @@ kind: HTTPRoute
 metadata:
   name: mealie-route
   namespace: home
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
   parentRefs:
     - name: internal-gateway

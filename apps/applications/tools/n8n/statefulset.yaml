@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: n8n
+        networking/expose-web-ui: "true"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -58,6 +59,9 @@ spec:
             capabilities:
               drop:
                 - ALL
+          ports:
+            - name: web-ui
+              containerPort: 5678
           resources:
             requests:
               cpu: 250m

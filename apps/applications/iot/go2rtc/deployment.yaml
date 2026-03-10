@@ -14,13 +14,14 @@ spec:
     metadata:
       labels:
         app: go2rtc
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: go2rtc
           image: ghcr.io/alexxit/go2rtc
           ports:
             - containerPort: 1984
-              name: http
+              name: web-ui
             - containerPort: 8554
               name: rtsp
             - containerPort: 8555

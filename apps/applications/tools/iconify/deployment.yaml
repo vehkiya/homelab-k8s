@@ -14,23 +14,24 @@ spec:
     metadata:
       labels:
         app: iconify
+        networking/expose-http-api: "true"
     spec:
       containers:
         - name: iconify
           image: iconify/api
           ports:
             - containerPort: 3000
-              name: http
+              name: http-api
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: http-api
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: http-api
             initialDelaySeconds: 5
             periodSeconds: 10
           resources:

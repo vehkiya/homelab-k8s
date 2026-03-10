@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: home-assistant
+        networking/expose-web-ui: "true"
       annotations:
         k8s.v1.cni.cncf.io/networks: macvlan-iot
     spec:
@@ -33,7 +34,7 @@ spec:
           image: ghcr.io/home-operations/home-assistant
           ports:
             - containerPort: 8123
-              name: http
+              name: web-ui
           volumeMounts:
             - name: hass-data
               mountPath: /config

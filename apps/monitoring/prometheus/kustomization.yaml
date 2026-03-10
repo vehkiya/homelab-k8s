@@ -13,3 +13,7 @@ resources:
   - secrets.yaml
   - network-policies.yaml
   - http-route.yaml
+
+patches:
+  - path: patch-grafana-deployment.yaml
+  - path: patch-grafana-service.yaml

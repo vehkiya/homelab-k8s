@@ -9,5 +9,6 @@ spec:
     app: salt-rim
   ports:
     - protocol: TCP
-      port: 8080 # Service port
-  type: ClusterIP # Only needs internal cluster access
+      port: 8080
+      name: web-ui
+  type: ClusterIP

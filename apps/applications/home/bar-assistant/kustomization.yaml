@@ -12,7 +12,7 @@ resources:
   - bar-assistant-config-map.yaml
   - bar-assistant-deployment.yaml
   - bar-assistant-service.yaml
-  - bar-assistant-http-routes.yaml
+  - http-route.yaml
   - salt-rim-deployment.yaml
   - salt-rim-service.yaml
   - network-policy.yaml

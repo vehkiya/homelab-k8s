@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: sonarr
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: sonarr

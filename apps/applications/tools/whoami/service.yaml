@@ -11,3 +11,4 @@ spec:
     app: whoami
   ports:
     - port: 80
+      name: web-ui

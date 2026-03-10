@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: posterizarr
+        networking/expose-web-ui: "true"
     spec:
       dnsPolicy: None
       securityContext:

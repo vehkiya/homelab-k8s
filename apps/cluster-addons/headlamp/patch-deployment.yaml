@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: headlamp
+  namespace: kubernetes-dashboard
+spec:
+  template:
+    metadata:
+      labels:
+        networking/expose-web-ui: "true"
+    spec:
+      containers:
+        - name: headlamp
+          ports:
+            - name: web-ui
+              containerPort: 4466
+              protocol: TCP

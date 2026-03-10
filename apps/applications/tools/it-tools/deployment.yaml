@@ -12,10 +12,14 @@ spec:
     metadata:
       labels:
         app: it-tools
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: it-tools
           image: ghcr.io/corentinth/it-tools
+          ports:
+            - name: web-ui
+              containerPort: 80
           resources:
             requests:
               cpu: 10m

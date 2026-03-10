@@ -12,7 +12,7 @@ spec:
   selector:
     app: go2rtc
   ports:
-    - name: http-api
+    - name: web-ui
       port: 1984
     - name: rtsp
       port: 8554

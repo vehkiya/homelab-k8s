@@ -58,6 +58,9 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          ports:
+            - containerPort: 5580
+              name: websocket-api
           securityContext:
             capabilities:
               add:

@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: qbittorrent
+        networking/expose-web-ui: "true"
     spec:
       affinity:
         nodeAffinity:

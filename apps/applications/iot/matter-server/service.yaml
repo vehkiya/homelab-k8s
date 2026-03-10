@@ -8,4 +8,4 @@ spec:
     app: matter-server
   ports:
     - port: 5580
-      name: matter-server
+      name: websocket-api

@@ -12,12 +12,14 @@ spec:
     metadata:
       labels:
         app: renovate-server
+        networking/expose-http-api: "true"
     spec:
       containers:
         - name: renovate-server
           image: ghcr.io/mend/renovate-ce
           ports:
             - containerPort: 8080
+              name: http-api
           envFrom:
             - configMapRef:
                 name: renovate-env

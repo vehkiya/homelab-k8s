@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         app: bar-assistant
+        networking/expose-http-api: "true"
     spec:
       initContainers:
         - name: volume-permissions
@@ -55,6 +56,9 @@ spec:
           #                secretKeyRef:
           #                  name: redis-secret
           #                  key: redis-password
+          ports:
+            - containerPort: 8080
+              name: http-api
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant

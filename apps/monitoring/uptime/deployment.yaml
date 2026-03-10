@@ -14,10 +14,14 @@ spec:
     metadata:
       labels:
         app: uptime-kuma
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: uptime-kuma
           image: ghcr.io/louislam/uptime-kuma
+          ports:
+            - name: web-ui
+              containerPort: 3001
           resources:
             requests:
               cpu: 10m

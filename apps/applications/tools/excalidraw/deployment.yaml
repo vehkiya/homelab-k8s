@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: excalidraw
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: excalidraw
@@ -23,3 +24,6 @@ spec:
             limits:
               cpu: 100m
               memory: 128Mi
+          ports:
+            - name: web-ui
+              containerPort: 8080

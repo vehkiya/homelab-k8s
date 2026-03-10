@@ -21,7 +21,7 @@ spec:
           image: ghcr.io/hononeko/bw-cli
           imagePullPolicy: "IfNotPresent"
           ports:
-            - name: api
+            - name: http-api
               containerPort: 8087
           envFrom:
             - secretRef:
@@ -32,19 +32,19 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: api
+              port: http-api
             initialDelaySeconds: 20
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /healthz
-              port: api
+              port: http-api
             initialDelaySeconds: 15
             periodSeconds: 10
           startupProbe:
             httpGet:
               path: /healthz
-              port: api
+              port: http-api
             initialDelaySeconds: 1
             failureThreshold: 60
             periodSeconds: 5
@@ -65,7 +65,7 @@ spec:
   selector:
     app: bitwarden-cli
   ports:
-    - name: api
+    - name: http-api
       protocol: TCP
       port: 8087
       targetPort: 8087
