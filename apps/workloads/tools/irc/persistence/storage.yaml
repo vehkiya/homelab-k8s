@@ -28,7 +28,7 @@ metadata:
   labels:
     app: the-lounge
   name: the-lounge-config-pvc
-  namespace: default
+  namespace: tools
 spec:
   accessModes:
     - ReadWriteOnce

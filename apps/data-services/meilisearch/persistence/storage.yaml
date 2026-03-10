@@ -26,7 +26,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: meilisearch-pvc   # Base name, will be overridden by overlay
-  namespace: default      # Base namespace, will be overridden
+  namespace: data-services      # Base namespace, will be overridden
 spec:
   accessModes:
     - ReadWriteOnce
