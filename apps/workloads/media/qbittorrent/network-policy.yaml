@@ -31,7 +31,7 @@ spec:
             k8s:io.kubernetes.pod.namespace: iot
         - matchLabels:
             app: n8n
-            k8s:io.kubernetes.pod.namespace: default
+            k8s:io.kubernetes.pod.namespace: automation
       toPorts:
         - ports:
             - port: "web-ui"
@@ -54,7 +54,7 @@ spec:
     # === Allow access to n8n ===
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: default
+            k8s:io.kubernetes.pod.namespace: automation
             app: n8n
       toPorts:
         - ports:

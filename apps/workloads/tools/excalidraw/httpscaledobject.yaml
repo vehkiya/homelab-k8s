@@ -2,7 +2,7 @@ apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
   name: excalidraw
-  namespace: default
+  namespace: tools
 spec:
   hosts:
     - excalidraw.kerrlab.app

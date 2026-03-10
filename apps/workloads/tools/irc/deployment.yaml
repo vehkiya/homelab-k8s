@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: thelounge
-  namespace: default
+  namespace: tools
 spec:
   strategy:
     type: Recreate

@@ -3,7 +3,6 @@ kind: Kustomization
 
 namespace: media
 resources:
-  - persistence/
   - secrets.yaml
   - deployment.yaml
   - service.yaml

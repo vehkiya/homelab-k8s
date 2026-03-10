@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: n8n
-  namespace: default
+  namespace: automation
 spec:
   serviceName: n8n
   replicas: 1

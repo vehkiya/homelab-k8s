@@ -2,7 +2,7 @@ apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
   name: thelounge
-  namespace: default
+  namespace: tools
 spec:
   hosts:
     - irc.kerrlab.app

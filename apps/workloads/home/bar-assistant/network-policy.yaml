@@ -33,7 +33,7 @@ spec:
     # Allow access to Meilisearch
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: default
+            k8s:io.kubernetes.pod.namespace: automation
             app.kubernetes.io/name: meilisearch
       toPorts:
         - ports:

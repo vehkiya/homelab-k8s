@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: whoami-policy
-  namespace: default
+  namespace: tools
 spec:
   endpointSelector:
     matchLabels:
