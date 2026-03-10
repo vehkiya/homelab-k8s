@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: strimzi-kafka-operator
-  namespace: kafka
+  namespace: data-services
 spec:
   endpointSelector:
     matchLabels:

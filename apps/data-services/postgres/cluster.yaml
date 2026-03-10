@@ -3,7 +3,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: postgres-db
-  namespace: postgres
+  namespace: data-services
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:

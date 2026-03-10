@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: meilisearch-kubernetes
     app.kubernetes.io/name: meilisearch
   name: meilisearch-kubernetes
-  namespace: default
+  namespace: data-services
 spec:
   internalTrafficPolicy: Cluster
   ports:

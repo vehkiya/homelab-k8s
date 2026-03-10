@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: postgres-superuser
-  namespace: postgres
+  namespace: data-services
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:

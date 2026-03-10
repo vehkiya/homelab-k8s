@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: meilisearch-kubernetes-master-key
-  namespace: default
+  namespace: data-services
 spec:
   target:
     name: meilisearch-kubernetes-master-key
