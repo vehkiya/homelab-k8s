@@ -71,35 +71,8 @@ spec:
           envFrom:
             - secretRef:
                 name: n8n-db-credentials
-          env:
-            - name: EXECUTIONS_MODE
-              value: "queue"
-            - name: QUEUE_BULL_REDIS_HOST
-              value: "redis-master.data-services.svc.cluster.local"
-            - name: QUEUE_BULL_REDIS_PORT
-              value: "6379"
-            - name: DB_TYPE
-              value: "postgresdb"
-            - name: DB_POSTGRESDB_DATABASE
-              value: "n8n"
-            - name: DB_POSTGRESDB_HOST
-              value: "fortress.kerrlab.app"
-            - name: DB_POSTGRESDB_PORT
-              value: "15432"
-            - name: DB_POSTGRESDB_USER
-              value: "n8n_user"
-            - name: TZ
-              value: "Europe/Chisinau"
-            - name: N8N_PROTOCOL
-              value: "https"
-            - name: N8N_HOST
-              value: "n8n.kerrlab.app"
-            - name: WEBHOOK_URL
-              value: "https://n8n.kerrlab.app"
-            - name: N8N_PROXY_HOPS
-              value: "1"
-            - name: GENERIC_TIMEZONE
-              value: "Europe/Chisinau"
+            - configMapRef:
+                name: n8n-config
           volumeMounts:
             - name: data
               mountPath: /home/node/.n8n

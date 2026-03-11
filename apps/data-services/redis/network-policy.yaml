@@ -21,10 +21,12 @@ spec:
             "k8s:app": "bar-assistant"
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "automation"
-            "k8s:app": "n8n"
-        - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "automation"
-            "k8s:app": "n8n-worker"
+          matchExpressions:
+            - key: "k8s:app"
+              operator: In
+              values:
+                - n8n
+                - n8n-worker
       toPorts:
         - ports:
             - port: "6379"

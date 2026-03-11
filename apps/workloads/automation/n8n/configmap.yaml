@@ -1,0 +1,20 @@
+# ConfigMap for non-sensitive configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: n8n-config
+data:
+  EXECUTIONS_MODE: "queue"
+  QUEUE_BULL_REDIS_HOST: "redis-master.data-services.svc.cluster.local"
+  QUEUE_BULL_REDIS_PORT: "6379"
+  DB_TYPE: "postgresdb"
+  DB_POSTGRESDB_DATABASE: "n8n"
+  DB_POSTGRESDB_HOST: "fortress.kerrlab.app"
+  DB_POSTGRESDB_PORT: "15432"
+  DB_POSTGRESDB_USER: "n8n_user"
+  TZ: "Europe/Chisinau"
+  N8N_PROTOCOL: "https"
+  N8N_HOST: "n8n.kerrlab.app"
+  WEBHOOK_URL: "https://n8n.kerrlab.app"
+  N8N_PROXY_HOPS: "1"
+  GENERIC_TIMEZONE: "Europe/Chisinau"
