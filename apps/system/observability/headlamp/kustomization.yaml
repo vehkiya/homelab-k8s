@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: observability
 helmCharts:
   - name: headlamp
+    namespace: observability
     repo: https://kubernetes-sigs.github.io/headlamp/
     version: 0.40.0
     releaseName: headlamp
