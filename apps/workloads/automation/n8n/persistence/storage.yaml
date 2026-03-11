@@ -28,7 +28,6 @@ metadata:
   labels:
     app: n8n
   name: n8n-config-pvc
-  namespace: automation
 spec:
   accessModes:
     - ReadWriteOnce

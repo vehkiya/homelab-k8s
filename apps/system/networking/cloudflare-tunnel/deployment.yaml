@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloudflared
-  namespace: cloudflare-tunnel
   labels:
     app.kubernetes.io/name: cloudflared
 spec:

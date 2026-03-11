@@ -2,7 +2,6 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: traefik-dashboard-auth-secret
-  namespace: traefik
 spec:
   target:
     name: traefik-dashboard-auth-secret

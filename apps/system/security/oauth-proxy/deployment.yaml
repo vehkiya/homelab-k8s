@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: oauth-proxy
-  namespace: security
   labels:
     app: oauth-proxy
 spec:

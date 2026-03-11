@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: uptime-kuma-policy
-  namespace: observability
 spec:
   endpointSelector:
     matchLabels:

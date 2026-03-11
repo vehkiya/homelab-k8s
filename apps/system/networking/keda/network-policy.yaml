@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: keda-policy
-  namespace: observability
 spec:
   endpointSelector: {}
 
@@ -11,7 +10,7 @@ spec:
     # === Allow intra-namespace communication ===
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: observability
+            k8s:io.kubernetes.pod.namespace: keda
 
     # === Allow webhook and metrics access from the Kube API server ===
     - fromEntities:
@@ -27,7 +26,7 @@ spec:
     # === Allow intra-namespace communication ===
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: observability
+            k8s:io.kubernetes.pod.namespace: keda
 
     # === Allow access to the Kubernetes API server ===
     - toEntities:

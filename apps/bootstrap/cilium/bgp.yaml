@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
   name: ubiquiti-gateway-peer # Name referenced in CiliumBGPNodeConfig
-  namespace: kube-system
 spec:
   ebgpMultihop: 1
   timers:
@@ -20,7 +19,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
   name: ubiquiti-gateway-peer-v6 # Name referenced in CiliumBGPNodeConfig
-  namespace: kube-system
 spec:
   ebgpMultihop: 1
   timers:
@@ -38,7 +36,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
   name: default-bgp-cluster-config
-  namespace: kube-system
 spec:
   bgpInstances:
     - name: homelab-router # An identifier for this BGP instance
@@ -59,7 +56,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
   name: lb-advertisement
-  namespace: kube-system
   labels:
     advertise: "bgp"
 spec:

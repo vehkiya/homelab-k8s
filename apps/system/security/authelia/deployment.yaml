@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: authelia
-  namespace: security
   labels:
     app: authelia
 spec:

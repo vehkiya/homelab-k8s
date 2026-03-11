@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: go2rtc-policy
-  namespace: iot
 spec:
   endpointSelector:
     matchLabels:

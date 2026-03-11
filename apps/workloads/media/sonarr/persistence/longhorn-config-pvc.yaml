@@ -4,7 +4,6 @@ metadata:
   labels:
     app: sonarr
   name: sonarr-config-longhorn-pvc
-  namespace: media
 spec:
   accessModes:
     - ReadWriteOnce

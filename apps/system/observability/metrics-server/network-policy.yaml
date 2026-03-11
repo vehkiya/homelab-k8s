@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: metrics-server-policy
-  namespace: kube-system  # Adjust if you install metrics-server in a different namespace
 spec:
   endpointSelector:
     matchLabels:

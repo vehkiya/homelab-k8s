@@ -2,7 +2,6 @@ apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
   name: wedding-share
-  namespace: home
 spec:
   hosts:
     - event.kerrlab.app

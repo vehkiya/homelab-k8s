@@ -4,7 +4,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: argocd-default-policy
-  namespace: argocd
 spec:
   endpointSelector: { } # Apply to all pods in the namespace
   # ----=== Ingress ===----
@@ -43,7 +42,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: argocd-server-policy
-  namespace: argocd
 spec:
   endpointSelector:
     matchLabels:
@@ -84,7 +82,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: argocd-repo-server-egress-policy
-  namespace: argocd
 spec:
   endpointSelector:
     matchLabels:

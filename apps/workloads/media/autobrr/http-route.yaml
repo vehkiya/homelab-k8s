@@ -2,7 +2,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: autobrr-ui-route
-  namespace: media
 spec:
   parentRefs:
     - name: internal-gateway

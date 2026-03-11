@@ -4,7 +4,6 @@ metadata:
   labels:
     app: radarr
   name: radarr-config-longhorn-pvc
-  namespace: media
 spec:
   accessModes:
     - ReadWriteOnce

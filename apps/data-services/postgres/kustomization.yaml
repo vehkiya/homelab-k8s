@@ -16,3 +16,4 @@ resources:
   - tcp-route.yaml
   - authelia-user-password.yaml
   - network-policy.yaml
+  - mealie-db-user.yaml

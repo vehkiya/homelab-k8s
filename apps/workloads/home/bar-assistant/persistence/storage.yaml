@@ -28,7 +28,6 @@ metadata:
   labels:
     app: bar-assistant
   name: bar-assistant-config-pvc
-  namespace: home
 spec:
   accessModes:
     - ReadWriteOnce

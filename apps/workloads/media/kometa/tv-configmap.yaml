@@ -27,4 +27,3 @@ data:
 kind: ConfigMap
 metadata:
   name: kometa-tv-config
-  namespace: media

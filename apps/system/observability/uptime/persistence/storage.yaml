@@ -28,7 +28,6 @@ metadata:
   labels:
     app: uptime-kuma
   name: uptime-kuma-config-pvc
-  namespace: observability
 spec:
   accessModes:
     - ReadWriteOnce

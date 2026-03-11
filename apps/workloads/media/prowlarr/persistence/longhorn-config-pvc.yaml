@@ -4,7 +4,6 @@ metadata:
   labels:
     app: prowlarr
   name: prowlarr-config-longhorn-pvc
-  namespace: media
 spec:
   accessModes:
     - ReadWriteOnce

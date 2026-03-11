@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zigbee2mqtt
-  namespace: iot
 spec:
   replicas: 1
   strategy:

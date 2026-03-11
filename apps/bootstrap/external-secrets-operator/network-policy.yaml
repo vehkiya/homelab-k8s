@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-all-policies
-  namespace: external-secrets
 spec:
   description: "Combined policy for External Secrets components"
   endpointSelector:
@@ -41,7 +40,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-webhook-ingress
-  namespace: external-secrets
 spec:
   description: "Allow K8s API Server to reach the Webhook"
   endpointSelector:
@@ -73,7 +71,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-controller-policy
-  namespace: external-secrets
 spec:
   endpointSelector:
     matchLabels:
@@ -113,7 +110,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-webhook-policy
-  namespace: external-secrets
 spec:
   endpointSelector:
     matchLabels:
@@ -153,7 +149,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-certcontroller-policy
-  namespace: external-secrets
 spec:
   endpointSelector:
     matchLabels:
@@ -184,7 +179,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: bitwarden-cli-policy
-  namespace: external-secrets
 spec:
   endpointSelector:
     matchLabels:

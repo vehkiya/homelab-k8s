@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: authelia-policy
-  namespace: security
 spec:
   endpointSelector:
     matchLabels:
@@ -22,7 +21,7 @@ spec:
               protocol: "TCP"
     - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "redis"
+            "k8s:io.kubernetes.pod.namespace": "data-services"
             "k8s:app": "redis"
       toPorts:
         - ports:
@@ -39,10 +38,10 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: cloudnative-pg
-            k8s:io.kubernetes.pod.namespace: postgres
+            k8s:io.kubernetes.pod.namespace: data-services
         - matchLabels:
             cnpg.io/cluster: postgres-db
-            k8s:io.kubernetes.pod.namespace: postgres
+            k8s:io.kubernetes.pod.namespace: data-services
       toPorts:
         - ports:
             - port: "5432"

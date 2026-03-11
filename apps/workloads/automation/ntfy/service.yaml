@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ntfy
-  namespace: automation
   labels:
     app.kubernetes.io/name: ntfy
 spec:

@@ -3,7 +3,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: internal-gateway
-  namespace: traefik
   annotations:
     cert-manager.io/cluster-issuer: zerossl-prod
 spec:
@@ -27,7 +26,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: external-gateway
-  namespace: traefik
   annotations:
     cert-manager.io/cluster-issuer: zerossl-prod
 spec:

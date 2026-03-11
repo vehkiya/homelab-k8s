@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: grafana-rules
-  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -83,7 +82,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: prometheus-operator-rules
-  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -116,7 +114,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: prometheus-server-rules
-  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -216,7 +213,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: alertmanager-rules
-  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -269,7 +265,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: kube-state-metrics-rules
-  namespace: observability
 spec:
   endpointSelector:
     matchLabels:

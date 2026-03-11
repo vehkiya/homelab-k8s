@@ -25,7 +25,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: wedding-share-nfs-pvc
-  namespace: home
 spec:
   accessModes:
     - ReadWriteMany

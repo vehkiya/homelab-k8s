@@ -2,7 +2,6 @@ apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
   name: "cnp-traefik-perimeter"
-  namespace: "traefik"
 spec:
   description: "Allows external traffic to Traefik (80/443) and allows Traefik to talk to k8s API and backend services."
   endpointSelector:

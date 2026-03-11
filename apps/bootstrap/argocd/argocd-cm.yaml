@@ -4,7 +4,6 @@ metadata:
   # Default name for the Argo CD ConfigMap
   name: argocd-cm
   # Default namespace for Argo CD (adjust if you installed it elsewhere)
-  namespace: argocd
   labels:
     # Standard labels for identifying Argo CD components
     app.kubernetes.io/name: argocd-cm

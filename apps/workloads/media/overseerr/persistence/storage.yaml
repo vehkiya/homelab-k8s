@@ -28,7 +28,6 @@ metadata:
   labels:
     app: overseerr
   name: overseerr-config-pvc
-  namespace: media
 spec:
   accessModes:
     - ReadWriteOnce

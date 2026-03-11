@@ -2,7 +2,6 @@ apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: auth-whoami
-  namespace: tools
   labels:
     app.kubernetes.io/instance: "authelia"
     app.kubernetes.io/name: "authelia"
@@ -21,7 +20,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: whoami-route
-  namespace: tools
 spec:
   parentRefs:
     - name: internal-gateway

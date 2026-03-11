@@ -28,7 +28,6 @@ metadata:
   labels:
     app: mealie
   name: mealie-config-pvc
-  namespace: home
 spec:
   accessModes:
     - ReadWriteOnce

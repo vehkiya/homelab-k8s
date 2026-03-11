@@ -3,7 +3,6 @@ apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
   name: "cnpg-postgres-db-cluster-policy"
-  namespace: data-services
 spec:
   description: "Policy for the actual Postgres DB cluster 'postgres-db'"
   endpointSelector:
@@ -93,7 +92,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: cnpg-policy
-  namespace: postgres
 spec:
   endpointSelector:
     matchLabels:

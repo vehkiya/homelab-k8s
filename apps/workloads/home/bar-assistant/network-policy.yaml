@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: bar-assistant-policy
-  namespace: home
 spec:
   endpointSelector:
     matchLabels:
@@ -55,7 +54,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: salt-rim-policy
-  namespace: home
 spec:
   endpointSelector:
     matchLabels:

@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: ntfy-policy
-  namespace: automation
 spec:
   endpointSelector:
     matchLabels:

@@ -4,7 +4,6 @@ metadata:
   labels:
     app: tautulli
   name: tautulli-config-longhorn-pvc
-  namespace: media
 spec:
   accessModes:
     - ReadWriteOnce

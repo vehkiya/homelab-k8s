@@ -4,7 +4,6 @@ metadata:
   labels:
     app: autobrr
   name: autobrr-config-longhorn-pvc
-  namespace: media
 spec:
   accessModes:
     - ReadWriteOnce

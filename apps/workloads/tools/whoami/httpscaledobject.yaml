@@ -2,7 +2,6 @@ apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
   name: whoami
-  namespace: tools
 spec:
   hosts:
     - whoami.kerrlab.app

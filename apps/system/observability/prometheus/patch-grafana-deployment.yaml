@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kube-prometheus-stack-grafana
-  namespace: observability
 spec:
   template:
     metadata:
