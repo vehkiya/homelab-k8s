@@ -13,7 +13,7 @@ spec:
     # Rule A: Allow Authelia to connect
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: core
+            k8s:io.kubernetes.pod.namespace: security
             app: authelia
       toPorts:
         - ports:
@@ -99,7 +99,7 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: core
+            k8s:io.kubernetes.pod.namespace: security
             app: authelia
       toPorts:
         - ports:

@@ -89,7 +89,7 @@ spec:
   egress:
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: core
+            k8s:io.kubernetes.pod.namespace: security
             app: authelia
       toPorts:
         - ports:
@@ -105,7 +105,7 @@ spec:
   endpointSelector:
     matchLabels:
       app: authelia
-      k8s:io.kubernetes.pod.namespace: core
+      k8s:io.kubernetes.pod.namespace: security
   ingress:
     - fromEndpoints:
         - {}
