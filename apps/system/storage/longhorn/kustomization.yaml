@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: longhorn-system
 helmCharts:
   - name: longhorn
+    namespace: longhorn-system
     repo: https://charts.longhorn.io
     version: 1.11.0
     releaseName: longhorn
@@ -12,6 +13,7 @@ resources:
   - longhorn-namespace.yaml
   - longhorn-http-route.yaml
   - network-policy.yaml
+  - storageclass-retain.yaml
 
 patches:
   - path: patch-longhorn-ui-deployment.yaml
