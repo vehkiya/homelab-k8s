@@ -35,7 +35,7 @@ spec:
     - toEndpoints:
         - matchLabels:
             cnpg.io/cluster: postgres-db
-            k8s:io.kubernetes.pod.namespace: postgres
+            k8s:io.kubernetes.pod.namespace: data-services
       toPorts:
         - ports:
             - port: "5432"

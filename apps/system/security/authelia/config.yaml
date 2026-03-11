@@ -60,7 +60,7 @@ data:
     storage:
       encryption_key: "${STORAGE_ENCRYPTION_KEY}"
       postgres:
-        address: 'tcp://postgres-db-rw.postgres.svc:5432'
+        address: 'tcp://postgres-db-rw.data-services.svc.cluster.local:5432'
         database: authelia-db
         username: authelia_user
         # The password is loaded from an environment variable
