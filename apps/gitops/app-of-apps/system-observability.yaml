@@ -10,9 +10,11 @@ spec:
         revision: HEAD
         directories:
           - path: apps/system/observability/*
+          - path: apps/system/observability/uptime
+            exclude: true
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: "{{path.basename}}"
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
@@ -21,10 +23,10 @@ spec:
       source:
         repoURL: https://github.com/vehkiya/homelab-k8s.git
         targetRevision: HEAD
-        path: '{{path}}'
+        path: "{{path}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'monitoring'
+        namespace: "monitoring"
       syncPolicy:
         automated:
           prune: true
