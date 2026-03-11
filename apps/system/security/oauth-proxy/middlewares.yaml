@@ -8,7 +8,7 @@ spec:
   forwardAuth:
     # The address of the oauth2-proxy service.
     # The path /oauth2/auth is the endpoint oauth2-proxy uses for verification.
-    address: http://oauth-proxy.core.svc.cluster.local:4180/oauth2/auth
+    address: http://oauth-proxy.security.svc.cluster.local:4180/oauth2/auth
     trustForwardHeader: true
     maxResponseBodySize: 2097152
     authResponseHeaders:

@@ -5,7 +5,7 @@ metadata:
   name: authelia-forward-auth
 spec:
   forwardAuth:
-    address: "http://authelia.core.svc.cluster.local:9091/api/authz/forward-auth"
+    address: "http://authelia.security.svc.cluster.local:9091/api/authz/forward-auth"
     trustForwardHeader: true
     maxResponseBodySize: 2097152
     authResponseHeaders:
