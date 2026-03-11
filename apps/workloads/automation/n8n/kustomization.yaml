@@ -4,7 +4,7 @@ namespace: automation
 resources:
   - configmap.yaml
   - secrets.yaml
-  - statefulset.yaml
+  - deployment.yaml
   - worker-deployment.yaml
   - db-credentials.yaml
   - service.yaml
