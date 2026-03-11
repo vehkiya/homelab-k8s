@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -45,7 +45,7 @@ spec:
     - toServices:
         - k8sService:
             serviceName: kube-prometheus-stack-prometheus
-            namespace: monitoring
+            namespace: observability
       toPorts:
         - ports:
             - port: "9090"

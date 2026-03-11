@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: oauth-proxy-policy
-  namespace: core
+  namespace: security
 spec:
   endpointSelector:
     matchLabels:

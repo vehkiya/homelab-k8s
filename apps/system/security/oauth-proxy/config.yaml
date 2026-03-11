@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: oauth2-proxy-configmap
-  namespace: core
+  namespace: security
 data:
   oauth2-proxy.cfg: |
     # Listen Address

@@ -1,7 +1,7 @@
 # values.yaml for strimzi-kafka-operator chart
 
-watchNamespaces: 
-  - renovate
+watchNamespaces:
+  - automation
 
 resources:
   requests:

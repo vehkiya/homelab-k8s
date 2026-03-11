@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: grafana-rules
-  namespace: monitoring
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -64,7 +64,7 @@ spec:
     - toServices:
         - k8sService:
             serviceName: kube-prometheus-stack-alertmanager
-            namespace: monitoring
+            namespace: observability
       toPorts:
         - ports:
             - port: "9093"
@@ -73,7 +73,7 @@ spec:
     - toServices:
         - k8sService:
             serviceName: loki
-            namespace: monitoring
+            namespace: observability
       toPorts:
         - ports:
             - port: "3100"
@@ -83,7 +83,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: prometheus-operator-rules
-  namespace: monitoring
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -116,7 +116,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: prometheus-server-rules
-  namespace: monitoring
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -216,7 +216,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: alertmanager-rules
-  namespace: monitoring
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -269,7 +269,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: kube-state-metrics-rules
-  namespace: monitoring
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:

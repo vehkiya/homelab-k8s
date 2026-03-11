@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: uptime-kuma-policy
-  namespace: notifications
+  namespace: observability
 spec:
   endpointSelector:
     matchLabels:
@@ -14,7 +14,7 @@ spec:
     - toServices:
         - k8sService:
             serviceName: ntfy
-            namespace: monitoring
+            namespace: automation
     # === Allow Internet Access for monitoring ===
     - toEntities:
         - "world"
