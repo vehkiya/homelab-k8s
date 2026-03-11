@@ -22,6 +22,9 @@ spec:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "automation"
             "k8s:app": "n8n"
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "automation"
+            "k8s:app": "n8n-worker"
       toPorts:
         - ports:
             - port: "6379"

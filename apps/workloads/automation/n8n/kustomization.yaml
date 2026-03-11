@@ -3,6 +3,8 @@ kind: Kustomization
 namespace: automation
 resources:
   - statefulset.yaml
+  - worker-deployment.yaml
+  - db-credentials.yaml
   - service.yaml
   - http-route.yaml
   - external-http-route.yaml
