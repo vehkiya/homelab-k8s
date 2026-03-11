@@ -16,7 +16,6 @@ helmCharts:
     namespace: observability
 
 resources:
-  - namespace.yaml
   - network-policy.yaml
   - reference-grant.yaml
 
