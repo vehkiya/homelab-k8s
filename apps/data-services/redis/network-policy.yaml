@@ -11,16 +11,16 @@ spec:
     # === Allow access from clients ===
     - fromEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "core"
+            "k8s:io.kubernetes.pod.namespace": "security"
             "k8s:app": "authelia"
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "core"
+            "k8s:io.kubernetes.pod.namespace": "security"
             "k8s:app": "oauth-proxy"
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": "home"
             "k8s:app": "bar-assistant"
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "default"
+            "k8s:io.kubernetes.pod.namespace": "automation"
             "k8s:app": "n8n"
       toPorts:
         - ports:

@@ -29,7 +29,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "redis"
+            "k8s:io.kubernetes.pod.namespace": "data-services"
             "k8s:app": "redis"
       toPorts:
         - ports:
