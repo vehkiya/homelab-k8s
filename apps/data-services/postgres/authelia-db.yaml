@@ -2,6 +2,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: authelia-db
+  namespace: data-services
 spec:
   name: authelia-db
   cluster:

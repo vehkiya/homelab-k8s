@@ -11,7 +11,7 @@ spec:
     - match: HostSNI(`*`) # Passthrough routes often match any SNI
       services:
         - name: postgres-db-rw # Your CNPG read-write service
-          namespace: postgres    # Namespace of the CNPG service
+          namespace: data-services    # Namespace of the CNPG service
           port: 5432          # Port of the CNPG service
   tls:
     passthrough: true # Enable TLS Passthrough mode in Traefik
