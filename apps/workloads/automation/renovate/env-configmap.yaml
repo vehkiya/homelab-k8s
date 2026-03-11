@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: renovate-env
-  namespace: renovate
+  namespace: automation
 data:
   MEND_RNV_PLATFORM: "github"
   MEND_RNV_AUTODISCOVER_FILTER: "vehkiya/*,hononeko/*,Test-Forge/*"

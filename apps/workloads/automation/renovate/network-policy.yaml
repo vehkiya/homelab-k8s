@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: renovate-server-policy
-  namespace: renovate
+  namespace: automation
 spec:
   endpointSelector:
     matchLabels:
@@ -37,7 +37,7 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: renovate-redis-policy
-  namespace: renovate
+  namespace: automation
 spec:
   endpointSelector:
     matchLabels:

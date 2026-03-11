@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: renovate-server
-  namespace: renovate
+  namespace: automation
 spec:
   replicas: 1
   selector:
