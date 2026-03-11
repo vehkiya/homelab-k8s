@@ -1,0 +1,37 @@
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: RedisReplication
+metadata:
+  name: redis-ha
+  namespace: data-services
+spec:
+  clusterSize: 3
+  kubernetesConfig:
+    imagePullPolicy: "IfNotPresent"
+    image: "quay.io/opstree/redis:v7.0.12"
+    redisSecret:
+      name: redis-ha-secret
+      key: redis-password
+  redisExporter:
+    enabled: false
+    image: "quay.io/opstree/redis-exporter:v1.44.0"
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: "longhorn"
+  redisConfig:
+    additionalRedisConfig: |
+      maxmemory 256mb
+      maxmemory-policy allkeys-lru
+  sentinel:
+    size: 3
+    image: "quay.io/opstree/redis:v7.0.12"
+    redisSecret:
+      name: redis-ha-secret
+      key: redis-password
+  podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000

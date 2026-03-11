@@ -5,8 +5,9 @@ metadata:
   name: n8n-config
 data:
   EXECUTIONS_MODE: "queue"
-  QUEUE_BULL_REDIS_HOST: "redis-master.data-services.svc.cluster.local"
-  QUEUE_BULL_REDIS_PORT: "6379"
+  QUEUE_REDIS_TYPE: "sentinel"
+  QUEUE_BULL_REDIS_SENTINEL_HOSTS: "redis-ha-node-0.redis-ha-headless.data-services.svc.cluster.local:26379,redis-ha-node-1.redis-ha-headless.data-services.svc.cluster.local:26379,redis-ha-node-2.redis-ha-headless.data-services.svc.cluster.local:26379"
+  QUEUE_BULL_REDIS_SENTINEL_NAME: "mymaster"
   DB_TYPE: "postgresdb"
   DB_POSTGRESDB_DATABASE: "n8n"
   DB_POSTGRESDB_HOST: "fortress.kerrlab.app"

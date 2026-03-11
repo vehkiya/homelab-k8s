@@ -4,8 +4,11 @@ metadata:
   name: redis-policy
 spec:
   endpointSelector:
-    matchLabels:
-      "k8s:app": redis
+    matchExpressions:
+      - key: "k8s:app.kubernetes.io/name"
+        operator: In
+        values:
+          - redis-ha
   # ----=== Ingress ===----
   ingress:
     # === Allow access from clients ===
@@ -27,7 +30,30 @@ spec:
               values:
                 - n8n
                 - n8n-worker
+        - matchLabels:
+            "k8s:app.kubernetes.io/name": "redis-ha-node"
+        - matchLabels:
+            "k8s:app.kubernetes.io/name": "redis-ha"
+        - matchLabels:
+            "k8s:name": "redis-operator"
       toPorts:
         - ports:
             - port: "6379"
               protocol: "TCP"
+            - port: "26379"
+              protocol: "TCP"
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: redis-operator-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      "k8s:name": "redis-operator"
+  # ----=== Egress ===----
+  egress:
+    - toEntities:
+        - kube-apiserver
+        - host
+        - cluster
