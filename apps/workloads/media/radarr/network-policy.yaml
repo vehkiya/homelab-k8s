@@ -43,7 +43,7 @@ spec:
             namespace: media
         - k8sService:
             serviceName: ntfy
-            namespace: monitoring
+            namespace: automation
     # === Allow access to external for indexers ===
     - toEntities:
         - "world"

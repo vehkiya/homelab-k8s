@@ -35,7 +35,7 @@ spec:
             namespace: media
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
+            k8s:io.kubernetes.pod.namespace: automation
             app.kubernetes.io/name: ntfy
       toPorts:
         - ports:
