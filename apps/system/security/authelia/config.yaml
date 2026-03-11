@@ -28,7 +28,7 @@ data:
           same_site: 'lax'
 
       redis:
-        host: 'redis-master.redis.svc.cluster.local'
+        host: 'redis-master.data-services.svc.cluster.local'
         port: 6379
         timeout: '5s'
         max_retries: 0
