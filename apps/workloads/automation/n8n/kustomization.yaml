@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: automation
 resources:
   - configmap.yaml
+  - secrets.yaml
   - statefulset.yaml
   - worker-deployment.yaml
   - db-credentials.yaml

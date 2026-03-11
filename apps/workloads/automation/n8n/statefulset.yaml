@@ -71,6 +71,8 @@ spec:
           envFrom:
             - secretRef:
                 name: n8n-db-credentials
+            - secretRef:
+                name: n8n-secrets
             - configMapRef:
                 name: n8n-config
           volumeMounts:
