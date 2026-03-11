@@ -4,8 +4,12 @@ metadata:
   name: n8n-policy
 spec:
   endpointSelector:
-    matchLabels:
-      app: n8n
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - n8n
+          - n8n-worker
   ingress:
     # === Allow access from qBittorrent ===
     - fromEndpoints:
@@ -27,6 +31,14 @@ spec:
             - port: "websecure"
               protocol: TCP
             - port: "dmz"
+              protocol: TCP
+
+    # === Allow egress to NAS PostgreSQL ===
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
               protocol: TCP
 
     # === Allow egress to Home Assistant ===
