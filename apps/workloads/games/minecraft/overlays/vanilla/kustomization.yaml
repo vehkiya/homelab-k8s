@@ -157,4 +157,4 @@ patches:
         labels:
           pool: dmz-lb-pool
         annotations:
-          lbipam.cilium.io/ips: "2a00:1858:104b:8558::2,10.20.1.141"
+          lbipam.cilium.io/ips: "10.20.1.141"
