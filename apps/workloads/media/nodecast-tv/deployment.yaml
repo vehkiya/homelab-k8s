@@ -69,9 +69,11 @@ spec:
             requests:
               cpu: 10m
               memory: 128Mi
+              gpu.intel.com/i915: "1"
             limits:
               cpu: 500m
               memory: 500Mi
+              gpu.intel.com/i915: "1"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -79,9 +81,6 @@ spec:
             capabilities:
               drop:
                 - ALL
-      resourceClaims:
-        - name: intel-gpu
-          resourceClaimTemplateName: intel-gpu-claim-template
       securityContext:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch

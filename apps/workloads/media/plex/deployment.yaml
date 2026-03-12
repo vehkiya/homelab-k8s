@@ -85,12 +85,11 @@ spec:
             requests:
               cpu: 1000m
               memory: 2Gi
+              gpu.intel.com/i915: "1"
             limits:
               cpu: 8000m
               memory: 8Gi
-      resourceClaims:
-        - name: intel-gpu
-          resourceClaimTemplateName: intel-gpu-claim-template
+              gpu.intel.com/i915: "1"
       dnsConfig:
         options:
           - name: ndots
