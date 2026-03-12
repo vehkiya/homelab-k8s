@@ -9,6 +9,7 @@ helmCharts:
     namespace: spegel
     valuesFile: values/values.yaml
 
+namespace: spegel
 resources:
   - namespace.yaml
   - network-policy.yaml
