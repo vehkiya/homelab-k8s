@@ -1,0 +1,45 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authelia-redis-policy
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: "k8s:app"
+        operator: "In"
+        values:
+          - "authelia-redis"
+          - "authelia-redis-s"
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:app": "authelia"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
+            - port: "26379"
+              protocol: "TCP"
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:name": "redis-operator"
+            "k8s:io.kubernetes.pod.namespace": "data-services"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
+            - port: "26379"
+              protocol: "TCP"
+    - fromEndpoints:
+        - matchExpressions:
+            - key: "k8s:app"
+              operator: "In"
+              values:
+                - "authelia-redis"
+                - "authelia-redis-s"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
+            - port: "26379"
+              protocol: "TCP"

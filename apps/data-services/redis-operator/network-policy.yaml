@@ -1,0 +1,14 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: redis-operator-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      "k8s:name": "redis-operator"
+  # ----=== Egress ===----
+  egress:
+    - toEntities:
+        - kube-apiserver
+        - host
+        - cluster

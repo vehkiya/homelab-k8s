@@ -1,0 +1,37 @@
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: Redis
+metadata:
+  name: redis-n8n
+spec:
+  kubernetesConfig:
+    # ---=== Redis === ---
+    image: quay.io/opstree/redis:v8.4.2
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 101m
+        memory: 128Mi
+    # ---=== Secret === ---
+    redisSecret:
+      name: n8n-secrets
+      key: QUEUE_BULL_REDIS_PASSWORD
+    # ---=== Storage === ---
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: "longhorn"
+  # ---=== Pod Security === ---
+  podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
+  # ---=== Exporter === ---
+  redisExporter:
+    enabled: false
+    image: quay.io/opstree/redis-exporter:v1.44.0

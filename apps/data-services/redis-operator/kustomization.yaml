@@ -7,3 +7,6 @@ helmCharts:
     version: 0.23.0
     releaseName: redis-operator
     includeCRDs: true
+
+resources:
+  - network-policy.yaml
