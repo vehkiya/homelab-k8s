@@ -20,11 +20,12 @@ helmCharts:
       nodeFeatureRule: true
       sharedDevNum: 5
 
-  - name: intel-gpu-resource-driver
-    repo: https://intel.github.io/helm-charts/
-    version: 0.7.0
+  - name: intel-gpu-resource-driver-chart
+    repo: oci://ghcr.io/intel/intel-resource-drivers-for-kubernetes
+    version: 0.9.1
     releaseName: intel-gpu-resource-driver
     namespace: inteldeviceplugins-system
+    includeCRDs: true
     valuesInline:
       namespaceOverride: inteldeviceplugins-system
       kubeletPlugin:
