@@ -9,11 +9,11 @@ spec:
       template:
         spec:
           securityContext:
-            fsGroup: 65534
+            fsGroup: 100
             fsGroupChangePolicy: OnRootMismatch
             runAsGroup: 100
             runAsNonRoot: true
-            runAsUser: 1026
+            runAsUser: 1027
           dnsPolicy: None
           dnsConfig:
             searches:

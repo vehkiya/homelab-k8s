@@ -21,7 +21,7 @@ spec:
             app: sonarr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
-            app: overseerr
+            app: seerr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: notifications
             app: uptime-kuma

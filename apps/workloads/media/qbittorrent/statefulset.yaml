@@ -180,7 +180,7 @@ spec:
           securityContext:
             runAsGroup: 100
             runAsNonRoot: true
-            runAsUser: 1026
+            runAsUser: 1027
             allowPrivilegeEscalation: false
             seccompProfile:
               type: RuntimeDefault
@@ -235,7 +235,7 @@ spec:
               cpu: "50m"
               memory: "64Mi"
           securityContext:
-            runAsUser: 1026
+            runAsUser: 1027
             runAsGroup: 100
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -277,7 +277,7 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
-        fsGroup: 65534
+        fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
       volumes:
         - name: downloads-mount

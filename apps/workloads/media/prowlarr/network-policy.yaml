@@ -35,6 +35,13 @@ spec:
         - k8sService:
             serviceName: flaresolverr
             namespace: media
+    # === Allow access to Postgres on Fortress ===
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
     # === Allow access to external for indexers ===
     - toEntities:
         - "world"

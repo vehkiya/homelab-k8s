@@ -1,0 +1,22 @@
+<Config>
+    <LogLevel>info</LogLevel>
+    <InstanceName>Prowlarr</InstanceName>
+    <Port>9696</Port>
+    <UrlBase/>
+    <BindAddress>*</BindAddress>
+    <SslPort>6969</SslPort>
+    <EnableSsl>False</EnableSsl>
+    <LaunchBrowser>True</LaunchBrowser>
+    <ApiKey>{{ .Env.PROWLARR_API_KEY }}</ApiKey>
+    <AuthenticationMethod>External</AuthenticationMethod>
+    <PostgresUser>{{ .Env.POSTGRES_USER }}</PostgresUser>
+    <PostgresPassword>{{ .Env.POSTGRES_PASSWORD }}</PostgresPassword>
+    <PostgresPort>{{ .Env.POSTGRES_PORT }}</PostgresPort>
+    <PostgresHost>{{ .Env.POSTGRES_HOST }}</PostgresHost>
+    <PostgresMainDb>{{ .Env.POSTGRES_MAIN_DB }}</PostgresMainDb>
+    <PostgresLogDb>{{ .Env.POSTGRES_LOG_DB }}</PostgresLogDb>
+    <UpdateMechanism>Docker</UpdateMechanism>
+    <AuthenticationRequired>Enabled</AuthenticationRequired>
+    <SslCertPath/>
+    <SslCertPassword/>
+</Config>

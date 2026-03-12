@@ -31,7 +31,7 @@ The cluster hosts a diverse ecosystem of applications, organized by domain:
 
 ### 🎬 Media & Entertainment
 - **Streaming:** Plex Media Server (with Intel QuickSync hardware transcoding).
-- **Automation:** Radarr, Sonarr, Bazarr, Prowlarr, and Overseerr.
+- **Automation:** Radarr, Sonarr, Bazarr, Prowlarr, and Seerr.
 - **Management:** Kometa (Plex Meta Manager), Tautulli, and Posterizarr.
 - **Downloaders:** qBittorrent, Autobrr, and Unpackerr.
 

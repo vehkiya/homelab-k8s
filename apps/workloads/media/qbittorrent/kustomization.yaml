@@ -10,7 +10,13 @@ resources:
   - ntfy-credentials-secret.yaml
   - vpn-secret.yaml
   - qbit-secrets.yaml
-  - scripts-configmap.yaml
+
+configMapGenerator:
+  - name: qbittorrent-scripts
+    files:
+      - notify-n8n.sh=templates/notify-n8n.sh
+generatorOptions:
+  disableNameSuffixHash: true
 
 labels:
   - pairs:

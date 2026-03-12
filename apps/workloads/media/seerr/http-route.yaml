@@ -1,0 +1,36 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: seerr-ui-route
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "seerr.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: seerr-ui
+          port: 5055
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: seerr-ui-redirect
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "overseerr.kerrlab.app"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: seerr.kerrlab.app
+            statusCode: 301

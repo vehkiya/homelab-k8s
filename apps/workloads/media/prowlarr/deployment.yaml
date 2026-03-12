@@ -15,6 +15,26 @@ spec:
         app: prowlarr
         networking/expose-web-ui: "true"
     spec:
+      initContainers:
+        - name: inject-secrets
+          image: hairyhenderson/gomplate
+          command: [ "gomplate", "-f", "/template/config.xml", "-o", "/config/config.xml" ]
+          envFrom:
+            - secretRef:
+                name: prowlarr-secrets
+          volumeMounts:
+            - name: prowlarr-template-vol
+              mountPath: /template
+            # Mount the Longhorn volume into the init container
+            - name: prowlarr-config-pvc
+              mountPath: /config
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
       containers:
         - name: prowlarr
           image: ghcr.io/home-operations/prowlarr
@@ -22,7 +42,7 @@ spec:
             - name: PGID
               value: "100"
             - name: PUID
-              value: "1026"
+              value: "1027"
             - name: TZ
               value: "Europe/Chisinau"
           ports:
@@ -61,7 +81,7 @@ spec:
               cpu: 500m
               memory: 500Mi
           volumeMounts:
-            - name: config
+            - name: prowlarr-config-pvc
               mountPath: /config
           securityContext:
             allowPrivilegeEscalation: false
@@ -71,12 +91,15 @@ spec:
               drop:
                 - ALL
       securityContext:
-        fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        fsGroup: 100
         runAsGroup: 100
         runAsNonRoot: true
-        runAsUser: 1026
+        runAsUser: 1027
       volumes:
-        - name: config
+        - name: prowlarr-template-vol
+          configMap:
+            name: prowlarr-config-template
+        - name: prowlarr-config-pvc
           persistentVolumeClaim:
             claimName: prowlarr-config-longhorn-pvc

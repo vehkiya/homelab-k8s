@@ -6,6 +6,7 @@ resources:
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+  - secret.yaml
 
 labels:
   - pairs:
@@ -14,3 +15,12 @@ labels:
 images:
   - name: ghcr.io/home-operations/radarr
     newTag: 6.1.1@sha256:5e08c0eefd2770d1d29395c4f84fe5bf7dfc3a986598021306a5d8ac017a3989
+  - name: hairyhenderson/gomplate
+    newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
+
+configMapGenerator:
+  - name: radarr-config-template
+    files:
+      - config.xml=templates/config.xml
+generatorOptions:
+  disableNameSuffixHash: true

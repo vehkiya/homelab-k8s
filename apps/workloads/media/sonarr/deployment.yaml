@@ -15,6 +15,26 @@ spec:
         app: sonarr
         networking/expose-web-ui: "true"
     spec:
+      initContainers:
+        - name: inject-secrets
+          image: hairyhenderson/gomplate
+          command: [ "gomplate", "-f", "/template/config.xml", "-o", "/config/config.xml" ]
+          envFrom:
+            - secretRef:
+                name: sonarr-secrets
+          volumeMounts:
+            - name: sonarr-template-vol
+              mountPath: /template
+            # Mount the Longhorn volume into the init container
+            - name: sonarr-config-pvc
+              mountPath: /config
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
       containers:
         - name: sonarr
           image: ghcr.io/home-operations/sonarr
@@ -22,7 +42,7 @@ spec:
             - name: PGID
               value: "100"
             - name: PUID
-              value: "1026"
+              value: "1027"
             - name: TZ
               value: "Europe/Chisinau"
           ports:
@@ -69,7 +89,7 @@ spec:
               mountPath: /anime
             - name: video-movies-mount
               mountPath: /movies
-            - name: config
+            - name: sonarr-config-pvc
               mountPath: /config
           securityContext:
             allowPrivilegeEscalation: false
@@ -79,11 +99,11 @@ spec:
               drop:
                 - ALL
       securityContext:
-        fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        fsGroup: 100
         runAsGroup: 100
         runAsNonRoot: true
-        runAsUser: 1026
+        runAsUser: 1027
       volumes:
         - name: downloads-mount
           persistentVolumeClaim:
@@ -97,6 +117,9 @@ spec:
         - name: video-anime-mount
           persistentVolumeClaim:
             claimName: video-anime-pvc
-        - name: config
+        - name: sonarr-template-vol
+          configMap:
+            name: sonarr-config-template
+        - name: sonarr-config-pvc
           persistentVolumeClaim:
             claimName: sonarr-config-longhorn-pvc

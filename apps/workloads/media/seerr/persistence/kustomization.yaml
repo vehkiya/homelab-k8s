@@ -7,5 +7,5 @@ resources:
 
 labels:
   - pairs:
-      app.kubernetes.io/name: overseerr
+      app.kubernetes.io/name: seerr
       app.kubernetes.io/part-of: media-services

@@ -61,9 +61,6 @@ spec:
             limits:
               cpu: 500m
               memory: 256Mi
-          volumeMounts:
-            - name: config
-              mountPath: /config
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -77,7 +74,3 @@ spec:
         runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: autobrr-config-longhorn-pvc
