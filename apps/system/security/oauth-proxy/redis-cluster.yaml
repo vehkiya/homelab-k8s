@@ -1,0 +1,37 @@
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: RedisReplication
+metadata:
+  name: oauth-redis
+spec:
+  clusterSize: 3
+
+  kubernetesConfig:
+    # ---=== Redis === ---
+    image: quay.io/opstree/redis:v8.4.2
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 101m
+        memory: 128Mi
+    # ---=== Secret === ---
+    redisSecret:
+      name: oauth-proxy-secrets
+      key: OAUTH2_PROXY_REDIS_PASSWORD
+  # ---=== Sentinel ===---
+  sentinel:
+    size: 3
+    image: quay.io/opstree/redis-sentinel:v8.4.2
+    redisSecret:
+      name: oauth-proxy-secrets
+      key: OAUTH2_PROXY_REDIS_PASSWORD
+  # ---=== Pod Security === ---
+  podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
+  # ---=== Exporter === ---
+  redisExporter:
+    enabled: false
+    image: quay.io/opstree/redis-exporter:v1.44.0

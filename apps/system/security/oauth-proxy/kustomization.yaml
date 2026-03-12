@@ -9,6 +9,8 @@ resources:
   - middlewares.yaml
   - service.yaml
   - network-policy.yaml
+  - redis-cluster.yaml
+  - redis-network-policy.yaml
 images:
   - name: quay.io/oauth2-proxy/oauth2-proxy
     newTag: v7.14.3@sha256:68336da945bdaff799262c8d14fb1d1aa9354df5e02b87e0955addc040344618

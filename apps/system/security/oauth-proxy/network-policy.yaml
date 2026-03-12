@@ -35,7 +35,20 @@ spec:
         - ports:
             - port: "6379"
               protocol: "TCP"
-
+    - toEndpoints:
+        - matchLabels:
+            "k8s:app": "oauth-redis"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
+    - toEndpoints:
+        - matchLabels:
+            "k8s:app": "oauth-redis-s"
+      toPorts:
+        - ports:
+            - port: "26379"
+              protocol: "TCP"
     - toEntities:
         - "world"
       toPorts:

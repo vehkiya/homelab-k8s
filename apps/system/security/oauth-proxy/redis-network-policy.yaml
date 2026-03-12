@@ -1,19 +1,19 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: authelia-redis-policy
+  name: oauth-redis-policy
 spec:
   endpointSelector:
     matchExpressions:
       - key: "k8s:app"
         operator: "In"
         values:
-          - "authelia-redis"
-          - "authelia-redis-s"
+          - "oauth-redis"
+          - "oauth-redis-s"
   ingress:
     - fromEndpoints:
         - matchLabels:
-            "k8s:app": "authelia"
+            "k8s:app": "oauth-proxy"
       toPorts:
         - ports:
             - port: "6379"
@@ -35,20 +35,19 @@ spec:
             - key: "k8s:app"
               operator: "In"
               values:
-                - "authelia-redis"
-                - "authelia-redis-s"
+                - "oauth-redis"
+                - "oauth-redis-s"
       toPorts:
         - ports:
             - port: "6379"
               protocol: "TCP"
             - port: "26379"
               protocol: "TCP"
-
   egress:
     # Allow them to talk to the Redis Data nodes (for sync and health checks)
     - toEndpoints:
         - matchLabels:
-            "k8s:app": "authelia-redis"
+            "k8s:app": "oauth-redis"
       toPorts:
         - ports:
             - port: "6379"
@@ -57,7 +56,7 @@ spec:
     # Allow them to talk to Sentinel nodes (for quorum/voting)
     - toEndpoints:
         - matchLabels:
-            "k8s:app": "authelia-redis-s"
+            "k8s:app": "oauth-redis-s"
       toPorts:
         - ports:
             - port: "26379"
