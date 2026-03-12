@@ -28,8 +28,8 @@ patches:
       spec:
         ipFamilyPolicy: PreferDualStack
         ipFamilies:
-        - IPv6
         - IPv4
+        - IPv6
     target:
       kind: Service
       name: keda-add-ons-http-interceptor-proxy
