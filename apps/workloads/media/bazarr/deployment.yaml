@@ -29,9 +29,14 @@ spec:
             - name: PGID
               value: "100"
             - name: PUID
-              value: "1026"
+              value: "1027"
             - name: TZ
               value: "Europe/Chisinau"
+          envFrom:
+            - configMapRef:
+                name: bazarr-config
+            - secretRef:
+                name: bazarr-secrets
           ports:
             - name: web-ui
               containerPort: 6767
@@ -57,12 +62,12 @@ spec:
               port: web-ui
           volumeMounts:
             - name: video-series-mount
-              mountPath: /tv # Path inside the container
+              mountPath: /tv
             - name: video-movies-mount
               mountPath: /movies
             - name: video-anime-mount
               mountPath: /anime
-            - name: config
+            - name: bazarr-config-pvc
               mountPath: /config
           securityContext:
             allowPrivilegeEscalation: false
@@ -72,11 +77,11 @@ spec:
               drop:
                 - ALL
       securityContext:
-        fsGroup: 65534
+        fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
         runAsGroup: 100
         runAsNonRoot: true
-        runAsUser: 1026
+        runAsUser: 1027
       volumes:
         - name: video-movies-mount
           persistentVolumeClaim:
@@ -87,6 +92,6 @@ spec:
         - name: video-anime-mount
           persistentVolumeClaim:
             claimName: video-anime-pvc
-        - name: config
+        - name: bazarr-config-pvc
           persistentVolumeClaim:
             claimName: bazarr-config-longhorn-pvc

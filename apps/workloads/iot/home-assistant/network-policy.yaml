@@ -60,7 +60,7 @@ spec:
             serviceName: plex-ui
             namespace: media
         - k8sService:
-            serviceName: overseerr-ui
+            serviceName: seerr-ui
             namespace: media
         - k8sService:
             serviceName: minecraft-vh

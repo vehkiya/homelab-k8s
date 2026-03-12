@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: overseerr
+  name: seerr
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: overseerr
+      app: seerr
   template:
     metadata:
       labels:
-        app: overseerr
+        app: seerr
         networking/expose-web-ui: "true"
     spec:
       containers:
-        - name: overseerr
+        - name: seerr
           image: ghcr.io/seerr-team/seerr
           env:
             - name: PGID
@@ -25,6 +25,11 @@ spec:
               value: "1000"
             - name: TZ
               value: "Europe/Chisinau"
+          envFrom:
+            - configMapRef:
+                name: seerr-config
+            - secretRef:
+                name: seerr-secrets
           ports:
             - name: web-ui
               containerPort: 5055
@@ -79,4 +84,4 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: overseerr-config-pvc
+            claimName: seerr-config-longhorn-pvc

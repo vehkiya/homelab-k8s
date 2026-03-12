@@ -1,11 +1,11 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: overseerr-policy
+  name: seerr-policy
 spec:
   endpointSelector:
     matchLabels:
-      app: overseerr
+      app: seerr
   # ----=== Ingress ===----
   ingress:
     - fromEndpoints:
@@ -40,6 +40,13 @@ spec:
       toPorts:
         - ports:
             - port: "80"
+              protocol: TCP
+    # === Allow access to Postgres on Fortress ===
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
               protocol: TCP
     # === Allow access to external for metadata ===
     - toEntities:

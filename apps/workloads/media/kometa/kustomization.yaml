@@ -5,12 +5,27 @@ namespace: media
 resources:
   - secret.yaml
   - network-policies.yaml
-  - anime-configmap.yaml
-  - movie-configmap.yaml
-  - tv-configmap.yaml
-  - overlays-configmap.yaml
-  - configmap.yaml
   - cronjob.yaml
+
+configMapGenerator:
+  - name: kometa-config
+    files:
+      - config.yml=templates/config.yml
+  - name: kometa-anime-config
+    files:
+      - anime.yaml=templates/anime.yaml
+  - name: kometa-movie-config
+    files:
+      - movies.yaml=templates/movies.yaml
+  - name: kometa-overlay-config
+    files:
+      - overlay.yaml=templates/overlay.yaml
+  - name: kometa-tv-config
+    files:
+      - tv.yaml=templates/tv.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
 
 labels:
   - pairs:

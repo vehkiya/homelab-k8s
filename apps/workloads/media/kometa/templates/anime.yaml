@@ -1,0 +1,19 @@
+collections: # --- Collections based on AniDB ---
+
+  Popular Anime on AniDB:
+    anidb_popular: 30 # Fetches up to 30 titles from AniDB's general popular list.
+    summary: "Popular anime series according to AniDB's overall popular list."
+    sort_title: "+00_Popular (AniDB)"
+    sync_mode: sync # Keeps the collection updated with the list
+
+  Ghost in The Shell:
+    anidb_relation: https://anidb.net/anime/8692
+
+  Dragon Ball:
+    anidb_relation: https://anidb.net/anime/231/relation/graph
+
+  # --- Collections based on MyAnimeList (MAL) --
+  Top All Anime:
+    mal_all: 30
+    collection_order: custom
+    sync_mode: sync

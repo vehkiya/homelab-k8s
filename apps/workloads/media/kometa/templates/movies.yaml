@@ -1,0 +1,124 @@
+collections:
+  Trakt Popular:
+    trakt_chart:
+      chart: popular
+      limit: 200
+    collection_order: custom
+    sync_mode: sync
+    summary: The most popular movies for all time.
+
+  Marvel Cinematic Universe:
+    trakt_list: https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe?sort=rank,asc
+    sort_title: "+01_Marvel Cinematic Universe"
+    summary: "All movies from the Marvel Cinematic Universe, in release order. https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe"
+
+  Harry Potterverse:
+    trakt_list: https://trakt.tv/users/barsaky/lists/harry-potter-universe-chronological-order?sort=rank,asc
+    summary: "The magical adventures of Harry Potter and his friends at Hogwarts School of Witchcraft and Wizardry, and their fight against the dark wizard Lord Voldemort."
+    sort_title: "+_Franchise_Harry Potter"
+    sync_mode: sync
+    collection_order: custom
+    radarr_add_missing: true
+    radarr_search: true
+
+  The Matrix Collection:
+    tmdb_collection: 2344 # The Matrix Collection
+    summary: "A collection of movies from The Matrix franchise."
+    sort_title: "+Franchise_Matrix"
+
+  Middle-earth Saga:
+    trakt_list: https://trakt.tv/users/drachenplatinum/lists/middle-earth-chronological-order?sort=rank,asc
+    summary: "The complete Middle-earth saga including The Lord of the Rings and The Hobbit."
+    sort_title: "+Franchise_Middle-earth Saga"
+    sync_mode: sync
+    collection_order: custom
+
+  The Lord of the Rings Collection:
+    tmdb_collection: 119 # The Lord of the Rings Collection
+    summary: "The epic fantasy adventure based on J.R.R. Tolkien's novels."
+    sort_title: "+Franchise_Lord of the Rings"
+
+  Star Wars Collection:
+    trakt_list: https://trakt.tv/users/docteur-dream/lists/star-wars-chronology?sort=rank,asc
+    summary: "The epic space opera franchise created by George Lucas."
+    sort_title: "+Franchise_Star Wars"
+    sync_mode: sync
+    collection_order: custom
+
+  The Futurama Collection:
+    tmdb_movie:
+      - 7249  # Bender's Big Score (2007)
+      - 12889  # The Beast with a Billion Backs (2008)
+      - 13253  # Bender's Game (2008)
+      - 15060  # Into the Wild Green Yonder (2009)
+    summary: "The adventures of a late-20th-century New York City pizza delivery boy, Philip J. Fry, who, after being unwittingly cryogenically frozen for one thousand years, finds employment at Planet Express, an interplanetary delivery company in the retro-futuristic 31st century."
+    # Sort the items within the collection chronologically by their release date
+    collection_order: release
+
+  Dune Collection:
+    tmdb_collection: 726871 # Dune Collection (Covers recent Denis Villeneuve films and potentially older ones if TMDb groups them)
+    summary: "Feature film adaptations of Frank Herbert's epic science fiction novel, Dune."
+    sort_title: "+Franchise_Dune"
+    radarr_add_missing: true
+    radarr_search: true
+
+  Indiana Jones Collection:
+    tmdb_collection: 84 # Indiana Jones Collection
+    summary: "The adventures of archaeologist and adventurer Dr. Henry 'Indiana' Jones, Jr."
+    sort_title: "+Franchise_Indiana Jones"
+
+  Shrek Collection:
+    tmdb_collection: 2150 # Shrek Collection (Includes Shrek movies and Puss in Boots movies)
+    summary: "The animated adventures of Shrek, Donkey, Puss in Boots, and their fairy tale friends."
+    sort_title: "+Franchise_Shrek"
+
+  Taxi Collection:
+    tmdb_collection: 211721 # Taxi Collection (Original French series)
+    summary: "The French action-comedy film series about a taxi driver and a police inspector."
+    sort_title: "+Franchise_Taxi (French)"
+
+  James Bond Collection:
+    tmdb_collection: 645 # James Bond Collection (Official EON Productions films)
+    summary: "The cinematic adventures of MI6 agent James Bond, 007."
+    sort_title: "+Franchise_James Bond"
+
+  Mission Impossible Collection:
+    tmdb_collection: 87359 # Mission: Impossible Collection
+    summary: "The action spy film series following IMF agent Ethan Hunt."
+    sort_title: "+Franchise_Mission Impossible"
+
+  Pirates of the Caribbean Collection:
+    tmdb_collection: 295 # Pirates of the Caribbean Collection
+    summary: "Swashbuckling adventures with Captain Jack Sparrow and cursed treasures."
+    sort_title: "+Franchise_Pirates of the Caribbean"
+
+  Toy Story Collection:
+    tmdb_collection: 10194 # Toy Story Collection
+    summary: "The beloved Pixar animated series about the secret lives of toys."
+    sort_title: "+Franchise_Toy Story"
+
+  Terminator Collection:
+    tmdb_collection: 528 # Terminator Collection
+    summary: "The science fiction action franchise about the war between humans and intelligent machines."
+    sort_title: "+Franchise_Terminator"
+
+  John Wick Collection:
+    tmdb_collection: 404609 # John Wick Collection
+    summary: "The neo-noir action thriller series about the legendary hitman."
+    sort_title: "+Franchise_John Wick"
+
+  Despicable Me / Minions Collection:
+    tmdb_collection: 1570 # Despicable Me Collection
+    summary: "The animated adventures of Gru, his family, and the mischievous Minions."
+    sort_title: "+Franchise_Despicable Me & Minions"
+
+  Christmas:
+    trakt_list:
+      - https://trakt.tv/users/movistapp/lists/christmas-movies
+      - https://trakt.tv/users/2borno2b/lists/christmas-movies-extravanganza
+    sync_mode: sync
+
+  Documentaries:
+    smart_filter:
+      all:
+        genre: Documentary

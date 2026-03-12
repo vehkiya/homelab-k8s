@@ -25,7 +25,7 @@ spec:
         - matchLabels:
             app: radarr
         - matchLabels:
-            app: overseerr
+            app: seerr
         - matchLabels:
             app: tautulli
         - matchLabels:

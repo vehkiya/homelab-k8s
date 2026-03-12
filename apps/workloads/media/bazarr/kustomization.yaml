@@ -6,6 +6,8 @@ resources:
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+  - configmap.yaml
+  - secret.yaml
 
 labels:
   - pairs:
