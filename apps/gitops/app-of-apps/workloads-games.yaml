@@ -5,14 +5,17 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - git:
-        repoURL: https://github.com/vehkiya/homelab-k8s.git
-        revision: HEAD
-        directories:
-          - path: apps/workloads/games/*
+    - list:
+        elements:
+          - name: romm
+            path: apps/workloads/games/romm
+          - name: minecraft-vanilla
+            path: apps/workloads/games/minecraft/overlays/vanilla
+          - name: minecraft-vault-hunters
+            path: apps/workloads/games/minecraft/overlays/vault-hunters
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{name}}'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
