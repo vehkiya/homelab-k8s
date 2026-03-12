@@ -6,10 +6,12 @@ resources:
   - secrets.yaml
   - oidc-secrets.yaml
   - config.yaml
-  - deployment.yaml
+  - daemonset.yaml
   - http-route.yaml
   - service.yaml
   - network-policy.yaml
+  - redis-cluster.yaml
+  - redis-network-policy.yaml
 images:
   - name: alpine/k8s
     newTag: 1.35.2@sha256:9a87b09e1b6d887fa52c2dea1611d112d9e7d3d0271708588711a2fb2016e82c

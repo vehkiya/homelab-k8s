@@ -21,13 +21,18 @@ spec:
               protocol: "TCP"
     - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "data-services"
-            "k8s:app": "redis"
+            "k8s:app": "authelia-redis"
       toPorts:
         - ports:
             - port: "6379"
               protocol: "TCP"
-
+    - toEndpoints:
+        - matchLabels:
+            "k8s:app": "authelia-redis-s"
+      toPorts:
+        - ports:
+            - port: "26379"
+              protocol: "TCP"
     - toCIDR:
         # ldap.kerrlab.app
         - 10.10.1.218/32
