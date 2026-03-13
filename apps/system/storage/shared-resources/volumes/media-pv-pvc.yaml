@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-pv
+  labels:
+    pv-name: media-pv
+spec:
+  capacity:
+    storage: 30Ti
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+  nfs:
+    server: 10.10.1.218
+    path: /volume1/media/data
+  storageClassName: synostorage-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Ti
+  selector:
+    # Optional but recommended to bind to a specific PV
+    matchLabels:
+      pv-name: media-pv
+  storageClassName: synostorage-nfs

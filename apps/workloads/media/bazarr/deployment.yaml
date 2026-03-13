@@ -61,12 +61,8 @@ spec:
               path: /api/system/ping
               port: web-ui
           volumeMounts:
-            - name: video-series-mount
-              mountPath: /tv
-            - name: video-movies-mount
-              mountPath: /movies
-            - name: video-anime-mount
-              mountPath: /anime
+            - name: media
+              mountPath: /data
             - name: bazarr-config-pvc
               mountPath: /config
           securityContext:
@@ -83,15 +79,9 @@ spec:
         runAsNonRoot: true
         runAsUser: 1027
       volumes:
-        - name: video-movies-mount
+        - name: media
           persistentVolumeClaim:
-            claimName: video-movies-pvc
-        - name: video-series-mount
-          persistentVolumeClaim:
-            claimName: video-series-pvc
-        - name: video-anime-mount
-          persistentVolumeClaim:
-            claimName: video-anime-pvc
+            claimName: media-pvc
         - name: bazarr-config-pvc
           persistentVolumeClaim:
             claimName: bazarr-config-longhorn-pvc

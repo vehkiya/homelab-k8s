@@ -9,13 +9,12 @@ spec:
   # ----=== Ingress ===----
   ingress:
     # === Allow access from other apps ===
-    # === Allow access from other apps ===
     - fromEndpoints:
         - matchLabels:
             app: prowlarr
       toPorts:
         - ports:
-            - port: "web-ui"
+            - port: "http-api"
               protocol: "TCP"
 
   # ----=== Egress ===----

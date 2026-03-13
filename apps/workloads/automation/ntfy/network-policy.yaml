@@ -40,6 +40,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: qbittorrent
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: kometa
       toPorts:
         - ports:
             - port: "80"

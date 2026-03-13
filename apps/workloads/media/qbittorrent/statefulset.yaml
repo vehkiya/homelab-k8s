@@ -159,8 +159,8 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           volumeMounts:
-            - name: downloads-mount
-              mountPath: /downloads # Path inside the container
+            - name: media
+              mountPath: /data
             - name: config
               mountPath: /config
             - name: vuetorrent-webui
@@ -280,9 +280,9 @@ spec:
         fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
       volumes:
-        - name: downloads-mount
+        - name: media
           persistentVolumeClaim:
-            claimName: downloads-pvc
+            claimName: media-pvc
         - name: config
           persistentVolumeClaim:
             claimName: qbittorrent-config-longhorn-pvc

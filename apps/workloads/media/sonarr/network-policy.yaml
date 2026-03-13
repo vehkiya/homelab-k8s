@@ -21,6 +21,8 @@ spec:
         - matchLabels:
             app: unpackerr
         - matchLabels:
+            app: kometa
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
             app: n8n
       toPorts:

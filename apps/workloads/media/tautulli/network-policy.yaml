@@ -12,6 +12,8 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app: seerr
+        - matchLabels:
+            app: kometa
       toPorts:
         - ports:
             - port: "web-ui"

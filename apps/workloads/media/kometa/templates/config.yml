@@ -82,7 +82,7 @@ settings:
   playlist_sync_to_users: all
   verify_ssl: true
 plex:
-  url: http://plex.media.svc.cluster.local:32400
+  url: http://plex-ui.media.svc.cluster.local:32400
   token: ${PLEX_TOKEN}
   timeout: 60
   db_cache: 512
@@ -96,13 +96,13 @@ tmdb:
   region:
   cache_expiration: 60
 tautulli:
-  url: http://tautulli.media.svc.cluster.local:8181
+  url: http://tautulli-ui.media.svc.cluster.local:8181
   apikey: ${TAUTULLI_API_KEY}
 omdb:
   apikey: ${OMDB_API_KEY}
   cache_expiration: 60
 radarr:
-  url: http://radarr.media.svc.cluster.local:7878
+  url: http://radarr-ui.media.svc.cluster.local:7878
   token: ${RADARR_TOKEN}
   add_missing: false
   root_folder_path: /movies
@@ -118,7 +118,7 @@ radarr:
   monitor_existing: false
   ignore_cache: false
 sonarr:
-  url: http://sonarr.media.svc.cluster.local:8989
+  url: http://sonarr-ui.media.svc.cluster.local:8989
   token: ${SONARR_TOKEN}
   add_missing: false
   add_existing: false
@@ -163,4 +163,8 @@ trakt:
     refresh_token: ${TRAKT_REFRESH_TOKEN}
     scope: public
     created_at: 1758573962
-  pin: dbe03b3a
+  pin: f4197d99
+ntfy:
+  url: http://ntfy.automation.svc.cluster.local:80
+  token: ${NTFY_TOKEN}
+  topic: kometa

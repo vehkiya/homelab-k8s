@@ -5,7 +5,7 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: kometa
+      app: kometa
   # ----=== Egress ===----
   egress:
     # === Allow DNS ===
@@ -36,6 +36,9 @@ spec:
         - k8sService:
             serviceName: longhorn-backend
             namespace: longhorn-system
+        - k8sService:
+            serviceName: ntfy
+            namespace: automation
     # === Allow access to external for metadata ===
     - toEntities:
         - "world"

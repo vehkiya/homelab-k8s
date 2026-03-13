@@ -81,14 +81,8 @@ spec:
               cpu: 1000m
               memory: 1Gi
           volumeMounts:
-            - name: downloads-mount
-              mountPath: /downloads # Path inside the container
-            - name: video-series-mount
-              mountPath: /tv # Path inside the container
-            - name: video-anime-mount
-              mountPath: /anime
-            - name: video-movies-mount
-              mountPath: /movies
+            - name: media
+              mountPath: /data
             - name: sonarr-config-pvc
               mountPath: /config
           securityContext:
@@ -105,18 +99,9 @@ spec:
         runAsNonRoot: true
         runAsUser: 1027
       volumes:
-        - name: downloads-mount
+        - name: media
           persistentVolumeClaim:
-            claimName: downloads-pvc
-        - name: video-movies-mount
-          persistentVolumeClaim:
-            claimName: video-movies-pvc
-        - name: video-series-mount
-          persistentVolumeClaim:
-            claimName: video-series-pvc
-        - name: video-anime-mount
-          persistentVolumeClaim:
-            claimName: video-anime-pvc
+            claimName: media-pvc
         - name: sonarr-template-vol
           configMap:
             name: sonarr-config-template

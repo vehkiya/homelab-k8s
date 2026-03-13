@@ -7,6 +7,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            app: kometa
         spec:
           securityContext:
             fsGroup: 100

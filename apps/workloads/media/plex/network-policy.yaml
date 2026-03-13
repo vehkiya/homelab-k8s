@@ -35,6 +35,8 @@ spec:
         - matchLabels:
             app: home-assistant
             k8s:io.kubernetes.pod.namespace: iot
+        - matchLabels:
+            app: kometa
       toPorts:
         - ports:
             - port: web-ui
