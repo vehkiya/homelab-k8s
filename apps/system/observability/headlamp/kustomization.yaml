@@ -5,7 +5,7 @@ helmCharts:
   - name: headlamp
     namespace: observability
     repo: https://kubernetes-sigs.github.io/headlamp/
-    version: 0.40.0
+    version: 0.40.1
     releaseName: headlamp
     includeCRDs: true
     valuesFile: values/values.yaml
