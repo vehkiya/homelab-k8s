@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app: sonarr
-  name: sonarr-config-longhorn-pvc
+  name: sonarr-tv-pvc
 spec:
   accessModes:
     - ReadWriteOnce

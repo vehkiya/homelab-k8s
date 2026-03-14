@@ -5,5 +5,9 @@ metadata:
   name: unpackerr-config
 data:
   TZ: "Europe/Chisinau"
-  UN_SONARR_0_URL: "http://sonarr-ui.media.svc.cluster.local:8989"
+  UN_SONARR_0_URL: "http://sonarr-tv-ui.media.svc.cluster.local:8989"
+  UN_SONARR_0_PATHS_0: "/data/torrents/tv"
+  UN_SONARR_1_URL: "http://sonarr-anime-ui.media.svc.cluster.local:8989"
+  UN_SONARR_1_PATHS_0: "/data/torrents/anime"
   UN_RADARR_0_URL: "http://radarr-ui.media.svc.cluster.local:7878"
+  UN_RADARR_0_PATHS_0: "/data/torrents/movies"

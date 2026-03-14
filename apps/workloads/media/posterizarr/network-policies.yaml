@@ -7,13 +7,15 @@ spec:
     matchLabels:
       app: posterizarr
   ingress:
+    # === Allow access from other apps ===
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
+            app: sonarr
+        - matchLabels:
+            app: radarr
       toPorts:
         - ports:
-            - port: web-ui
+            - port: "web-ui"
               protocol: "TCP"
   # ----=== Egress ===----
   egress:

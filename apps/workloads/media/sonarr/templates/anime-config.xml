@@ -1,6 +1,6 @@
 <Config>
     <LogLevel>info</LogLevel>
-    <InstanceName>Sonarr</InstanceName>
+    <InstanceName>Sonarr Anime</InstanceName>
     <Port>8989</Port>
     <UrlBase/>
     <BindAddress>*</BindAddress>

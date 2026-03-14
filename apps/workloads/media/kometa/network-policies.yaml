@@ -25,7 +25,10 @@ spec:
             serviceName: radarr-ui
             namespace: media
         - k8sService:
-            serviceName: sonarr-ui
+            serviceName: sonarr-tv-ui
+            namespace: media
+        - k8sService:
+            serviceName: sonarr-anime-ui
             namespace: media
         - k8sService:
             serviceName: plex-ui

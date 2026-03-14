@@ -3,7 +3,8 @@ kind: Kustomization
 namespace: media
 
 resources:
-  - longhorn-config-pvc.yaml
+  - sonarr-tv-pvc.yaml
+  - sonarr-anime-pvc.yaml
 
 labels:
   - pairs:

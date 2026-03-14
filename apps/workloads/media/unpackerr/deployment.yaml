@@ -24,7 +24,10 @@ spec:
                 secretKeyRef: { name: unpackerr-app-secrets, key: radarr_key }
             - name: UN_SONARR_0_API_KEY
               valueFrom:
-                secretKeyRef: { name: unpackerr-app-secrets, key: sonarr_key }
+                secretKeyRef: { name: unpackerr-app-secrets, key: sonarr_tv_key }
+            - name: UN_SONARR_1_API_KEY
+              valueFrom:
+                secretKeyRef: { name: unpackerr-app-secrets, key: sonarr_anime_key }
           resources:
             requests:
               cpu: "10m"
@@ -34,7 +37,7 @@ spec:
               memory: "1Gi"
           volumeMounts:
             - name: downloads-mount
-              mountPath: /downloads # Path inside the container
+              mountPath: /data # Path inside the container
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -51,4 +54,4 @@ spec:
       volumes:
         - name: downloads-mount
           persistentVolumeClaim:
-            claimName: downloads-pvc
+            claimName: media-pvc

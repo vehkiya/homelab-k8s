@@ -23,6 +23,8 @@ spec:
         - matchLabels:
             app: kometa
         - matchLabels:
+            app: recyclarr
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
             app: n8n
       toPorts:
@@ -44,8 +46,19 @@ spec:
             serviceName: prowlarr-ui
             namespace: media
         - k8sService:
+            serviceName: posterizarr
+            namespace: media
+        - k8sService:
             serviceName: ntfy
             namespace: automation
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: ntfy
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
     # === Allow access to Postgres on Fortress ===
     - toCIDR:
         - "10.10.1.218/32"

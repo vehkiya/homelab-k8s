@@ -19,13 +19,15 @@ spec:
   # ----=== Egress ===----
   egress:
     # === Allow access to services ===
-    # === Allow access to services ===
     - toServices:
         - k8sService:
             serviceName: plex-ui
             namespace: media
         - k8sService:
-            serviceName: sonarr-ui
+            serviceName: sonarr-tv-ui
+            namespace: media
+        - k8sService:
+            serviceName: sonarr-anime-ui
             namespace: media
         - k8sService:
             serviceName: radarr-ui

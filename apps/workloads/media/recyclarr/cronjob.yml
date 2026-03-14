@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: recyclarr
+  namespace: media
+spec:
+  schedule: "0 3 * * 0" # Every Sunday at 03:00
+  concurrencyPolicy: Forbid # Prevents overlap if a job hangs
+  successfulJobsHistoryLimit: 1 # Keeps the cluster clean
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: recyclarr
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          containers:
+            - name: recyclarr
+              image: ghcr.io/recyclarr/recyclarr
+              args:
+                - "sync"
+              env:
+                - name: TZ
+                  value: "Europe/Chisinau"
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: recyclarr-secrets
+                      key: RADARR_API_KEY
+                - name: SONARR_TV_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: recyclarr-secrets
+                      key: SONARR_TV_API_KEY
+                - name: SONARR_ANIME_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: recyclarr-secrets
+                      key: SONARR_ANIME_API_KEY
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /config/recyclarr.yml
+                  subPath: recyclarr.yml
+                  readOnly: true
+                - name: cache-volume
+                  mountPath: /config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: recyclarr-config
+            - name: cache-volume
+              emptyDir: {}

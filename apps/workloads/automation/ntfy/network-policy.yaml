@@ -43,6 +43,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: kometa
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            k8s:app: prowlarr
       toPorts:
         - ports:
             - port: "80"
