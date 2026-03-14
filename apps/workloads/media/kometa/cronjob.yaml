@@ -173,7 +173,8 @@ spec:
               volumeMounts:
                 - name: config
                   mountPath: /config
-                - name: assets
+                - name: media
+                  subPath: assets
                   mountPath: /assets
                 - name: movie-config
                   mountPath: /config/movies.yaml
@@ -206,9 +207,9 @@ spec:
             - name: overlay-config
               configMap:
                 name: kometa-overlay-config
-            - name: assets
+            - name: media
               persistentVolumeClaim:
-                claimName: video-assets-pvc
+                claimName: media-pvc
             - name: fonts
               persistentVolumeClaim:
                 claimName: fonts-pvc

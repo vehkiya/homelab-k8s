@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - cronjob.yml
+  - secret.yml
+  - network-policy.yml
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: recyclarr
+      app.kubernetes.io/part-of: media-services
+
+images:
+  - name: ghcr.io/recyclarr/recyclarr
+    newTag: 8.5.0@sha256:5da14297a11aa910582d800f0edcb8f9e9d488642083c01dc34950f6449d9214
+
+configMapGenerator:
+  - name: recyclarr-config
+    files:
+      - recyclarr.yml=templates/recyclarr.yml
+generatorOptions:
+  disableNameSuffixHash: true

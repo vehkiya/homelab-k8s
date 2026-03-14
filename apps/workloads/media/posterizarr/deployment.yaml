@@ -154,7 +154,8 @@ spec:
             - name: RUN_TIME
               value: "06:00"
           volumeMounts:
-            - name: assets
+            - name: media
+              subPath: assets
               mountPath: /assets
             - name: config
               mountPath: /config
@@ -176,9 +177,9 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: posterizarr-config-pvc
-        - name: assets
+        - name: media
           persistentVolumeClaim:
-            claimName: video-assets-pvc
+            claimName: media-pvc
         - name: fonts
           persistentVolumeClaim:
             claimName: fonts-pvc

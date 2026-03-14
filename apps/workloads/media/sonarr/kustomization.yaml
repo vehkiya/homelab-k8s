@@ -2,11 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - deployment.yaml
+  - deployment-tv.yaml
+  - deployment-anime.yaml
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
-  - secret.yaml
+  - secret-tv.yaml
+  - secret-anime.yaml
 
 labels:
   - pairs:
@@ -18,9 +20,13 @@ images:
   - name: hairyhenderson/gomplate
     newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
 
+# Shared config for both instances
 configMapGenerator:
-  - name: sonarr-config-template
+  - name: sonarr-tv-config-template
     files:
-      - config.xml=templates/config.xml
+      - config.xml=templates/tv-config.xml
+  - name: sonarr-anime-config-template
+    files:
+      - config.xml=templates/anime-config.xml
 generatorOptions:
   disableNameSuffixHash: true

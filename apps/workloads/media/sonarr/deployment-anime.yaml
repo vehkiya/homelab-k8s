@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr-anime
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: sonarr
+      sonarr-type: anime
+  template:
+    metadata:
+      labels:
+        app: sonarr
+        sonarr-type: anime
+        networking/expose-web-ui: "true"
+    spec:
+      initContainers:
+        - name: inject-secrets
+          image: hairyhenderson/gomplate
+          command: [ "gomplate", "-f", "/template/config.xml", "-o", "/config/config.xml" ]
+          envFrom:
+            - secretRef:
+                name: sonarr-anime-secrets
+          volumeMounts:
+            - name: sonarr-template-vol
+              mountPath: /template
+            # Mount the Longhorn volume into the init container
+            - name: sonarr-config-pvc
+              mountPath: /config
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+      containers:
+        - name: sonarr
+          image: ghcr.io/home-operations/sonarr
+          env:
+            - name: PGID
+              value: "100"
+            - name: PUID
+              value: "1027"
+            - name: TZ
+              value: "Europe/Chisinau"
+          ports:
+            - name: web-ui
+              containerPort: 8989
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: web-ui
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: web-ui
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: web-ui
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 10m
+              memory: 250Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          volumeMounts:
+            - name: media
+              mountPath: /data
+            - name: sonarr-config-pvc
+              mountPath: /config
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroupChangePolicy: OnRootMismatch
+        fsGroup: 100
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1027
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-pvc
+        - name: sonarr-template-vol
+          configMap:
+            name: sonarr-anime-config-template
+        - name: sonarr-config-pvc
+          persistentVolumeClaim:
+            claimName: sonarr-anime-pvc

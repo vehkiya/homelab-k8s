@@ -1,11 +1,11 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: unpackerr-policy
+  name: recyclarr-policy
 spec:
   endpointSelector:
     matchLabels:
-      app: unpackerr
+      app: recyclarr
   # ----=== Egress ===----
   egress:
     # === Allow access to services ===
@@ -19,3 +19,11 @@ spec:
         - k8sService:
             serviceName: sonarr-anime-ui
             namespace: media
+    # === Allow access to external for indexers ===
+    - toEntities:
+        - "world"
+      toPorts:
+        # Only allow HTTP/S for indexers
+        - ports:
+            - port: "443"
+              protocol: TCP

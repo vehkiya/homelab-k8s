@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sonarr
+  name: sonarr-tv
 spec:
   replicas: 1
   strategy:
@@ -9,10 +9,12 @@ spec:
   selector:
     matchLabels:
       app: sonarr
+      sonarr-type: tv
   template:
     metadata:
       labels:
         app: sonarr
+        sonarr-type: tv
         networking/expose-web-ui: "true"
     spec:
       initContainers:
@@ -21,7 +23,7 @@ spec:
           command: [ "gomplate", "-f", "/template/config.xml", "-o", "/config/config.xml" ]
           envFrom:
             - secretRef:
-                name: sonarr-secrets
+                name: sonarr-tv-secrets
           volumeMounts:
             - name: sonarr-template-vol
               mountPath: /template
@@ -104,7 +106,7 @@ spec:
             claimName: media-pvc
         - name: sonarr-template-vol
           configMap:
-            name: sonarr-config-template
+            name: sonarr-tv-config-template
         - name: sonarr-config-pvc
           persistentVolumeClaim:
-            claimName: sonarr-config-longhorn-pvc
+            claimName: sonarr-tv-pvc
