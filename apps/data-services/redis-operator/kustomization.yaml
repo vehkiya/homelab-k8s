@@ -4,7 +4,7 @@ namespace: data-services
 helmCharts:
   - name: redis-operator
     repo: https://ot-container-kit.github.io/helm-charts/
-    version: 0.23.0
+    version: 0.24.0
     releaseName: redis-operator
     includeCRDs: true
 
