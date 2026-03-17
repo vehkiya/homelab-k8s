@@ -12,6 +12,7 @@ helmCharts:
     releaseName: traefik
     namespace: traefik
     valuesFile: values/traefik-config.yaml
+    includeCRDs: true
 
 resources:
   - dashboard-auth.yaml
