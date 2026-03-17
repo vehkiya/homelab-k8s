@@ -3,14 +3,20 @@ kind: CiliumNetworkPolicy
 metadata:
   name: keda-policy
 spec:
-  endpointSelector: {}
+  endpointSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/part-of
+        operator: In
+        values:
+          - keda-operator
+          - keda-add-ons-http
 
   # ----=== Ingress ===----
   ingress:
     # === Allow intra-namespace communication ===
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: observability
+            k8s:io.kubernetes.pod.namespace: networking
 
     # === Allow webhook and metrics access from the Kube API server ===
     - fromEntities:
@@ -31,7 +37,7 @@ spec:
     # === Allow intra-namespace communication ===
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: observability
+            k8s:io.kubernetes.pod.namespace: networking
 
     # === Allow access to the Kubernetes API server ===
     - toEntities:
