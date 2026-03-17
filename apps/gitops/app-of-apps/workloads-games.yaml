@@ -13,6 +13,8 @@ spec:
             path: apps/workloads/games/minecraft/overlays/vanilla
           - name: minecraft-vault-hunters
             path: apps/workloads/games/minecraft/overlays/vault-hunters
+          - name: satisfactory
+            path: apps/workloads/games/satisfactory
   template:
     metadata:
       name: "{{name}}"
