@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: satisfactory-data-pvc
+  namespace: games
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-retain
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: satisfactory-backup-nfs
+  labels:
+    pv-name: satisfactory-backup-nfs
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+    - hard
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster/satisfactory
+  storageClassName: synostorage-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: satisfactory-backup-pvc
+  namespace: games
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  selector:
+    matchLabels:
+      pv-name: satisfactory-backup-nfs
+  storageClassName: synostorage-nfs
