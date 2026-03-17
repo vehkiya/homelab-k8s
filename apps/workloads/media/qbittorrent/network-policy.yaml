@@ -29,7 +29,7 @@ spec:
             app: home-assistant
             k8s:io.kubernetes.pod.namespace: iot
         - matchLabels:
-            app: n8n
+            app.kubernetes.io/name: n8n
             k8s:io.kubernetes.pod.namespace: automation
       toPorts:
         - ports:
@@ -54,7 +54,7 @@ spec:
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
-            app: n8n
+            app.kubernetes.io/name: n8n
       toPorts:
         - ports:
             - port: "5678"

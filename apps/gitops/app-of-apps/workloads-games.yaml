@@ -15,7 +15,7 @@ spec:
             path: apps/workloads/games/minecraft/overlays/vault-hunters
   template:
     metadata:
-      name: '{{name}}'
+      name: "{{name}}"
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
@@ -24,10 +24,10 @@ spec:
       source:
         repoURL: https://github.com/vehkiya/homelab-k8s.git
         targetRevision: HEAD
-        path: '{{path}}'
+        path: "{{path}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'games'
+        namespace: "games"
       syncPolicy:
         syncOptions:
           - CreateNamespace=true

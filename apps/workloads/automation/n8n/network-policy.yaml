@@ -5,12 +5,21 @@ metadata:
 spec:
   endpointSelector:
     matchExpressions:
-      - key: app
+      - key: app.kubernetes.io/name
         operator: In
         values:
           - n8n
           - n8n-worker
   ingress:
+    # === Allow access from Traefik ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "http"
+              protocol: "TCP"
     # === Allow access from qBittorrent ===
     - fromEndpoints:
         - matchLabels:

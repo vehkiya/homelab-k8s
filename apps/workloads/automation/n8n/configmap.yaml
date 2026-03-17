@@ -5,6 +5,7 @@ metadata:
   name: n8n-config
 data:
   EXECUTIONS_MODE: "queue"
+  OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
   QUEUE_BULL_REDIS_HOST: "redis-n8n.automation.svc.cluster.local"
   QUEUE_BULL_REDIS_PORT: "6379"
   DB_TYPE: "postgresdb"

@@ -30,7 +30,7 @@ spec:
             app: autobrr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
-            app: n8n
+            app.kubernetes.io/name: n8n
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: bazarr

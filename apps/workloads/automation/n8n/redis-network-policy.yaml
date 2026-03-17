@@ -12,7 +12,7 @@ spec:
   ingress:
     - fromEndpoints:
         - matchExpressions:
-            - key: "k8s:app"
+            - key: "k8s:app.kubernetes.io/name"
               operator: "In"
               values:
                 - "n8n"

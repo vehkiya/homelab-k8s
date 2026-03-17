@@ -8,7 +8,7 @@ TAGS="$3"
 CONTENT_PATH="$4"
 
 # Define the target n8n webhook URL
-WEBHOOK_URL="http://n8n-ui.automation.svc.cluster.local:5678/webhook/$WEBHOOK_ID"
+WEBHOOK_URL="http://n8n-webhook-processor.automation.svc.cluster.local:5678/webhook/$WEBHOOK_ID"
 
 # Ensure the secret was successfully injected from the Kubernetes Secret
 if [ -z "$WEBHOOK_SECRET" ]; then
