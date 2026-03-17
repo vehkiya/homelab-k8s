@@ -26,7 +26,7 @@ spec:
             app: recyclarr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
-            app: n8n
+            app.kubernetes.io/name: n8n
       toPorts:
         - ports:
             - port: "web-ui"

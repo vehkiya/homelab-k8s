@@ -19,7 +19,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
-            app: n8n
+            app.kubernetes.io/name: n8n
       toPorts:
         - ports:
             - port: "8123"

@@ -26,5 +26,5 @@ spec:
             kind: Middleware
             name: n8n-webhook-rate-limit
       backendRefs:
-        - name: n8n-ui
+        - name: n8n-webhook-processor
           port: 5678

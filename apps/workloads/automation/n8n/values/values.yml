@@ -1,0 +1,360 @@
+# ----- Image -----
+image:
+  repository: docker.n8n.io/n8nio/n8n
+  pullPolicy: IfNotPresent
+
+# ----- Names -----
+nameOverride: ""
+fullnameOverride: ""
+
+# ----- Queue mode -----
+# Two deployment modes are supported:
+#   1. Queue mode (enabled: true, default) — main + workers + optional webhook processors.
+#      Requires external PostgreSQL and Redis.
+#   2. Standalone mode (enabled: false) — single main pod with SQLite.
+#      No workers, no Redis, no external database. Requires persistence for SQLite storage.
+queueMode:
+  enabled: true
+  workerReplicaCount: 2
+  # Worker concurrency (number of jobs each worker can handle simultaneously)
+  workerConcurrency: 10
+
+# ----- Webhook processors (optional scaling layer) -----
+webhookProcessor:
+  # Enable dedicated webhook processing pods for high-throughput webhook scenarios
+  enabled: true
+  replicaCount: 2
+  # Disable webhook processing in main process when webhook processors are enabled
+  disableProductionWebhooksOnMainProcess: true
+
+# ----- Multi-main (optional, requires queue mode) -----
+multiMain:
+  enabled: false
+
+# ----- Task Runners (external mode with sidecar containers) -----
+taskRunners:
+  # Enable task runners for executing user-provided JavaScript and Python code
+  # When enabled, a sidecar container (n8nio/runners) is added to main and worker pods
+  enabled: true
+
+  # Task runner image configuration
+  image:
+    repository: n8nio/runners
+    # Tag must match n8n version
+    # Leave empty to automatically use the same tag as the main n8n image
+    # Set explicitly only if you need a different version (not recommended)
+    tag: ""
+    pullPolicy: IfNotPresent
+
+  # Task runner mode (only external mode is supported in this chart)
+  mode: external
+
+  authToken:
+    # Use existing secret for auth token
+    existingSecret: "n8n-secrets"
+    existingSecretKey: "TASK_RUNNER_TOKEN"
+
+  # Task broker configuration (runs within n8n main/worker containers)
+  broker:
+    # Listen address for the task broker (0.0.0.0 allows external connections from sidecar)
+    listenAddress: "0.0.0.0"
+    # Port for task broker to listen on
+    port: 5679
+
+  # Launcher configuration
+  launcher:
+    # Log level for the launcher (debug, info, warn, error)
+    logLevel: info
+    # Number of seconds of inactivity before shutting down task runner process
+    # The launcher will automatically start the runner again when there are new tasks
+    # Set to 0 to disable automatic shutdown
+    autoShutdownTimeout: 15
+
+  # Resource limits for task runner sidecar containers
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # Additional environment variables for task runners
+  extraEnv: []
+
+# ----- Main replicas (when multi-main is disabled) -----
+replicaCount: 1
+
+# ----- Service -----
+service:
+  type: ClusterIP
+  port: 5678
+  annotations: {}
+  sessionAffinity:
+    enabled: false
+    timeoutSeconds: 10800
+
+# ----- Ingress -----
+ingress:
+  enabled: false
+
+# ----- Persistence -----
+persistence:
+  enabled: false
+  accessModes: ["ReadWriteOnce"]
+  size: 10Gi
+  storageClassName: ""
+
+# ----- External Volumes -----
+extraVolumes: []
+
+extraVolumeMounts: []
+
+# ----- Resources -----
+resources:
+  main:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  worker:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  webhookProcessor:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# ----- Node placement -----
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# ----- Security -----
+# Note: readOnlyRootFilesystem is intentionally not set. n8n writes to
+# ~/.n8n/, /tmp/, and other paths at runtime. Enabling it would require
+# extensive volumeMount overrides and is not practical for this workload.
+securityContext:
+  enabled: true
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsGroup: 1000
+
+# ----- RBAC ServiceAccount & Network Policy -----
+rbac:
+  create: true
+
+serviceAccount:
+  # Create a new service account for n8n pods
+  create: true
+  name: n8n
+
+networkPolicy:
+  enabled: false
+
+# ----- Health checks -----
+probes:
+  liveness:
+    enabled: true
+    path: /healthz
+    initialDelaySeconds: 30
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+  readiness:
+    enabled: true
+    path: /healthz
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 6
+  # Worker-specific probes (workers don't have HTTP endpoints)
+  worker:
+    readiness:
+      enabled: true
+      # Custom readiness probe that checks if worker is ready
+      type: "exec" # <-- Use exec probe instead of HTTP
+      command:
+        - "/bin/sh"
+        - "-c"
+        - "pgrep -f 'n8n worker' > /dev/null"
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 3
+      failureThreshold: 6
+    liveness:
+      enabled: true
+      # Check if n8n worker process is still running
+      type: "exec"
+      command:
+        - "/bin/sh"
+        - "-c"
+        - "pgrep -f 'n8n worker' > /dev/null"
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+# ----- Lifecycle (graceful shutdown) -----
+lifecycle:
+  # Main pods lifecycle configuration
+  main:
+    terminationGracePeriodSeconds: 60
+    preStop:
+      enabled: true
+      # Sleep to allow pod to be removed from service endpoints before SIGTERM
+      command:
+        - "/bin/sh"
+        - "-c"
+        - "sleep 10"
+  # Worker pods lifecycle configuration
+  worker:
+    terminationGracePeriodSeconds: 60
+    preStop:
+      enabled: true
+      # Sleep to allow current workflow executions to complete
+      command:
+        - "/bin/sh"
+        - "-c"
+        - "sleep 10"
+  # Webhook processor pods lifecycle configuration
+  webhookProcessor:
+    terminationGracePeriodSeconds: 60
+    preStop:
+      enabled: true
+      # Sleep to allow current webhook requests to complete
+      command:
+        - "/bin/sh"
+        - "-c"
+        - "sleep 10"
+
+# ----- Autoscaling -----
+hpa:
+  # Main pods autoscaling (UI/API pods)
+  main:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 80
+  # Worker pods autoscaling (execution pods)
+  worker:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 70
+  # Webhook processor pods autoscaling (webhook handling)
+  webhookProcessor:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 60
+
+# ----- Pod Disruption Budget -----
+pdb:
+  enabled: true
+  minAvailable: 1
+
+# ----- Webhook config -----
+webhook:
+  # Enable webhook functionality
+  enabled: true
+  # Custom webhook URL base domain (if not set, will use ingress host)
+  # Format: https://your-domain.com (n8n adds /webhook path automatically)
+  url: "https://n8n.kerrlab.app"
+  # Timeout for webhook requests in milliseconds
+  timeout: 120000
+  # Additional webhook environment variables
+  extraEnv: []
+
+# ----- Executions config -----
+executions:
+  # Execution timeout settings
+  timeout: -1 # <-- Default timeout in seconds (-1 = disabled)
+  timeoutMax: 3600 # <-- Maximum timeout users can set
+  # Data persistence settings
+  data:
+    saveOnError: "all" # <-- Save data on error (all, none)
+    saveOnSuccess: "all" # <-- Save data on success (all, none)
+    saveOnProgress: false # <-- Save progress for each node
+    saveManualExecutions: true # <-- Save manual execution data
+  # Data pruning settings
+  pruning:
+    enabled: true # <-- Enable execution data pruning
+    maxAge: 336 # <-- Max execution age in hours (14 days)
+    maxCount: 10000 # <-- Max executions to keep (0 = no limit)
+    hardDeleteBuffer: 1 # <-- Buffer hours before hard delete
+    hardDeleteInterval: 15 # <-- Hard delete interval in minutes
+    softDeleteInterval: 60 # <-- Soft delete interval in minutes
+  # Concurrency settings
+  concurrency:
+    productionLimit: -1 # <-- Max concurrent production executions (-1 = disabled)
+  # Additional execution environment variables
+  extraEnv: []
+
+# ----- App config -----
+config:
+  timezone: Europe/Chisinau
+  extraEnvFrom:
+    - configMapRef:
+        name: n8n-config
+
+# ----- Secrets -----
+secretRefs:
+  existingSecret: "n8n-secrets"
+
+# ----- Database (PostgreSQL - required for queue mode) -----
+database:
+  type: postgresdb
+  # External database is required for queue mode
+  useExternal: true
+  host: "fortress.kerrlab.app"
+  port: 15432
+  database: n8n
+  schema: "public"
+  user: n8n_user
+  passwordSecret:
+    name: "n8n-db-credentials"
+    key: "DB_POSTGRESDB_PASSWORD"
+
+# ----- Redis (required for queue mode) -----
+redis:
+  # Redis is required for queue mode
+  enabled: true
+  useExternal: true
+  host: "redis-n8n.automation.svc.cluster.local"
+  port: 6379
+  # Redis authentication
+  username: ""
+  passwordSecret:
+    name: "n8n-secrets"
+    key: "QUEUE_BULL_REDIS_PASSWORD"
+  # Advanced Redis settings
+  database: 0
+  timeout: 10000
+  prefix: ""
+  tls: false
+  dualstack: false
+  # Redis Cluster support (comma-separated list of host:port)
+  clusterNodes: ""
+  # Queue worker settings
+  worker:
+    timeout: 30
+    lockDuration: 60000 # <-- Worker lease duration (ms)
+    lockRenewTime: 10000 # <-- Lock renewal frequency (ms)
+    stalledInterval: 30000 # <-- Stalled job check interval (ms)
+    maxStalledCount: 1 # <-- Max stalled job retries
+  # Health check settings
+  healthCheck:
+    enabled: false # <-- Enable queue health checks
+    port: 5678 # <-- Health check port
+  # Additional Redis environment variables
+  extraEnv: []

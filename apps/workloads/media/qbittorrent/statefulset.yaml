@@ -251,7 +251,7 @@ spec:
             - name: NTFY_SERVER
               value: "http://ntfy.automation.svc.cluster.local"
             - name: NTFY_TOPIC
-              value: "downloads"
+              value: "downloads-live-updates"
             - name: NTFY_PRIORITY_PROGRESS
               value: "low"
             - name: NTFY_PRIORITY_COMPLETE
@@ -262,6 +262,8 @@ spec:
               value: "bar"
             - name: ALLOWED_SUBNETS
               value: "127.0.0.1/32,::1/128"
+            - name: POLL_INTERVAL
+              value: "30"
           envFrom:
             - secretRef:
                 name: ntfy-credentials

@@ -14,5 +14,18 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: n8n-ui
+        - name: n8n-main
+          port: 5678
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /webhook
+        - path:
+            type: PathPrefix
+            value: /webhook-test
+        - path:
+            type: PathPrefix
+            value: /webhook-waiting
+      backendRefs:
+        - name: n8n-webhook-processor
           port: 5678
