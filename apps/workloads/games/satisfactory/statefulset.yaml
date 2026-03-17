@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: satisfactory
+  namespace: games
+  labels:
+    app: satisfactory
+spec:
+  serviceName: satisfactory
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: satisfactory
+  template:
+    metadata:
+      labels:
+        app: satisfactory
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - performance
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: satisfactory
+          image: wolveix/satisfactory-server
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7777
+              name: game-udp
+              protocol: UDP
+            - containerPort: 7777
+              name: game-tcp
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: satisfactory-config
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: backups
+              mountPath: /config/backups
+          resources:
+            requests:
+              memory: "8Gi"
+              cpu: "2000m"
+            limits:
+              memory: "16Gi"
+              cpu: "4000m"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: satisfactory-data-pvc
+        - name: backups
+          persistentVolumeClaim:
+            claimName: satisfactory-backup-pvc
