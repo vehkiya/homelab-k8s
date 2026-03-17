@@ -5,7 +5,7 @@ namespace: automation
 helmCharts:
   - name: n8n
     repo: oci://ghcr.io/n8n-io/n8n-helm-chart
-    version: 1.0.4 
+    version: 1.1.0 
     releaseName: n8n
     namespace: automation
     includeCRDs: true
