@@ -21,6 +21,11 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
 
+    # === Allow HTTP Interceptor to receive traffic from Traefik ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+
   # ----=== Egress ===----
   egress:
     # === Allow intra-namespace communication ===

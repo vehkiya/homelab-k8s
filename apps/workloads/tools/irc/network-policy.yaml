@@ -16,7 +16,7 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: keda
+            k8s:io.kubernetes.pod.namespace: observability
             app.kubernetes.io/component: interceptor
       toPorts:
         - ports:
