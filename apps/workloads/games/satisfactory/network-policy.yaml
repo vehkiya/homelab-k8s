@@ -1,0 +1,31 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: satisfactory-policy
+  namespace: games
+spec:
+  endpointSelector:
+    matchLabels:
+      app: satisfactory
+  ingress:
+    # Allow Game Clients from Internet
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "7777"
+              protocol: TCP
+            - port: "7777"
+              protocol: UDP
+            - port: "8888"
+              protocol: TCP
+  egress:
+    # Allow HTTP/HTTPS to World (game data downloads / updates)
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
