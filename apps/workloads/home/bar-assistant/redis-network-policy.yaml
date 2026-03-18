@@ -11,11 +11,8 @@ spec:
           - "redis-bar-assistant"
   ingress:
     - fromEndpoints:
-        - matchExpressions:
-            - key: "k8s:app.kubernetes.io/name"
-              operator: "In"
-              values:
-                - "bar-assistant"
+        - matchLabels:
+            "app": "bar-assistant"
       toPorts:
         - ports:
             - port: "6379"

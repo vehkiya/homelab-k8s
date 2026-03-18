@@ -15,10 +15,12 @@ data:
   # Internal hostname for Meilisearch Service within the cluster
   MEILISEARCH_HOST: "http://meilisearch-kubernetes.data-services.svc.cluster.local:7700"
   # Internal hostname for Redis Service within the cluster
-  REDIS_HOST: "redis-bar-assistant"
+  REDIS_HOST: "redis-bar-assistant.home.svc.cluster.local"
   CACHE_DRIVER: "redis"
   SESSION_DRIVER: "redis"
   ALLOW_REGISTRATION: "true"
+  TRUSTED_PROXIES: "*"
+  SESSION_SECURE_COOKIE: "true"
 
   # --- Salt Rim Frontend ---
   API_URL: "https://bar.kerrlab.app/bar"
