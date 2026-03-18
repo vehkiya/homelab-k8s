@@ -8,7 +8,6 @@ labels:
 
 resources:
   - meilisearch-master-key.yaml
-  - redis-password.yaml
   - bar-assistant-config-map.yaml
   - bar-assistant-deployment.yaml
   - bar-assistant-service.yaml
@@ -18,6 +17,8 @@ resources:
   - network-policy.yaml
   - secret.yaml
   - middlewares.yaml
+  - redis.yaml
+  - redis-network-policy.yaml
 
 images:
   - name: busybox

@@ -1,0 +1,30 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: bar-assistant-redis-policy
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: "k8s:app"
+        operator: "In"
+        values:
+          - "redis-bar-assistant"
+  ingress:
+    - fromEndpoints:
+        - matchExpressions:
+            - key: "k8s:app.kubernetes.io/name"
+              operator: "In"
+              values:
+                - "bar-assistant"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:name": "redis-operator"
+            "k8s:io.kubernetes.pod.namespace": "data-services"
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"

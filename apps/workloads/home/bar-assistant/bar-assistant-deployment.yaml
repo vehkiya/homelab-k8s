@@ -51,11 +51,13 @@ spec:
                 secretKeyRef:
                   name: bar-assistant-secrets
                   key: OIDC_CLIENT_SECRET
-          #            - name: REDIS_PASSWORD
-          #              valueFrom:
-          #                secretKeyRef:
-          #                  name: redis-secret
-          #                  key: redis-password
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bar-assistant-secrets
+                  key: REDIS_PASSWORD
+            - name: REDIS_HOST
+              value: redis-bar-assistant
           ports:
             - containerPort: 8080
               name: http-api
