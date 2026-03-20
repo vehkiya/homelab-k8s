@@ -19,6 +19,14 @@ spec:
             - port: "443"
               protocol: "TCP"
 
+    # 2. Allow Hairpinning to Traefik (Internal LoadBalancer IP)
+    - toCIDR:
+        - 10.10.1.16/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+
     # 3. Allow OIDC Provider (If you use Google/Dex/etc for login)
     - toEntities:
         - world
