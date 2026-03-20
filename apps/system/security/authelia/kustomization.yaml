@@ -20,7 +20,7 @@ images:
 configMapGenerator:
   - name: authelia-config
     files:
-      - configuration-template.yml.template=templates/configuration.yaml
+      - configuration-template.yml=templates/configuration.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

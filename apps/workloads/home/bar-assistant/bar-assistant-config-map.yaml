@@ -27,4 +27,4 @@ data:
   # This matches the Ingress path for the backend
   AUTHELIA_BASE_URL: "https://auth.kerrlab.app"
   AUTHELIA_CLIENT_ID: "bar-assistant"
-  AUTHELIA_REDIRECT_URI: "https://bar.kerrlab.app/oauth/callback"
+  AUTHELIA_REDIRECT_URI: "https://bar.kerrlab.app/bar/api/auth/sso/authelia/callback"
