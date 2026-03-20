@@ -1,4 +1,8 @@
 # Authelia Configuration
+log:
+  level: 'info'
+  format: 'json'
+
 server:
   address: 'tcp://0.0.0.0:9091'
   buffers:
@@ -11,8 +15,8 @@ session:
   # The secret is loaded from an environment variable
   secret: "${SESSION_SECRET}"
   same_site: 'lax'
-  inactivity: '15m'
-  expiration: '2h'
+  inactivity: '1h'
+  expiration: '8h'
   remember_me: '1M'
   cookies:
     - domain: 'kerrlab.app'
@@ -52,13 +56,14 @@ identity_validation:
 # Regulation settings
 regulation:
   max_retries: 3
-  find_time: 120
-  ban_time: 300
+  find_time: '2m'
+  ban_time: '15m'
 
 # Storage configuration using PostgreSQL
 storage:
   encryption_key: "${STORAGE_ENCRYPTION_KEY}"
   postgres:
+    timeout: '10s'
     address: 'tcp://postgres-db-rw.data-services.svc.cluster.local:5432'
     database: authelia-db
     username: authelia_user
@@ -80,6 +85,7 @@ notifier:
 # Authentication backend using LDAP
 authentication_backend:
   ldap:
+    implementation: 'custom'
     address: 'ldaps://ldap.kerrlab.app:636'
     start_tls: false
     base_dn: "${LDAP_BASE_DN}"
@@ -87,6 +93,9 @@ authentication_backend:
     user: "${LDAP_BIND_DN}"
     # The password is loaded from an environment variable
     password: "${LDAP_PASSWORD}"
+    additional_users_dn: 'cn=users'
+    additional_groups_dn: 'cn=groups'
+    timeout: '10s'
     # Search filter for users
     users_filter: '(&({username_attribute}={input})(objectClass=person))'
     # Search filter for groups
@@ -101,7 +110,7 @@ authentication_backend:
       middle_name: 'middleName'
       nickname: ''
       gender: ''
-      birthdate: ''
+      birthdate: 'apple-birthday'
       website: 'wWWHomePage'
       profile: ''
       picture: ''
@@ -118,8 +127,8 @@ authentication_backend:
       member_of: 'memberOf'
       group_name: 'cn'
       extra:
-        extra_example:
-          name: ''
+        title:
+          name: 'title'
           multi_valued: false
           value_type: 'string'
 
@@ -133,14 +142,15 @@ access_control:
 
 totp:
   disable: false
-  issuer: 'authelia.com'
-  algorithm: 'sha1'
+  issuer: 'kerrlab.app'
+  algorithm: 'sha256'
   digits: 6
   period: 30
   skew: 1
   secret_size: 32
   allowed_algorithms:
     - 'SHA1'
+    - 'SHA256'
   allowed_digits:
     - 6
   allowed_periods:
