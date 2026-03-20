@@ -1,7 +1,10 @@
 config:
+  sessionTTL: null
   oidc:
     secret:
       create: false
     externalSecret:
       enabled: true
       name: headlamp-oidc-credentials
+    useAccessToken: true
+    usePKCE: true
