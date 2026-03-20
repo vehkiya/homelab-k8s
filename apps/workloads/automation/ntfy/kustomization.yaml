@@ -19,3 +19,6 @@ configMapGenerator:
   - name: ntfy-config
     files:
       - server.yml.template=template/server.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
