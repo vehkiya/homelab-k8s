@@ -42,3 +42,22 @@ spec:
               protocol: TCP
             - port: "2049" # NFS
               protocol: TCP
+    # === Allow access to 10.10.1.218 ===
+    - toCIDR:
+        - 10.10.1.218/32
+      toPorts:
+        - ports:
+            - port: "8333"
+              protocol: TCP
+            - port: "9333"
+              protocol: TCP
+            - port: "8888"
+              protocol: TCP
+            - port: "8080"
+              protocol: TCP
+            - port: "19333"
+              protocol: TCP
+            - port: "18888"
+              protocol: TCP
+            - port: "18080"
+              protocol: TCP
