@@ -220,7 +220,7 @@ identity_providers:
         consent_mode: "pre-configured"
         pre_configured_consent_duration: "30 days"
         redirect_uris:
-          - "https://bar.kerrlab.app/bar/api/auth/sso/authelia/callback"
+          - "https://bar.kerrlab.app/oauth/callback"
         scopes:
           - "openid"
           - "email"

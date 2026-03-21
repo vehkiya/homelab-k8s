@@ -82,7 +82,7 @@ spec:
             - |
               apk add --no-cache rsync inotify-tools &&
               while true; do
-                rsync -a --no-owner --no-group --delete --log-file=/dev/stderr /config/saved/ /backups/saved/
+                rsync -a --no-owner --no-group --log-file=/dev/stderr /config/saved/ /backups/saved/
                 inotifywait -r -e create,close_write,moved_to /config/saved/
               done
           volumeMounts:

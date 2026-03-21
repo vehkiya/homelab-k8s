@@ -12,13 +12,14 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /bar
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: bar-assistant-strip-prefix
+            value: /api
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /storage
       backendRefs:
         - name: bar-assistant
           port: 8080

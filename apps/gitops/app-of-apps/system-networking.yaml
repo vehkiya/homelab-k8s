@@ -10,16 +10,12 @@ spec:
         revision: HEAD
         directories:
           - path: apps/system/networking/*
-          - path: apps/system/networking/traefik-crds
-            exclude: true
           - path: apps/system/networking/tailscale
             exclude: true
   template:
     metadata:
       name: "{{path.basename}}"
       namespace: argocd
-      finalizers:
-        - resources-finalizer.argocd.argoproj.io
     spec:
       project: default
       source:
