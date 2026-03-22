@@ -21,4 +21,4 @@ images:
   - name: ghcr.io/hononeko/bw-cli
     newTag: 2026.1.0@sha256:94574a70497d48354ad09c4a6e065379720cebf83aea286d1db3df60e0773d17
   - name: alpine/k8s
-    newTag: 1.35.2@sha256:9a87b09e1b6d887fa52c2dea1611d112d9e7d3d0271708588711a2fb2016e82c
+    newTag: 1.35.3@sha256:80cf3f1a55c19009223245c8b680156ff4e41c0a4778eb4b121c67f4946bc469
