@@ -23,6 +23,6 @@ resources:
   - redis-network-policy.yaml
 images:
   - name: busybox
-    newTag: 1.37@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
+    newTag: 1.37@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
   - name: docker.n8n.io/n8nio/n8n
     newTag: 2.14.0@sha256:e0ed9b5468d57dc46f6c015065a7e531b1463507bdccb7382135db3b364ac6a7
