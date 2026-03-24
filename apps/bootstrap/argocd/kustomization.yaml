@@ -17,7 +17,7 @@ images:
   - name: redis
     newTag: 8.6.1@sha256:315270d166080f537bbdf1b489b603aaaa213cb55a544acfa51feb7481abb1c0
   - name: busybox
-    newTag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
+    newTag: 1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
 
 patches:
   - path: argocd-cm.yaml
