@@ -15,4 +15,4 @@ images:
   - name: alpine
     newTag: 3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
   - name: ghcr.io/itzg/minecraft-server
-    newTag: java25@sha256:13bf4c79497957af2448f64200d79e93ed4e6e93b7ca9ce5632a02a740aa71a1
+    newTag: java25@sha256:e82759776a655e8619fe7b729c9ec89ff820c318d53b628d7a406aaf14b87d43
