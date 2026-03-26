@@ -11,7 +11,7 @@ resources:
 
 images:
   - name: binwiederhier/ntfy
-    newTag: v2.19.2@sha256:9114cd5cdcb8c2ea1239bd710caae867e82c2deda68271b9db151240b403b3f4
+    newTag: v2.20.0@sha256:c7bdbea1436c76ba4c3b90a104364d091bf96bf78bd38177b17e9890793a8bf8
   - name: alpine
     newTag: 3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
 
