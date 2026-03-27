@@ -12,3 +12,9 @@ defaultSettings:
   disableSchedulingOnControlPlane: false
   # Set to 15% for smaller disks
   storageMinimalAvailablePercentage: 15
+
+image:
+  longhorn:
+    instanceManager:
+      repository: longhornio/longhorn-instance-manager
+      tag: v1.11.0
