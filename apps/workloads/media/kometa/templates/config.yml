@@ -115,10 +115,10 @@ radarr:
   url: http://radarr-ui.media.svc.cluster.local:7878
   token: ${RADARR_TOKEN}
   add_missing: false
-  root_folder_path: /movies
+  root_folder_path: /data/media/movies
   monitor: false
   availability: cinemas
-  quality_profile: Any
+  quality_profile: 4K
   tag: kometa
   add_existing: false
   search: false
@@ -130,9 +130,9 @@ radarr:
 sonarr:
   add_missing: false
   add_existing: false
-  root_folder_path: /tv
+  root_folder_path: /data/media/tv
   monitor: pilot
-  quality_profile: Any
+  quality_profile: HD
   language_profile: English
   series_type: standard
   season_folder: true

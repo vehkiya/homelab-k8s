@@ -146,7 +146,8 @@ spec:
                 - name: kometa-config
                   mountPath: /config_templates/config.yml
                   subPath: config.yml
-                - name: assets
+                - name: media
+                  subPath: assets
                   mountPath: /assets
                 - name: fonts
                   mountPath: /tmp/fonts
