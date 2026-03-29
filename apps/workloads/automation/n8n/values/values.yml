@@ -45,6 +45,7 @@ taskRunners:
     # Set explicitly only if you need a different version (not recommended)
     tag: ""
     pullPolicy: IfNotPresent
+  nativePythonRunner: true
 
   # Task runner mode (only external mode is supported in this chart)
   mode: external
@@ -91,7 +92,7 @@ service:
   port: 5678
   annotations: {}
   sessionAffinity:
-    enabled: false
+    enabled: true
     timeoutSeconds: 10800
 
 # ----- Ingress -----
@@ -247,7 +248,7 @@ hpa:
     targetCPUUtilizationPercentage: 80
   # Worker pods autoscaling (execution pods)
   worker:
-    enabled: false
+    enabled: true
     minReplicas: 2
     maxReplicas: 4
     targetCPUUtilizationPercentage: 70

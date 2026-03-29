@@ -19,3 +19,4 @@ data:
   WEBHOOK_URL: "https://n8n.kerrlab.app"
   N8N_PROXY_HOPS: "1"
   GENERIC_TIMEZONE: "Europe/Chisinau"
+  N8N_PUSH_BACKEND: "websocket"
