@@ -32,4 +32,4 @@ images:
   - name: qmcgaw/gluetun
     newTag: v3.41.1@sha256:1a5bf4b4820a879cdf8d93d7ef0d2d963af56670c9ebff8981860b6804ebc8ab
   - name: ghcr.io/hononeko/qbit-gluetun-sync
-    newTag: 1.1.0@sha256:e421022ea0f8e2aab60ff266f429b902cda650e707b3285c76b86f80d69d9328
+    newTag: 1.2.2@sha256:25b67f5d2ab5caaf677545728b2de18b75de0bf7a18f0a79f54022976298128b
