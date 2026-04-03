@@ -101,10 +101,10 @@ ingress:
 
 # ----- Persistence -----
 persistence:
-  enabled: false
+  enabled: true
   accessModes: ["ReadWriteOnce"]
   size: 10Gi
-  storageClassName: ""
+  storageClassName: "longhorn"
 
 # ----- External Volumes -----
 extraVolumes: []
