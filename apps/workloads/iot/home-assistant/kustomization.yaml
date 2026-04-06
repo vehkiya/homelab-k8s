@@ -13,6 +13,17 @@ resources:
   - http-route.yaml
   - nad.yaml
   - network-policy.yaml
+
+configMapGenerator:
+  - name: home-assistant-config
+    files:
+      - configuration.yaml.template=template/configuration.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
 images:
   - name: ghcr.io/home-operations/home-assistant
     newTag: 2026.4.1@sha256:1000851ce4d5bf2f6790bfc8b9052daa2c33a84f92e0bad7d60e0a9333ff4dc2
+  - name: hairyhenderson/gomplate
+    newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9

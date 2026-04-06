@@ -3,10 +3,5 @@ kind: Kustomization
 
 namespace: iot
 
-labels:
-  - pairs:
-      app.kubernetes.io/name: home-assistant
-
 resources:
-  - namespace.yaml
   - nfs-storage.yaml
