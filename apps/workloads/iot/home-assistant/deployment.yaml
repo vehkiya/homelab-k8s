@@ -17,17 +17,23 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: macvlan-iot
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        searches:
-          - iot.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
-        nameservers:
-          - 10.96.0.10
-        options:
-          - name: ndots
-            value: "5"
+      initContainers:
+        - name: prepare-config
+          image: hairyhenderson/gomplate
+          command: [ "gomplate", "--left-delim", "[[", "--right-delim", "]]", "-f", "/template/configuration.yaml.template", "-o", "/config/configuration.yaml" ]
+          volumeMounts:
+            - name: config-template
+              mountPath: /template
+            - name: hass-data
+              mountPath: /config
+              subPath: config
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       containers:
         - name: homeassistant
           image: ghcr.io/home-operations/home-assistant
@@ -41,10 +47,6 @@ spec:
             - name: hass-data
               mountPath: /media
               subPath: media
-          #              # temporarily exclude because Home Assistant doesn't like this
-          #            - name: hass-config-files
-          #              mountPath: /config/configuration.yaml
-          #              subPath: configuration.yaml
           resources:
             requests:
               cpu: 10m
@@ -67,3 +69,6 @@ spec:
         - name: hass-data
           persistentVolumeClaim:
             claimName: home-assistant-pvc
+        - name: config-template
+          configMap:
+            name: home-assistant-config
