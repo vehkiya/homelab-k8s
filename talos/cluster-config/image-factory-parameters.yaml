@@ -1,10 +1,11 @@
 customization:
   extraKernelArgs:
     - intel_idle.max_cstate=0
-    - iommu.passthrough=1
     - intel_iommu=on
     - iommu=pt
     - cpufreq.default_governor=performance
+    - nvme_core.io_timeout=60
+    - nvme_core.default_ps_max_latency_us=0
   systemExtensions:
     officialExtensions:
       - siderolabs/btrfs
@@ -15,7 +16,5 @@ customization:
       - siderolabs/mei
       - siderolabs/nut-client
       - siderolabs/realtek-firmware
-      - siderolabs/util-linux-tools
       - siderolabs/wasmedge
       - siderolabs/xe
-      - siderolabs/nvme-cli

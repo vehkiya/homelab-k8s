@@ -7,6 +7,7 @@ resources:
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+  - restore-job.yaml
 
 labels:
   - pairs:
@@ -15,3 +16,5 @@ labels:
 images:
   - name: plexinc/pms-docker
     newTag: 1.43.1.10576-06378bdcd@sha256:80c1c9080352613e77fc2f49bcfee67a0a72cd60b9cf4bbc1b601e55c0160859
+  - name: alpine
+    newTag: 3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
