@@ -76,6 +76,8 @@ spec:
               mountPath: /config
             - name: transcode
               mountPath: /transcode
+            - name: backups
+              mountPath: /backups
           resources:
             # only rune on nodes that have Intel GPU
             requests:
@@ -86,6 +88,47 @@ spec:
               cpu: 8000m
               memory: 8Gi
               gpu.intel.com/i915: "1"
+        - name: backup-sidecar
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+          command:
+            - /bin/sh
+            - -c
+            - |
+              PREFS_PATH="/config/Library/Application Support/Plex Media Server/Preferences.xml"
+              echo "🚀 Backup Sidecar Started (Inotify Mode)."
+              echo "👀 Watching /backups for native Plex DB backups..."
+              inotifywait -m -e close_write -q --format "%f" /backups/ | while read -r filename; do
+                if echo "$filename" | grep -qEo '^com\.plexapp\.plugins\.library\.db-[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+                  DATE_SUFFIX="${filename##*-}"
+                  echo "💾 Detected Plex native DB backup: $filename"
+              
+                  if [ -f "$PREFS_PATH" ]; then
+                    echo "⚙️  Backing up Preferences.xml as Preferences.xml-$DATE_SUFFIX..."
+                    rsync -a --no-owner --no-group "$PREFS_PATH" "/backups/Preferences.xml-$DATE_SUFFIX"
+                    echo "✅ Preferences backup complete!"
+                  fi
+              
+                  echo "🧹 Cleaning up old Preferences.xml backups (keeping last 5)..."
+                  ls -dt /backups/Preferences.xml-* 2>/dev/null | tail -n +6 | xargs -r rm -f
+                fi
+              done
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: backups
+              mountPath: /backups
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
       dnsConfig:
         options:
           - name: ndots
@@ -100,3 +143,6 @@ spec:
         - name: transcode
           persistentVolumeClaim:
             claimName: plex-transcode-pvc
+        - name: backups
+          persistentVolumeClaim:
+            claimName: plex-backup-pvc

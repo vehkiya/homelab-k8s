@@ -2,3 +2,6 @@
 .idea/**
 /talos/cluster-config/backup/
 /apps/**/charts/**
+
+.gemini/
+gha-creds-*.json

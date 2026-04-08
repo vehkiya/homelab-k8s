@@ -5,6 +5,7 @@ namespace: media
 resources:
   - transcode-pvc.yaml
   - longhorn-config-pvc.yaml
+  - plex-backup-pvc.yaml
 
 labels:
   - pairs:
