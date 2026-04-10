@@ -14,6 +14,19 @@ inotifywait -m -e close_write -q --format "%f" /backups/ | while read -r filenam
     fi
 
     echo "🧹 Cleaning up old Preferences.xml backups (keeping last 5)..."
-    ls -dt /backups/Preferences.xml-* 2>/dev/null | tail -n +6 | xargs -r rm -f
+    # Shell globs expand alphabetically. Since our suffix is YYYY-MM-DD,
+    # alphabetical order matches chronological order (oldest first).
+    set -- /backups/Preferences.xml-*
+    if [ -e "$1" ]; then
+      total=$#
+      if [ "$total" -gt 5 ]; then
+        limit=$((total - 5))
+        for file do
+          if [ "$limit" -le 0 ]; then break; fi
+          rm -f "$file"
+          limit=$((limit - 1))
+        done
+      fi
+    fi
   fi
 done
