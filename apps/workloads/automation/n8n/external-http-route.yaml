@@ -12,6 +12,13 @@ spec:
     - matches:
         - path:
             type: PathPrefix
+            value: /webhook-test
+      backendRefs:
+        - name: n8n-main
+          port: 5678
+    - matches:
+        - path:
+            type: PathPrefix
             value: /webhook
         - path:
             type: PathPrefix
