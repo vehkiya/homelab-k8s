@@ -14,7 +14,7 @@ spec:
             runAsUser: 0
           containers:
             - name: restorer
-              image: alpine
+              image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
               command: ["/bin/sh", "/scripts/restore.sh"]
               volumeMounts:
                 - name: restore-script
