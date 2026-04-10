@@ -9,6 +9,14 @@ resources:
   - network-policy.yaml
   - restore-job.yaml
 
+configMapGenerator:
+  - name: plex-backup-script
+    files:
+      - backup.sh=backup.sh
+  - name: plex-restore-script
+    files:
+      - restore.sh=restore.sh
+
 labels:
   - pairs:
       app.kubernetes.io/name: plex
