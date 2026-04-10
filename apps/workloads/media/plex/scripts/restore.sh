@@ -2,7 +2,10 @@
 set -e
 echo "📂 Scanning /backups for native db backups..."
 
-LATEST_DB_BACKUP=$(ls -t /backups/com.plexapp.plugins.library.db-????-??-?? 2>/dev/null | head -n 1)
+LATEST_DB_BACKUP=""
+for f in /backups/com.plexapp.plugins.library.db-????-??-??; do
+  [ -e "$f" ] && LATEST_DB_BACKUP="$f"
+done
 
 if [ -z "$LATEST_DB_BACKUP" ]; then
   echo "❌ No native DB backup files found in /backups!"
