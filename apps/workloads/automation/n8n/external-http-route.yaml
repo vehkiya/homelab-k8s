@@ -13,6 +13,12 @@ spec:
         - path:
             type: PathPrefix
             value: /webhook-test
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: n8n-webhook-rate-limit
       backendRefs:
         - name: n8n-main
           port: 5678
