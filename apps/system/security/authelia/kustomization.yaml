@@ -15,7 +15,7 @@ images:
   - name: alpine/k8s
     newTag: 1.35.3@sha256:097aa60cbef561146757c7494468e9d7b04d843597ad1a1515ed09d0708c8014
   - name: ghcr.io/authelia/authelia
-    newTag: 4.39.18@sha256:ac379ba7680cea6ea21a29b65bf6daabb5aec5b4412c5591ec71df4fd156c789
+    newTag: 4.39.19@sha256:0c824dcab1ae97c56bf673c5e77fe8cc6bcd400564555140cc8002a12c6b6463
 
 configMapGenerator:
   - name: authelia-config
