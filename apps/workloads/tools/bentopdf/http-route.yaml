@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bentopdf-route
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "pdf.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Cross-Origin-Opener-Policy
+                value: same-origin
+              - name: Cross-Origin-Embedder-Policy
+                value: require-corp
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080
