@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: bentopdf-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: bentopdf
+
+  # Allow Ingress (Inbound)
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: networking
+            app.kubernetes.io/component: interceptor
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"

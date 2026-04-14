@@ -1,0 +1,16 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: bentopdf
+spec:
+  hosts:
+    - pdf.kerrlab.app
+  scaleTargetRef:
+    name: bentopdf
+    kind: Deployment
+    apiVersion: apps/v1
+    service: bentopdf
+    port: 8080
+  replicas:
+    min: 0
+    max: 1
