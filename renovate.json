@@ -20,10 +20,10 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/(^|/)kustomization\.yaml$/"
+        "/(^|/)kustomization\\.yaml$/"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+-\\s+https://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?:refs/tags/)?(?<currentValue>[^/]+)/"
+        "# renovate: datasource=(?<datasource>[a-z\\-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+-\\s+https://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?:refs/tags/)?(?<currentValue>[^/]+)/"
       ]
     }
   ],
@@ -111,7 +111,7 @@
         "plexinc/pms-docker"
       ],
       "versioning": "loose",
-      "allowedVersions": "/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9a-f]+$/"
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-[0-9a-f]+$/"
     },
     {
       "matchUpdateTypes": [
@@ -134,10 +134,15 @@
         "kustomize"
       ],
       "matchPackageNames": [
-        "ghcr.io/spegel-org/helm-charts/spegel"
+        "ghcr.io/spegel-org/helm-charts/spegel",
+        "ghcr.io/n8n-io/n8n-helm-chart/n8n",
+        "ghcr.io/intel/intel-resource-drivers-for-kubernetes/intel-gpu-resource-driver-chart",
+        "spegel",
+        "n8n",
+        "intel-gpu-resource-driver-chart"
       ],
       "pinDigests": false,
-      "description": "Disable pinning for Spegel OCI chart as Kustomize helmCharts doesn't support digests"
+      "description": "Disable pinning for OCI charts as Kustomize helmCharts doesn't support digests"
     }
   ]
 }
