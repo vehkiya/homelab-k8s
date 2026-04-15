@@ -16,16 +16,16 @@ data:
   RENOVATE_PR_HOURLY_LIMIT: "4"
   RENOVATE_ONBOARDING_CONFIG: |-
     {
-      $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-      extends: ['config:recommended', ":semanticCommits", "mergeConfidence:all-badges"],
+      "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+      "extends": ["config:recommended", ":semanticCommits", "mergeConfidence:all-badges"]
     }
   RENOVATE_REPOSITORY_CACHE: "enabled"
   RENOVATE_HOST_RULES: |-
     [
       {
-        hostType: 'docker',
-        matchHost: 'docker.io',
-        username: process.env.DOCKER_USERNAME,
-        password: process.env.DOCKER_PASSWORD,
+        "hostType": "docker",
+        "matchHost": "docker.io",
+        "username": "{{env.DOCKER_USERNAME}}",
+        "password": "{{env.DOCKER_PASSWORD}}"
       }
     ]
