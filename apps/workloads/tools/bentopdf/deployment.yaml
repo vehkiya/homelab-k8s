@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bentopdf
-          image: ghcr.io/alam00000/bentopdf
+          image: ghcr.io/alam00000/bentopdf-simple
           ports:
             - name: web-ui
               containerPort: 8080
@@ -23,8 +23,6 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
-            - name: SIMPLE_MODE
-              value: "true"
           resources:
             requests:
               cpu: 10m
