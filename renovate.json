@@ -19,8 +19,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "(^|/)kustomization\\.yaml$"
+      "managerFilePatterns": [
+        "/(^|/)kustomization\.yaml$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+-\\s+https://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?:refs/tags/)?(?<currentValue>[^/]+)/"
@@ -111,7 +111,7 @@
         "plexinc/pms-docker"
       ],
       "versioning": "loose",
-      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-[0-9a-f]+$/"
+      "allowedVersions": "/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9a-f]+$/"
     },
     {
       "matchUpdateTypes": [
