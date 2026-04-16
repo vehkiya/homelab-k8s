@@ -13,7 +13,7 @@ resources:
 
 images:
   - name: quay.io/argoproj/argocd
-    newTag: v3.3.6@sha256:16b92ba472fbb9287459cc52e0ecff07288dff461209955098edb56ce866fe49
+    newTag: v3.3.7@sha256:31f494ef5ad17b8dfd4e03fbae79c57cfadede325ed16a1794ee9ce20ca5d759
   - name: redis
     newTag: 8.6.2@sha256:1f073813b641755b70b0200da64131bbeeb4ec5b633ca67772229b49820caafa
   - name: busybox
