@@ -22,7 +22,7 @@ helmCharts:
 
   - name: intel-gpu-resource-driver-chart
     repo: oci://ghcr.io/intel/intel-resource-drivers-for-kubernetes
-    version: 0.9.1
+    version: 0.10.0
     releaseName: intel-gpu-resource-driver
     namespace: inteldeviceplugins-system
     includeCRDs: true
