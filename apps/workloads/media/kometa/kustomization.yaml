@@ -33,6 +33,6 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: alpine/k8s
-    newTag: 1.35.3@sha256:097aa60cbef561146757c7494468e9d7b04d843597ad1a1515ed09d0708c8014
+    newTag: 1.35.4@sha256:d9aeef2665287b9918bc57c539ba95382ba4c8d52c8b1310df5666a89d9a3d04
   - name: kometateam/kometa
     newTag: v2.3.1@sha256:683c04827ef3fecf1cc5cb178f75f91f968aef6c6d89d34bc9c70966fd1d7259
