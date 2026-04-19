@@ -24,7 +24,7 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: alpine/k8s
-    newTag: 1.35.3@sha256:097aa60cbef561146757c7494468e9d7b04d843597ad1a1515ed09d0708c8014
+    newTag: 1.35.4@sha256:d9aeef2665287b9918bc57c539ba95382ba4c8d52c8b1310df5666a89d9a3d04
   - name: ghcr.io/home-operations/qbittorrent
     newTag: 5.1.4@sha256:bb82ad6668f8eda1d0fcce6c1341498bfa879155bb1295cd9d314a2c35c07a01
   - name: ghcr.io/hononeko/qbit-ntfy-sidecar
