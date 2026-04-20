@@ -20,7 +20,7 @@ labels:
 
 images:
   - name: ghcr.io/itzg/minecraft-server
-    newTag: stable-java17@sha256:5cc640a32d042f5e07e2fb381c0351aac3cf82bf512afa408240bde5c2358899
+    newTag: stable-java17@sha256:dea8184ce4d3c5459ec8aca1fa2acd4215395321ff0817cdf5be8493980700fa
 
 # 3. Patches
 patches:
