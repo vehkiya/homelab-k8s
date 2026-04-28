@@ -4,7 +4,7 @@ customization:
     - intel_iommu=on
     - iommu=pt
     - cpufreq.default_governor=performance
-    - nvme_core.io_timeout=60
+    - nvme_core.io_timeout=255
     - nvme_core.default_ps_max_latency_us=0
   systemExtensions:
     officialExtensions:
