@@ -5,7 +5,16 @@
 
 # --- Configuration ---
 SINGLE_NODE_UPGRADE_SCRIPT="./upgrade-node.sh"
+DOMAIN=".kube.kerrlab.app"
 # --- End Configuration ---
+
+# Check for required dependencies
+for cmd in talosctl kubectl; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "🛑 Error: Required command '$cmd' is not installed or not in PATH."
+        exit 1
+    fi
+done
 
 # Argument Parsing
 STAGE_FLAG=""
@@ -84,7 +93,6 @@ read -ra CP_ARRAY_SHORT <<< "$CP_NODES"
 read -ra WORKER_ARRAY_SHORT <<< "$WORKER_NODES"
 
 # Append FQDN
-DOMAIN=".kube.kerrlab.app"
 CP_ARRAY=()
 for n in "${CP_ARRAY_SHORT[@]}"; do
     CP_ARRAY+=("${n}${DOMAIN}")
