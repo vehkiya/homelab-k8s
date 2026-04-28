@@ -1,0 +1,18 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: matter-server-route
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "matter.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: matter-server
+          port: 5580

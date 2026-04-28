@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: matter-server
+        networking/expose-web-ui: "true"
       annotations:
         k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:20:00" }]'
     spec:
@@ -38,15 +39,15 @@ spec:
               cpu: 50m
               memory: 64Mi
       containers:
-        - image: ghcr.io/home-assistant-libs/python-matter-server
+        - image: ghcr.io/matter-js/matterjs-server
           name: matter-server
-          args:
-            - "--storage-path"
-            - "/data"
-            - "--paa-root-cert-dir"
-            - "/data/credentials"
-            - "--primary-interface"
-            - "net1"
+          env:
+            - name: PRODUCTION_MODE
+              value: "true"
+            - name: PRIMARY_INTERFACE
+              value: "net1"
+            - name: STORAGE_PATH
+              value: "/data"
           volumeMounts:
             - name: data
               mountPath: /data
@@ -59,7 +60,7 @@ spec:
               memory: 512Mi
           ports:
             - containerPort: 5580
-              name: websocket-api
+              name: web-ui
           securityContext:
             capabilities:
               add:
