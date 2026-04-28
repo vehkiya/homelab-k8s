@@ -237,7 +237,6 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
-        hostUsers: false
         fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
       volumes:
