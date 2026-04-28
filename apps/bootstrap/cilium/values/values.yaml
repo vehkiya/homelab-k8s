@@ -71,7 +71,7 @@ enableIPv6Masquerade: true
 # enableMasqueradeRouteSource: true
 
 externalIPs:
-  enabled: true
+  enabled: false
 nodePort:
   enabled: true
 hostPort:
