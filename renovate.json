@@ -143,6 +143,17 @@
       ],
       "pinDigests": false,
       "description": "Disable pinning for OCI charts as Kustomize helmCharts doesn't support digests"
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "pinDigests": true,
+      "groupName": "github-actions",
+      "schedule": [
+        "every weekend"
+      ],
+      "description": "Group all GitHub Actions updates and schedule them weekly"
     }
   ]
 }

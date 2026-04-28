@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
 
       - name: Install Kustomize
-        uses: imranismail/setup-kustomize@v3
+        uses: imranismail/setup-kustomize@53f941b41dca13ed61874bbc6b4b6e1562877530 # v3
 
       - name: Install Kubeconform
         run: |
@@ -36,7 +36,7 @@ jobs:
         run: echo "VERSION=$(npm view renovate version)" >> $GITHUB_OUTPUT
 
       - name: Lint YAML
-        uses: ibiqlik/action-yamllint@v3
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3
         with:
           config_data: |
             extends: default
@@ -53,7 +53,7 @@ jobs:
               empty-lines: disable
 
       - name: Setup Cache
-        uses: actions/cache@v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: |
             ~/.cache/kubeconform
@@ -117,7 +117,7 @@ jobs:
           done
 
       - name: Cache Renovate
-        uses: actions/cache@v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-renovate-${{ steps.renovate-version.outputs.VERSION }}
