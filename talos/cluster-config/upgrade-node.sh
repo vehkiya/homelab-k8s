@@ -33,6 +33,14 @@ if [ -z "$NODE" ] || [ -z "$VERSION" ]; then
     exit 2
 fi
 
+# Check for required dependencies
+for cmd in talosctl jq curl kubectl yq; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo 1>&2 "Error: Required command '$cmd' is not installed or not in PATH."
+        exit 1
+    fi
+done
+
 FACTORY_PARAMS="image-factory-parameters.yaml"
 
 echo "=== Phase 1: Pre-Check ==="
@@ -54,7 +62,10 @@ backup_machine_config "$NODE" || exit 1 # Exit if backup fails
 # Backup: etcd snapshot if controlplane
 # The machine config was just backed up, we can read its type from the YAML using yq
 # We filter out 'null' because the YAML may contain multiple documents
-NODE_TYPE=$(yq -r '.machine.type' "backup/${NODE}.yaml" 2>/dev/null | grep -v null | head -n 1)
+if ! NODE_TYPE=$(yq -r '.machine.type' "backup/${NODE}.yaml" | grep -v null | head -n 1); then
+    echo "Warning: Failed to determine node type using yq. Proceeding with etcd snapshot just in case..."
+    NODE_TYPE="controlplane"
+fi
 if [ "$NODE_TYPE" = "controlplane" ] || [ "$NODE_TYPE" = "init" ]; then
     TIMESTAMP=$(date +%Y%m%d-%H%M%S)
     SNAPSHOT_FILE="backup/history/etcd-${NODE}-${TIMESTAMP}.snapshot"
@@ -82,15 +93,21 @@ printf "%s " "Press enter to proceed with upgrade"
 read ans
 
 echo "=== Phase 4: Upgrade ==="
-UPGRADE_CMD="talosctl upgrade --image \"factory.talos.dev/installer/$ID:$VERSION\" -n \"$NODE\" --wait --preserve --reboot-mode=default $FORCE_FLAG"
+UPGRADE_CMD=(talosctl upgrade --image "factory.talos.dev/installer/$ID:$VERSION" -n "$NODE")
 
 if [ -n "$STAGE_FLAG" ]; then
     echo "Staging mode selected. New boot assets will be loaded into memory, but reboot will be deferred."
-    UPGRADE_CMD="talosctl upgrade --image \"factory.talos.dev/installer/$ID:$VERSION\" -n \"$NODE\" --stage $FORCE_FLAG"
+    UPGRADE_CMD+=(--stage)
+else
+    UPGRADE_CMD+=(--wait --preserve --reboot-mode=default)
 fi
 
-echo "Running: $UPGRADE_CMD"
-if eval "$UPGRADE_CMD"; then
+if [ -n "$FORCE_FLAG" ]; then
+    UPGRADE_CMD+=("$FORCE_FLAG")
+fi
+
+echo "Running: ${UPGRADE_CMD[*]}"
+if "${UPGRADE_CMD[@]}"; then
     echo "Upgrade command completed successfully for node $NODE."
 else
     echo "Error: Upgrade failed for node $NODE"
