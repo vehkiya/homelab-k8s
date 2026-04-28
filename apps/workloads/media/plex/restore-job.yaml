@@ -12,6 +12,7 @@ spec:
         spec:
           securityContext:
             runAsUser: 0
+            hostUsers: false
           containers:
             - name: restorer
               image: ghcr.io/hononeko/k8s-backup-tools:0.1.0

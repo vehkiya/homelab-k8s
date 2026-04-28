@@ -25,48 +25,6 @@ spec:
                     values:
                       - "2.5G"
       initContainers:
-        - name: install-vuetorrent
-          image: alpine/k8s
-          command:
-            - /bin/sh
-            - -c
-            - |
-              VERSION="v2.28.2"
-              DOWNLOAD_URL="https://github.com/VueTorrent/VueTorrent/releases/download/${VERSION}/vuetorrent.zip"
-
-              echo "Downloading VueTorrent version ${VERSION}..."
-              curl -L "$DOWNLOAD_URL" -o /tmp/vuetorrent.zip
-
-              if [ ! -f /tmp/vuetorrent.zip ]; then
-                echo "Download failed. Exiting."
-                exit 1
-              fi
-
-              echo "Unpacking to /vuetorrent..."
-              # Now the unzip command will work
-              unzip /tmp/vuetorrent.zip -d /
-
-              # Clean up
-              rm /tmp/vuetorrent.zip
-
-              echo "VueTorrent installation complete."
-          volumeMounts:
-            - name: vuetorrent-webui
-              mountPath: /vuetorrent
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "32Mi"
-            limits:
-              cpu: "50m"
-              memory: "128Mi"
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
         - name: gluetun
           image: qmcgaw/gluetun
           restartPolicy: Always # Declares this as a native sidecar
@@ -279,6 +237,7 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
+        hostUsers: false
         fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
       volumes:
@@ -289,7 +248,9 @@ spec:
           persistentVolumeClaim:
             claimName: qbittorrent-config-longhorn-pvc
         - name: vuetorrent-webui
-          emptyDir: {}
+          image:
+            # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+            reference: ghcr.io/vehkiya/vuetorrent:v2.28.2
         - name: gluetun-port-data
           emptyDir: {}
         - name: scripts-volume
