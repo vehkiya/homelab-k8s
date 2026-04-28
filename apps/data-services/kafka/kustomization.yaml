@@ -5,7 +5,7 @@ namespace: data-services
 helmCharts:
   - name: strimzi-kafka-operator
     repo: https://strimzi.io/charts/
-    version: 0.51.0
+    version: 1.0.0
     releaseName: strimzi-kafka-operator
     namespace: data-services
     includeCRDs: true
