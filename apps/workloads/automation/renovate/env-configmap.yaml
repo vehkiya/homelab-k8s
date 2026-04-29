@@ -25,7 +25,7 @@ data:
       {
         "hostType": "docker",
         "matchHost": "docker.io",
-        "username": "{{env.DOCKER_USERNAME}}",
-        "password": "{{env.DOCKER_PASSWORD}}"
+        "username":  process.env.DOCKER_USERNAME,
+        "password": process.env.DOCKER_PASSWORD
       }
     ]
