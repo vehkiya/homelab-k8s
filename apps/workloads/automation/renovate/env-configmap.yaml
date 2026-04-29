@@ -17,7 +17,15 @@ data:
   RENOVATE_ONBOARDING_CONFIG: |-
     {
       "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-      "extends": ["config:recommended", ":semanticCommits", "mergeConfidence:all-badges", "helpers:pinGitHubActionDigests"]
+      "extends": ["config:recommended", ":semanticCommits", "mergeConfidence:all-badges"]
     }
   RENOVATE_REPOSITORY_CACHE: "enabled"
-  RENOVATE_DETECT_HOST_RULES_FROM_ENV: "true"
+  RENOVATE_HOST_RULES: |-
+    [
+      {
+        "hostType": "docker",
+        "matchHost": "docker.io",
+        "username": "{{env.DOCKER_USERNAME}}",
+        "password": "{{env.DOCKER_PASSWORD}}"
+      }
+    ]
