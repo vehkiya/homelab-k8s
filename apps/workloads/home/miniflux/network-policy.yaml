@@ -1,0 +1,28 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: miniflux-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: miniflux
+  egress:
+    # ------------------------------------------------------------------
+    # 1. Postgres
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+
+    # ------------------------------------------------------------------
+    # 2. PUBLIC INTERNET
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
