@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: home
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: miniflux
+
+# List of resources to include
+resources:
+  - secrets.yaml
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - network-policy.yaml
+
+images:
+  - name: ghcr.io/miniflux/miniflux
+    newTag: 2.2.19-distroless@sha256:c752402519127b6eb4081bace4bea3ca89465b2c7e3f354b7be020a822e3d8a3

@@ -1,0 +1,52 @@
+# 3-mealie-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: miniflux-app
+  labels:
+    app: miniflux
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: miniflux
+  template:
+    metadata:
+      labels:
+        app: miniflux
+        networking/expose-web-ui: "true"
+    spec:
+      containers:
+        - name: miniflux
+          image: ghcr.io/miniflux/miniflux
+          envFrom:
+            - configMapRef:
+                name: miniflux-config
+            - secretRef:
+                name: miniflux-secrets
+          ports:
+            - containerPort: 8080
+              name: web-ui
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1026
