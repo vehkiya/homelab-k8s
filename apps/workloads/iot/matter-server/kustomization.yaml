@@ -14,6 +14,6 @@ resources:
   - http-route.yaml
 images:
   - name: ghcr.io/matter-js/matterjs-server
-    newTag: 0.6.3@sha256:2998ea719750f05e83b0163beff343d59c1ddd80393e0d7decd64e31691ef6d3
+    newTag: 0.6.4@sha256:eea6c89cf39d975c323c394f3a4897a1cc34935c2bf8941cf9a70f397f83007c
   - name: busybox
     newTag: 1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
