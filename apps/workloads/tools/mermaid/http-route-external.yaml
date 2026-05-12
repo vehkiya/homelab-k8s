@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mermaid-route-external
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: traefik
+  hostnames:
+    - "mermaid.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080
