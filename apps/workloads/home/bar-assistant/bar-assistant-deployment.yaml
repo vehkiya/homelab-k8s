@@ -39,6 +39,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: bar-assistant-config
+            - secretRef:
+                name: bar-assistant-secrets
           # Map MEILI_MASTER_KEY from Secret explicitly to MEILISEARCH_KEY env var
           env:
             - name: MEILISEARCH_KEY
@@ -46,16 +48,6 @@ spec:
                 secretKeyRef:
                   name: meilisearch-kubernetes-master-key
                   key: MEILI_MASTER_KEY
-            - name: AUTHELIA_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: bar-assistant-secrets
-                  key: OIDC_CLIENT_SECRET
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: bar-assistant-secrets
-                  key: REDIS_PASSWORD
             - name: REDIS_HOST
               value: redis-bar-assistant
           ports:
