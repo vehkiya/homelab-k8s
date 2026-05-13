@@ -26,6 +26,13 @@ spec:
     - matches:
         - path:
             type: PathPrefix
+            value: /uploads
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
             value: /
       backendRefs:
         - name: salt-rim

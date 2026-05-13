@@ -221,6 +221,7 @@ identity_providers:
         pre_configured_consent_duration: "30 days"
         redirect_uris:
           - "https://bar.kerrlab.app/oauth/callback"
+        claims_policy: "with_email"
         scopes:
           - "openid"
           - "email"
@@ -232,7 +233,7 @@ identity_providers:
         grant_types:
           - "authorization_code"
         userinfo_signed_response_alg: "none"
-        token_endpoint_auth_method: "client_secret_basic"
+        token_endpoint_auth_method: "client_secret_post"
       # ---- === Mealie === ----
       - client_id: "mealie"
         client_name: "Mealie"
