@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-mcp
+  namespace: ai
+  labels:
+    app: k8s-mcp
+spec:
+  selector:
+    app: k8s-mcp
+  ports:
+    - port: 8080
+      targetPort: http-api
+      protocol: TCP

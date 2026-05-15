@@ -1,0 +1,25 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: k8s-mcp-policy
+  namespace: ai
+spec:
+  endpointSelector:
+    matchLabels:
+      app: k8s-mcp
+  egress:
+    # Allow egress to the Kubernetes API server for the MCP to function
+    - toEntities:
+        - kube-apiserver
+  ingress:
+    - fromEndpoints:
+        - matchExpressions:
+            - key: "k8s:app.kubernetes.io/name"
+              operator: "In"
+              values:
+                - "n8n"
+                - "n8n-worker"
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"

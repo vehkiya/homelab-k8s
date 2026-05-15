@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-mcp
+  namespace: ai
+  labels:
+    app: k8s-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-mcp
+  template:
+    metadata:
+      labels:
+        networking/expose-http-api: "true"
+        app: k8s-mcp
+    spec:
+      serviceAccountName: k8s-mcp
+      containers:
+        - name: mcp-server
+          image: ghcr.io/containers/kubernetes-mcp-server:v0.0.60
+          ports:
+            - containerPort: 8080
+              name: http-api
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"

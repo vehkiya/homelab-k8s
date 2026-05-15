@@ -100,6 +100,15 @@ spec:
         - ports:
             - port: "8080"
               protocol: TCP
+    # === Allow egress to k8s-mcp ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ai
+            app: k8s-mcp
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
     # === Allow Internet Access ===
     - toEntities:
         - "world"
