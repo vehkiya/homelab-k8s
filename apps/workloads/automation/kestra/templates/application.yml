@@ -1,0 +1,30 @@
+kestra:
+  server:
+    basic-auth:
+      enabled: true
+  repository:
+    type: postgres
+  queue:
+    type: postgres
+  storage:
+    type: minio
+    minio:
+      endpoint: s3.kerrlab.app
+      port: 443
+      access-key: ${MINIO_ACCESS_KEY}
+      secret-key: ${MINIO_SECRET_KEY}
+      bucket: kestra
+      region: us-east-1
+      secure: true
+  jdbc:
+    postgres:
+      url: jdbc:postgresql://fortress.kerrlab.app:15432/kestra
+      username: kestra_user
+      password: ${DB_PASSWORD}
+
+datasources:
+  postgres:
+    url: jdbc:postgresql://fortress.kerrlab.app:15432/kestra
+    username: kestra_user
+    password: ${DB_PASSWORD}
+    driverClassName: org.postgresql.Driver
