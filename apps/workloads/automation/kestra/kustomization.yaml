@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: automation
+
+resources:
+  - secrets.yaml
+  - webserver.yaml
+  - executor.yaml
+  - worker.yaml
+  - hpa.yaml
+  - http-route.yaml
+  - network-policy.yaml
+
+configMapGenerator:
+  - name: kestra-config
+    files:
+      - application.yml=templates/application.yml
+
+
+images:
+  - name: kestra/kestra
+    newTag: v1.3.16@sha256:6a4cc70ba305b63dc5cfc0a2d0f44127805878b5a4a4b533646697abf35b8829

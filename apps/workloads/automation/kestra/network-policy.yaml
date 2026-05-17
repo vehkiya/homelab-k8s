@@ -1,0 +1,37 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kestra-policy
+  namespace: automation
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - kestra
+
+  egress:
+    # === Allow egress to NAS PostgreSQL ===
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    # === Allow egress to s3.kerrlab.app (S3) ===
+    - toFQDNs:
+        - matchName: "s3.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    # === Allow Internet Access for plugins and flows ===
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "80"
+              protocol: TCP

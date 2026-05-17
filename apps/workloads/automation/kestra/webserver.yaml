@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kestra-webserver
+  namespace: automation
+  labels:
+    app.kubernetes.io/name: kestra
+    app.kubernetes.io/component: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kestra
+      app.kubernetes.io/component: webserver
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kestra
+        app.kubernetes.io/component: webserver
+        networking/expose-web-ui: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - webserver
+                topologyKey: kubernetes.io/hostname
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: webserver
+          image: kestra/kestra:latest
+          args:
+            - server
+            - webserver
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: MICRONAUT_CONFIG_FILES
+              value: /app/conf/application.yml
+          envFrom:
+            - secretRef:
+                name: kestra-credentials
+          ports:
+            - name: web-ui
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1024Mi
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
+          volumeMounts:
+            - name: config
+              mountPath: /app/conf/application.yml
+              subPath: application.yml
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: kestra-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kestra-webserver
+  namespace: automation
+  labels:
+    app.kubernetes.io/name: kestra
+    app.kubernetes.io/component: webserver
+spec:
+  ports:
+    - name: web-ui
+      port: 8080
+      targetPort: web-ui
+  selector:
+    app.kubernetes.io/name: kestra
+    app.kubernetes.io/component: webserver
