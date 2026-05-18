@@ -61,10 +61,10 @@ spec:
               protocol: TCP
             - port: "18080"
               protocol: TCP
-    # === Allow access to fortress.kerrlab.app ===
+    # === Allow egress to s3.kerrlab.app ===
     - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
+        - matchName: "s3.kerrlab.app"
       toPorts:
         - ports:
-            - port: "8333"
+            - port: "443"
               protocol: TCP
