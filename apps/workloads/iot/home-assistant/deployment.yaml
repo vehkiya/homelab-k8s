@@ -29,11 +29,11 @@ spec:
               subPath: config
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: "25m"
+              memory: "32Mi"
       containers:
         - name: homeassistant
           image: ghcr.io/home-operations/home-assistant
@@ -49,11 +49,11 @@ spec:
               subPath: media
           resources:
             requests:
-              cpu: 10m
-              memory: 256Mi
+              cpu: "10m"
+              memory: "128Mi"
             limits:
-              cpu: 1000m
-              memory: 1024Mi
+              cpu: "500m"
+              memory: "512Mi"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

@@ -62,11 +62,11 @@ spec:
               mountPath: /etc/ntfy
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: "50m"
+              memory: "64Mi"
       containers:
         - name: ntfy
           image: binwiederhier/ntfy
@@ -84,11 +84,11 @@ spec:
               mountPath: /var/cache/ntfy
           resources:
             requests:
-              cpu: 10m
-              memory: 64Mi
+              cpu: "10m"
+              memory: "32Mi"
             limits:
-              memory: 256Mi
-              cpu: 1000m
+              memory: "128Mi"
+              cpu: "500m"
       volumes:
         - name: config-template
           configMap:

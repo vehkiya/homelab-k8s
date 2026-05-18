@@ -52,11 +52,11 @@ spec:
               mountPath: /app/wwwroot/custom_resources
           resources:
             requests:
-              cpu: 10m
-              memory: 64Mi
+              cpu: "10m"
+              memory: "32Mi"
             limits:
-              cpu: 500m
-              memory: 512Mi
+              cpu: "250m"
+              memory: "256Mi"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:

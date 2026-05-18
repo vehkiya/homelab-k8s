@@ -31,11 +31,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 10m
-              memory: 64Mi
+              cpu: "10m"
+              memory: "32Mi"
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: "50m"
+              memory: "64Mi"
           volumeMounts:
             - name: config
               mountPath: /etc/oauth2-proxy

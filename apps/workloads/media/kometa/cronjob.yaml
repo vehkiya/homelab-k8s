@@ -136,10 +136,10 @@ spec:
               resources:
                 requests:
                   cpu: "10m"
-                  memory: "64Mi"
+                  memory: "32Mi"
                 limits:
-                  cpu: "50m"
-                  memory: "128Mi"
+                  cpu: "25m"
+                  memory: "64Mi"
               volumeMounts:
                 - name: config
                   mountPath: /config
@@ -159,11 +159,11 @@ spec:
               args: ["--run", "--read-only-config"]
               resources:
                 limits:
-                  cpu: 500m
-                  memory: 512Mi
+                  cpu: "250m"
+                  memory: "256Mi"
                 requests:
-                  cpu: 500m
-                  memory: 512Mi
+                  cpu: "250m"
+                  memory: "256Mi"
               securityContext:
                 allowPrivilegeEscalation: false
                 seccompProfile:

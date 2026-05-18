@@ -33,11 +33,11 @@ spec:
             privileged: true
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: "25m"
+              memory: "32Mi"
       containers:
         - image: ghcr.io/matter-js/matterjs-server
           name: matter-server
@@ -53,11 +53,11 @@ spec:
               mountPath: /data
           resources:
             requests:
-              cpu: 10m
-              memory: 128Mi
+              cpu: "10m"
+              memory: "64Mi"
             limits:
-              cpu: 500m
-              memory: 512Mi
+              cpu: "250m"
+              memory: "256Mi"
           ports:
             - containerPort: 5580
               name: web-ui

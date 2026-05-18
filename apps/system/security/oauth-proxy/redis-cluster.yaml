@@ -11,11 +11,11 @@ spec:
     imagePullPolicy: IfNotPresent
     resources:
       requests:
-        cpu: 101m
-        memory: 128Mi
+        cpu: "50m"
+        memory: "64Mi"
       limits:
-        cpu: 101m
-        memory: 128Mi
+        cpu: "50m"
+        memory: "64Mi"
     # ---=== Secret === ---
     redisSecret:
       name: oauth-proxy-secrets

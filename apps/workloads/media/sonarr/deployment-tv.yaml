@@ -32,11 +32,11 @@ spec:
               mountPath: /config
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 100m
-              memory: 64Mi
+              cpu: "50m"
+              memory: "32Mi"
       containers:
         - name: sonarr
           image: ghcr.io/home-operations/sonarr
@@ -77,11 +77,11 @@ spec:
             failureThreshold: 3
           resources:
             requests:
-              cpu: 10m
-              memory: 250Mi
+              cpu: "10m"
+              memory: "125Mi"
             limits:
-              cpu: 1000m
-              memory: 1Gi
+              cpu: "500m"
+              memory: "512Mi"
           volumeMounts:
             - name: media
               mountPath: /data

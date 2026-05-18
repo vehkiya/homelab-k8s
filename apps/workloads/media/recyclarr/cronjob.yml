@@ -23,10 +23,10 @@ spec:
           resources:
             requests:
               cpu: "10m"
-              memory: "64Mi"
+              memory: "32Mi"
             limits:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "125m"
+              memory: "128Mi"
           containers:
             - name: recyclarr
               image: ghcr.io/recyclarr/recyclarr

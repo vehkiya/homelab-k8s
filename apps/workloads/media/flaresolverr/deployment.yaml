@@ -52,11 +52,11 @@ spec:
             failureThreshold: 3
           resources:
             requests:
-              cpu: "100m"
-              memory: "256Mi"
+              cpu: "50m"
+              memory: "128Mi"
             limits:
-              cpu: "1"
-              memory: "512Mi"
+              cpu: "500m"
+              memory: "256Mi"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:

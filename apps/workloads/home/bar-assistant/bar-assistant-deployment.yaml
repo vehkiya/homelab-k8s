@@ -28,11 +28,11 @@ spec:
               mountPath: /var/www/cocktails/storage/bar-assistant
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 100m
-              memory: 64Mi
+              cpu: "50m"
+              memory: "32Mi"
       containers:
         - name: bar-assistant-server
           image: ghcr.io/karlomikus/barassistant
@@ -58,11 +58,11 @@ spec:
               mountPath: /var/www/cocktails/storage/bar-assistant
           resources:
             requests:
-              cpu: 10m
-              memory: 256Mi
+              cpu: "10m"
+              memory: "128Mi"
             limits:
-              cpu: 500m
-              memory: 1Gi
+              cpu: "250m"
+              memory: "512Mi"
       volumes:
         - name: bar-data
           persistentVolumeClaim:

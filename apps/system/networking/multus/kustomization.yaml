@@ -68,7 +68,7 @@ patches:
               - name: kube-multus
                 resources:
                   limits:
-                    memory: 2560Mi
+                    memory: "1280Mi"
     target:
       kind: DaemonSet
       name: kube-multus-ds

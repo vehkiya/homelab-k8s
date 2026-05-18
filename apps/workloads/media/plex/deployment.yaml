@@ -81,12 +81,12 @@ spec:
           resources:
             # only rune on nodes that have Intel GPU
             requests:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: "500m"
+              memory: "1Gi"
               gpu.intel.com/i915: "1"
             limits:
-              cpu: 8000m
-              memory: 8Gi
+              cpu: "4000m"
+              memory: "4Gi"
               gpu.intel.com/i915: "1"
         - name: backup-sidecar
           image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
@@ -109,11 +109,11 @@ spec:
               mountPath: /backups
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "50m"
+              memory: "32Mi"
+              cpu: "25m"
             limits:
-              memory: "128Mi"
-              cpu: "200m"
+              memory: "64Mi"
+              cpu: "100m"
       dnsConfig:
         options:
           - name: ndots

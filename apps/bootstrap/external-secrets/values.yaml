@@ -1,25 +1,25 @@
 resources:
   requests:
-    cpu: 10m
-    memory: 32Mi
+    cpu: "10m"
+    memory: "16Mi"
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: "50m"
+    memory: "64Mi"
 
 webhook:
   resources:
     requests:
-      cpu: 10m
-      memory: 32Mi
+      cpu: "10m"
+      memory: "16Mi"
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: "50m"
+      memory: "64Mi"
 
 certController:
   resources:
     requests:
-      cpu: 10m
-      memory: 32Mi
+      cpu: "10m"
+      memory: "16Mi"
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: "50m"
+      memory: "64Mi"

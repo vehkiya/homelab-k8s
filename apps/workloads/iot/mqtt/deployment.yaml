@@ -42,11 +42,11 @@ spec:
               mountPath: /mosquitto-init/config
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: "25m"
+              memory: "32Mi"
       containers:
         - name: mosquitto
           image: eclipse-mosquitto
@@ -60,11 +60,11 @@ spec:
               mountPath: /mosquitto/data
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 50m
-              memory: 128Mi
+              cpu: "25m"
+              memory: "64Mi"
           readinessProbe:
             tcpSocket:
               port: 1883

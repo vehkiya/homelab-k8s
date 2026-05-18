@@ -56,11 +56,11 @@ spec:
                 name: kestra-credentials
           resources:
             requests:
-              cpu: 500m
-              memory: 1024Mi
+              cpu: "250m"
+              memory: "512Mi"
             limits:
-              cpu: 1000m
-              memory: 2048Mi
+              cpu: "500m"
+              memory: "1Gi"
           volumeMounts:
             - name: config
               mountPath: /app/conf/application.yml

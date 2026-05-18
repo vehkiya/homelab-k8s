@@ -19,11 +19,11 @@ spec:
           image: ghcr.io/thelounge/thelounge
           resources:
             requests:
-              cpu: 10m
-              memory: 64Mi
+              cpu: "10m"
+              memory: "32Mi"
             limits:
-              cpu: 100m
-              memory: 256Mi
+              cpu: "50m"
+              memory: "128Mi"
           ports:
             - name: web-ui
               containerPort: 9000

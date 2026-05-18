@@ -58,11 +58,11 @@ spec:
               mountPath: "/tmp/renovate/cache"
           resources:
             requests:
-              cpu: 500m
-              memory: 512Mi
+              cpu: "250m"
+              memory: "256Mi"
             limits:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: "500m"
+              memory: "1Gi"
       volumes:
         - name: cache-volume
           emptyDir: {}

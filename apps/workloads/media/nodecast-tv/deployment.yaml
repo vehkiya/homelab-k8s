@@ -67,12 +67,12 @@ spec:
               mountPath: /app/data
           resources:
             requests:
-              cpu: 10m
-              memory: 128Mi
+              cpu: "10m"
+              memory: "64Mi"
               gpu.intel.com/i915: "1"
             limits:
-              cpu: 500m
-              memory: 500Mi
+              cpu: "250m"
+              memory: "250Mi"
               gpu.intel.com/i915: "1"
           securityContext:
             allowPrivilegeEscalation: false

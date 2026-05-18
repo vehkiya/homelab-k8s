@@ -86,11 +86,11 @@ spec:
                 - ALL
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: "25m"
+              memory: "32Mi"
       containers:
         - name: authelia
           image: ghcr.io/authelia/authelia
@@ -107,11 +107,11 @@ spec:
                 name: authelia-secrets
           resources:
             requests:
-              cpu: 100m
-              memory: 64Mi
+              cpu: "50m"
+              memory: "32Mi"
             limits:
-              cpu: 1000m
-              memory: 256Mi
+              cpu: "500m"
+              memory: "128Mi"
           volumeMounts:
             - name: config-volume
               mountPath: /config

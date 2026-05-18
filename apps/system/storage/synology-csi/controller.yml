@@ -85,11 +85,11 @@ spec:
         - name: csi-provisioner
           resources:
             requests:
-              cpu: 10m
-              memory: 20Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 100m
-              memory: 100Mi
+              cpu: "50m"
+              memory: "50Mi"
           securityContext:
             privileged: true
             capabilities:
@@ -111,11 +111,11 @@ spec:
         - name: csi-attacher
           resources:
             requests:
-              cpu: 10m
-              memory: 20Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 100m
-              memory: 100Mi
+              cpu: "50m"
+              memory: "50Mi"
           securityContext:
             privileged: true
             capabilities:
@@ -135,11 +135,11 @@ spec:
         - name: csi-resizer
           resources:
             requests:
-              cpu: 10m
-              memory: 20Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 100m
-              memory: 100Mi
+              cpu: "50m"
+              memory: "50Mi"
           securityContext:
             privileged: true
             capabilities:
@@ -159,11 +159,11 @@ spec:
         - name: csi-plugin
           resources:
             requests:
-              cpu: 10m
-              memory: 20Mi
+              cpu: "10m"
+              memory: "16Mi"
             limits:
-              cpu: 500m
-              memory: 250Mi
+              cpu: "250m"
+              memory: "125Mi"
           securityContext:
             privileged: true
             capabilities:

@@ -130,11 +130,11 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 10m
-              memory: 64Mi
+              cpu: "10m"
+              memory: "32Mi"
             limits:
-              cpu: 50m
-              memory: 128Mi
+              cpu: "25m"
+              memory: "64Mi"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -161,11 +161,11 @@ spec:
               mountPath: /config
           resources:
             requests:
-              cpu: 100m
-              memory: 256Mi
+              cpu: "50m"
+              memory: "128Mi"
             limits:
-              cpu: 1000m
-              memory: 1024Mi
+              cpu: "500m"
+              memory: "512Mi"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
