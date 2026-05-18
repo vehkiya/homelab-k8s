@@ -12,6 +12,11 @@ defaultSettings:
   disableSchedulingOnControlPlane: false
   # Set to 15% for smaller disks
   storageMinimalAvailablePercentage: 15
+  # Limit CPU impact on N100s during rebuilding
+  concurrentReplicaRebuildPerNodeLimit: 1
+  # Default Backup Target
+  backupTarget: "s3://longhorn-backups@us-east-1/"
+  backupTargetCredentialSecret: "s3-backup-secret"
 
 image:
   longhorn:

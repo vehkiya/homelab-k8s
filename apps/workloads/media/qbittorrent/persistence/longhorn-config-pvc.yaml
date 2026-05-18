@@ -3,6 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app: qbittorrent
+    recurring-job.longhorn.io/source: "enabled"
+    recurring-job.longhorn.io/daily-s3-backup: "enabled"
   name: qbittorrent-config-longhorn-pvc
 spec:
   accessModes:

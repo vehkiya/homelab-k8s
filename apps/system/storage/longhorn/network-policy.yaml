@@ -61,3 +61,10 @@ spec:
               protocol: TCP
             - port: "18080"
               protocol: TCP
+    # === Allow access to fortress.kerrlab.app ===
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "8333"
+              protocol: TCP
