@@ -1,12 +1,9 @@
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: n8n-webhook-processor
-spec:
-  behavior:
+- op: add
+  path: /spec/behavior
+  value:
     scaleDown:
       stabilizationWindowSeconds: 600
       policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 120
+      - type: Pods
+        value: 1
+        periodSeconds: 120
