@@ -14,6 +14,8 @@ resources:
   - longhorn-http-route.yaml
   - network-policy.yaml
   - storageclass-retain.yaml
+  - s3-backup-secret.yaml
+  - backup-job.yaml
 
 patches:
   - path: patch-longhorn-ui-deployment.yaml
