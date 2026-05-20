@@ -19,4 +19,4 @@ configMapGenerator:
 
 images:
   - name: kestra/kestra
-    newTag: v1.3.16@sha256:6a4cc70ba305b63dc5cfc0a2d0f44127805878b5a4a4b533646697abf35b8829
+    newTag: v1.3.18@sha256:133901701c4552de2f0ad9d869c81925a0fe453b1508bf0f9711d925e78c8de9
