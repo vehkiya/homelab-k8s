@@ -15,6 +15,6 @@ resources:
   - http-route.yaml
 images:
   - name: busybox
-    newTag: 1.37@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
+    newTag: 1.38@sha256:b6762ddf4a50aabb5f4d21aa6f447d05d5633fb09f09c08b33f22356a2f98be0
   - name: ghcr.io/koenkk/zigbee2mqtt
     newTag: 2.10.1@sha256:67c26dcf8346aced02fe1380a6afd1b57268bcef10faae3f6057c13d5d3dfa80
