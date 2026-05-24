@@ -25,4 +25,4 @@ data:
   SMTP_HOST: "smtp.protonmail.ch"
   SMTP_PORT: "587"
   OPENAI_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/openai/"
-  OPENAI_MODEL: "gemini-3-flash-preview"
+  OPENAI_MODEL: "gemini-3.5-flash"
