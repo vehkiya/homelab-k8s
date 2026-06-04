@@ -10,7 +10,8 @@ spec:
         revision: HEAD
         directories:
           - path: apps/workloads/automation/*
-          - path: '!apps/workloads/automation/kestra'
+          - exclude: true
+            path: apps/workloads/automation/kestra
   template:
     metadata:
       name: "{{path.basename}}"
