@@ -4,7 +4,7 @@ metadata:
   name: ntfy-data
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: longhorn-retain
   resources:
     requests:

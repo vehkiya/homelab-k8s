@@ -102,7 +102,7 @@ ingress:
 # ----- Persistence -----
 persistence:
   enabled: true
-  accessModes: ["ReadWriteOnce"]
+  accessModes: ["ReadWriteMany"]
   size: 10Gi
   storageClassName: "longhorn"
 
