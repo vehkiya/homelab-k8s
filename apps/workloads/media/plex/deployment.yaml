@@ -20,10 +20,12 @@ spec:
           resourceClaimTemplateName: intel-gpu-claim-template
       affinity:
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
+          # NOTE: Hard-pinned to 'performance' nodes because Kubernetes DRA (Dynamic Resource Allocation)
+          # allocator ignores soft preferredDuringScheduling constraints during device allocation.
+          # Revert to preferredDuringScheduling once DRA supports soft constraints.
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
                   - key: node-type
                     operator: In
                     values:
