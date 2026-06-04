@@ -6,7 +6,7 @@ metadata:
   name: bazarr-config-longhorn-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi

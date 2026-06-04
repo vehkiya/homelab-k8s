@@ -6,7 +6,7 @@ metadata:
   name: sonarr-tv-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 4Gi
