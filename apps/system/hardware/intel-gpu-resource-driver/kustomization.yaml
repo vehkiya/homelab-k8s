@@ -30,6 +30,9 @@ helmCharts:
       namespaceOverride: inteldeviceplugins-system
       kubeletPlugin:
         cdiRoot: /var/cdi/static
+        privileged: true
+        healthMonitoring:
+          enabled: false
 
 patches:
   - patch: |-
