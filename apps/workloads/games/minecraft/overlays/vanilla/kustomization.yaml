@@ -121,6 +121,11 @@ patches:
             containers:
               # Main Container
               - name: minecraft
+                resources:
+                  requests:
+                    memory: "10Gi"
+                  limits:
+                    memory: "14Gi"
                 volumeMounts:
                   - name: backups
                     mountPath: /nfs
