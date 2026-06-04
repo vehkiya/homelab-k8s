@@ -21,11 +21,11 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 50
+            - weight: 100
               preference:
                 matchExpressions:
                   - key: node-type
-                    operator: In
+                    operator: NotIn
                     values:
                       - performance
       containers:
