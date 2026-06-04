@@ -15,6 +15,19 @@ spec:
         app: nodecast-tv
         networking/expose-web-ui: "true"
     spec:
+      resourceClaims:
+        - name: intel-gpu
+          resourceClaimTemplateName: intel-gpu-claim-template
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - performance
       containers:
         - name: nodecast-tv
           image: ghcr.io/technomancer702/nodecast-tv
@@ -69,11 +82,11 @@ spec:
             requests:
               cpu: "10m"
               memory: "64Mi"
-              gpu.intel.com/i915: "1"
             limits:
               cpu: "250m"
               memory: "250Mi"
-              gpu.intel.com/i915: "1"
+            claims:
+              - name: intel-gpu
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
