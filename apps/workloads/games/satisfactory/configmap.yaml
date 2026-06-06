@@ -4,5 +4,5 @@ metadata:
   name: satisfactory-config
   namespace: games
 data:
-  STEAMBETA: "true"
+  STEAMBETA: "false"
   TZ: "Europe/Chisinau"
