@@ -6,7 +6,7 @@ namespace: networking
 helmCharts:
   - name: keda
     repo: https://kedacore.github.io/charts
-    version: 2.20.0
+    version: 2.20.1
     releaseName: keda
     namespace: networking
   - name: keda-add-ons-http
