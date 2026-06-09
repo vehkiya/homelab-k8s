@@ -13,7 +13,7 @@ data:
   DB_POSTGRESDB_HOST: "fortress.kerrlab.app"
   DB_POSTGRESDB_PORT: "15432"
   DB_POSTGRESDB_USER: "n8n_user"
-  DB_POSTGRESDB_POOL_MAX: "30"
+  DB_POSTGRESDB_POOL_MAX: "10"
   TZ: "Europe/Chisinau"
   N8N_PROTOCOL: "https"
   N8N_HOST: "n8n.kerrlab.app"
