@@ -11,8 +11,8 @@ spec:
     imagePullPolicy: IfNotPresent
     resources:
       requests:
-        cpu: 101m
-        memory: 128Mi
+        cpu: 10m
+        memory: 16Mi
       limits:
         cpu: 101m
         memory: 128Mi
@@ -36,6 +36,13 @@ spec:
     redisSecret:
       name: authelia-secrets
       key: REDIS_PASSWORD
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
   # ---=== Pod Security === ---
   podSecurityContext:
     runAsUser: 1000

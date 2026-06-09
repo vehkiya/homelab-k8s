@@ -36,7 +36,7 @@ ipv6NativeRoutingCIDR: "fdf0:10:244::/48"
 bpf:
   datapathMode: netkit
   tproxy: false
-  preallocateMaps: true
+  preallocateMaps: false
   hostLegacyRouting: false
   masquerade: true
   mapDynamicSizeRatio: 0.025
@@ -73,12 +73,32 @@ hubble:
   enabled: false
 
 rollOutCiliumPods: true
+
+# resources configuration for cilium-agent daemonset
+resources:
+  requests:
+    cpu: 100m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 8Gi
+
+# resources configuration for cilium-envoy daemonset
+envoy:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
 operator:
   rollOutPods: true
   resources:
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 64Mi
     limits:
       cpu: 100m
       memory: 128Mi

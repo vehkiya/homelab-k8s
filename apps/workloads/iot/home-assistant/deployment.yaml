@@ -49,11 +49,11 @@ spec:
               subPath: media
           resources:
             requests:
-              cpu: "10m"
-              memory: "128Mi"
+              cpu: "50m"
+              memory: "768Mi"
             limits:
-              cpu: "500m"
-              memory: "1024Mi"
+              cpu: "1000m"
+              memory: "2048Mi"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

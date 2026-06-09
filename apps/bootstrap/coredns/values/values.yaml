@@ -70,11 +70,21 @@ servers:
           max_concurrent 1000
       - name: cache
         parameters: 600
+        configBlock: |-
+          prefetch 10 1m 50%
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: loop
       - name: reload
       - name: loadbalance
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
 
 # --------------------------------------------------------------------------
 # This will create the db.kerrlab.app zone file in the same ConfigMap
