@@ -19,6 +19,8 @@ resources:
   - middlewares.yaml
   - redis.yaml
   - redis-network-policy.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
 
 images:
   - name: busybox

@@ -1,0 +1,63 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bar-app-external-route
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: traefik
+  hostnames:
+    - "bar.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: bar-assistant-rate-limit
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /storage
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: bar-assistant-rate-limit
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /uploads
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: bar-assistant-rate-limit
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: bar-assistant-rate-limit
+      backendRefs:
+        - name: salt-rim
+          port: 8080
