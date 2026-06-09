@@ -26,6 +26,10 @@ webhookProcessor:
   replicaCount: 2
   # Disable webhook processing in main process when webhook processors are enabled
   disableProductionWebhooksOnMainProcess: true
+  # Override NODE_OPTIONS memory limit for webhook processor (512Mi limit)
+  extraEnv:
+    - name: NODE_OPTIONS
+      value: --max-old-space-size=400
 
 # ----- Multi-main (optional, requires queue mode) -----
 multiMain:
@@ -116,24 +120,24 @@ resources:
   main:
     requests:
       cpu: "100m"
-      memory: "256Mi"
+      memory: "384Mi"
     limits:
       cpu: "500m"
-      memory: "512Mi"
+      memory: "1024Mi"
   worker:
     requests:
       cpu: "100m"
       memory: "256Mi"
     limits:
       cpu: "500m"
-      memory: "512Mi"
+      memory: "1024Mi"
   webhookProcessor:
     requests:
       cpu: "50m"
-      memory: "128Mi"
+      memory: "256Mi"
     limits:
       cpu: "250m"
-      memory: "256Mi"
+      memory: "512Mi"
 
 # ----- Node placement -----
 nodeSelector: {}
@@ -304,6 +308,9 @@ executions:
 # ----- App config -----
 config:
   timezone: Europe/Chisinau
+  extraEnv:
+    - name: NODE_OPTIONS
+      value: --max-old-space-size=800
   extraEnvFrom:
     - configMapRef:
         name: n8n-config

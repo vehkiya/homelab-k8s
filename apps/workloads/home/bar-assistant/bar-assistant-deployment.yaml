@@ -50,6 +50,14 @@ spec:
                   key: MEILI_MASTER_KEY
             - name: REDIS_HOST
               value: redis-bar-assistant
+            - name: PHP_FPM_PM_CONTROL
+              value: "ondemand"
+            - name: PHP_FPM_PM_MAX_CHILDREN
+              value: "5"
+            - name: PHP_MEMORY_LIMIT
+              value: "192M"
+            - name: PHP_OPCACHE_MEMORY_CONSUMPTION
+              value: "64"
           ports:
             - containerPort: 8080
               name: http-api

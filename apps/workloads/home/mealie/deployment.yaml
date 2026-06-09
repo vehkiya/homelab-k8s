@@ -45,10 +45,10 @@ spec:
               name: web-ui
           resources:
             limits:
-              memory: "512Mi"
+              memory: "768Mi"
               cpu: "500m"
             requests:
-              memory: "128Mi"
+              memory: "384Mi"
               cpu: "125m"
           securityContext:
             runAsNonRoot: true

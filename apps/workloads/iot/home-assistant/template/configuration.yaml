@@ -77,3 +77,9 @@ homeassistant:
     - /media
   media_dirs:
     llmvision: /config/media/llmvision
+
+# Optimized Recorder configuration to reduce disk IO on NFS
+recorder:
+  purge_keep_days: 7
+  commit_interval: 30
+
