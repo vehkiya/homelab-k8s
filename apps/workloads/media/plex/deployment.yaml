@@ -86,8 +86,8 @@ spec:
           resources:
             # only rune on nodes that have Intel GPU
             requests:
-              cpu: "100m"
-              memory: "256Mi"
+              cpu: "1000m"
+              memory: "4Gi"
             limits:
               cpu: "4000m"
               memory: "12Gi"
