@@ -57,14 +57,18 @@ spec:
             httpGet:
               path: /healthcheck
               port: http-api
-            initialDelaySeconds: 15
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
           readinessProbe:
             httpGet:
               path: /healthcheck
               port: http-api
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
           volumeMounts:
             - name: bar-data
               mountPath: /var/www/cocktails/storage/bar-assistant
