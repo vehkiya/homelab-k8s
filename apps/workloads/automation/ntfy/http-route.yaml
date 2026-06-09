@@ -15,6 +15,12 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: ntfy-rate-limit
       backendRefs:
         - name: ntfy
           port: 80

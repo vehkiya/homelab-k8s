@@ -17,3 +17,11 @@ spec:
         - ports:
             - port: "7700"
               protocol: TCP
+    # === Allow access from Traefik (external route) ===
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": traefik
+      toPorts:
+        - ports:
+            - port: "7700"
+              protocol: TCP

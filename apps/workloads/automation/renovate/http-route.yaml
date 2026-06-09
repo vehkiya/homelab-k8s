@@ -13,6 +13,12 @@ spec:
         - path:
             type: PathPrefix
             value: /webhook
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: renovate-rate-limit
       backendRefs:
         - name: renovate-server
           port: 8080

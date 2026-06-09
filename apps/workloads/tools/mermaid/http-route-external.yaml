@@ -13,6 +13,12 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: mermaid-rate-limit
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking

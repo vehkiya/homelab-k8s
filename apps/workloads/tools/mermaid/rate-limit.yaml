@@ -1,0 +1,9 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: mermaid-rate-limit
+spec:
+  rateLimit:
+    average: 20
+    burst: 50
+    period: "1s"

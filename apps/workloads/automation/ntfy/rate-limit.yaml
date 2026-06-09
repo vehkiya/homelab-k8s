@@ -1,0 +1,9 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: ntfy-rate-limit
+spec:
+  rateLimit:
+    average: 30
+    burst: 60
+    period: "1s"
