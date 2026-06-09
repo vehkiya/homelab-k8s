@@ -24,6 +24,6 @@ generatorOptions:
 
 images:
   - name: ghcr.io/home-operations/home-assistant
-    newTag: 2026.6.1@sha256:fdc0bbd1bb93218b4726b3dc6909a02cf036ac0ac28c52c717d755a227255b70
+    newTag: 2026.6.2@sha256:124cfd97bf15112d770cd60d1ded0eb8739fb3123b9a32bf85978d4cfa27b1a3
   - name: hairyhenderson/gomplate
     newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
