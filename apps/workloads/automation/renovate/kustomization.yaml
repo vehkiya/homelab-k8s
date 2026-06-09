@@ -9,6 +9,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - rate-limit.yaml
 
 images:
   - name: ghcr.io/mend/renovate-ce

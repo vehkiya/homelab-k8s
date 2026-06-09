@@ -6,6 +6,7 @@ resources:
   - service.yaml
   - http-route.yaml
   - http-route-external.yaml
+  - rate-limit.yaml
   - httpscaledobject.yaml
   - network-policy.yaml
 images:

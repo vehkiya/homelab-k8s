@@ -42,4 +42,9 @@ spec:
           extensionRef:
             group: "traefik.io"
             kind: "Middleware"
+            name: "whoami-rate-limit"
+        - type: ExtensionRef
+          extensionRef:
+            group: "traefik.io"
+            kind: "Middleware"
             name: "auth-whoami"

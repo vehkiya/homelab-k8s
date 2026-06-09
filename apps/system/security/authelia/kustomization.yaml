@@ -7,6 +7,7 @@ resources:
   - oidc-secrets.yaml
   - daemonset.yaml
   - http-route.yaml
+  - rate-limit.yaml
   - service.yaml
   - network-policy.yaml
   - redis-cluster.yaml

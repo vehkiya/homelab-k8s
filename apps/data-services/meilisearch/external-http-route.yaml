@@ -1,15 +1,13 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: plex-ui-route
+  name: meilisearch-external-route
 spec:
   parentRefs:
-    - name: internal-gateway
-      namespace: traefik
     - name: external-gateway
       namespace: traefik
   hostnames:
-    - "plex.kerrlab.app"
+    - "meilisearch.kerrlab.app"
   rules:
     - matches:
         - path:
@@ -20,7 +18,7 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: plex-rate-limit
+            name: meilisearch-rate-limit
       backendRefs:
-        - name: plex-ui
-          port: 32400
+        - name: meilisearch-kubernetes
+          port: 7700

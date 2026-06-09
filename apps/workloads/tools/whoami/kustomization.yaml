@@ -5,6 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - rate-limit.yaml
   - httpscaledobject.yaml
   - network-policy.yaml
 images:

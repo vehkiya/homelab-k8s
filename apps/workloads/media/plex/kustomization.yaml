@@ -6,6 +6,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - rate-limit.yaml
   - network-policy.yaml
   - restore-job.yaml
 
