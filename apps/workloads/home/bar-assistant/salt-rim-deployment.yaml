@@ -18,6 +18,18 @@ spec:
         app: salt-rim
         networking/expose-web-ui: "true"
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - bar-assistant
+                topologyKey: kubernetes.io/hostname
       containers:
         - name: salt-rim-frontend
           image: ghcr.io/karlomikus/salt-rim

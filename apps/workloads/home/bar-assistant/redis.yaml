@@ -10,10 +10,10 @@ spec:
     resources:
       requests:
         cpu: "50m"
-        memory: "64Mi"
+        memory: "128Mi"
       limits:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: "200m"
+        memory: "256Mi"
     # ---=== Secret === ---
     redisSecret:
       name: bar-assistant-secrets
