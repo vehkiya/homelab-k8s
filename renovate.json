@@ -86,7 +86,7 @@
       "matchPackageNames": [
         "ghcr.io/koenkk/zigbee2mqtt",
         "eclipse-mosquitto",
-        "ghcr.io/home-assistant-libs/python-matter-server",
+        "ghcr.io/matter-js/matterjs-server",
         "ghcr.io/home-operations/home-assistant"
       ]
     },
@@ -154,6 +154,10 @@
         "every weekend"
       ],
       "description": "Group all GitHub Actions updates and schedule them weekly"
+    },
+    {
+      "matchPackageNames": ["ghcr.io/matter-js/matterjs-server"],
+      "changelogUrl": "https://github.com/matter-js/matterjs-server/blob/main/CHANGELOG.md"
     }
   ]
 }
