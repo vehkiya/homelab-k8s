@@ -14,7 +14,7 @@ spec:
             app: home-assistant
       toPorts:
         - ports:
-            - port: "http" # 1984
+            - port: "1984" # 1984
               protocol: TCP
     # === Allow access from local networks (Direct LB Access) ===
     - fromCIDR:
