@@ -18,10 +18,14 @@ data:
   REDIS_HOST: "redis-bar-assistant.home.svc.cluster.local"
   CACHE_DRIVER: "redis"
   SESSION_DRIVER: "redis"
-  ALLOW_REGISTRATION: "false"
-  TRUSTED_PROXIES: "*"
   SESSION_SECURE_COOKIE: "true"
   SESSION_DOMAIN: "bar.kerrlab.app"
+  TRUSTED_PROXIES: "*"
+  # --- User management ---
+  ALLOW_REGISTRATION: "false"
+  ENABLE_PASSWORD_LOGIN: "false"
+  # --- Database configuration ---
+  # DB_CONNECTION: "pgsql"
 
   # --- Salt Rim Frontend ---
   API_URL: "https://bar.kerrlab.app"
@@ -30,4 +34,4 @@ data:
   AUTHELIA_CLIENT_ID: "bar-assistant"
   AUTHELIA_REDIRECT_URI: "https://bar.kerrlab.app/oauth/callback"
   GEN_AI_PROVIDER: "gemini"
-  GEN_AI_MODEL: "gemini-3.5-flash"
+  GEN_AI_MODEL: "gemini-flash-latest"

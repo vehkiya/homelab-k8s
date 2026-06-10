@@ -37,6 +37,19 @@ spec:
         - ports:
             - port: "7700"
               protocol: TCP
+    # Allow access to PostgreSQL
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
     # Allow access to Authelia (via Traefik or World) for OIDC validation
     - toEntities:
         - world
