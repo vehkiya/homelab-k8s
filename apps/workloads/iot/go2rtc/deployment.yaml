@@ -14,7 +14,41 @@ spec:
       labels:
         app: go2rtc
         networking/expose-web-ui: "true"
+      annotations:
+        k8s.v1.cni.cncf.io/networks: macvlan-iot
     spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.96.0.10
+        searches:
+          - iot.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+        options:
+          - name: ndots
+            value: "5"
+      initContainers:
+        - name: inject-secrets
+          image: hairyhenderson/gomplate
+          command: [ "gomplate", "-f", "/template/go2rtc.yaml", "-o", "/config/go2rtc.yaml" ]
+          envFrom:
+            - secretRef:
+                name: go2rtc-vault-secrets
+            - secretRef:
+                name: go2rtc-fields-secrets
+          volumeMounts:
+            - name: go2rtc-template-vol
+              mountPath: /template
+            - name: go2rtc-config-dir
+              mountPath: /config
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "32Mi"
       containers:
         - name: go2rtc
           image: ghcr.io/alexxit/go2rtc
@@ -28,9 +62,8 @@ spec:
             - containerPort: 1935
               name: rtmp
           volumeMounts:
-            - name: go2rtc-config
-              mountPath: /config/go2rtc.yaml
-              subPath: go2rtc.yaml
+            - name: go2rtc-config-dir
+              mountPath: /config
             - name: hass-data
               mountPath: /config/hass
               subPath: config
@@ -51,6 +84,8 @@ spec:
         - name: hass-data
           persistentVolumeClaim:
             claimName: home-assistant-pvc
-        - name: go2rtc-config
+        - name: go2rtc-template-vol
           configMap:
-            name: go2rtc-config
+            name: go2rtc-config-template
+        - name: go2rtc-config-dir
+          emptyDir: {}

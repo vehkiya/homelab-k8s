@@ -9,10 +9,21 @@ labels:
 
 resources:
   - deployment.yaml
-  - config.yaml
+  - secret.yaml
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
+
+configMapGenerator:
+  - name: go2rtc-config-template
+    files:
+      - go2rtc.yaml=templates/go2rtc.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
 images:
   - name: ghcr.io/alexxit/go2rtc
     newTag: 1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae
+  - name: hairyhenderson/gomplate
+    newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
