@@ -11,4 +11,4 @@ resources:
   - network-policy.yaml
 images:
   - name: ghcr.io/mermaid-js/mermaid-live-editor
-    newTag: latest@sha256:188e156f036571305bb9fa601a4eff64dc233e3b757cbea09a6fa830850a24d9
+    newTag: latest@sha256:ad7343dceb607c04aa211f02c356e8caddc8a383759266fdc5b3f91e6a91f3f8
