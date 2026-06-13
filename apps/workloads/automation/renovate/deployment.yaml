@@ -13,9 +13,21 @@ spec:
         app: renovate-server
         networking/expose-http-api: "true"
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
       containers:
         - name: renovate-server
           image: ghcr.io/mend/renovate-ce
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - containerPort: 8080
               name: http-api

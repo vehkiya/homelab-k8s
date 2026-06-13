@@ -15,38 +15,49 @@ spec:
         app.kubernetes.io/name: ntfy
         networking/expose-web-ui: "true"
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
       initContainers:
         - name: prepare-config
           image: alpine
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           command: ["/bin/sh", "-c"]
           args:
             - |
-              apk add --no-cache yq gettext
-
               echo "Generating config..."
 
               if [ -n "$NTFY_AUTH_USERS" ]; then
-                # 1. We export the variable so yq can see it via env()
-                export NTFY_AUTH_USERS
-
-                # 2. Use 'env(NTFY_AUTH_USERS)' to read it safely
-                # We add a leading newline (\n) so it drops to the next line in YAML
-                NTFY_AUTH_USERS_FORMATTED="
-              $(yq e -n 'env(NTFY_AUTH_USERS) | split(",")' | sed 's/^/  /')"
+                NTFY_AUTH_USERS_FORMATTED=""
+                for user in $(echo "$NTFY_AUTH_USERS" | tr ',' ' '); do
+                  NTFY_AUTH_USERS_FORMATTED="${NTFY_AUTH_USERS_FORMATTED}\n  - $user"
+                done
               else
-                # Fallback for empty list
                 NTFY_AUTH_USERS_FORMATTED=" []"
               fi
-
-              # Export the formatted string for envsubst
-              export NTFY_AUTH_USERS_FORMATTED
 
               if [ ! -f /etc/ntfy-template/server.yml.template ]; then
                 echo "Template not found!"
                 exit 1
               fi
 
-              envsubst < /etc/ntfy-template/server.yml.template > /etc/ntfy/server.yml
+              TEMPLATE=$(cat /etc/ntfy-template/server.yml.template)
+              CONFIG=$(echo "$TEMPLATE" | sed \
+                -e "s|\$NTFY_WEB_PUSH_PUBLIC_KEY|$NTFY_WEB_PUSH_PUBLIC_KEY|g" \
+                -e "s|\$NTFY_WEB_PUSH_PRIVATE_KEY|$NTFY_WEB_PUSH_PRIVATE_KEY|g" \
+                -e "s|\$NTFY_WEB_PUSH_EMAIL_ADDRESS|$NTFY_WEB_PUSH_EMAIL_ADDRESS|g" \
+                -e "s|\$NTFY_AUTH_USERS_FORMATTED|$NTFY_AUTH_USERS_FORMATTED|g")
+              
+              printf "$CONFIG" > /etc/ntfy/server.yml
 
               echo "Config generated:"
               cat /etc/ntfy/server.yml
@@ -70,6 +81,13 @@ spec:
       containers:
         - name: ntfy
           image: binwiederhier/ntfy
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           args: ["serve"]
           ports:
             - name: web-ui

@@ -99,6 +99,12 @@ spec:
           securityContext:
             runAsUser: 1027
             runAsGroup: 100
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           command:
             - /bin/sh
             - /scripts/backup.sh

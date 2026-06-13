@@ -12,9 +12,20 @@ spec:
         app: whoami
         networking/expose-web-ui: "true"
     spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
       containers:
         - name: whoami
           image: traefik/whoami
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - name: web-ui
               containerPort: 80

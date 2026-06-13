@@ -15,6 +15,11 @@ spec:
         app: authelia
         networking/expose-web-ui: "true"
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
       enableServiceLinks: false
       initContainers:
         - name: prepare-config
@@ -94,6 +99,13 @@ spec:
       containers:
         - name: authelia
           image: ghcr.io/authelia/authelia
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - name: web-ui
               containerPort: 9091
