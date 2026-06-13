@@ -87,52 +87,18 @@ notifier:
 # Authentication backend using LDAP
 authentication_backend:
   ldap:
-    implementation: "custom"
-    address: "ldaps://ldap.kerrlab.app:636"
+    implementation: "lldap"
+    address: "ldaps://lldap.security.svc.cluster.local:636"
     start_tls: false
-    base_dn: "${LDAP_BASE_DN}"
-    # Credentials for the user that will perform searches
-    user: "${LDAP_BIND_DN}"
-    # The password is loaded from an environment variable
+    tls:
+      server_name: "lldap.kerrlab.app"
+      skip_verify: false
+    base_dn: "dc=ldap,dc=kerrlab,dc=app"
+    additional_users_dn: "ou=people"
+    additional_groups_dn: "ou=groups"
+    user: "uid=authelia,ou=people,dc=ldap,dc=kerrlab,dc=app"
     password: "${LDAP_PASSWORD}"
-    additional_users_dn: "cn=users"
-    additional_groups_dn: "cn=groups"
     timeout: "10s"
-    # Search filter for users
-    users_filter: "(&({username_attribute}={input})(objectClass=person))"
-    # Search filter for groups
-    groups_filter: "(&(objectClass=posixGroup)(memberUid={username}))"
-    # Attributes for user profiles
-    attributes:
-      distinguished_name: "distinguishedName"
-      username: "uid"
-      display_name: "displayName"
-      family_name: "sn"
-      given_name: "givenName"
-      middle_name: "middleName"
-      nickname: ""
-      gender: ""
-      birthdate: "apple-birthday"
-      website: "wWWHomePage"
-      profile: ""
-      picture: ""
-      zoneinfo: ""
-      locale: ""
-      phone_number: "telephoneNumber"
-      phone_extension: ""
-      street_address: "streetAddress"
-      locality: "l"
-      region: "st"
-      postal_code: "postalCode"
-      country: "c"
-      mail: "mail"
-      member_of: "memberOf"
-      group_name: "cn"
-      extra:
-        title:
-          name: "title"
-          multi_valued: false
-          value_type: "string"
 
 # Access control rules
 access_control:
@@ -144,22 +110,22 @@ access_control:
       subject:
         - ["group:administrators"]
         - ["group:privileged-users"]
-        - ["group:household-users"]
-        - ["group:guest"]
+        - ["group:users"]
+        - ["group:guests"]
     - domain: "romm.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
         - ["group:privileged-users"]
-        - ["group:household-users"]
-        - ["group:guest"]
+        - ["group:users"]
+        - ["group:guests"]
     # Allow only standard users and administrators to access all other subdomains of kerrlab.app
     - domain: "*.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
         - ["group:privileged-users"]
-        - ["group:household-users"]
+        - ["group:users"]
 
 totp:
   disable: false
@@ -238,7 +204,7 @@ identity_providers:
             subject:
               - ["group:administrators"]
               - ["group:privileged-users"]
-              - ["group:household-users"]
+              - ["group:users"]
       one_factor_general_policy:
         default_policy: 'deny'
         rules:
@@ -246,7 +212,7 @@ identity_providers:
             subject:
               - ["group:administrators"]
               - ["group:privileged-users"]
-              - ["group:household-users"]
+              - ["group:users"]
       guest_allowed_policy:
         default_policy: 'deny'
         rules:
@@ -254,8 +220,8 @@ identity_providers:
             subject:
               - ["group:administrators"]
               - ["group:privileged-users"]
-              - ["group:household-users"]
-              - ["group:guest"]
+              - ["group:users"]
+              - ["group:guests"]
     clients:
       # ---- === Bar Assistant === ----
       - client_id: "bar-assistant"

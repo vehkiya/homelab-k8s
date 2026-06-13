@@ -33,12 +33,12 @@ spec:
         - ports:
             - port: "26379"
               protocol: "TCP"
-    - toCIDR:
-        # ldap.kerrlab.app
-        - 10.10.1.218/32
+    - toEndpoints:
+        - matchLabels:
+            app: lldap
       toPorts:
         - ports:
-            - port: "636"
+            - port: "6360"
               protocol: TCP
     - toEndpoints:
         - matchLabels:
