@@ -28,6 +28,8 @@ alertmanager:
             requests:
               storage: 10Gi # Adjust
 grafana:
+  deploymentStrategy:
+    type: Recreate
   persistence:
     enabled: true
     storageClassName: longhorn
