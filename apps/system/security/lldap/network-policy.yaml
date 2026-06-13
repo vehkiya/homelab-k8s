@@ -29,18 +29,7 @@ spec:
             - port: "6360"
               protocol: TCP
   egress:
-    # 1. DNS Resolution
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-            - port: "53"
-              protocol: TCP
-    # 2. Connection to external PostgreSQL DB on Synology
+    # 1. Connection to external PostgreSQL DB on Synology
     - toCIDR:
         - 10.10.1.218/32
       toPorts:
