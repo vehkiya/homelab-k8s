@@ -308,9 +308,7 @@ executions:
 # ----- App config -----
 config:
   timezone: Europe/Chisinau
-  extraEnv:
-    - name: NODE_OPTIONS
-      value: --max-old-space-size=800
+  extraEnv: []
   extraEnvFrom:
     - configMapRef:
         name: n8n-config
