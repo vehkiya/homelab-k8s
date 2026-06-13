@@ -17,11 +17,7 @@ images:
     newTag: 1.36.1@sha256:692239d739589247c4a791205ed9619c28ae85a21286e19a6211c04a62c56668
   - name: ghcr.io/authelia/authelia
     newTag: 4.39.20@sha256:1b363e9279e742397966333f364e0876ae02bf5c876de73e83af6d48c57ff51b
-
 configMapGenerator:
   - name: authelia-config
     files:
       - configuration-template.yml=templates/configuration.yaml
-
-generatorOptions:
-  disableNameSuffixHash: true
