@@ -34,6 +34,8 @@ spec:
               value: "true"
             - name: TZ
               value: "Europe/Chisinau"
+            - name: DISABLE_USERPASS_LOGIN
+              value: "true"
             - name: OIDC_ENABLED
               value: "true"
             - name: OIDC_PROVIDER
