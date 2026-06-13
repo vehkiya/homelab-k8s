@@ -226,6 +226,7 @@ identity_providers:
       with_groups:
         id_token:
           - "email"
+          - "email_verified"
           - "preferred_username"
           - "name"
           - "groups"
