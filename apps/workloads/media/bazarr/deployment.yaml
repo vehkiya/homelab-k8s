@@ -51,15 +51,20 @@ spec:
             httpGet:
               path: /api/system/ping
               port: web-ui
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 5
           livenessProbe:
             httpGet:
               path: /api/system/ping
               port: web-ui
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
           volumeMounts:
             - name: media
               mountPath: /data
