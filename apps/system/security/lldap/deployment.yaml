@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lldap
+  labels:
+    app: lldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lldap
+  template:
+    metadata:
+      labels:
+        app: lldap
+        networking/expose-web-ui: "true"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: lldap
+          image: ghcr.io/lldap/lldap:stable-alpine-rootless
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - name: ldap
+              containerPort: 3890
+              protocol: TCP
+            - name: ldaps
+              containerPort: 6360
+              protocol: TCP
+            - name: http
+              containerPort: 17170
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: lldap-secrets
+          env:
+            - name: LLDAP_LDAP_BASE_DN
+              value: "dc=ldap,dc=kerrlab,dc=app"
+            - name: LLDAP_LDAPS_OPTIONS__ENABLED
+              value: "true"
+            - name: LLDAP_LDAPS_OPTIONS__CERT_FILE
+              value: "/certs/tls.crt"
+            - name: LLDAP_LDAPS_OPTIONS__KEY_FILE
+              value: "/certs/tls.key"
+            - name: LLDAP_KEY_SEED
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-secrets
+                  key: LLDAP_JWT_SECRET
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: certs
+              mountPath: /certs
+              readOnly: true
+      volumes:
+        - name: certs
+          secret:
+            secretName: lldap-tls-cert

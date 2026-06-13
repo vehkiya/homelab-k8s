@@ -1,0 +1,38 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: lldap-policy
+  namespace: security
+spec:
+  endpointSelector:
+    matchLabels:
+      app: lldap
+  ingress:
+    # 1. Allow HTTP access only from Traefik ingress controller (for Admin Web UI)
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: traefik
+            k8s:io.kubernetes.pod.namespace: traefik
+      toPorts:
+        - ports:
+            - port: "17170"
+              protocol: TCP
+    # 2. Allow LDAP query access only from Authelia (and other SSO consumers in security namespace)
+    - fromEndpoints:
+        - matchLabels:
+            app: authelia
+            k8s:io.kubernetes.pod.namespace: security
+      toPorts:
+        - ports:
+            - port: "3890"
+              protocol: TCP
+            - port: "6360"
+              protocol: TCP
+  egress:
+    # 1. Connection to external PostgreSQL DB on Synology
+    - toCIDR:
+        - 10.10.1.218/32
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
