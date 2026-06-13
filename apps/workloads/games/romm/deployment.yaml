@@ -57,6 +57,10 @@ spec:
               value: "groups"
             - name: OIDC_ROLE_ADMIN
               value: "administrators"
+            - name: OIDC_ROLE_EDITOR
+              value: "privileged-users"
+            - name: OIDC_ROLE_VIEWER
+              value: "*"
           volumeMounts:
             - name: config-file
               mountPath: /romm/config/config.yml

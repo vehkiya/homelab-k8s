@@ -138,8 +138,15 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    # Allow guests, standard users, and administrators to access bar-assistant subdomain
+    # Allow guests, standard users, and administrators to access bar-assistant and RomM subdomains
     - domain: "bar.kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:administrators"]
+        - ["group:privileged-users"]
+        - ["group:household-users"]
+        - ["group:guest"]
+    - domain: "romm.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
@@ -239,7 +246,7 @@ identity_providers:
               - ["group:administrators"]
               - ["group:privileged-users"]
               - ["group:household-users"]
-      bar_assistant_policy:
+      guest_allowed_policy:
         default_policy: 'deny'
         rules:
           - policy: 'two_factor'
@@ -254,7 +261,7 @@ identity_providers:
         client_name: "Bar Assistant"
         client_secret: "${BAR_ASSISTANT_SECRET}"
         public: false
-        authorization_policy: "bar_assistant_policy"
+        authorization_policy: "guest_allowed_policy"
         consent_mode: "pre-configured"
         pre_configured_consent_duration: "30 days"
         redirect_uris:
@@ -376,7 +383,7 @@ identity_providers:
         client_name: "RomM"
         client_secret: "${ROMM_SECRET}"
         public: false
-        authorization_policy: "general_policy"
+        authorization_policy: "guest_allowed_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -385,7 +392,7 @@ identity_providers:
         pre_configured_consent_duration: "30 days"
         redirect_uris:
           - "https://romm.kerrlab.app/api/oauth/openid"
-        claims_policy: "with_email"
+        claims_policy: "with_groups"
         scopes:
           - "openid"
           - "email"
