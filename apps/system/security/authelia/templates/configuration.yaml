@@ -138,9 +138,19 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    # Allow authenticated users to access all subdomains of kerrlab.app
+    # Allow guests and users to access bar-assistant subdomain
+    - domain: "bar.kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:privileged-users"]
+        - ["group:household-users"]
+        - ["group:guest"]
+    # Allow only standard users to access all other subdomains of kerrlab.app
     - domain: "*.kerrlab.app"
       policy: two_factor
+      subject:
+        - ["group:privileged-users"]
+        - ["group:household-users"]
 
 totp:
   disable: false
@@ -210,13 +220,36 @@ identity_providers:
           - "preferred_username"
           - "name"
           - "groups"
+    authorization_policies:
+      general_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:privileged-users"]
+              - ["group:household-users"]
+      one_factor_general_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - ["group:privileged-users"]
+              - ["group:household-users"]
+      bar_assistant_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:privileged-users"]
+              - ["group:household-users"]
+              - ["group:guest"]
     clients:
       # ---- === Bar Assistant === ----
       - client_id: "bar-assistant"
         client_name: "Bar Assistant"
         client_secret: "${BAR_ASSISTANT_SECRET}"
         public: false
-        authorization_policy: "two_factor"
+        authorization_policy: "bar_assistant_policy"
         consent_mode: "pre-configured"
         pre_configured_consent_duration: "30 days"
         redirect_uris:
@@ -239,7 +272,7 @@ identity_providers:
         client_name: "Mealie"
         client_secret: "${MEALIE_SECRET}"
         public: false
-        authorization_policy: "two_factor"
+        authorization_policy: "general_policy"
         require_pkce: true
         pkce_challenge_method: "S256"
         consent_mode: "pre-configured"
@@ -265,7 +298,7 @@ identity_providers:
         client_name: "Autobrr"
         client_secret: "${AUTOBRR_SECRET}"
         public: false
-        authorization_policy: "two_factor"
+        authorization_policy: "general_policy"
         require_pkce: false
         pkce_challenge_method: ""
         consent_mode: "pre-configured"
@@ -290,7 +323,7 @@ identity_providers:
         client_name: "OAuth2 Proxy"
         client_secret: "${OAUTH_PROXY_SECRET}"
         public: false
-        authorization_policy: "one_factor"
+        authorization_policy: "one_factor_general_policy"
         consent_mode: "pre-configured"
         pre_configured_consent_duration: "1 week"
         redirect_uris:
@@ -315,7 +348,7 @@ identity_providers:
         public: false
         require_pkce: true
         pkce_challenge_method: "S256"
-        authorization_policy: "two_factor"
+        authorization_policy: "general_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -338,7 +371,7 @@ identity_providers:
         client_name: "RomM"
         client_secret: "${ROMM_SECRET}"
         public: false
-        authorization_policy: "two_factor"
+        authorization_policy: "general_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -361,7 +394,7 @@ identity_providers:
         client_name: "NodeCast"
         client_secret: "${NODECAST_SECRET}"
         public: false
-        authorization_policy: "two_factor"
+        authorization_policy: "general_policy"
         grant_types:
           - "authorization_code"
         response_types:
