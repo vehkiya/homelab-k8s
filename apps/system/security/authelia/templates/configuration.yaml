@@ -138,17 +138,19 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    # Allow guests and users to access bar-assistant subdomain
+    # Allow guests, standard users, and administrators to access bar-assistant subdomain
     - domain: "bar.kerrlab.app"
       policy: two_factor
       subject:
+        - ["group:administrators"]
         - ["group:privileged-users"]
         - ["group:household-users"]
         - ["group:guest"]
-    # Allow only standard users to access all other subdomains of kerrlab.app
+    # Allow only standard users and administrators to access all other subdomains of kerrlab.app
     - domain: "*.kerrlab.app"
       policy: two_factor
       subject:
+        - ["group:administrators"]
         - ["group:privileged-users"]
         - ["group:household-users"]
 
@@ -226,6 +228,7 @@ identity_providers:
         rules:
           - policy: 'two_factor'
             subject:
+              - ["group:administrators"]
               - ["group:privileged-users"]
               - ["group:household-users"]
       one_factor_general_policy:
@@ -233,6 +236,7 @@ identity_providers:
         rules:
           - policy: 'one_factor'
             subject:
+              - ["group:administrators"]
               - ["group:privileged-users"]
               - ["group:household-users"]
       bar_assistant_policy:
@@ -240,6 +244,7 @@ identity_providers:
         rules:
           - policy: 'two_factor'
             subject:
+              - ["group:administrators"]
               - ["group:privileged-users"]
               - ["group:household-users"]
               - ["group:guest"]
