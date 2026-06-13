@@ -16,6 +16,13 @@ spec:
       containers:
         - name: romm
           image: rommapp/romm
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           resources:
             requests:
               cpu: "50m"
@@ -71,6 +78,7 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
+        runAsNonRoot: true
         fsGroup: 65534
         fsGroupChangePolicy: Always
       volumes:

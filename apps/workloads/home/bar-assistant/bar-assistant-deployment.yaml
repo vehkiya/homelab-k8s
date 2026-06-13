@@ -18,9 +18,22 @@ spec:
         app: bar-assistant
         networking/expose-http-api: "true"
     spec:
+      securityContext:
+        runAsUser: 33
+        runAsGroup: 33
+        runAsNonRoot: true
+        fsGroup: 33
+        fsGroupChangePolicy: Always
       initContainers:
         - name: volume-permissions
           image: busybox
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           command:
             ["sh", "-c", "chown 33:33 /var/www/cocktails/storage/bar-assistant"]
           volumeMounts:
@@ -36,6 +49,13 @@ spec:
       containers:
         - name: bar-assistant-server
           image: ghcr.io/karlomikus/barassistant
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           envFrom:
             - configMapRef:
                 name: bar-assistant-config

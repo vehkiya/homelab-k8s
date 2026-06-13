@@ -6,6 +6,8 @@ resources:
   - service.yaml
   - deployment.yaml
   - http-route.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
   - network-policy.yaml
 images:
   - name: rommapp/romm

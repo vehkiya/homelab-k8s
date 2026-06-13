@@ -7,6 +7,18 @@ spec:
     matchLabels:
       app: romm
 
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow Ingress from Traefik only ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+
   # ----=== Egress ===----
   egress:
     # === Allow Egress to Traefik for Hairpinning (for OIDC) ===

@@ -18,6 +18,10 @@ spec:
         app: salt-rim
         networking/expose-web-ui: "true"
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
       affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -33,6 +37,13 @@ spec:
       containers:
         - name: salt-rim-frontend
           image: ghcr.io/karlomikus/salt-rim
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           env:
             # Explicitly map needed vars from ConfigMap
             - name: API_URL
