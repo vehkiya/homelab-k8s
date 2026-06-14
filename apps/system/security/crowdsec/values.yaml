@@ -1,7 +1,10 @@
 container_runtime: containerd
 
 config:
-  config.yaml.local: ""
+  config.yaml.local: |
+    api:
+      client:
+        unregister_on_exit: true
 
 # --- Local API Configuration ---
 lapi:

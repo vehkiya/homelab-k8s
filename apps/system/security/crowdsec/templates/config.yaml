@@ -13,8 +13,8 @@ db_config:
       api_key: 72h
       cert: 72h
     agents_autodelete:
-      cert: 72h
-      login_password: 72h
+      cert: 12h
+      login_password: 12h
 api:
   server:
     auto_registration:
