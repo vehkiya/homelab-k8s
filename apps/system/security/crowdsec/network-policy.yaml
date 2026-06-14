@@ -36,17 +36,7 @@ spec:
             - port: "15432"
               protocol: "TCP"
 
-    # 2. Allow egress to DNS
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: "UDP"
-            - port: "53"
-              protocol: "TCP"
+
     # 3. Allow egress to CAPI (public internet) and K8s API server
     - toEntities:
         - "world"
