@@ -93,6 +93,36 @@ spec:
               memory: "16Gi"
             claims:
               - name: intel-gpu
+        - name: plex-logs
+          image: alpine
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/sh
+            - -c
+            - |
+              LOG_DIR="/config/Library/Application Support/Plex Media Server/Logs"
+              until [ -d "$LOG_DIR" ]; do sleep 2; done
+              exec tail -F "$LOG_DIR/Plex Media Server.log"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "32Mi"
         - name: backup-sidecar
           image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
           imagePullPolicy: IfNotPresent
