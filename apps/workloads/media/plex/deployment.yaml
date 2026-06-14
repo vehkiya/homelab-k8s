@@ -61,19 +61,19 @@ spec:
               path: /identity
               port: web-ui
             initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            periodSeconds: 15
+            timeoutSeconds: 5
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 4
           livenessProbe:
             httpGet:
               path: /identity
               port: web-ui
             initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            periodSeconds: 30
+            timeoutSeconds: 5
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 6
           volumeMounts:
             - name: media
               mountPath: /data
@@ -90,7 +90,7 @@ spec:
               memory: "4Gi"
             limits:
               cpu: "4000m"
-              memory: "12Gi"
+              memory: "16Gi"
             claims:
               - name: intel-gpu
         - name: backup-sidecar
