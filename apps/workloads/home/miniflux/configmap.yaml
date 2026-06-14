@@ -4,8 +4,8 @@ kind: ConfigMap
 metadata:
   name: miniflux-config
 data:
-  RUN_MIGRATIONS: 1
-  CREATE_ADMIN: 1
+  RUN_MIGRATIONS: "1"
+  CREATE_ADMIN: "1"
   BASE_URL: "https://rss.kerrlab.app"
   # Add OAuth2 or WebAuthn configurations here
   # https://miniflux.app/docs/configuration.html#oauth2-client-id
