@@ -25,14 +25,13 @@ lapi:
     #     secretKeyRef:
     #       name: crowdsec-secrets
     #       key: UNIFI_BUN_KEY
-    # Temporarily commented out to bypass CAPI rate-limiting (Forbidden 403)
-    # - name: ENROLL_KEY
-    #   valueFrom:
-    #     secretKeyRef:
-    #       name: crowdsec-secrets
-    #       key: ENROLL_KEY
-    # - name: ENROLL_INSTANCE_NAME
-    #   value: "homelab-k8s-lapi"
+    - name: ENROLL_KEY
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: ENROLL_KEY
+    - name: ENROLL_INSTANCE_NAME
+      value: "homelab-k8s-lapi"
 
   # Template configuration rendering via gomplate init container
   extraInitContainers:
