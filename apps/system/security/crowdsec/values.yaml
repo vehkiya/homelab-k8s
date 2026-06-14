@@ -1,10 +1,7 @@
 container_runtime: containerd
 
 config:
-  config.yaml.local: |
-    api:
-      client:
-        unregister_on_exit: true
+  config.yaml.local: ""
 
 # --- Local API Configuration ---
 lapi:
@@ -96,6 +93,14 @@ agent:
   env:
     - name: COLLECTIONS
       value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios"
+  extraVolumes:
+    - name: agent-config-local
+      configMap:
+        name: crowdsec-agent-config
+  extraVolumeMounts:
+    - name: agent-config-local
+      mountPath: /etc/crowdsec/config.yaml.local
+      subPath: config.yaml.local
 # --- AppSec (WAF) Configuration ---
 appsec:
   enabled: true
