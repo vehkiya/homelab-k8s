@@ -1,0 +1,27 @@
+db_config:
+  type: postgresql
+  user: {{ .Env.DB_USER }}
+  password: {{ .Env.DB_PASSWORD }}
+  db_name: {{ .Env.DB_NAME }}
+  host: {{ .Env.DB_HOST }}
+  port: {{ .Env.DB_PORT }}
+  sslmode: disable
+  flush:
+    max_items: 5000
+    max_age: 7d
+    bouncers_autodelete:
+      api_key: 72h
+      cert: 72h
+    agents_autodelete:
+      cert: 72h
+      login_password: 72h
+api:
+  server:
+    auto_registration:
+      enabled: true
+      token: "${REGISTRATION_TOKEN}"
+      allowed_ranges:
+        - "127.0.0.1/32"
+        - "10.244.0.0/16"
+        - "10.0.0.0/8"
+        - "100.64.0.0/10"

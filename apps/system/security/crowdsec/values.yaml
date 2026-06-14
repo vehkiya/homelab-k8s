@@ -1,0 +1,95 @@
+container_runtime: containerd
+
+config:
+  config.yaml.local: ""
+
+# --- Local API Configuration ---
+lapi:
+  enabled: true
+  replicas: 2
+  persistentVolume:
+    data:
+      enabled: false # SQLite is disabled, PostgreSQL handles persistence
+    config:
+      enabled: false # Configuration persistence disabled for stateless replicas
+
+  env:
+    - name: BOUNCER_KEY_traefik
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: LAPI_KEY
+    # To enable UniFi bouncer later, add this env var (and register the key in ExternalSecret secrets.yaml)
+    # - name: BOUNCER_KEY_unifi
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: crowdsec-secrets
+    #       key: UNIFI_BUN_KEY
+    - name: ENROLL_KEY
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: ENROLL_KEY
+    - name: ENROLL_INSTANCE_NAME
+      value: "homelab-k8s-lapi"
+
+  # Template configuration rendering via gomplate init container
+  extraInitContainers:
+    - name: inject-secrets
+      image: hairyhenderson/gomplate:v5.0-alpine
+      command: [ "gomplate", "-f", "/template/config.yaml", "-o", "/share/config.yaml.local" ]
+      env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-secrets
+              key: db-user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-secrets
+              key: db-password
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-secrets
+              key: db-host
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-secrets
+              key: db-port
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-secrets
+              key: db-name
+      volumeMounts:
+        - name: crowdsec-template-vol
+          mountPath: /template
+        - name: crowdsec-config-share
+          mountPath: /share
+  
+  extraVolumes:
+    - name: crowdsec-template-vol
+      configMap:
+        name: crowdsec-config-template
+    - name: crowdsec-config-share
+      emptyDir: {}
+
+  extraVolumeMounts:
+    - name: crowdsec-config-share
+      mountPath: /etc/crowdsec/config.yaml.local
+      subPath: config.yaml.local
+
+# --- Agent Configuration ---
+agent:
+  enabled: true
+  # Log acquisition configuration
+  acquisition:
+    - namespace: traefik
+      podName: traefik-*
+      program: traefik
+  env:
+    - name: COLLECTIONS
+      value: "crowdsecurity/traefik crowdsecurity/http-cve"

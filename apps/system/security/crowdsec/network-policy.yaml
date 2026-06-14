@@ -1,0 +1,63 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-policy
+  namespace: security
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
+  ingress:
+    # 1. Allow agents and bouncers to talk to LAPI port 8080
+    - fromEndpoints:
+        # Allow LAPI/Agent pods in 'security' namespace
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
+        # Allow Traefik bouncers in 'traefik' namespace
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"
+    # 2. Allow kubelet health probes
+    - fromEntities:
+        - "host"
+        - "health"
+
+  egress:
+    # 1. Allow egress to external PostgreSQL database
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: "TCP"
+
+    # 2. Allow egress to DNS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: "UDP"
+            - port: "53"
+              protocol: "TCP"
+    # 3. Allow egress to CAPI (public internet) and K8s API server
+    - toEntities:
+        - "world"
+        - "kube-apiserver"
+
+    # 4. Allow LAPI/Agent pods to talk to each other on LAPI port 8080
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"

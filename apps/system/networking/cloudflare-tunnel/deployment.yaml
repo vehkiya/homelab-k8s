@@ -1,3 +1,11 @@
+# WARNING / NOTE: When using cloudflared as an active ingress proxy:
+# The source IP seen by Traefik will be this cloudflared pod's internal IP.
+# Since Traefik's trustedIPs config does not trust pod CIDRs by default,
+# Traefik will reject the X-Forwarded-For / CF-Connecting-IP headers, identifying
+# the client as the cloudflared pod. If CrowdSec is deployed, it will see all attacks
+# coming from this pod and may ban it, causing a total outage of tunnel traffic.
+# Mitigation: Configure the 'cloudflarewarp' Traefik plugin or route traffic through
+# the BGP LoadBalancer IP to preserve the original Cloudflare Edge source IPs.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
