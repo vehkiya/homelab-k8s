@@ -92,7 +92,7 @@ agent:
       program: traefik
   env:
     - name: COLLECTIONS
-      value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors"
+      value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios"
 # --- AppSec (WAF) Configuration ---
 appsec:
   enabled: true
