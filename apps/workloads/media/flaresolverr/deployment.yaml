@@ -46,8 +46,8 @@ spec:
               path: /
               port: http-api
             initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            periodSeconds: 30
+            timeoutSeconds: 10
             successThreshold: 1
             failureThreshold: 3
           resources:

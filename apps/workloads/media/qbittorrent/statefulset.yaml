@@ -126,8 +126,8 @@ spec:
               path: /
               port: web-ui
             initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            periodSeconds: 15
+            timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 3
           livenessProbe:
@@ -135,8 +135,8 @@ spec:
               path: /
               port: web-ui
             initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            periodSeconds: 30
+            timeoutSeconds: 10
             successThreshold: 1
             failureThreshold: 3
           volumeMounts:

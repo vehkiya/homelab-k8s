@@ -69,10 +69,10 @@ spec:
               path: /ping
               port: web-ui
             initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
+            periodSeconds: 20
+            timeoutSeconds: 5
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 5
           resources:
             requests:
               cpu: "10m"
