@@ -102,6 +102,8 @@ ports:
       advertisedPort: 8443
     forwardedHeaders:
       trustedIPs: # Cloudflare Proxy
+        - 10.244.0.0/16
+        - fdf0:10:244::/64
         - 173.245.48.0/20
         - 103.21.244.0/22
         - 103.22.200.0/22
@@ -196,6 +198,8 @@ extraObjects:
           updateIntervalSeconds: 60
           mode: stream
           forwardedHeadersTrustedIPs:
+            - 10.244.0.0/16
+            - fdf0:10:244::/64
             - 173.245.48.0/20
             - 103.21.244.0/22
             - 103.22.200.0/22
