@@ -25,13 +25,14 @@ lapi:
     #     secretKeyRef:
     #       name: crowdsec-secrets
     #       key: UNIFI_BUN_KEY
-    - name: ENROLL_KEY
-      valueFrom:
-        secretKeyRef:
-          name: crowdsec-secrets
-          key: ENROLL_KEY
-    - name: ENROLL_INSTANCE_NAME
-      value: "homelab-k8s-lapi"
+    # Temporarily commented out to bypass CAPI rate-limiting (Forbidden 403)
+    # - name: ENROLL_KEY
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: crowdsec-secrets
+    #       key: ENROLL_KEY
+    # - name: ENROLL_INSTANCE_NAME
+    #   value: "homelab-k8s-lapi"
 
   # Template configuration rendering via gomplate init container
   extraInitContainers:
@@ -92,4 +93,17 @@ agent:
       program: traefik
   env:
     - name: COLLECTIONS
-      value: "crowdsecurity/traefik crowdsecurity/http-cve"
+      value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors"
+# --- AppSec (WAF) Configuration ---
+appsec:
+  enabled: true
+  acquisitions:
+    - source: appsec
+      listen_addr: "0.0.0.0:7422"
+      path: /
+      appsec_config: crowdsecurity/virtual-patching
+      labels:
+        type: appsec
+  env:
+    - name: COLLECTIONS
+      value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules"

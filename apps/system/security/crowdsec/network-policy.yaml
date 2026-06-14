@@ -22,10 +22,23 @@ spec:
         - ports:
             - port: "8080"
               protocol: "TCP"
+            - port: "7422"
+              protocol: "TCP"
     # 2. Allow kubelet health probes
     - fromEntities:
         - "host"
         - "health"
+    # 3. Allow all pods in security namespace (e.g. helm test pods) to reach LAPI / Agent / AppSec
+    - fromEndpoints:
+        - {}
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"
+            - port: "6060"
+              protocol: "TCP"
+            - port: "7422"
+              protocol: "TCP"
 
   egress:
     # 1. Allow egress to external PostgreSQL database
@@ -50,4 +63,23 @@ spec:
       toPorts:
         - ports:
             - port: "8080"
+              protocol: "TCP"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-security-namespace-egress
+  namespace: security
+spec:
+  endpointSelector: {}
+  egress:
+    - toEndpoints:
+        - {}
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"
+            - port: "6060"
+              protocol: "TCP"
+            - port: "7422"
               protocol: "TCP"
