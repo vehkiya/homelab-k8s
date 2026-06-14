@@ -21,3 +21,5 @@ configMapGenerator:
   - name: crowdsec-agent-config
     files:
       - config.yaml.local=templates/agent-config.yaml
+generatorOptions:
+  disableNameSuffixHash: true
