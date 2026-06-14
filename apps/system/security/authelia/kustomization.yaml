@@ -14,7 +14,7 @@ resources:
   - redis-network-policy.yaml
 images:
   - name: alpine/k8s
-    newTag: 1.36.1@sha256:692239d739589247c4a791205ed9619c28ae85a21286e19a6211c04a62c56668
+    newTag: 1.36.2@sha256:44ef4942e171939b9c665a4a84beb80e2dcdb9a24330d4651cfdfd2e9deecc47
   - name: ghcr.io/authelia/authelia
     newTag: 4.39.20@sha256:1b363e9279e742397966333f364e0876ae02bf5c876de73e83af6d48c57ff51b
 configMapGenerator:
