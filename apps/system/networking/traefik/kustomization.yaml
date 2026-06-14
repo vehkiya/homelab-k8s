@@ -16,6 +16,7 @@ helmCharts:
 
 resources:
   - dashboard-auth.yaml
+  - bouncer-secret.yaml
   - services.yaml
   - gateways.yaml
   - tcp-gateway.yaml

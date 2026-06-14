@@ -16,10 +16,16 @@ deployment:
   kind: DaemonSet
   additionalVolumes:
     - name: plugins
+    - name: crowdsec-bouncer-key-vol
+      secret:
+        secretName: crowdsec-bouncer-key
 
 additionalVolumeMounts:
   - name: plugins
     mountPath: /plugins-storage
+  - name: crowdsec-bouncer-key-vol
+    mountPath: /etc/crowdsec-bouncer
+    readOnly: true
 
 updateStrategy:
   type: RollingUpdate
@@ -37,6 +43,16 @@ ingressRoute:
 logs:
   general:
     level: WARN
+  access:
+    enabled: true
+    format: json
+    fields:
+      headers:
+        defaultmode: keep
+        names:
+          Authorization: redact
+          Cookie: redact
+          Set-Cookie: redact
 
 ports:
   web:
@@ -68,6 +84,8 @@ ports:
     expose:
       default: true
     http:
+      middlewares:
+        - traefik-crowdsec-bouncer@kubernetescrd
       encodedCharacters:
         allowEncodedSlash: false
         allowEncodedBackSlash: false
@@ -163,10 +181,35 @@ extraObjects:
     spec:
       basicAuth:
         secret: traefik-dashboard-auth-secret
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: crowdsec-bouncer
+      namespace: traefik
+    spec:
+      plugin:
+        crowdsec:
+          enabled: true
+          crowdsecLapiScheme: http
+          crowdsecLapiHost: crowdsec-service.security.svc.cluster.local:8080
+          crowdsecLapiKeyFile: "/etc/crowdsec-bouncer/bouncer-key"
+          updateIntervalSeconds: 60
+          mode: stream
+          clientTrustedIPs:
+            - 127.0.0.1/32
+            - 10.0.0.0/8
+            - 100.64.0.0/10
+            - 192.168.1.0/24
+            - 192.168.11.0/24
+            - 192.168.29.0/24
 
 experimental:
   fastProxy:
     enabled: true
+  plugins:
+    crowdsec:
+      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      version: "v1.3.4"
 
 resources:
   requests:

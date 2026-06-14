@@ -9,10 +9,23 @@ spec:
       app.kubernetes.io/name: traefik
 
   ingress:
-    # Rule 1: Allow public internet to ports 80/443
+    # Rule 1: Allow public internet and cluster to DMZ ports (8443)
     - fromEntities:
         - "world"
         - "cluster"
+      toPorts:
+        - ports:
+            # === DMZ entrypoint ===
+            - port: "8443"
+              protocol: "UDP"
+            - port: "8443"
+              protocol: "TCP"
+
+    # Rule 2: Allow cluster, host, and remote-node to internal websecure (9443)
+    - fromEntities:
+        - "cluster"
+        - "host"
+        - "remote-node"
       toPorts:
         - ports:
             # === Internal websecure entrypoint ===
@@ -20,10 +33,20 @@ spec:
               protocol: "UDP"
             - port: "9443"
               protocol: "TCP"
-            # === DMZ entrypoint ===
-            - port: "8443"
+
+    # Rule 3: Allow trusted internal LAN, VLANs, and Tailscale VPN to internal websecure (9443)
+    - fromCIDR:
+        - "10.10.1.0/24"
+        - "192.168.1.0/24"
+        - "192.168.11.0/24"
+        - "192.168.29.0/24"
+        - "100.64.0.0/10"
+      toPorts:
+        - ports:
+            # === Internal websecure entrypoint ===
+            - port: "9443"
               protocol: "UDP"
-            - port: "8443"
+            - port: "9443"
               protocol: "TCP"
 
 
