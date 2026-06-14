@@ -7,7 +7,7 @@ spec:
     - name: internal-gateway
       namespace: traefik
   hostnames:
-    - "rss.kerrlab.app"
+    - "miniflux.kerrlab.app"
   rules:
     - matches:
         - path:
