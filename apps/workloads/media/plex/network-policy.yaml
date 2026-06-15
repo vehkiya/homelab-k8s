@@ -41,3 +41,14 @@ spec:
         - ports:
             - port: web-ui
               protocol: "TCP"
+    # === Allow access from local networks (Direct LB Access) ===
+    - fromCIDR:
+        - "10.10.1.0/24"
+        - "192.168.1.0/24"
+        - "192.168.11.0/24"
+        - "192.168.29.0/24"
+        - "100.64.0.0/10"
+      toPorts:
+        - ports:
+            - port: web-ui
+              protocol: "TCP"
