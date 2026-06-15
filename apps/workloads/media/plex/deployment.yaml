@@ -51,7 +51,7 @@ spec:
               DB_DIR="/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
               mkdir -p "$DB_DIR"
               echo "Syncing database from Longhorn to local emptyDir..."
-              rsync -aH --delete "$DB_DIR/" /config-db/
+              rsync -aH --no-o --no-g --delete "$DB_DIR/" /config-db/
           volumeMounts:
             - name: config
               mountPath: /config
