@@ -60,10 +60,10 @@ spec:
           resources:
             requests:
               cpu: "10m"
-              memory: "32Mi"
+              memory: "128Mi"
             limits:
               cpu: "100m"
-              memory: "64Mi"
+              memory: "256Mi"
         - name: config-sync
           image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
           restartPolicy: Always
@@ -115,10 +115,10 @@ spec:
           resources:
             requests:
               cpu: "10m"
-              memory: "32Mi"
+              memory: "128Mi"
             limits:
               cpu: "100m"
-              memory: "64Mi"
+              memory: "256Mi"
       containers:
         - name: plex
           image: plexinc/pms-docker
