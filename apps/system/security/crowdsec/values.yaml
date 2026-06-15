@@ -36,7 +36,7 @@ lapi:
   # Template configuration rendering via gomplate init container
   extraInitContainers:
     - name: inject-secrets
-      image: hairyhenderson/gomplate:v5.0-alpine
+      image: ghcr.io/hononeko/k8s-config-tools
       command: [ "gomplate", "-f", "/template/config.yaml", "-o", "/share/config.yaml.local" ]
       env:
         - name: DB_USER

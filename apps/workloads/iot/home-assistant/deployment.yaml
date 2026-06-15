@@ -30,7 +30,7 @@ spec:
             value: "5"
       initContainers:
         - name: prepare-config
-          image: hairyhenderson/gomplate
+          image: ghcr.io/hononeko/k8s-config-tools
           command: [ "gomplate", "--left-delim", "[[", "--right-delim", "]]", "-f", "/template/configuration.yaml.template", "-o", "/config/configuration.yaml" ]
           volumeMounts:
             - name: config-template

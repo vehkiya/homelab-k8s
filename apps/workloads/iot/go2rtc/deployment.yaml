@@ -30,7 +30,7 @@ spec:
             value: "5"
       initContainers:
         - name: inject-secrets
-          image: hairyhenderson/gomplate
+          image: ghcr.io/hononeko/k8s-config-tools
           command: [ "gomplate", "-f", "/template/go2rtc.yaml", "-o", "/config/go2rtc.yaml" ]
           envFrom:
             - secretRef:

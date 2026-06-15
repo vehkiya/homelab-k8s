@@ -23,3 +23,7 @@ configMapGenerator:
       - config.yaml.local=templates/agent-config.yaml
 generatorOptions:
   disableNameSuffixHash: true
+
+images:
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.0@sha256:fa8e55d5c4b2971076cc2dfd70ff15f1c1734245de6bb109190e744a86cb9e94

@@ -30,7 +30,95 @@ spec:
                     operator: In
                     values:
                       - performance
-      terminationGracePeriodSeconds: 30
+      terminationGracePeriodSeconds: 120
+      initContainers:
+        - name: init-db-sync
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/sh
+            - -c
+            - |
+              DB_DIR="/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
+              mkdir -p "$DB_DIR"
+              echo "Syncing database from Longhorn to local emptyDir..."
+              rsync -aH --delete "$DB_DIR/" /config-db/
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: config-db
+              mountPath: /config-db
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+        - name: config-sync
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          restartPolicy: Always
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/sh
+            - -c
+            - |
+              DB_DIR="/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
+              while true; do
+                sleep 900
+                echo "Running 15-minute DB backup..."
+                if [ -f "/config-db/com.plexapp.plugins.library.db" ]; then
+                  for db in /config-db/*.db; do
+                    db_name=$(basename "$db")
+                    sqlite3 "$db" ".backup '$DB_DIR/$db_name'"
+                  done
+                fi
+              done
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    DB_DIR="/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
+                    if [ -f "/config-db/com.plexapp.plugins.library.db" ]; then
+                      echo "Pod shutting down. Running final DB backup..."
+                      for db in /config-db/*.db; do
+                        db_name=$(basename "$db")
+                        sqlite3 "$db" ".backup '$DB_DIR/$db_name'"
+                      done
+                    fi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: config-db
+              mountPath: /config-db
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
       containers:
         - name: plex
           image: plexinc/pms-docker
@@ -79,6 +167,8 @@ spec:
               mountPath: /data
             - name: config
               mountPath: /config
+            - name: config-db
+              mountPath: "/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
             - name: transcode
               mountPath: /transcode
             - name: backups
@@ -123,6 +213,7 @@ spec:
             limits:
               cpu: "50m"
               memory: "32Mi"
+
         - name: backup-sidecar
           image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
           imagePullPolicy: IfNotPresent
@@ -170,6 +261,8 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: plex-config-longhorn-pvc
+        - name: config-db
+          emptyDir: {}
         - name: transcode
           emptyDir:
             medium: Memory

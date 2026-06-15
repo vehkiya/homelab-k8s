@@ -17,6 +17,13 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: UDP
+            - port: "80"
+              protocol: TCP
+    # Allow egress to Bazarr for webhooks
+    - toServices:
+        - k8sService:
+            serviceName: bazarr-ui
+            namespace: media
   # Allow Ingress (Inbound)
   ingress:
     - fromEndpoints:
