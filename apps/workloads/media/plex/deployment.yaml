@@ -88,7 +88,9 @@ spec:
                 if [ -f "/config-db/com.plexapp.plugins.library.db" ]; then
                   for db in /config-db/*.db; do
                     db_name=$(basename "$db")
-                    sqlite3 "$db" ".backup '$DB_DIR/$db_name'"
+                    if ! sqlite3 "$db" ".backup '$DB_DIR/$db_name'"; then
+                      echo "ERROR: Failed to backup $db_name" >&2
+                    fi
                   done
                 fi
               done
@@ -104,7 +106,9 @@ spec:
                       echo "Pod shutting down. Running final DB backup..."
                       for db in /config-db/*.db; do
                         db_name=$(basename "$db")
-                        sqlite3 "$db" ".backup '$DB_DIR/$db_name'"
+                        if ! sqlite3 "$db" ".backup '$DB_DIR/$db_name'"; then
+                          echo "ERROR: Failed to backup $db_name" >&2
+                        fi
                       done
                     fi
           volumeMounts:
@@ -262,7 +266,8 @@ spec:
           persistentVolumeClaim:
             claimName: plex-config-longhorn-pvc
         - name: config-db
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: 4Gi
         - name: transcode
           emptyDir:
             medium: Memory
