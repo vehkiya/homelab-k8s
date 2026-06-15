@@ -33,12 +33,11 @@ spec:
       terminationGracePeriodSeconds: 120
       initContainers:
         - name: init-db-sync
-          image: alpine
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
           command:
             - /bin/sh
             - -c
             - |
-              apk add --no-cache rsync
               DB_DIR="/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
               mkdir -p "$DB_DIR"
               echo "Syncing database from Longhorn to local emptyDir..."
@@ -150,12 +149,11 @@ spec:
               cpu: "50m"
               memory: "32Mi"
         - name: config-sync
-          image: alpine
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
           command:
             - /bin/sh
             - -c
             - |
-              apk add --no-cache rsync
               DB_DIR="/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
               while true; do
                 sleep 900
