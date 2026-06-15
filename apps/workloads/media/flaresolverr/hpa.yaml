@@ -9,6 +9,12 @@ spec:
     name: flaresolverr
   minReplicas: 1
   maxReplicas: 4
+  behavior:
+    scaleUp:
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
   metrics:
     - type: Resource
       resource:
