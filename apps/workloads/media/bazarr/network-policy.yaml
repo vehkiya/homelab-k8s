@@ -8,6 +8,17 @@ spec:
       app: bazarr
 
 
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow access from Plex for webhooks ===
+    - fromEndpoints:
+        - matchLabels:
+            app: plex
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: "TCP"
+
   # ----=== Egress ===----
   egress:
     # === Allow access to services ===
