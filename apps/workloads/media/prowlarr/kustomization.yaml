@@ -15,8 +15,8 @@ labels:
 images:
   - name: ghcr.io/home-operations/prowlarr
     newTag: 2.4.0@sha256:8a140c9104c754a272f5e0d1dfcb32a06f07946a431a45c1083a16344f531748
-  - name: hairyhenderson/gomplate
-    newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.0@sha256:fa8e55d5c4b2971076cc2dfd70ff15f1c1734245de6bb109190e744a86cb9e94
 
 configMapGenerator:
   - name: prowlarr-config-template

@@ -17,8 +17,8 @@ labels:
 images:
   - name: ghcr.io/home-operations/sonarr
     newTag: 4.0.17@sha256:6806001ccc2ec95d941c9c0de012dbcb59c6a33932cfc17f71e300bdd48cabfe
-  - name: hairyhenderson/gomplate
-    newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.0@sha256:fa8e55d5c4b2971076cc2dfd70ff15f1c1734245de6bb109190e744a86cb9e94
 
 # Shared config for both instances
 configMapGenerator:

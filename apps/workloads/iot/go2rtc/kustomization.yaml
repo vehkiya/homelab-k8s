@@ -25,5 +25,5 @@ generatorOptions:
 images:
   - name: ghcr.io/alexxit/go2rtc
     newTag: 1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae
-  - name: hairyhenderson/gomplate
-    newTag: v5.0-alpine@sha256:e9f830456c24b92dc8f59591d9604c90af6b7102c503f9834e716eb1002440e9
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.0@sha256:fa8e55d5c4b2971076cc2dfd70ff15f1c1734245de6bb109190e744a86cb9e94

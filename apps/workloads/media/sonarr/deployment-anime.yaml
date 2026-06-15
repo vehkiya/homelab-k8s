@@ -19,7 +19,7 @@ spec:
     spec:
       initContainers:
         - name: inject-secrets
-          image: hairyhenderson/gomplate
+          image: ghcr.io/hononeko/k8s-config-tools
           command: [ "gomplate", "-f", "/template/config.xml", "-o", "/config/config.xml" ]
           envFrom:
             - secretRef:
