@@ -25,7 +25,7 @@ images:
   - name: busybox
     newTag: 1.38@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
   - name: docker.n8n.io/n8nio/n8n
-    newTag: 2.26.3@sha256:51ac1d08178e635a593368f0947532990e55c14342ac781c8d77538daae859c8
+    newTag: 2.26.4@sha256:ddb5204bc8c7b71c446dfe1c1dce296df138bcfadb7f5e27d7de35ec2889d026
 patches:
   - path: hpa-patch.yaml
     target:
