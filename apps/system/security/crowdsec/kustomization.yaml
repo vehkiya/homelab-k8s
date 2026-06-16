@@ -26,4 +26,4 @@ generatorOptions:
 
 images:
   - name: ghcr.io/hononeko/k8s-config-tools
-    newTag: 0.1.0@sha256:fa8e55d5c4b2971076cc2dfd70ff15f1c1734245de6bb109190e744a86cb9e94
+    newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
