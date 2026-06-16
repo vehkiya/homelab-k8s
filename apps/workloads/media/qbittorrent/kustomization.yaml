@@ -26,7 +26,7 @@ images:
   - name: alpine/k8s
     newTag: 1.36.2@sha256:44ef4942e171939b9c665a4a84beb80e2dcdb9a24330d4651cfdfd2e9deecc47
   - name: ghcr.io/home-operations/qbittorrent
-    newTag: 5.2.1@sha256:8d58d9ad18a1fb5e556e68bde7ac06046847cc97069257f01d2e1ec0d27ff019
+    newTag: 5.2.2@sha256:58e7ef6ed77f369c484b3066652c9e2e3d2c87bd44fce9883455565145fbd8eb
   - name: ghcr.io/hononeko/qbit-ntfy-sidecar
     newTag: 1.0.1@sha256:3aaa53c009f229b25eb7375814d2610fbf8eccf7b6eb7a651136105e2bf03352
   - name: ghcr.io/qdm12/gluetun
