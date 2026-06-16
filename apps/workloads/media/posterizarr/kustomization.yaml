@@ -23,4 +23,4 @@ images:
   - name: alpine/k8s
     newTag: 1.36.2@sha256:44ef4942e171939b9c665a4a84beb80e2dcdb9a24330d4651cfdfd2e9deecc47
   - name: ghcr.io/fscorrupt/posterizarr
-    newTag: 2.2.49@sha256:e6cad8d01d7718c9617cecb0c4764111846bdea7be5e952e19e0cc932237f5f6
+    newTag: 2.2.50@sha256:488b9fda2d0d8a8cedb2d91ee38d8e9630cf3b2701ec25e756838f364aecc3be
