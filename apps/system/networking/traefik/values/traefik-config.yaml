@@ -40,19 +40,18 @@ ingressRoute:
     # Add custom middlewares : authentication and redirection
     middlewares:
       - name: traefik-dashboard-auth
-logs:
-  general:
-    level: WARN
-  access:
-    enabled: true
-    format: json
-    fields:
-      headers:
-        defaultmode: keep
-        names:
-          Authorization: redact
-          Cookie: redact
-          Set-Cookie: redact
+log:
+  level: WARN
+accessLog:
+  enabled: true
+  format: json
+  fields:
+    headers:
+      defaultMode: keep
+      names:
+        Authorization: redact
+        Cookie: redact
+        Set-Cookie: redact
 
 ports:
   web:
