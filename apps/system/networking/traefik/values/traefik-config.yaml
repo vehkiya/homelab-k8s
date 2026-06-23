@@ -196,6 +196,9 @@ extraObjects:
           crowdsecLapiKeyFile: "/etc/crowdsec-bouncer/bouncer-key"
           updateIntervalSeconds: 60
           mode: stream
+          crowdsecAppsecEnabled: true
+          crowdsecAppsecHost: crowdsec-appsec-service.security.svc.cluster.local:7422
+          crowdsecAppsecFailureBlock: true
           forwardedHeadersTrustedIPs:
             - 10.244.0.0/16
             - fdf0:10:244::/64
