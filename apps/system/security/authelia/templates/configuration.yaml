@@ -390,3 +390,26 @@ identity_providers:
           - "offline_access"
         userinfo_signed_response_alg: "RS256"
         token_endpoint_auth_method: "client_secret_post"
+      # ---- === Fluxer === ----
+      - client_id: "fluxer"
+        client_name: "Fluxer"
+        client_secret: "${FLUXER_SECRET}"
+        public: false
+        authorization_policy: "general_policy"
+        grant_types:
+          - "authorization_code"
+        response_types:
+          - "code"
+        consent_mode: "pre-configured"
+        pre_configured_consent_duration: "30 days"
+        redirect_uris:
+          - "https://fluxer.kerrlab.app/auth/sso/callback"
+        claims_policy: "with_email"
+        scopes:
+          - "openid"
+          - "email"
+          - "profile"
+          - "groups"
+          - "offline_access"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_post"
