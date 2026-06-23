@@ -17,6 +17,18 @@ spec:
         - ports:
             - port: "7700"
               protocol: TCP
+    # === Allow access from Fluxer API and Worker ===
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": home
+            "app": api
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": home
+            "app": worker
+      toPorts:
+        - ports:
+            - port: "7700"
+              protocol: TCP
     # === Allow access from Traefik (external route) ===
     - fromEndpoints:
         - matchLabels:
