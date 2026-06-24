@@ -20,10 +20,10 @@ spec:
     # === Allow access from Fluxer API and Worker ===
     - fromEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": home
+            "k8s:io.kubernetes.pod.namespace": comms
             "app": api
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": home
+            "k8s:io.kubernetes.pod.namespace": comms
             "app": worker
       toPorts:
         - ports:
