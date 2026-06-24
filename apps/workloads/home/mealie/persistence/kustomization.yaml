@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: home
 
 resources:
-  - storage.yaml
+  - nfs-storage.yaml
 
 labels:
   - pairs:

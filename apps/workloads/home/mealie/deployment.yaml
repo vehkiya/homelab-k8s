@@ -18,6 +18,7 @@ spec:
         app: mealie
         networking/expose-web-ui: "true"
     spec:
+      enableServiceLinks: false
       containers:
         - name: mealie
           image: ghcr.io/mealie-recipes/mealie
