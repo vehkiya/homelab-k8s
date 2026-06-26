@@ -13,25 +13,25 @@ prometheus:
 resources:
   requests:
     cpu: "10m"
-    memory: "16Mi"
+    memory: "32Mi"
   limits:
-    cpu: "50m"
-    memory: "64Mi"
+    cpu: "100m"
+    memory: "256Mi"
 
 webhook:
   resources:
     requests:
       cpu: "10m"
-      memory: "16Mi"
+      memory: "32Mi"
     limits:
-      cpu: "50m"
-      memory: "64Mi"
+      cpu: "100m"
+      memory: "128Mi"
 
 cainjector:
   resources:
     requests:
       cpu: "10m"
-      memory: "16Mi"
+      memory: "32Mi"
     limits:
-      cpu: "50m"
-      memory: "64Mi"
+      cpu: "100m"
+      memory: "256Mi"
