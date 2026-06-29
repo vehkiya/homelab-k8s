@@ -29,9 +29,6 @@ spec:
                 name: fluxer-config
             - secretRef:
                 name: fluxer-secrets
-          env:
-            - name: FLUXER_STATIC_CDN_ENDPOINT
-              value: ""
 
           ports:
             - containerPort: 8080
