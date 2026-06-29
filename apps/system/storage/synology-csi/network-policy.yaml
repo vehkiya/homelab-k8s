@@ -3,7 +3,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: synology-csi-policy
 spec:
-  endpointSelector: { }
+  endpointSelector: {}
   # ----=== Ingress ===----
   ingress:
     # === Allow access from the host for Kubelet ===
@@ -37,6 +37,8 @@ spec:
         - 10.10.1.218/32 # Synology NAS IP
       toPorts:
         - ports:
+            - port: "443" # DSM HTTPS
+              protocol: "TCP"
             - port: "5001" # DSM API
               protocol: "TCP"
             - port: "2049" # NFS
@@ -45,7 +47,7 @@ spec:
               protocol: "UDP"
             - port: "3260" # iSCSI
               protocol: "TCP"
-            - port: "111"  # Portmapper
+            - port: "111" # Portmapper
               protocol: "TCP"
-            - port: "111"  # Portmapper
+            - port: "111" # Portmapper
               protocol: "UDP"

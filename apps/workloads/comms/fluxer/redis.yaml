@@ -1,0 +1,32 @@
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: Redis
+metadata:
+  name: redis-fluxer
+spec:
+  kubernetesConfig:
+    image: quay.io/opstree/redis:v8.4.2@sha256:eba9bac8aab170698b7276ba1608ad40268ef597c73925576a533940e49287db
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: "10m"
+        memory: "32Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"
+    redisSecret:
+      name: fluxer-secrets
+      key: REDIS_PASSWORD
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: "longhorn"
+  podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
+  redisExporter:
+    enabled: false
+    image: quay.io/opstree/redis-exporter:v1.44.0@sha256:a63d2b6e946f8b82467ec5f853c24ab994b7cab5eacc3c3cbaa50e49bd27f235

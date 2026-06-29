@@ -1,0 +1,85 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: fluxer-policy
+spec:
+  endpointSelector: {}
+
+  ingress:
+    # Allow all traffic from Traefik
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+    # Allow all internal traffic within the comms namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: comms
+    # Allow external and internal WebRTC media traffic to LiveKit
+    - fromEntities:
+        - world
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "7881"
+              protocol: TCP
+            - port: "7882"
+              protocol: UDP
+
+  egress:
+    # Allow all internal traffic within the comms namespace (Redis, NATS, etc.)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: comms
+
+    # Allow access to Meilisearch
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: data-services
+            app.kubernetes.io/name: meilisearch
+      toPorts:
+        - ports:
+            - port: "7700"
+              protocol: TCP
+
+    # Allow access to PostgreSQL and SeaweedFS (S3) on fortress
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+
+    # Allow external requests (for Unfurl microservice fetching URL previews, STUN/TURN queries, etc.)
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "80"
+              protocol: TCP
+            - port: "587"
+              protocol: TCP
+            - port: "465"
+              protocol: TCP
+            - port: "3478"
+              protocol: UDP
+            - port: "3478"
+              protocol: TCP
+            - port: "19302"
+              protocol: UDP
+    # Allow egress to Traefik namespace (for loopback HTTP/HTTPS)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik

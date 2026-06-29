@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: workloads-comms
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        revision: HEAD
+        directories:
+          - path: apps/workloads/comms/*
+  template:
+    metadata:
+      name: "{{path.basename}}"
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vehkiya/homelab-k8s.git
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "comms"
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+  syncPolicy:
+    preserveResourcesOnDeletion: true

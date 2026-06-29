@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-proxy
+  labels:
+    app: static-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-proxy
+  template:
+    metadata:
+      labels:
+        app: static-proxy
+    spec:
+      containers:
+        - name: static-proxy
+          image: ghcr.io/fluxerapp/fluxer-static:v1
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          ports:
+            - containerPort: 8080
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-proxy
+spec:
+  selector:
+    app: static-proxy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080

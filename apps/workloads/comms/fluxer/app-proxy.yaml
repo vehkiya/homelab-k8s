@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-proxy
+  labels:
+    app: app-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-proxy
+  template:
+    metadata:
+      labels:
+        app: app-proxy
+    spec:
+      containers:
+        - name: app-proxy
+          image: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted:v1
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          envFrom:
+            - configMapRef:
+                name: fluxer-config
+            - secretRef:
+                name: fluxer-secrets
+          env:
+            - name: FLUXER_STATIC_CDN_ENDPOINT
+              value: ""
+
+          ports:
+            - containerPort: 8080
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-proxy
+spec:
+  selector:
+    app: app-proxy
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

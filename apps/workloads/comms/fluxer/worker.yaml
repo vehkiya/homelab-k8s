@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: ghcr.io/fluxerapp/fluxer-api:v1
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          command: ["./node_modules/.bin/tsx", "src/WorkerEntrypoint.ts"]
+          workingDir: /usr/src/app/fluxer_api
+          envFrom:
+            - configMapRef:
+                name: fluxer-config
+            - secretRef:
+                name: fluxer-secrets
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fluxer-secrets
+                  key: REDIS_PASSWORD
+            - name: FLUXER_KV_URL
+              value: "redis://:$(REDIS_PASSWORD)@redis-fluxer:6379/0"

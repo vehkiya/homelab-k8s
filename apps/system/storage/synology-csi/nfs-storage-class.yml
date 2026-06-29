@@ -5,9 +5,9 @@ metadata:
 provisioner: csi.san.synology.com
 parameters:
   protocol: "nfs"
-  dsm: 'nas.kerrlab.app'
-  location: '/volume1'
-  mountPermissions: '0755'
+  dsm: "fortress.kerrlab.app"
+  location: "/volume1"
+  mountPermissions: "0755"
 mountOptions:
   - nfsvers=4.1
   - async
