@@ -59,6 +59,15 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
+    # Allow egress to local reverse proxy (10.10.1.16) for loopback HTTP/HTTPS resolution
+    - toCIDR:
+        - "10.10.1.16/32"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
 
     # Allow external requests (for Unfurl microservice fetching URL previews, STUN/TURN queries, etc.)
     - toEntities:
@@ -88,4 +97,10 @@ spec:
             - port: "80"
               protocol: TCP
             - port: "443"
+              protocol: TCP
+            - port: "8000"
+              protocol: TCP
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
               protocol: TCP
