@@ -100,5 +100,5 @@ data:
   FLUXER_ADMIN_BASE_PATH: "/admin"
   FLUXER_ADMIN_ENDPOINT: "https://fluxer.kerrlab.app/admin"
   FLUXER_APP_ENDPOINT: "https://fluxer.kerrlab.app"
-  FLUXER_STATIC_CDN_ENDPOINT: "https://fluxer.kerrlab.app"
+  FLUXER_STATIC_CDN_ENDPOINT: ""
   FLUXER_ADMIN_OAUTH_REDIRECT_URI: "https://fluxer.kerrlab.app/admin/oauth2_callback"
