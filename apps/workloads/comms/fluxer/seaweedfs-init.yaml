@@ -37,13 +37,13 @@ spec:
             - >
               set -e;
               mc alias set myminio $FLUXER_S3_ENDPOINT $FLUXER_S3_ACCESS_KEY $FLUXER_S3_SECRET_KEY;
-              for b in fluxer fluxer-uploads fluxer-downloads fluxer-reports fluxer-harvests; do
-                if ! mc ls myminio/$b >/dev/null 2>&1; then
-                  mc mb myminio/$b;
+              for b in "$FLUXER_S3_BUCKET_CDN" "$FLUXER_S3_BUCKET_UPLOADS" "$FLUXER_S3_BUCKET_DOWNLOADS" "$FLUXER_S3_BUCKET_REPORTS" "$FLUXER_S3_BUCKET_HARVESTS"; do
+                if ! mc ls myminio/"$b" >/dev/null 2>&1; then
+                  mc mb myminio/"$b";
                 fi
               done;
               # SeaweedFS S3 API doesn't fully support MinIO-style 'mc anonymous' policy resource format
               # (returns 'Policy has invalid resource'). Public assets reading is served natively by
-              # the Filer endpoint directly (e.g. /buckets/fluxer), so we ignore S3 ACL errors.
-              mc anonymous set public myminio/fluxer || true;
+              # the Filer endpoint directly, so we ignore S3 ACL errors.
+              mc anonymous set public myminio/"$FLUXER_S3_BUCKET_CDN" || true;
               echo "buckets ready";
