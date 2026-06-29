@@ -38,6 +38,6 @@ spec:
               mc alias set myminio $FLUXER_S3_ENDPOINT $FLUXER_S3_ACCESS_KEY $FLUXER_S3_SECRET_KEY &&
               for b in fluxer fluxer-uploads fluxer-downloads fluxer-reports fluxer-harvests; do
                 mc mb myminio/$b || true;
-                mc anonymous set public myminio/$b || true;
               done;
+              mc anonymous set public myminio/fluxer || true;
               echo "buckets ready";
