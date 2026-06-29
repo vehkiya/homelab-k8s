@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media-proxy
+  labels:
+    app: media-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: media-proxy
+  template:
+    metadata:
+      labels:
+        app: media-proxy
+    spec:
+      containers:
+        - name: media-proxy
+          image: ghcr.io/fluxerapp/fluxer-media-proxy:v1
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          envFrom:
+            - configMapRef:
+                name: fluxer-config
+            - secretRef:
+                name: fluxer-secrets
+          ports:
+            - containerPort: 8080
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-proxy
+spec:
+  selector:
+    app: media-proxy
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

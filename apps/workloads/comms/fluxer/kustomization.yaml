@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: comms
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: fluxer
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - external-secrets.yaml
+  - redis.yaml
+  - nats.yaml
+  - seaweedfs-init.yaml
+  - livekit.yaml
+  - api.yaml
+  - worker.yaml
+  - gateway.yaml
+  - media-proxy.yaml
+  - static-proxy.yaml
+  - app-proxy.yaml
+  - admin.yaml
+  - microservices.yaml
+  - http-route.yaml
+  - network-policy.yaml
+
+images:
+  - name: ghcr.io/fluxerapp/fluxer-api
+    newTag: 2026.616.51541
+  - name: ghcr.io/fluxerapp/fluxer-gateway
+    newTag: 2026.616.45601
+  - name: ghcr.io/fluxerapp/fluxer-media-proxy
+    newTag: 2026.616.51548
+  - name: ghcr.io/fluxerapp/fluxer-static
+    newTag: 2026.616.45609
+  - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
+    newTag: 2026.616.45607
+  - name: ghcr.io/fluxerapp/fluxer-snowflakes
+    newTag: 2026.616.45608
+  - name: ghcr.io/fluxerapp/fluxer-users
+    newTag: 2026.616.45626
+  - name: ghcr.io/fluxerapp/fluxer-messages
+    newTag: 2026.616.45622
+  - name: ghcr.io/fluxerapp/fluxer-unfurl
+    newTag: 2026.616.45600
+  - name: ghcr.io/fluxerapp/fluxer-admin
+    newTag: 2026.616.51531

@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluxer-config
+data:
+  FLUXER_ENV: "production"
+  NODE_ENV: "production"
+  FLUXER_SELF_HOSTED: "true"
+  FLUXER_BASE_DOMAIN: "fluxer.kerrlab.app"
+  FLUXER_PUBLIC_SCHEME: "https"
+  FLUXER_PUBLIC_PORT: "443"
+  FLUXER_TRUST_CLIENT_IP_HEADER: "true"
+  FLUXER_CLIENT_IP_HEADER_NAME: "x-forwarded-for"
+
+  FLUXER_PASSKEY_RP_ID: "fluxer.kerrlab.app"
+
+  FLUXER_DATABASE_BACKEND: "postgres"
+  FLUXER_POSTGRES_HOST: "fortress.kerrlab.app"
+  FLUXER_POSTGRES_PORT: "15432"
+  FLUXER_POSTGRES_DATABASE: "fluxer"
+  FLUXER_POSTGRES_USERNAME: "fluxer"
+  FLUXER_POSTGRES_SSL: "false"
+
+  FLUXER_KV_URL: "redis://redis-fluxer:6379/0"
+  FLUXER_NATS_URL: "nats://nats:4222"
+  FLUXER_NATS_JETSTREAM_URL: "nats://nats:4222"
+  FLUXER_SVC_NATS_URL: "nats://nats:4222"
+  FLUXER_SVC_SHARD_COUNT: "1"
+
+  FLUXER_SEARCH_ENGINE: "meilisearch"
+  FLUXER_SEARCH_URL: "http://meilisearch-kubernetes.data-services.svc.cluster.local:7700"
+
+  FLUXER_S3_ENDPOINT: "http://fortress.kerrlab.app:8333"
+  FLUXER_S3_PUBLIC_ENDPOINT: "http://fortress.kerrlab.app:8333"
+  FLUXER_S3_REGION: "us-east-1"
+  FLUXER_S3_FORCE_PATH_STYLE: "true"
+  FLUXER_S3_BUCKET_CDN: "fluxer"
+  FLUXER_S3_BUCKET_UPLOADS: "fluxer-uploads"
+  FLUXER_S3_BUCKET_DOWNLOADS: "fluxer-downloads"
+  FLUXER_S3_BUCKET_REPORTS: "fluxer-reports"
+  FLUXER_S3_BUCKET_HARVESTS: "fluxer-harvests"
+  AWS_DEFAULT_REGION: "us-east-1"
+  AWS_EC2_METADATA_DISABLED: "true"
+
+  FLUXER_LIVEKIT_ENABLED: "true"
+  FLUXER_LIVEKIT_WEBHOOK_URL: "http://api:8080/webhooks/livekit"
+  FLUXER_LIVEKIT_URL: "wss://fluxer.kerrlab.app/livekit"
+  FLUXER_LIVEKIT_DEFAULT_REGION: '{"id":"local","name":"Local","emoji":"🏠","latitude":0,"longitude":0}'
+
+  FLUXER_EMAIL_ENABLED: "true"
+  FLUXER_EMAIL_PROVIDER: "smtp"
+  FLUXER_EMAIL_FROM_EMAIL: "homelab@kerrlab.app"
+  FLUXER_EMAIL_FROM_NAME: "Fluxer"
+  FLUXER_EMAIL_SMTP_SECURE: "false"
+
+  FLUXER_SMS_ENABLED: "false"
+  FLUXER_CAPTCHA_ENABLED: "false"
+  FLUXER_CAPTCHA_PROVIDER: "none"
+  FLUXER_STRIPE_ENABLED: "false"
+  FLUXER_NCMEC_ENABLED: "false"
+  FLUXER_CLAMAV_ENABLED: "false"
+  FLUXER_DISCOVERY_ENABLED: "true"
+
+  FLUXER_VAPID_EMAIL: "admin@fluxer.kerrlab.app"
+
+  FLUXER_INTERNAL_API_ENDPOINT: "http://api:8080"
+  FLUXER_API_ENDPOINT: "http://api:8080"
+  FLUXER_INTERNAL_GATEWAY_ENDPOINT: "http://gateway:8080"
+  FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT: "http://media-proxy:8080"
+  FLUXER_MARKETING_ENDPOINT: "https://fluxer.kerrlab.app"
+  FLUXER_MEDIA_PROXY_ENDPOINT: "http://media-proxy:8080"
+  FLUXER_MEDIA_ENDPOINT: "https://fluxer.kerrlab.app/media"
+  FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT: "https://fluxer.kerrlab.app/media"
+
+  FLUXER_API_PORT: "8080"
+  FLUXER_API_PRESIGNED_ATTACHMENT_UPLOADS_ENABLED: "true"
+
+  FLUXER_API_WORKER_MODE: "all_lanes"
+  FLUXER_API_WORKER_ENABLE_CRON_SCHEDULER: "true"
+  FLUXER_API_WORKER_ENABLE_VOICE_RECONCILIATION: "true"
+
+  FLUXER_GATEWAY_PORT: "8080"
+  FLUXER_GATEWAY_MEDIA_PROXY_ENDPOINT: "https://fluxer.kerrlab.app/media"
+  FLUXER_GATEWAY_STATIC_CDN_ENDPOINT: "https://fluxer.kerrlab.app"
+  FLUXER_GATEWAY_LOGGER_LEVEL: "info"
+
+  FLUXER_MEDIA_PROXY_HOST: "0.0.0.0"
+  FLUXER_MEDIA_PROXY_PORT: "8080"
+  FLUXER_MEDIA_PROXY_MODE: "upload"
+  FLUXER_MEDIA_PROXY_STORAGE_BACKEND: "s3"
+
+  FLUXER_APP_PROXY_HOST: "0.0.0.0"
+  FLUXER_APP_PROXY_PORT: "8080"
+  DISCOVERY_UPSTREAM_URL: "https://fluxer.kerrlab.app/api/.well-known/fluxer"
+  PUBLIC_BOOTSTRAP_API_ENDPOINT: "/api"
+  PUBLIC_BOOTSTRAP_API_PUBLIC_ENDPOINT: "https://fluxer.kerrlab.app/api"
+
+  FLUXER_ADMIN_HOST: "0.0.0.0"
+  FLUXER_ADMIN_PORT: "8080"
+  FLUXER_ADMIN_BASE_PATH: "/admin"
+  FLUXER_ADMIN_ENDPOINT: "https://fluxer.kerrlab.app/admin"
+  FLUXER_APP_ENDPOINT: "https://fluxer.kerrlab.app"
+  FLUXER_STATIC_CDN_ENDPOINT: "https://fluxer.kerrlab.app"
+  FLUXER_ADMIN_OAUTH_REDIRECT_URI: "https://fluxer.kerrlab.app/admin/oauth2_callback"

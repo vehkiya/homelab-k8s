@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seaweedfs-init
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: minio/mc:latest@sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          envFrom:
+            - configMapRef:
+                name: fluxer-config
+          env:
+            - name: FLUXER_S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fluxer-secrets
+                  key: FLUXER_S3_ACCESS_KEY
+            - name: FLUXER_S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fluxer-secrets
+                  key: FLUXER_S3_SECRET_KEY
+          command:
+            - /bin/sh
+            - -c
+            - >
+              mc alias set myminio $FLUXER_S3_ENDPOINT $FLUXER_S3_ACCESS_KEY $FLUXER_S3_SECRET_KEY &&
+              for b in fluxer fluxer-uploads fluxer-downloads fluxer-reports fluxer-harvests; do
+                mc mb myminio/$b || true;
+                mc anonymous set public myminio/$b || true;
+              done;
+              echo "buckets ready";
