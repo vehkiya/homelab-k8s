@@ -18,10 +18,6 @@ spec:
         app: salt-rim
         networking/expose-web-ui: "true"
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
       affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
