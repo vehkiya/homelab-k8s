@@ -19,7 +19,7 @@ data:
   FLUXER_POSTGRES_PORT: "15432"
   FLUXER_POSTGRES_DATABASE: "fluxer"
   FLUXER_POSTGRES_USERNAME: "fluxer"
-  FLUXER_POSTGRES_SSL: "false"
+  FLUXER_POSTGRES_SSL: "true"
 
   FLUXER_KV_URL: "redis://redis-fluxer:6379/0"
   FLUXER_NATS_URL: "nats://nats:4222"
