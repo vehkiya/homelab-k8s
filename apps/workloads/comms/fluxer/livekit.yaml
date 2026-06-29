@@ -97,3 +97,4 @@ spec:
       protocol: UDP
       targetPort: 7882
   type: LoadBalancer
+  externalTrafficPolicy: Local
