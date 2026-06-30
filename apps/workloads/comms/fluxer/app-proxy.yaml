@@ -19,11 +19,11 @@ spec:
           image: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted:v1
           resources:
             requests:
-              cpu: 50m
-              memory: 128Mi
+              cpu: 100m
+              memory: 256Mi
             limits:
-              cpu: 500m
-              memory: 512Mi
+              cpu: 1000m
+              memory: 1Gi
           envFrom:
             - configMapRef:
                 name: fluxer-config
