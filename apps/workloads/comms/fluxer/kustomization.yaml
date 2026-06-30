@@ -45,4 +45,4 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-unfurl
     newTag: 2026.616.45600@sha256:696bbd82bfb608550f042e16533cec76906cda2e662d1264cdd04d4c2781b861
   - name: ghcr.io/fluxerapp/fluxer-admin
-    newTag: 2026.616.51531@sha256:5f06e15eb5a81db506b081852553d29ba45976c98be909dea5ef24be8545b3ab
+    newTag: 2026.630.20736@sha256:c3d2d961671892cf88f0add61d93e9a945a9493520ea4711a8ee3c7cf82528d3
