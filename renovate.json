@@ -158,6 +158,12 @@
     {
       "matchPackageNames": ["ghcr.io/matter-js/matterjs-server"],
       "changelogUrl": "https://github.com/matter-js/matterjs-server/blob/main/CHANGELOG.md"
+    },
+    {
+      "groupName": "fluxerapp",
+      "matchPackageNames": [
+        "/^ghcr\\.io/fluxerapp//"
+      ]
     }
   ]
 }
