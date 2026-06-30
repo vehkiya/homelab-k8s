@@ -101,3 +101,4 @@ data:
   FLUXER_ADMIN_ENDPOINT: "https://fluxer.kerrlab.app/admin"
   FLUXER_APP_ENDPOINT: "https://fluxer.kerrlab.app"
   FLUXER_ADMIN_OAUTH_REDIRECT_URI: "https://fluxer.kerrlab.app/admin/oauth2_callback"
+  FLUXER_RELAX_REGISTRATION_RATE_LIMITS: "true"
