@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otbr-agent
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: otbr-agent
+  template:
+    metadata:
+      labels:
+        app: otbr-agent
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:10:00" }]'
+    spec:
+      volumes:
+        - name: shared-tty
+          emptyDir: {}
+        - name: dev-pts
+          hostPath:
+            path: /dev/pts
+            type: Directory
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+        - name: otbr-data
+          persistentVolumeClaim:
+            claimName: otbr-data-pvc
+        - name: proxy-script
+          configMap:
+            name: otbr-proxy
+            defaultMode: 0755
+
+      initContainers:
+        - name: compile-proxy
+          image: golang:1.22-alpine
+          command:
+            - sh
+            - -c
+            - |
+              go build -ldflags="-s -w" -o /shared/proxy /app/proxy.go
+          volumeMounts:
+            - name: proxy-script
+              mountPath: /app/proxy.go
+              subPath: proxy.go
+            - name: shared-tty
+              mountPath: /shared
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+      containers:
+        # 1. Socat Network-to-Serial bridge
+        - name: socat-tunnel
+          image: alpine/socat:latest
+          command:
+            - socat
+            - pty,link=/shared/ttyOTBR,raw,echo=0
+            - tcp:192.168.4.46:6638
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: shared-tty
+              mountPath: /shared
+            - name: dev-pts
+              mountPath: /dev/pts
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "32Mi"
+
+        # 2. Official OpenThread Border Router Agent
+        - name: otbr-agent
+          image: openthread/otbr:latest
+          command:
+            - sh
+            - -c
+            - |
+              # Start user-space NAT proxy (Go binary)
+              /shared/proxy &
+              PROXY_PID=$!
+
+              /app/etc/docker/test/docker_entrypoint.sh spinel+hdlc+uart:///shared/ttyOTBR &
+              ENTRYPOINT_PID=$!
+
+              # Self-healing background monitor and configuration loop
+              (
+                sleep 5
+                while true; do
+                  if ! service otbr-agent status >/dev/null 2>&1; then
+                    echo "[Monitor] otbr-agent is not running! Starting it..."
+                    service otbr-agent start || true
+                    sleep 3
+                  fi
+                  if ot-ctl -I wpan0 state 2>/dev/null | grep -qE "disabled|detached"; then
+                    echo "[Monitor] Thread is disabled/detached. Configuring dataset and starting..."
+                    ot-ctl dataset set active 000300000F01026AAF0208D2A77360F57E14430E08000062F411A5979F05108EFA50EF8502124B55060149A51FFBFF030D4E4553542D50414E2D364141460708FDD8FA8BD4A50000041003E9980C22C5AF9D09FFAF88AE133AF50C0402A0F77835060004001FFFE0 || true
+                    ot-ctl ifconfig up || true
+                    ot-ctl thread start || true
+                    sleep 5
+                  fi
+                  if ot-ctl -I wpan0 state 2>/dev/null | grep -qE "child|router|leader"; then
+                    ot-ctl br rioprf high || true
+                    ot-ctl br routeprf high || true
+                    ot-ctl netdata register || true
+                  fi
+                  sleep 15
+                done
+              ) &
+
+              wait $ENTRYPOINT_PID
+          env:
+            - name: INFRA_INTERFACE
+              value: "net1"
+            - name: BACKBONE_INTERFACE
+              value: "net1"
+            - name: RADIO_URL
+              value: "spinel+hdlc+uart:///shared/ttyOTBR"
+            - name: NAT64
+              value: "0"
+            - name: DNS64
+              value: "0"
+            - name: FIREWALL
+              value: "0"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: shared-tty
+              mountPath: /shared
+            - name: dev-pts
+              mountPath: /dev/pts
+            - name: tun-device
+              mountPath: /dev/net/tun
+            - name: otbr-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "128Mi"

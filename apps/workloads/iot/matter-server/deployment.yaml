@@ -29,6 +29,7 @@ spec:
               sysctl -w net.ipv6.conf.net1.accept_ra_rt_info_max_plen=64
               ip route add 224.0.0.0/4 dev net1 || true
               ip -6 route add ff00::/8 dev net1 || true
+              ip -6 route replace fd2f:741e:f59b:1::/64 via fe80::ff:fe00:1000 dev net1 metric 100 || true
           securityContext:
             privileged: true
           resources:
@@ -41,6 +42,12 @@ spec:
       containers:
         - image: ghcr.io/matter-js/matterjs-server
           name: matter-server
+          command:
+            - sh
+            - -c
+            - |
+              sed -i 's/messageCounterBitmap = 4294967295/messageCounterBitmap = 0/g' /app/node_modules/@matter/protocol/dist/esm/protocol/MessageReceptionState.js || true
+              exec node --enable-source-maps /app/node_modules/matter-server/dist/esm/MatterServer.js
           env:
             - name: PRODUCTION_MODE
               value: "true"
@@ -48,6 +55,8 @@ spec:
               value: "net1"
             - name: STORAGE_PATH
               value: "/data"
+            - name: LOG_LEVEL
+              value: "debug"
           volumeMounts:
             - name: data
               mountPath: /data
