@@ -19,6 +19,6 @@ resources:
   - bw-sync-cronjob.yaml
 images:
   - name: ghcr.io/hononeko/bw-cli
-    newTag: 2026.6.0@sha256:e9b9593a3a81c8da8ab93b3c9488d7fe226e96aba0fc7bd5425233574605d9ee
+    newTag: 2026.6.0@sha256:a406b7a77b7ad6f4756042236539ea6102ee75a7ee05ca9a2d50bd2c28af49b1
   - name: alpine/k8s
     newTag: 1.36.2@sha256:44ef4942e171939b9c665a4a84beb80e2dcdb9a24330d4651cfdfd2e9deecc47
