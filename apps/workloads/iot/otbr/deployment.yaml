@@ -1,0 +1,185 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otbr-agent
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: otbr-agent
+  template:
+    metadata:
+      labels:
+        app: otbr-agent
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:10:00" }]'
+    spec:
+      volumes:
+        - name: shared-tty
+          emptyDir: {}
+        - name: dev-pts
+          hostPath:
+            path: /dev/pts
+            type: Directory
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+        - name: otbr-data
+          persistentVolumeClaim:
+            claimName: otbr-data-pvc
+        - name: proxy-script
+          configMap:
+            name: otbr-proxy
+            defaultMode: 0755
+
+      initContainers:
+        - name: compile-proxy
+          image: golang:1.22-alpine@sha256:1699c10032ca2582ec89a24a1312d986a3f094aed3d5c1147b19880afe40e052
+          command:
+            - sh
+            - -c
+            - |
+              go build -ldflags="-s -w" -o /shared/proxy /app/proxy.go
+          volumeMounts:
+            - name: proxy-script
+              mountPath: /app/proxy.go
+              subPath: proxy.go
+            - name: shared-tty
+              mountPath: /shared
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+      containers:
+        # 1. Socat Network-to-Serial bridge
+        - name: socat-tunnel
+          image: alpine/socat:latest@sha256:d85531a29ef5ba99dfb4717485c239307e2902d522a1bc010992a2728c92cfad
+          command:
+            - socat
+            - pty,link=/shared/ttyOTBR,raw,echo=0
+            - tcp:192.168.4.46:6638
+          volumeMounts:
+            - name: shared-tty
+              mountPath: /shared
+            - name: dev-pts
+              mountPath: /dev/pts
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "32Mi"
+
+        # 2. Official OpenThread Border Router Agent
+        - name: otbr-agent
+          image: openthread/otbr:latest@sha256:db799aed61f61a87d0cd8ae69546a973455f18b40f2cc8e6ae6dea803e5f6d35
+          command:
+            - sh
+            - -c
+            - |
+              cleanup() {
+                echo "[Supervisor] Cleaning up child processes..."
+                [ -n "$PROXY_PID" ] && kill -TERM "$PROXY_PID" 2>/dev/null || true
+                [ -n "$ENTRYPOINT_PID" ] && kill -TERM "$ENTRYPOINT_PID" 2>/dev/null || true
+                [ -n "$MONITOR_PID" ] && kill -TERM "$MONITOR_PID" 2>/dev/null || true
+              }
+
+              trap 'cleanup; exit 143' TERM INT HUP
+
+              # Start user-space NAT proxy (Go binary)
+              /shared/proxy &
+              PROXY_PID=$!
+
+              # Start official border router entrypoint
+              /app/etc/docker/test/docker_entrypoint.sh spinel+hdlc+uart:///shared/ttyOTBR &
+              ENTRYPOINT_PID=$!
+
+              # Self-healing background monitor and configuration loop
+              (
+                sleep 5
+                while true; do
+                  if ! service otbr-agent status >/dev/null 2>&1; then
+                    echo "[Monitor] otbr-agent is not running! Starting it..."
+                    service otbr-agent start || true
+                    sleep 3
+                  fi
+                  if ot-ctl -I wpan0 state 2>/dev/null | grep -qE "disabled|detached"; then
+                    echo "[Monitor] Thread is disabled/detached. Configuring dataset and starting..."
+                    ot-ctl dataset set active "$THREAD_DATASET" || true
+                    ot-ctl ifconfig up || true
+                    ot-ctl thread start || true
+                    sleep 5
+                  fi
+                  if ot-ctl -I wpan0 state 2>/dev/null | grep -qE "child|router|leader"; then
+                    ot-ctl br rioprf high || true
+                    ot-ctl br routeprf high || true
+                    ot-ctl netdata register || true
+                  fi
+                  sleep 15
+                done
+              ) &
+              MONITOR_PID=$!
+
+              # Supervise processes: wait for either critical process to exit
+              while true; do
+                if ! kill -0 "$PROXY_PID" 2>/dev/null; then
+                  wait "$PROXY_PID"
+                  EXIT_CODE=$?
+                  echo "[Supervisor] Proxy process ($PROXY_PID) exited with status $EXIT_CODE"
+                  cleanup
+                  exit "$EXIT_CODE"
+                fi
+
+                if ! kill -0 "$ENTRYPOINT_PID" 2>/dev/null; then
+                  wait "$ENTRYPOINT_PID"
+                  EXIT_CODE=$?
+                  echo "[Supervisor] Entrypoint process ($ENTRYPOINT_PID) exited with status $EXIT_CODE"
+                  cleanup
+                  exit "$EXIT_CODE"
+                fi
+
+                sleep 2
+              done
+          env:
+            - name: INFRA_INTERFACE
+              value: "net1"
+            - name: BACKBONE_INTERFACE
+              value: "net1"
+            - name: RADIO_URL
+              value: "spinel+hdlc+uart:///shared/ttyOTBR"
+            - name: NAT64
+              value: "0"
+            - name: DNS64
+              value: "0"
+            - name: FIREWALL
+              value: "0"
+            - name: THREAD_DATASET
+              valueFrom:
+                secretKeyRef:
+                  name: otbr-credentials
+                  key: dataset
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: shared-tty
+              mountPath: /shared
+            - name: dev-pts
+              mountPath: /dev/pts
+            - name: tun-device
+              mountPath: /dev/net/tun
+            - name: otbr-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "128Mi"
