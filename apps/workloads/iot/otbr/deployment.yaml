@@ -84,10 +84,20 @@ spec:
             - sh
             - -c
             - |
+              cleanup() {
+                echo "[Supervisor] Cleaning up child processes..."
+                [ -n "$PROXY_PID" ] && kill -TERM "$PROXY_PID" 2>/dev/null || true
+                [ -n "$ENTRYPOINT_PID" ] && kill -TERM "$ENTRYPOINT_PID" 2>/dev/null || true
+                [ -n "$MONITOR_PID" ] && kill -TERM "$MONITOR_PID" 2>/dev/null || true
+              }
+
+              trap 'cleanup; exit 143' TERM INT HUP
+
               # Start user-space NAT proxy (Go binary)
               /shared/proxy &
               PROXY_PID=$!
 
+              # Start official border router entrypoint
               /app/etc/docker/test/docker_entrypoint.sh spinel+hdlc+uart:///shared/ttyOTBR &
               ENTRYPOINT_PID=$!
 
@@ -115,8 +125,28 @@ spec:
                   sleep 15
                 done
               ) &
+              MONITOR_PID=$!
 
-              wait $ENTRYPOINT_PID
+              # Supervise processes: wait for either critical process to exit
+              while true; do
+                if ! kill -0 "$PROXY_PID" 2>/dev/null; then
+                  wait "$PROXY_PID"
+                  EXIT_CODE=$?
+                  echo "[Supervisor] Proxy process ($PROXY_PID) exited with status $EXIT_CODE"
+                  cleanup
+                  exit "$EXIT_CODE"
+                fi
+
+                if ! kill -0 "$ENTRYPOINT_PID" 2>/dev/null; then
+                  wait "$ENTRYPOINT_PID"
+                  EXIT_CODE=$?
+                  echo "[Supervisor] Entrypoint process ($ENTRYPOINT_PID) exited with status $EXIT_CODE"
+                  cleanup
+                  exit "$EXIT_CODE"
+                fi
+
+                sleep 2
+              done
           env:
             - name: INFRA_INTERFACE
               value: "net1"
