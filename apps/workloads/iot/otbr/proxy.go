@@ -67,12 +67,18 @@ func makeIPv6UDPPacket(srcIP, dstIP net.IP, srcPort, dstPort uint16, payload []b
 	return packet
 }
 
+type clientKey struct {
+	ip   [16]byte
+	port uint16
+}
+
 type clientMapping struct {
 	clientIP   net.IP
 	clientPort uint16
 	clientMAC  []byte
 	targetIP   net.IP
 	conn       *net.UDPConn
+	lastActive time.Time
 }
 
 func main() {
@@ -103,11 +109,11 @@ func main() {
 
 	// (Raw TX Socket not needed, reusing AF_PACKET rxFd for sending)
 
-	mappings := make(map[uint16]*clientMapping)
+	mappings := make(map[clientKey]*clientMapping)
 	
 	rxChan := make(chan []byte, 1024)
 	replyChan := make(chan struct {
-		port    uint16
+		key     clientKey
 		payload []byte
 		addr    *net.UDPAddr
 	}, 1024)
@@ -132,6 +138,9 @@ func main() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
+	ticker := time.NewTicker(30 * time.Second)
+	defer ticker.Stop()
+
 	fmt.Println("User-space Thread UDP NAT Proxy started.")
 
 	for {
@@ -154,12 +163,19 @@ func main() {
 			udpLen := binary.BigEndian.Uint16(udpHeader[4:6])
 
 			if dstPort == 5540 && (dstIP[0] == 0xfd || dstIP[0] == 0xfc) {
-				payload := packet[62 : 62+int(udpLen-8)]
+				if udpLen < 8 || int(udpLen) > len(packet)-54 {
+					continue
+				}
+				payload := packet[62 : 54+int(udpLen)]
 
 				clientMAC := make([]byte, 6)
 				copy(clientMAC, packet[6:12]) // Source MAC in Ethernet header
 
-				mapping, exists := mappings[srcPort]
+				var ipArray [16]byte
+				copy(ipArray[:], srcIP.To16())
+				key := clientKey{ip: ipArray, port: srcPort}
+
+				mapping, exists := mappings[key]
 				if !exists {
 					fmt.Printf("Mapping new client: %s:%d -> %s:5540\n", srcIP.String(), srcPort, dstIP.String())
 					conn, err := net.ListenUDP("udp6", &net.UDPAddr{IP: net.IPv6unspecified})
@@ -174,10 +190,11 @@ func main() {
 						clientMAC:  clientMAC,
 						targetIP:   dstIP,
 						conn:       conn,
+						lastActive: time.Now(),
 					}
-					mappings[srcPort] = mapping
+					mappings[key] = mapping
 
-					go func(p uint16, c *net.UDPConn) {
+					go func(k clientKey, c *net.UDPConn) {
 						replyBuf := make([]byte, 65536)
 						for {
 							n, raddr, err := c.ReadFromUDP(replyBuf)
@@ -185,27 +202,29 @@ func main() {
 								break
 							}
 							if n > 0 {
-								fmt.Printf("[<-] Received Thread Reply from %s:%d for client port %d (%d bytes)\n", raddr.IP.String(), raddr.Port, p, n)
+								fmt.Printf("[<-] Received Thread Reply from %s:%d for client %s:%d (%d bytes)\n", raddr.IP.String(), raddr.Port, net.IP(k.ip[:]).String(), k.port, n)
 								payloadCopy := make([]byte, n)
 								copy(payloadCopy, replyBuf[:n])
 								replyChan <- struct {
-									port    uint16
+									key     clientKey
 									payload []byte
 									addr    *net.UDPAddr
-								}{port: p, payload: payloadCopy, addr: raddr}
+								}{key: k, payload: payloadCopy, addr: raddr}
 							}
 						}
-					}(srcPort, conn)
+					}(key, conn)
 				}
 
+				mapping.lastActive = time.Now()
 				raddr := &net.UDPAddr{IP: dstIP, Port: 5540}
 				fmt.Printf("[->] Forwarding client packet to Thread: %s:%d -> %s:5540 (%d bytes)\n", srcIP.String(), srcPort, dstIP.String(), len(payload))
 				_, _ = mapping.conn.WriteTo(payload, raddr)
 			}
 
 		case reply := <-replyChan:
-			mapping, exists := mappings[reply.port]
+			mapping, exists := mappings[reply.key]
 			if exists {
+				mapping.lastActive = time.Now()
 				// Build Ethernet header
 				ethHeader := make([]byte, 14)
 				copy(ethHeader[0:6], mapping.clientMAC)
@@ -223,8 +242,21 @@ func main() {
 				_ = syscall.Sendto(rxFd, rawFrame, 0, destAddr)
 			}
 
+		case <-ticker.C:
+			now := time.Now()
+			for key, mapping := range mappings {
+				if now.Sub(mapping.lastActive) > 5*time.Minute {
+					fmt.Printf("Expiring idle mapping: %s:%d\n", mapping.clientIP.String(), mapping.clientPort)
+					mapping.conn.Close()
+					delete(mappings, key)
+				}
+			}
+
 		case <-sigChan:
 			fmt.Println("Stopping proxy.")
+			for _, mapping := range mappings {
+				mapping.conn.Close()
+			}
 			return
 		}
 	}
