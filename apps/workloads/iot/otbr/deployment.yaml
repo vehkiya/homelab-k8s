@@ -64,8 +64,6 @@ spec:
             - socat
             - pty,link=/shared/ttyOTBR,raw,echo=0
             - tcp:192.168.4.46:6638
-          securityContext:
-            privileged: true
           volumeMounts:
             - name: shared-tty
               mountPath: /shared
