@@ -67,3 +67,20 @@ Before pushing any changes or finalizing a pull request, the agent **MUST** run 
     kubeconform -strict -summary <file.yaml>
     ```
 
+---
+
+## 4. Strict Image Tag Pinning Policy
+
+To ensure reproducible deployments and compatibility with automated dependency managers (like Renovate):
+*   **No `:latest` or Generic Tags:** All container image declarations MUST be pinned to specific semantic tags (e.g., `v1.2.7`) or specific image digests (SHAs).
+*   **Renovate Compatibility:** Always specify tags in a format that can be easily parsed and updated by Renovate.
+
+---
+
+## 5. Secret Hygiene & Vaultwarden Integration
+
+To ensure maximum security and prevent plaintext secrets from entering the repository:
+*   **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
+*   **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
+
+
