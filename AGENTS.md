@@ -51,21 +51,34 @@ resources:
 
 ## 3. Pre-Push Validation & Linting Workflow
 
-Before pushing any changes or finalizing a pull request, the agent **MUST** run the validation and linting pipeline to verify manifest syntax, schemas, and security practices.
+Before pushing any changes or finalizing a pull request, the agent **MUST** run the validation and linting pipeline matching the GitHub Actions CI (`.github/workflows/ci.yaml`):
 
 ### Validation Sequence
-1.  **YAML Linting:** Check all modified YAML files for syntax and formatting.
-    ```bash
-    yamllint <file.yaml>
-    ```
-2.  **Kubernetes Best Practices (Kube-Linter):** Audit manifests against security policies.
-    ```bash
-    kube-linter lint <file.yaml>
-    ```
-3.  **Kubernetes Conformity (Kubeconform):** Validate manifests against Kubernetes API schemas.
-    ```bash
-    kubeconform -strict -summary <file.yaml>
-    ```
+
+1. **Locate and Render Kustomize Layers:**
+   Locate all directories containing a `kustomization.yaml` that are closest parents to the modified files. For each directory, render the layer using Kustomize:
+   ```bash
+   kustomize build <layer-directory> --enable-helm > built.yaml
+   ```
+
+2. **YAML Linting:**
+   Check the modified YAML files (and the rendered `built.yaml`) for syntax and formatting:
+   ```bash
+   yamllint <file.yaml>
+   ```
+
+3. **Kubernetes Conformity (Kubeconform):**
+   Validate the rendered manifest structure using `kubeconform`. Ensure you ignore missing CRD schemas and skip validations for `Secret` and `SealedSecret` resources:
+   ```bash
+   kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" -cache ~/.cache/kubeconform built.yaml
+   ```
+
+4. **Kubernetes Best Practices (Kube-Linter):**
+   Audit the rendered manifests against security policies:
+   ```bash
+   kube-linter lint built.yaml
+   ```
+   *(Optional: If the layer uses Helm or remote sources, use `yq` to annotate Pod-bearing or Service resources with `"kube-linter.io/ignore-all" = "true"` to avoid upstream resource configuration alerts).*
 
 ---
 
