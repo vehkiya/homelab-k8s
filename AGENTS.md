@@ -83,4 +83,54 @@ To ensure maximum security and prevent plaintext secrets from entering the repos
 *   **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
 *   **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
 
+---
 
+## 6. Network Policy & Zero-Trust Architecture (Cilium)
+
+The cluster operates on a **default-deny network policy** baseline. To allow workload communication, you must define explicit ingress/egress rules using `CiliumNetworkPolicy` resources.
+
+### Pre-configured Global Clusterwide Policies
+Certain system-wide connections are already enabled globally in `apps/bootstrap/cilium/global-network-policies.yaml`. You do **not** need to redefine rules for these in local workload policies:
+1. **DNS Resolution:** Egress to CoreDNS (port `53` UDP/TCP in `kube-system`) is allowed for all endpoints cluster-wide.
+2. **Health Probes:** Ingress communication from the `host` and `health` entities is allowed for kubelet liveness/readiness probes.
+3. **Traefik Ingress:**
+   * Ingress from Traefik to any pod labeled with `networking/expose-web-ui: "true"` targeting a named port `"web-ui"` is automatically allowed.
+   * Ingress from Traefik to any pod labeled with `networking/expose-http-api: "true"` targeting a named port `"http-api"` is automatically allowed.
+
+### Named Port Ingress Mapping Example
+For a workload to utilize the global Traefik ingress policies:
+1. The **Pod template labels** must include `networking/expose-web-ui: "true"` (or `networking/expose-http-api: "true"`).
+2. The **Pod container ports** must have a named port `"web-ui"` (or `"http-api"`).
+3. The corresponding **Service** and **HTTPRoute** must target this `"web-ui"` (or `"http-api"`) named port.
+
+Example configuration flow:
+
+```yaml
+# 1. Pod Spec (deployment.yaml)
+spec:
+  template:
+    metadata:
+      labels:
+        networking/expose-web-ui: "true" # Matches the global policy
+    spec:
+      containers:
+        - name: app
+          ports:
+            - name: web-ui # Named port allowed by global policy
+              containerPort: 8080
+              protocol: TCP
+
+# 2. Service Spec (service.yaml)
+spec:
+  ports:
+    - name: web-ui
+      port: 80
+      targetPort: web-ui # References the container's named port
+
+# 3. Gateway Route Spec (http-route.yaml)
+spec:
+  rules:
+    - backendRefs:
+        - name: app-service
+          port: 80 # Routes through the service to targetPort
+```

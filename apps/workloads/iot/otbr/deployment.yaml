@@ -37,7 +37,7 @@ spec:
 
       initContainers:
         - name: compile-proxy
-          image: golang:1.22-alpine
+          image: golang:1.22-alpine@sha256:1699c10032ca2582ec89a24a1312d986a3f094aed3d5c1147b19880afe40e052
           command:
             - sh
             - -c
@@ -59,7 +59,7 @@ spec:
       containers:
         # 1. Socat Network-to-Serial bridge
         - name: socat-tunnel
-          image: alpine/socat:latest
+          image: alpine/socat:latest@sha256:d85531a29ef5ba99dfb4717485c239307e2902d522a1bc010992a2728c92cfad
           command:
             - socat
             - pty,link=/shared/ttyOTBR,raw,echo=0
@@ -81,7 +81,7 @@ spec:
 
         # 2. Official OpenThread Border Router Agent
         - name: otbr-agent
-          image: openthread/otbr:latest
+          image: openthread/otbr:latest@sha256:db799aed61f61a87d0cd8ae69546a973455f18b40f2cc8e6ae6dea803e5f6d35
           command:
             - sh
             - -c
