@@ -14,7 +14,7 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: ghcr.io/home-operations/prowlarr
-    newTag: 2.5.1@sha256:5014bec2085b72759570ae958cdee251956c059bf82ca6244a3ce99e1c327a12
+    newTag: 2.5.2@sha256:dbe7685eb134cd63eaa130fbf60060f33f26d7482b5fc5a81da9fca8552aa4ed
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
 
