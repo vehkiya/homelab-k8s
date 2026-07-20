@@ -23,7 +23,7 @@ helmCharts:
           limits:
             cpu: 100m
             memory: 128Mi
-      externalScaler:
+      scaler:
         resources:
           requests:
             cpu: 20m
