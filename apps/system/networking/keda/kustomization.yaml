@@ -14,6 +14,32 @@ helmCharts:
     version: 0.15.0
     releaseName: keda-add-ons-http
     namespace: networking
+    valuesInline:
+      operator:
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      externalScaler:
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      interceptor:
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+
 
 resources:
   - namespace.yaml
