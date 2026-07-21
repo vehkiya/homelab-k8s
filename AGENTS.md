@@ -169,3 +169,7 @@ When testing or debugging manual cluster edits (e.g. via `kubectl apply`), ArgoC
    ```
 4. **Perform Testing:** Run your `kubectl apply` commands for testing.
 5. **Revert Local File:** Revert the `apps/gitops/app-of-apps/<app-name>.yaml` file back to its un-commented state so git remains clean.
+6. **Post-Merge Cleanup (Only Upon Explicit User Confirmation):**
+   Once testing is complete, the PR is merged, and the user explicitly requests to finalize/resume:
+   * Switch to `master` and pull the latest changes (`git checkout master && git pull origin master`).
+   * Re-apply the `app-of-apps` manifest (`kubectl apply -f apps/gitops/app-of-apps/<app-name>.yaml`) to restore ArgoCD automated sync in the cluster.
