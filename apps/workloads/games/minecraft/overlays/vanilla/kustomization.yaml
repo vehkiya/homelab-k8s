@@ -33,7 +33,7 @@ patches:
       data:
         TYPE: "MODRINTH"
         # File provided via NFS aux mount
-        MODRINTH_MODPACK: "/nfs/Server 1.21.11 1.0.0.mrpack"
+        MODRINTH_MODPACK: "/nfs/Server_26.2.mrpack"
         EULA: "TRUE"
         VERSION: "LATEST"
         MOTD: "Vanilla Modpack Server"
