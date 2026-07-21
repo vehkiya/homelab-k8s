@@ -147,3 +147,25 @@ spec:
         - name: app-service
           port: 80 # Routes through the service to targetPort
 ```
+
+---
+
+## 7. Temporary ArgoCD Autosync Disabling for Debugging & Testing
+
+When testing or debugging manual cluster edits (e.g. via `kubectl apply`), ArgoCD's `selfHeal` will automatically overwrite your test changes. To temporarily disable autosync during a debugging session:
+
+1. **Locate the App-of-Apps Manifest:**
+   Find the matching ApplicationSet in `apps/gitops/app-of-apps/` (e.g., `workloads-iot.yaml`, `workloads-media.yaml`).
+2. **Comment out `automated` Sync Policy:**
+   ```yaml
+         syncPolicy:
+           # automated:
+           #   prune: true
+           #   selfHeal: true
+   ```
+3. **Apply to Cluster:**
+   ```bash
+   kubectl apply -f apps/gitops/app-of-apps/<app-name>.yaml
+   ```
+4. **Perform Testing:** Run your `kubectl apply` commands for testing.
+5. **Revert Local File:** Revert the `apps/gitops/app-of-apps/<app-name>.yaml` file back to its un-commented state so git remains clean.
