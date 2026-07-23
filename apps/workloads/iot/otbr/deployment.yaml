@@ -15,6 +15,7 @@ spec:
         app: otbr-agent
       annotations:
         k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:10:00" }]'
+        otbr.reconnect-loop: "enabled"
     spec:
       volumes:
         - name: shared-tty
@@ -61,9 +62,16 @@ spec:
         - name: socat-tunnel
           image: alpine/socat:latest@sha256:d85531a29ef5ba99dfb4717485c239307e2902d522a1bc010992a2728c92cfad
           command:
-            - socat
-            - pty,link=/shared/ttyOTBR,raw,echo=0
-            - tcp:192.168.4.46:6638
+            - sh
+            - -c
+            - |
+              while true; do
+                echo "[socat-tunnel] Connecting to 192.168.4.46:6638..."
+                rm -f /shared/ttyOTBR
+                socat pty,link=/shared/ttyOTBR,raw,echo=0 tcp:192.168.4.46:6638,keepalive,retry=30,interval=2
+                echo "[socat-tunnel] Connection lost, retrying in 2s..."
+                sleep 2
+              done
           volumeMounts:
             - name: shared-tty
               mountPath: /shared
