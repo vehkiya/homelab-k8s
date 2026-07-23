@@ -103,7 +103,9 @@ else
 fi
 
 if [ -n "$FORCE_FLAG" ]; then
-    UPGRADE_CMD+=("$FORCE_FLAG")
+    echo "Force mode enabled: Cordoning node and disabling drain to bypass PDB blocks (e.g. Longhorn instance-manager)..."
+    kubectl cordon "${NODE%%.*}" 2>/dev/null || true
+    UPGRADE_CMD+=(--drain=false)
 fi
 
 echo "Running: ${UPGRADE_CMD[*]}"
@@ -131,7 +133,8 @@ if [ -z "$STAGE_FLAG" ]; then
         K8S_NODE="${NODE%%.*}"
         STATUS=$(kubectl get node "$K8S_NODE" -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null)
         if [ "$STATUS" = "True" ]; then
-            echo "Node $NODE is Ready!"
+            echo "Node $NODE is Ready! Uncordoning..."
+            kubectl uncordon "$K8S_NODE" 2>/dev/null || true
             READY=true
             break
         fi

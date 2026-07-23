@@ -18,6 +18,7 @@ done
 
 # Argument Parsing
 STAGE_FLAG=""
+FORCE_FLAG=""
 VERSION=""
 
 while [ "$#" -gt 0 ]; do
@@ -26,8 +27,12 @@ while [ "$#" -gt 0 ]; do
             STAGE_FLAG="--stage"
             shift
             ;;
+        --force)
+            FORCE_FLAG="--force"
+            shift
+            ;;
         -h|--help)
-            echo "Usage: $0 [--stage] <version>"
+            echo "Usage: $0 [--stage] [--force] <version>"
             exit 0
             ;;
         *)
@@ -128,7 +133,7 @@ for NODE in "${CP_ARRAY[@]}"; do
     fi
     
     # Execute the single-node upgrade script
-    if "$SINGLE_NODE_UPGRADE_SCRIPT" $STAGE_FLAG "$NODE" "$VERSION"; then
+    if "$SINGLE_NODE_UPGRADE_SCRIPT" $STAGE_FLAG $FORCE_FLAG "$NODE" "$VERSION"; then
         echo "✅ Successfully processed $NODE."
         
         # In full upgrade mode, wait for the cluster to regain health (etcd quorum & endpoints)
@@ -160,7 +165,7 @@ for NODE in "${WORKER_ARRAY[@]}"; do
     
     # We upgrade workers one-by-one here, but this loop could be modified to background tasks 
     # for concurrent batching if desired in the future.
-    if "$SINGLE_NODE_UPGRADE_SCRIPT" $STAGE_FLAG "$NODE" "$VERSION"; then
+    if "$SINGLE_NODE_UPGRADE_SCRIPT" $STAGE_FLAG $FORCE_FLAG "$NODE" "$VERSION"; then
         echo "✅ Successfully processed worker $NODE."
         echo "----------------------------------------------------"
     else

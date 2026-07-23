@@ -16,7 +16,9 @@ spec:
     - noatime
     - rsize=1048576
     - wsize=1048576
-    - hard
+    - soft
+    - timeo=30
+    - retrans=2
   nfs:
     server: fortress.kerrlab.app
     path: /volume1/cluster/media/plex/backup

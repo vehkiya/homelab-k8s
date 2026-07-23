@@ -11,6 +11,9 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   mountOptions:
+    - soft
+    - timeo=30
+    - retrans=2
     - nfsvers=4.1
     - async
     - noatime

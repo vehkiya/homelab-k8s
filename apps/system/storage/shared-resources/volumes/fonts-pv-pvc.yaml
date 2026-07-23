@@ -11,6 +11,9 @@ spec:
     - ReadWriteMany # Or ReadOnlyMany if only reading
   persistentVolumeReclaimPolicy: Retain # Or Delete if you want the data deleted when the PV is deleted
   mountOptions:
+    - soft
+    - timeo=30
+    - retrans=2
     - nfsvers=4.1
     - async
     - noatime
