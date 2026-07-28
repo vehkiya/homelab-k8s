@@ -259,6 +259,7 @@ identity_providers:
         redirect_uris:
           - "https://recipes.kerrlab.app/login"
           - "https://recipes.kerrlab.app/login?direct=1"
+        claims_policy: "with_groups"
         scopes:
           - "openid"
           - "email"
