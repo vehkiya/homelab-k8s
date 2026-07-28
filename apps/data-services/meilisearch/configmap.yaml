@@ -3,6 +3,7 @@ data:
   MEILI_ENV: "production"
   MEILI_EXPERIMENTAL_DUMPLESS_UPGRADE: "true"
   MEILI_NO_ANALYTICS: "true"
+  MEILI_UPGRADE_DB: "true"
 kind: ConfigMap
 metadata:
   labels:
