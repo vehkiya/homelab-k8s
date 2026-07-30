@@ -15,4 +15,4 @@ images:
   - name: ghcr.io/mend/renovate-ce
     newTag: 15.1.0@sha256:2f84f32cd3c0d5cf910c158383f5186cd7524d507c7581df1974f268612af463
   - name: redis
-    newTag: 8.8.1@sha256:c88d347edef6249a6d2293f926f1eeb48bd40c57cbcd02c07f52e7f1fd2cb46b
+    newTag: 8.10.0@sha256:c29e49ab2f85760a3827b53882e6dd9f5c6c3f0bb7d724e07bb31cbf275a5236
