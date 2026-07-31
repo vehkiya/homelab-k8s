@@ -1,18 +1,16 @@
 apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
-  name: speedtest
+  name: it-tools
 spec:
   hosts:
-    - speed.kerrlab.app
+    - tools.kerrlab.app
   scaleTargetRef:
-    name: speedtest
+    name: it-tools
     kind: Deployment
     apiVersion: apps/v1
-    service: speedtest-ui
-    port: 3000
+    service: it-tools-ui
+    port: 80
   replicas:
     min: 0
     max: 1
-  cooldownPeriod: 60
-

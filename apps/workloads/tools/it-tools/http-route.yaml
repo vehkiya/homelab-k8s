@@ -14,5 +14,6 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: it-tools-ui
-          port: 80
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080

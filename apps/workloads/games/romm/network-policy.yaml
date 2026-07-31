@@ -18,6 +18,15 @@ spec:
         - ports:
             - port: "8080"
               protocol: TCP
+    # === Allow Ingress from KEDA Interceptor ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: networking
+            app.kubernetes.io/component: interceptor
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
 
   # ----=== Egress ===----
   egress:

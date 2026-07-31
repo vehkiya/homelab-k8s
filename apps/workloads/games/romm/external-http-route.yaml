@@ -20,5 +20,6 @@ spec:
             kind: Middleware
             name: romm-rate-limit
       backendRefs:
-        - name: romm-ui
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
           port: 8080

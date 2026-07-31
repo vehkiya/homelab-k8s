@@ -7,6 +7,16 @@ spec:
     matchLabels:
       app: nodecast-tv
 
+  # ----=== Ingress ===----
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: networking
+            app.kubernetes.io/component: interceptor
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: "TCP"
 
   # ----=== Egress ===----
   egress:

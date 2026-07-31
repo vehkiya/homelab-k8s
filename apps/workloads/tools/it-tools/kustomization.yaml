@@ -5,6 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - httpscaledobject.yaml
   - network-policy.yaml
 images:
   - name: ghcr.io/corentinth/it-tools
