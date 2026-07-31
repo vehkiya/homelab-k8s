@@ -10,6 +10,12 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       namespace: home
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: media
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: games
   to:
     - group: ""
       kind: Service
