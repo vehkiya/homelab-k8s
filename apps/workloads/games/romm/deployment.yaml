@@ -24,10 +24,10 @@ spec:
               type: RuntimeDefault
           resources:
             requests:
-              cpu: "50m"
+              cpu: "250m"
               memory: "256Mi"
             limits:
-              cpu: "500m"
+              cpu: "1000m"
               memory: "1Gi"
           ports:
             - containerPort: 8080
@@ -83,7 +83,7 @@ spec:
         runAsGroup: 1000
         runAsNonRoot: true
         fsGroup: 65534
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
         - name: romm-storage
           persistentVolumeClaim:
