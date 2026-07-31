@@ -383,6 +383,7 @@ identity_providers:
         pre_configured_consent_duration: "30 days"
         redirect_uris:
           - "https://nodecast.kerrlab.app/api/auth/oidc/callback"
+        claims_policy: "with_groups"
         scopes:
           - "openid"
           - "email"

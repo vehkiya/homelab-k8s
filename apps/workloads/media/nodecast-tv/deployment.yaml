@@ -37,6 +37,12 @@ spec:
               value: "production"
             - name: OIDC_ISSUER_URL
               value: "https://auth.kerrlab.app"
+            - name: OIDC_AUTH_URL
+              value: "https://auth.kerrlab.app/api/oidc/authorization"
+            - name: OIDC_TOKEN_URL
+              value: "https://auth.kerrlab.app/api/oidc/token"
+            - name: OIDC_USERINFO_URL
+              value: "https://auth.kerrlab.app/api/oidc/userinfo"
             - name: OIDC_CLIENT_ID
               value: "nodecast"
             - name: OIDC_CALLBACK_URL
