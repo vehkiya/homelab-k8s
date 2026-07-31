@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: nodecast-tv
 spec:
-  replicas: 1
   strategy:
     type: Recreate
   selector:
