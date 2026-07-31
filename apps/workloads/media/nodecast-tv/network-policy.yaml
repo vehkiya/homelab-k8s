@@ -20,9 +20,20 @@ spec:
 
   # ----=== Egress ===----
   egress:
-    # === Allow access to external ===
+    # === Allow access to external and host network ===
     - toEntities:
         - "world"
+        - "host"
+        - "remote-node"
+    # === Allow access to local reverse proxy (10.10.1.16) for loopback HTTP/HTTPS resolution ===
+    - toCIDR:
+        - "10.10.1.16/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+            - port: "80"
+              protocol: "TCP"
     # === Allow access to Traefik (for OIDC) ===
     - toEndpoints:
         - matchLabels:
@@ -34,3 +45,11 @@ spec:
               protocol: "TCP"
             - port: "80"
               protocol: "TCP"
+            - port: "9443"
+              protocol: "TCP"
+            - port: "8443"
+              protocol: "TCP"
+    - toServices:
+        - k8sService:
+            serviceName: traefik-internal
+            namespace: traefik

@@ -11,15 +11,23 @@ spec:
   rules:
     - matches:
         - path:
+            type: Exact
+            value: /login.html
+        - path:
+            type: Exact
+            value: /api/auth/login
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /api/auth/oidc/login
+            statusCode: 302
+    - matches:
+        - path:
             type: PathPrefix
             value: /
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking
           port: 8080
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: "traefik.io"
-            kind: "Middleware"
-            name: "authelia-forward-auth"
