@@ -1,18 +1,16 @@
 apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
-  name: speedtest
+  name: iconify
 spec:
   hosts:
-    - speed.kerrlab.app
+    - iconify.kerrlab.app
   scaleTargetRef:
-    name: speedtest
+    name: iconify
     kind: Deployment
     apiVersion: apps/v1
-    service: speedtest-ui
+    service: iconify
     port: 3000
   replicas:
     min: 0
     max: 1
-  cooldownPeriod: 60
-

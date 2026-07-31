@@ -9,6 +9,15 @@ spec:
 
   # === INGRESS: Who can reach Iconify? ===
   ingress:
+    # Allow KEDA HTTP Interceptor
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: networking
+            app.kubernetes.io/component: interceptor
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
     # Allow Prometheus / Monitoring (Optional)
     - fromEndpoints:
         - matchLabels:
