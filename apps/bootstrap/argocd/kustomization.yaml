@@ -6,14 +6,14 @@ resources:
   - namespace.yaml
   - argocd-secret.yaml
   # renovate: datasource=github-tags depName=argoproj/argo-cd
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.4.5/manifests/ha/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.4.6/manifests/ha/install.yaml
   - argocd-repositories-external-secret.yaml
   - ingress-route.yaml
   - network-policy.yaml
 
 images:
   - name: quay.io/argoproj/argocd
-    newTag: v3.4.5@sha256:224e454cfd8c1818fec3ed17b72b2034c9a3915fa819e1dcccafc753776d446a
+    newTag: v3.4.6@sha256:6e9f4f1d646d9056c8e285495d0c8043b5f553c784181b3522ef324dcefdcc82
   - name: redis
     newTag: 8.10.0@sha256:c29e49ab2f85760a3827b53882e6dd9f5c6c3f0bb7d724e07bb31cbf275a5236
   - name: busybox
