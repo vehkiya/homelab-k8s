@@ -13,7 +13,7 @@ session:
   name: authelia_session
   # This should match the root domain you are protecting
   # The secret is loaded from an environment variable
-  secret: "${SESSION_SECRET}"
+  secret: "{{ .Env.SESSION_SECRET }}"
   same_site: "lax"
   inactivity: "1h"
   expiration: "8h"
@@ -24,7 +24,7 @@ session:
       same_site: "lax"
 
   redis:
-    password: "${REDIS_PASSWORD}"
+    password: "{{ .Env.REDIS_PASSWORD }}"
     high_availability:
       sentinel_name: "mymaster"
       nodes:
@@ -53,7 +53,7 @@ identity_validation:
     # jwt_algorithm: 'HS256'
 
     ## The secret key used to sign and verify the JWT.
-    jwt_secret: "${JWT_SECRET}"
+    jwt_secret: "{{ .Env.JWT_SECRET }}"
 
 # Regulation settings
 regulation:
@@ -63,22 +63,22 @@ regulation:
 
 # Storage configuration using PostgreSQL
 storage:
-  encryption_key: "${STORAGE_ENCRYPTION_KEY}"
+  encryption_key: "{{ .Env.STORAGE_ENCRYPTION_KEY }}"
   postgres:
     timeout: "10s"
     address: "tcp://postgres-db-rw.data-services.svc.cluster.local:5432"
     database: authelia-db
     username: authelia_user
     # The password is loaded from an environment variable
-    password: "${STORAGE_PASSWORD}"
+    password: "{{ .Env.STORAGE_PASSWORD }}"
 
 # Notifier configuration (SMTP example)
 notifier:
   smtp:
     address: "smtp://smtp.protonmail.ch:587"
     sender: "Authelia <accounts@kerrlab.app>"
-    username: "${SMTP_USERNAME}"
-    password: "${SMTP_PASSWORD}"
+    username: "{{ .Env.SMTP_USERNAME }}"
+    password: "{{ .Env.SMTP_PASSWORD }}"
     subject: "[Authelia] {title}"
     tls:
       server_name: "smtp.protonmail.ch"
@@ -97,7 +97,7 @@ authentication_backend:
     additional_users_dn: "ou=people"
     additional_groups_dn: "ou=groups"
     user: "uid=authelia,ou=people,dc=ldap,dc=kerrlab,dc=app"
-    password: "${LDAP_PASSWORD}"
+    password: "{{ .Env.LDAP_PASSWORD }}"
     timeout: "10s"
 
 # Access control rules
@@ -175,7 +175,7 @@ webauthn:
 
 identity_providers:
   oidc:
-    hmac_secret: "${OIDC_HMAC_SECRET}"
+    hmac_secret: "{{ .Env.OIDC_HMAC_SECRET }}"
     jwks:
       - key_id: 'oidc_pk'
         key: {{ secret "/config/secrets/oidc/jwks/oidc_private.pem" | mindent 10 "|" | msquote }}
@@ -226,7 +226,7 @@ identity_providers:
       # ---- === Bar Assistant === ----
       - client_id: "bar-assistant"
         client_name: "Bar Assistant"
-        client_secret: "${BAR_ASSISTANT_SECRET}"
+        client_secret: "{{ .Env.BAR_ASSISTANT_SECRET }}"
         public: false
         authorization_policy: "guest_allowed_policy"
         consent_mode: "pre-configured"
@@ -249,7 +249,7 @@ identity_providers:
       # ---- === Mealie === ----
       - client_id: "mealie"
         client_name: "Mealie"
-        client_secret: "${MEALIE_SECRET}"
+        client_secret: "{{ .Env.MEALIE_SECRET }}"
         public: false
         authorization_policy: "general_policy"
         require_pkce: true
@@ -276,7 +276,7 @@ identity_providers:
       # ---- === Autobrr === ----
       - client_id: "autobrr"
         client_name: "Autobrr"
-        client_secret: "${AUTOBRR_SECRET}"
+        client_secret: "{{ .Env.AUTOBRR_SECRET }}"
         public: false
         authorization_policy: "general_policy"
         require_pkce: false
@@ -301,7 +301,7 @@ identity_providers:
       # ---- === OAuth2 Proxy === ----
       - client_id: "oauth2-proxy"
         client_name: "OAuth2 Proxy"
-        client_secret: "${OAUTH_PROXY_SECRET}"
+        client_secret: "{{ .Env.OAUTH_PROXY_SECRET }}"
         public: false
         authorization_policy: "one_factor_general_policy"
         consent_mode: "pre-configured"
@@ -324,7 +324,7 @@ identity_providers:
       # ---- === Headlamp === ----
       - client_id: "headlamp"
         client_name: "Headlamp"
-        client_secret: "${HEADLAMP_SECRET}"
+        client_secret: "{{ .Env.HEADLAMP_SECRET }}"
         public: false
         require_pkce: true
         pkce_challenge_method: "S256"
@@ -349,7 +349,7 @@ identity_providers:
       # ---- === RomM === ----
       - client_id: "romm"
         client_name: "RomM"
-        client_secret: "${ROMM_SECRET}"
+        client_secret: "{{ .Env.ROMM_SECRET }}"
         public: false
         authorization_policy: "guest_allowed_policy"
         grant_types:
@@ -372,7 +372,7 @@ identity_providers:
       # ---- === NodeCast === ----
       - client_id: "nodecast"
         client_name: "NodeCast"
-        client_secret: "${NODECAST_SECRET}"
+        client_secret: "{{ .Env.NODECAST_SECRET }}"
         public: false
         authorization_policy: "general_policy"
         grant_types:
@@ -395,7 +395,7 @@ identity_providers:
       # ---- === Fluxer === ----
       - client_id: "fluxer"
         client_name: "Fluxer"
-        client_secret: "${FLUXER_SECRET}"
+        client_secret: "{{ .Env.FLUXER_SECRET }}"
         public: false
         authorization_policy: "general_policy"
         grant_types:

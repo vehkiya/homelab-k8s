@@ -20,7 +20,7 @@ labels:
       app.kubernetes.io/name: posterizarr
       app.kubernetes.io/part-of: media-services
 images:
-  - name: alpine/k8s
-    newTag: 1.36.2@sha256:44ef4942e171939b9c665a4a84beb80e2dcdb9a24330d4651cfdfd2e9deecc47
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: ghcr.io/fscorrupt/posterizarr
     newTag: 3.1.4@sha256:7a9bb2aa98f7a0f93e2fa53160cffd70981617eb182442bf29f493371dd8ac2e

@@ -30,7 +30,7 @@ spec:
                 value: "5"
           initContainers:
             - name: prepare-config
-              image: alpine/k8s
+              image: ghcr.io/hononeko/k8s-config-tools
               securityContext:
                 allowPrivilegeEscalation: false
                 seccompProfile:
@@ -42,55 +42,12 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  echo "🚀 Starting Configuration Processing..."
-                  echo "--------------------------------------------------"
-
+                  echo "🚀 Starting Configuration Processing via Gomplate..."
                   CONFIG_TEMPLATE_PATH="/config_templates/config.yml"
                   FINAL_CONFIG_PATH="/config/config.yml"
 
-                  echo "ℹ️ Template Path: $CONFIG_TEMPLATE_PATH"
-                  echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
-                  echo "--------------------------------------------------"
-
-                  if [ "${DEBUG_ENABLED}" = "true" ]; then
-                    echo "🔎 Debug: Initial contents of /config directory:"
-                    ls -las /config
-                    echo "--------------------------------------------------"
-                    echo "🔎 Debug: Initial contents of /config_templates directory:"
-                    ls -las /config_templates
-                    echo "--------------------------------------------------"
-                  fi
-
-                  if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
-                    echo "❌ ERROR: Config template '$CONFIG_TEMPLATE_PATH' not found! Aborting."
-                    exit 1
-                  fi
-
-                  if [ "${DEBUG_ENABLED}" = "true" ]; then
-                    echo "📄 Displaying contents of template '$CONFIG_TEMPLATE_PATH':"
-                    cat "$CONFIG_TEMPLATE_PATH"
-                    echo "--------------------------------------------------"
-                  fi
-
-                  echo "⚙️  Generating final configuration file from template..."
-                  if envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"; then
-                    echo "✅ Final configuration file '$FINAL_CONFIG_PATH' generated successfully."
-                  else
-                    echo "❌ ERROR: Failed to generate configuration file '$FINAL_CONFIG_PATH'."
-                    exit 1
-                  fi
-                  echo "--------------------------------------------------"
-
-                  if [ "${DEBUG_ENABLED}" = "true" ]; then
-                    echo "📄 Displaying contents of generated configuration file '$FINAL_CONFIG_PATH':"
-                    cat "$FINAL_CONFIG_PATH"
-                    echo "--------------------------------------------------"
-                    echo "🔎 Debug: Contents of /config directory after processing:"
-                    ls -la /config
-                    echo "--------------------------------------------------"
-                  fi
-
-                  echo "🎉 Main configuration processing complete."
+                  gomplate -f "$CONFIG_TEMPLATE_PATH" -o "$FINAL_CONFIG_PATH"
+                  echo "✅ Main configuration file generated successfully."
                   echo ""
                   echo "--- Processing Additional Configuration Details ---"
                   echo "📄 Processing custom fonts..."

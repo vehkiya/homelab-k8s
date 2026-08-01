@@ -23,55 +23,13 @@ spec:
       enableServiceLinks: false
       initContainers:
         - name: prepare-config
-          image: alpine/k8s
+          image: ghcr.io/hononeko/k8s-config-tools
           command:
-            - /bin/sh
-            - -c
-            - |
-              echo "🚀 Starting Configuration Processing..."
-              echo "--------------------------------------------------"
-              DEBUG="false"
-
-              CONFIG_TEMPLATE_PATH="/config_templates/configuration-template.yml"
-              FINAL_CONFIG_PATH="/config/configuration.yml"
-
-              echo "ℹ️ Template Path: $CONFIG_TEMPLATE_PATH"
-              echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
-              echo "--------------------------------------------------"
-
-              # Check if template file exists
-              if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
-                echo "❌ ERROR: Config template '$CONFIG_TEMPLATE_PATH' not found! Aborting."
-                exit 1
-              fi
-
-              if [ "$DEBUG" = "true" ]; then
-                echo "📄 Contents of template '$CONFIG_TEMPLATE_PATH':"
-                cat "$CONFIG_TEMPLATE_PATH"
-                echo "--------------------------------------------------"
-              fi
-
-              echo "⚙️  Generating final configuration file from template..."
-              if envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"; then
-                echo "✅ Configuration file '$FINAL_CONFIG_PATH' generated successfully."
-              else
-                echo "❌ ERROR: Failed to generate configuration file '$FINAL_CONFIG_PATH' using envsubst."
-                ls -la /config
-                exit 1 # Critical step failed
-              fi
-              echo "--------------------------------------------------"
-
-              if [ "$DEBUG" = "true" ]; then
-                echo "📄 Verifying generated configuration file '$FINAL_CONFIG_PATH':"
-                cat "$FINAL_CONFIG_PATH" # For verification in logs
-                echo "--------------------------------------------------"
-
-                echo "🔎 Contents of /config directory after processing:"
-                ls -la /config
-                echo "--------------------------------------------------"
-              fi
-
-              echo "🎉 Configuration processing complete."
+            - gomplate
+            - -f
+            - /config_templates/configuration-template.yml
+            - -o
+            - /config/configuration.yml
           envFrom: # This injects all keys from the secret as environment variables
             - secretRef:
                 name: authelia-secrets
