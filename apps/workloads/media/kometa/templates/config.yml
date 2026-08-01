@@ -6,7 +6,7 @@ libraries:
     sonarr:
       name: anime
       url: http://sonarr-anime-ui.media.svc.cluster.local:8989
-      token: ${SONARR_TOKEN}
+      token: {{ .Env.SONARR_TOKEN }}
       root_folder_path:
   Movies:
     library_name: Movies
@@ -51,7 +51,7 @@ libraries:
     sonarr:
       name: tv
       url: http://sonarr-tv-ui.media.svc.cluster.local:8989
-      token: ${SONARR_TOKEN}
+      token: {{ .Env.SONARR_TOKEN }}
       root_foler_path: #TODO
 settings:
   run_order: [ 'operations', 'metadata', 'collections', 'overlays' ]
@@ -93,7 +93,7 @@ settings:
   verify_ssl: true
 plex:
   url: http://plex-ui.media.svc.cluster.local:32400
-  token: ${PLEX_TOKEN}
+  token: {{ .Env.PLEX_TOKEN }}
   timeout: 60
   db_cache: 512
   clean_bundles: true
@@ -101,19 +101,19 @@ plex:
   optimize: true
   verify_ssl: true
 tmdb:
-  apikey: ${TMDB_API_KEY}
+  apikey: {{ .Env.TMDB_API_KEY }}
   language: en
   region:
   cache_expiration: 60
 tautulli:
   url: http://tautulli-ui.media.svc.cluster.local:8181
-  apikey: ${TAUTULLI_API_KEY}
+  apikey: {{ .Env.TAUTULLI_API_KEY }}
 omdb:
-  apikey: ${OMDB_API_KEY}
+  apikey: {{ .Env.OMDB_API_KEY }}
   cache_expiration: 60
 radarr:
   url: http://radarr-ui.media.svc.cluster.local:7878
-  token: ${RADARR_TOKEN}
+  token: {{ .Env.RADARR_TOKEN }}
   add_missing: false
   root_folder_path: /data/media/movies
   monitor: false
@@ -150,29 +150,29 @@ anidb:
   language: en
   cache_expiration: 60
   username: vehkiya
-  password: ${ANIDB_PASSWORD}
+  password: {{ .Env.ANIDB_PASSWORD }}
 mal:
-  client_id: ${MAL_CLIENT_ID}
-  client_secret: ${MAL_CLIENT_SECRET}
+  client_id: {{ .Env.MAL_CLIENT_ID }}
+  client_secret: {{ .Env.MAL_CLIENT_SECRET }}
   authorization:
-    access_token: ${MAL_ACCESS_TOKEN}
+    access_token: {{ .Env.MAL_ACCESS_TOKEN }}
     token_type: Bearer
     expires_in: 2592000
-    refresh_token: ${MAL_REFRESH_TOKEN}
-  localhost_url: http://localhost/?code=${MAL_LOCALHOST_URL_CODE}
+    refresh_token: {{ .Env.MAL_REFRESH_TOKEN }}
+  localhost_url: http://localhost/?code={{ .Env.MAL_LOCALHOST_URL_CODE }}
   cache_expiration: 60
 trakt:
-  client_id: ${TRAKT_CLIENT_ID}
-  client_secret: ${TRAKT_CLIENT_SECRET}
+  client_id: {{ .Env.TRAKT_CLIENT_ID }}
+  client_secret: {{ .Env.TRAKT_CLIENT_SECRET }}
   authorization:
-    access_token: ${TRAKT_ACCESS_TOKEN}
+    access_token: {{ .Env.TRAKT_ACCESS_TOKEN }}
     token_type: Bearer
     expires_in: 7776000
-    refresh_token: ${TRAKT_REFRESH_TOKEN}
+    refresh_token: {{ .Env.TRAKT_REFRESH_TOKEN }}
     scope: public
     created_at: 1758573962
   pin: f4197d99
 ntfy:
   url: http://ntfy.automation.svc.cluster.local:80
-  token: ${NTFY_TOKEN}
+  token: {{ .Env.NTFY_TOKEN }}
   topic: kometa

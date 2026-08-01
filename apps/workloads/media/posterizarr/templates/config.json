@@ -1,9 +1,9 @@
 {
   "ApiPart": {
-    "tvdbapi": "${TVDB_API_KEY}",
-    "tmdbtoken": "${TMDB_API_TOKEN}",
-    "FanartTvAPIKey": "${FANART_PERSONAL_API_KEY}",
-    "PlexToken": "${PLEX_TOKEN}",
+    "tvdbapi": "{{ .Env.TVDB_API_KEY }}",
+    "tmdbtoken": "{{ .Env.TMDB_API_TOKEN }}",
+    "FanartTvAPIKey": "{{ .Env.FANART_PERSONAL_API_KEY }}",
+    "PlexToken": "{{ .Env.PLEX_TOKEN }}",
     "FavProvider": "tmdb",
     "WidthHeightFilter": "false",
     "PosterMinWidth": "2000",
@@ -62,7 +62,7 @@
     "DiscordUserName": "Posterizarr",
     "UseUptimeKuma": "false",
     "AppriseUrl": "discord://{WebhookID}/{WebhookToken}/",
-    "Discord": "${DISCORD_WEBHOOK}",
+    "Discord": "{{ .Env.DISCORD_WEBHOOK }}",
     "UptimeKumaUrl": "http://status.kerrlab.app/"
   },
   "PrerequisitePart": {

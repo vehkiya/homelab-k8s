@@ -37,53 +37,24 @@ spec:
       terminationGracePeriodSeconds: 30
       initContainers:
         - name: prepare-config
-          image: alpine/k8s
+          image: ghcr.io/hononeko/k8s-config-tools
           command:
             - /bin/sh
             - -c
             - |
-              echo "🚀 Starting Configuration Processing..."
-              echo "--------------------------------------------------"
-              DEBUG="false"
-
+              echo "🚀 Starting Configuration Processing via Gomplate..."
               CONFIG_TEMPLATE_PATH="/config_templates/config.json.template"
               FINAL_CONFIG_PATH="/config/config.json"
               SECRETS_DIR="/etc/posterizarr-secrets"
 
-              echo "🔐 Loading secrets from $SECRETS_DIR..."
               export DISCORD_WEBHOOK=$(cat $SECRETS_DIR/DISCORD_WEBHOOK)
               export FANART_PERSONAL_API_KEY=$(cat $SECRETS_DIR/FANART_PERSONAL_API_KEY)
               export PLEX_TOKEN=$(cat $SECRETS_DIR/PLEX_TOKEN)
               export TMDB_API_TOKEN=$(cat $SECRETS_DIR/TMDB_API_TOKEN)
               export TVDB_API_KEY=$(cat $SECRETS_DIR/TVDB_API_KEY)
-              echo "✅ Secrets loaded into script environment."
-              echo "--------------------------------------------------"
 
-              echo "ℹ️ Template Path: $CONFIG_TEMPLATE_PATH"
-              echo "ℹ️ Output Path: $FINAL_CONFIG_PATH"
-              echo "--------------------------------------------------"
-
-              # Check if template file exists
-              if [ ! -f "$CONFIG_TEMPLATE_PATH" ]; then
-                echo "❌ ERROR: Config template '$CONFIG_TEMPLATE_PATH' not found! Aborting."
-                exit 1
-              fi
-
-              if [ "$DEBUG" = "true" ]; then
-                echo "📄 Contents of template '$CONFIG_TEMPLATE_PATH':"
-                cat "$CONFIG_TEMPLATE_PATH"
-                echo "--------------------------------------------------"
-              fi
-
-              echo "⚙️  Generating final configuration file from template..."
-              if envsubst < "$CONFIG_TEMPLATE_PATH" > "$FINAL_CONFIG_PATH"; then
-                echo "✅ Configuration file '$FINAL_CONFIG_PATH' generated successfully."
-              else
-                echo "❌ ERROR: Failed to generate configuration file '$FINAL_CONFIG_PATH' using envsubst."
-                ls -la /config
-                exit 1 # Critical step failed
-              fi
-              echo "--------------------------------------------------"
+              gomplate -f "$CONFIG_TEMPLATE_PATH" -o "$FINAL_CONFIG_PATH"
+              echo "✅ Configuration file generated successfully."
 
               if [ "$DEBUG" = "true" ]; then
                 echo "📄 Verifying generated configuration file '$FINAL_CONFIG_PATH':"
