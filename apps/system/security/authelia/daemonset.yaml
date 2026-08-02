@@ -40,6 +40,8 @@ spec:
               mountPath: /config_templates
             - name: config-volume
               mountPath: /config
+            - name: authelia-keys
+              mountPath: /config/secrets
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
