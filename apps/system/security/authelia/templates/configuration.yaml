@@ -178,7 +178,7 @@ identity_providers:
     hmac_secret: "{{ .Env.OIDC_HMAC_SECRET }}"
     jwks:
       - key_id: 'oidc_pk'
-        key: {{ secret "/config/secrets/oidc/jwks/oidc_private.pem" | mindent 10 "|" | msquote }}
+        key: {{ file.Read "/config/secrets/oidc/jwks/oidc_private.pem" | strings.Quote }}
     claims_policies:
       with_email:
         id_token:
