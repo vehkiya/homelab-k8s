@@ -54,6 +54,7 @@ spec:
                   FONT_LIST="Montserrat-Medium.ttf"
                   FONT_SOURCE_DIR="/tmp/fonts"
                   FONT_DEST_DIR="/config/fonts"
+                  mkdir -p "$FONT_DEST_DIR"
 
                   for FONT_FILENAME in $FONT_LIST; do
                     FONT_SOURCE_PATH=$(find "$FONT_SOURCE_DIR" -type f -name "$FONT_FILENAME" | head -n 1)
