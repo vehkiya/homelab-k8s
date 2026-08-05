@@ -24,6 +24,6 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: plexinc/pms-docker
-    newTag: 1.43.3.10828-00f62d37d@sha256:a2b03d75aa16f422488c692935cab476d966b75f2af3c93bb6d910c6051906f5
+    newTag: 1.43.3.10861-07dfddaeb@sha256:5bc1d13f48da6366f46aaf2a3ce1a6292897eadc1f8efcbbd7321d30e94f2ed4
   - name: alpine
     newTag: latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
