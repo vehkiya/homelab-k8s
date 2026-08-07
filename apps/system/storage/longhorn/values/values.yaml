@@ -1,5 +1,5 @@
 persistence:
-  defaultClassReplicaCount: 3
+  defaultClassReplicaCount: 2
 ingress:
   enabled: false
 
@@ -17,12 +17,6 @@ defaultSettings:
   # Default Backup Target
   backupTarget: "s3://longhorn-backups@us-east-1/"
   backupTargetCredentialSecret: "s3-backup-secret"
-
-image:
-  longhorn:
-    instanceManager:
-      repository: longhornio/longhorn-instance-manager
-      tag: v1.11.0
 
 longhornManager:
   resources:
