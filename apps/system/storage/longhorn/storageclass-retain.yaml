@@ -13,6 +13,6 @@ parameters:
   disableRevisionCounter: "true"
   fromBackup: ""
   fsType: ext4
-  numberOfReplicas: "3"
+  numberOfReplicas: "2"
   staleReplicaTimeout: "30"
   unmapMarkSnapChainRemoved: ignored
