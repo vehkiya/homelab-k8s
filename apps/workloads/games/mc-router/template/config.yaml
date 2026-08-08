@@ -1,0 +1,16 @@
+connectionTimeout: 180s
+scaleDownDelay: 2h
+routes:
+  - serverAddress: "mc.kerrlab.app"
+    target: "minecraft-vanilla.games.svc.cluster.local:25565"
+    statefulSet: "minecraft-vanilla"
+  - serverAddress: "mc-vh.kerrlab.app"
+    target: "minecraft-vh.games.svc.cluster.local:25565"
+    statefulSet: "minecraft-vh"
+  - serverAddress: "vanilla.mc.*"
+    target: "minecraft-vanilla.games.svc.cluster.local:25565"
+    statefulSet: "minecraft-vanilla"
+  - serverAddress: "vh.mc.*"
+    target: "minecraft-vh.games.svc.cluster.local:25565"
+    statefulSet: "minecraft-vh"
+

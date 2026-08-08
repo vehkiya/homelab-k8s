@@ -1,0 +1,38 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mc-router-policy
+  namespace: games
+spec:
+  endpointSelector:
+    matchLabels:
+      app: mc-router
+  ingress:
+    # Allow incoming Minecraft client TCP connections from World / Internet
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
+  egress:
+    # Allow TCP connection to Minecraft backend pods (vanilla and vh)
+    - toEndpoints:
+        - matchLabels:
+            app: minecraft
+            k8s:io.kubernetes.pod.namespace: games
+        - matchLabels:
+            app: minecraft-vanilla
+            k8s:io.kubernetes.pod.namespace: games
+        - matchLabels:
+            app: minecraft-vh
+            k8s:io.kubernetes.pod.namespace: games
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
+    # Allow communicating with Kubernetes API server for scaling StatefulSets
+    - toEntities:
+        - host
+        - remote-node
+        - kube-apiserver

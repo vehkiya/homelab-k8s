@@ -62,16 +62,17 @@ Before pushing any changes or finalizing a pull request, the agent **MUST** run 
    ```
 
 2. **YAML Linting:**
-   Check the modified YAML files (and the rendered `built.yaml`) for syntax and formatting:
+   Check the modified YAML files (and the rendered `built.yaml`) for syntax and formatting (excluding `apps/gitops/app-of-apps/` manifests containing dynamic ArgoCD Go templates):
    ```bash
    yamllint <file.yaml>
    ```
 
 3. **Kubernetes Conformity (Kubeconform):**
-   Validate the rendered manifest structure using `kubeconform`. Ensure you ignore missing CRD schemas and skip validations for `Secret` and `SealedSecret` resources:
+   Validate the rendered manifest structure using `kubeconform`. Ensure you ignore missing CRD schemas and skip validations for `Secret` and `SealedSecret` resources *(Note: ArgoCD `ApplicationSet` manifests in `apps/gitops/app-of-apps/` utilizing `goTemplate: true` directives are evaluated dynamically by the ArgoCD controller and are excluded from static `kubeconform` unmarshalling)*:
    ```bash
    kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" -cache ~/.cache/kubeconform built.yaml
    ```
+
 
 4. **Kubernetes Best Practices (Kube-Linter):**
    Audit the rendered manifests against security policies:

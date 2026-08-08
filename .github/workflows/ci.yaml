@@ -40,6 +40,8 @@ jobs:
         with:
           config_data: |
             extends: default
+            ignore: |
+              apps/gitops/app-of-apps/
             rules:
               line-length: disable
               trailing-spaces: disable
@@ -51,6 +53,7 @@ jobs:
               braces: disable
               brackets: disable
               empty-lines: disable
+
 
       - name: Setup Cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6

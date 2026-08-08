@@ -49,7 +49,33 @@ spec:
             limits:
               memory: "64Mi"
               cpu: "50m"
+        - name: init-voicechat-config
+          image: ghcr.io/hononeko/k8s-config-tools
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "✅ Configuring Simple Voice Chat with port ${VOICE_CHAT_PORT:-24454} using gomplate..."
+              mkdir -p /data/config/voicechat /data/plugins/voicechat
+              gomplate -f /template/voicechat-server.properties.template -o /data/config/voicechat/voicechat-server.properties
+              cp /data/config/voicechat/voicechat-server.properties /data/plugins/voicechat/voicechat-server.properties 2>/dev/null || true
+          envFrom:
+            - configMapRef:
+                name: minecraft-config
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: voicechat-template
+              mountPath: /template
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
       containers:
+
         # --- Game Server ---
         - name: minecraft
           image: ghcr.io/itzg/minecraft-server
