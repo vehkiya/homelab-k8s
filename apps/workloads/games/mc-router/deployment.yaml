@@ -27,6 +27,10 @@ spec:
             - "--api-binding=0.0.0.0:8080"
             - "--in-kube-cluster"
             - "--kube-namespace=games"
+            - "--auto-scale-down=true"
+            - "--auto-scale-down-after=2h"
+            - "--auto-scale-up=true"
+
 
 
           ports:
