@@ -1,10 +1,6 @@
 {
-  "routes": {
-    "mc.kerrlab.app": "minecraft-vanilla.games.svc.cluster.local:25565",
-    "vanilla.mc.kerrlab.app": "minecraft-vanilla.games.svc.cluster.local:25565",
-    "vh.mc.kerrlab.app": "minecraft-vh.games.svc.cluster.local:25565",
-    "mc-vh.kerrlab.app": "minecraft-vh.games.svc.cluster.local:25565",
-    "vanilla.mc.*": "minecraft-vanilla.games.svc.cluster.local:25565",
-    "vh.mc.*": "minecraft-vh.games.svc.cluster.local:25565"
-  }
+  "mc.kerrlab.app": "minecraft-vanilla.games.svc.cluster.local:25565",
+  "vanilla.mc.kerrlab.app": "minecraft-vanilla.games.svc.cluster.local:25565",
+  "vh.mc.kerrlab.app": "minecraft-vh.games.svc.cluster.local:25565",
+  "mc-vh.kerrlab.app": "minecraft-vh.games.svc.cluster.local:25565"
 }

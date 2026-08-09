@@ -155,26 +155,29 @@ patches:
                         name: minecraft-vh-secret
                         key: RCON_PASSWORD
 
-  # === Patch Service (Voice Chat UDP 24455 on shared LB IP 10.20.1.140) ===
+  # === Patch Service (Internal ClusterIP for mc-router routing) ===
   - target:
       kind: Service
-      name: minecraft-vh
+      name: minecraft
     patch: |-
       apiVersion: v1
       kind: Service
       metadata:
-        name: minecraft-vh
-        labels:
-          pool: dmz-lb-pool
+        name: minecraft
         annotations:
-          lbipam.cilium.io/ips: "10.20.1.140"
-          cilium.io/service-sharing-key: "minecraft-games"
+          mc-router.itzg.me/externalServerName: "mc-vh.kerrlab.app,vh.mc.kerrlab.app"
       spec:
-        type: LoadBalancer
+        $patch: replace
+        type: ClusterIP
+        selector:
+          app: minecraft-vh
         ports:
+          - name: minecraft-tcp
+            port: 25565
+            targetPort: 25565
+            protocol: TCP
           - name: voice-udp
             port: 24455
             targetPort: 24454
             protocol: UDP
-
 

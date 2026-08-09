@@ -18,15 +18,13 @@ spec:
   egress:
     # Allow TCP connection to Minecraft backend pods (vanilla and vh)
     - toEndpoints:
-        - matchLabels:
-            app: minecraft
-            k8s:io.kubernetes.pod.namespace: games
-        - matchLabels:
-            app: minecraft-vanilla
-            k8s:io.kubernetes.pod.namespace: games
-        - matchLabels:
-            app: minecraft-vh
-            k8s:io.kubernetes.pod.namespace: games
+        - matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - minecraft
+                - minecraft-vanilla
+                - minecraft-vh
       toPorts:
         - ports:
             - port: "25565"

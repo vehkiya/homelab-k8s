@@ -8,14 +8,17 @@ metadata:
     pool: dmz-lb-pool
   annotations:
     lbipam.cilium.io/ips: "10.20.1.140"
+    lbipam.cilium.io/sharing-key: "minecraft-games"
     cilium.io/service-sharing-key: "minecraft-games"
+
 
 spec:
   type: LoadBalancer
   ipFamilyPolicy: SingleStack
   ipFamilies:
     - IPv4
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
+
   selector:
     app: mc-router
   ports:
