@@ -5,6 +5,8 @@ namespace: games
 resources:
   - ../../base
   - external-secret.yaml
+  - service-voice.yaml
+
 
 nameSuffix: -vanilla
 
