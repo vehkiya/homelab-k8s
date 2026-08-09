@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mc-router
+  namespace: games
+  labels:
+    app: mc-router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mc-router
+  template:
+    metadata:
+      labels:
+        app: mc-router
+    spec:
+      serviceAccountName: mc-router
+      containers:
+        - name: mc-router
+          image: itzg/mc-router:1.46.2
+
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--routes-config=/config/config.yaml"
+            - "--routes-config-watch"
+            - "--api-binding=0.0.0.0:8080"
+            - "--in-kube-cluster"
+            - "--kube-namespace=games"
+
+
+          ports:
+            - name: minecraft-tcp
+              containerPort: 25565
+              protocol: TCP
+            - name: api
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+      volumes:
+        - name: config
+          configMap:
+            name: mc-router-config

@@ -6,6 +6,8 @@ namespace: games
 resources:
   - ../../base
   - external-secret.yaml
+  - service-voice.yaml
+
 
 # 2. Add Name Suffix
 nameSuffix: -vh
@@ -46,14 +48,19 @@ patches:
         USE_AIKAR_FLAGS: "TRUE"
         USE_MEOWICE_FLAGS: "TRUE"
         # USE_MEOWICE_GRAALVM_FLAGS: "TRUE"
-        INIT_MEMORY: "8G"
-        MAX_MEMORY: "12G"
+        INIT_MEMORY: "4G"
+        MAX_MEMORY: "6G"
         VIEW_DISTANCE: "16"
         MODE: "survival"
         WHITELIST: "Kerrlab,JusApee"
         OVERRIDE_WHITELIST: "true"
         CF_FORCE_INCLUDE_MODS: "spark"
-        CF_OVERRIDES_SKIP_EXISTING: "true"
+        CF_OVERRIDES_SKIP_EXISTING: "false"
+
+        ENABLE_AUTOPAUSE: "TRUE"
+        AUTOPAUSE_TIMEOUT_ESTABLISHED: "900"
+        AUTOPAUSE_TIMEOUT_INIT: "600"
+        VOICE_CHAT_PORT: "24455"
 
   # === Override backup schedule ===
   - target:
@@ -125,6 +132,12 @@ patches:
           spec:
             containers:
               - name: minecraft
+                resources:
+                  requests:
+                    memory: "6Gi"
+                  limits:
+                    memory: "8Gi"
+
                 envFrom:
                   - configMapRef:
                       name: minecraft-config
@@ -136,6 +149,7 @@ patches:
                       secretKeyRef:
                         name: minecraft-vh-secret
                         key: RCON_PASSWORD
+
               - name: backup-sidecar
                 env:
                   - name: RCON_PASSWORD
@@ -144,16 +158,29 @@ patches:
                         name: minecraft-vh-secret
                         key: RCON_PASSWORD
 
-  # === Patch Service to assign static IP in pool ===
+  # === Patch Service (Internal ClusterIP for mc-router routing) ===
   - target:
       kind: Service
-      name: minecraft-vh # Matches the nameSuffix version if targeted correctly, or use base name
+      name: minecraft
     patch: |-
       apiVersion: v1
       kind: Service
       metadata:
-        name: minecraft-vh
-        labels:
-          pool: dmz-lb-pool
+        name: minecraft
         annotations:
-          lbipam.cilium.io/ips: "10.20.1.140"
+          mc-router.itzg.me/externalServerName: "mc-vh.kerrlab.app,vh.mc.kerrlab.app"
+      spec:
+        $patch: replace
+        type: ClusterIP
+        selector:
+          app: minecraft-vh
+        ports:
+          - name: minecraft-tcp
+            port: 25565
+            targetPort: 25565
+            protocol: TCP
+          - name: voice-udp
+            port: 24455
+            targetPort: 24454
+            protocol: UDP
+

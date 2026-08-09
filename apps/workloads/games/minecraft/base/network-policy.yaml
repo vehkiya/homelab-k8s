@@ -4,19 +4,32 @@ metadata:
   name: minecraft-policy
 spec:
   endpointSelector:
-    matchLabels:
-      app: minecraft
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - minecraft
+          - minecraft-vanilla
+          - minecraft-vh
   ingress:
+    # Allow TCP connections from mc-router
+    - fromEndpoints:
+        - matchLabels:
+            app: mc-router
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
     # Allow access from Home Assistant
     - fromEndpoints:
         - matchLabels:
-            app: home-assistant
+            app.kubernetes.io/name: home-assistant
             k8s:io.kubernetes.pod.namespace: iot
       toPorts:
         - ports:
             - port: "25565"
               protocol: TCP
-    # Allow Game Clients from Internet
+    # Allow Direct Game & Simple Voice Chat UDP/TCP traffic from Internet / World / Localhost
     - fromEntities:
         - world
       toPorts:
@@ -26,6 +39,8 @@ spec:
             - port: "24454"
               protocol: TCP
             - port: "24454"
+              protocol: UDP
+            - port: "24455"
               protocol: UDP
   egress:
     # Allow HTTP/HTTPS to World (CurseForge/Updates)

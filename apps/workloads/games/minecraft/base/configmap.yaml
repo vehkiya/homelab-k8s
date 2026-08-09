@@ -7,3 +7,28 @@ data:
   TZ: "Europe/Chisinau"
   MEMORY: "4G"
   ENABLE_WHITELIST: "true"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minecraft-voicechat-template
+data:
+  voicechat-server.properties.template: |
+    # Simple Voice Chat server config
+    port={{ .Env.VOICE_CHAT_PORT }}
+    bind_address=
+    max_voice_distance=48.0
+    whisper_distance=24.0
+    codec=VOIP
+    mtu_size=1024
+    keep_alive=1000
+    enable_groups=true
+    voice_host=
+    allow_recording=true
+    spectator_interaction=false
+    spectator_player_possession=false
+    force_voice_chat=false
+    login_timeout=10000
+    broadcast_range=-1.0
+    allow_pings=true
+    use_natives=true

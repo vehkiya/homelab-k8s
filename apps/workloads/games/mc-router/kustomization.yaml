@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: games
+
+resources:
+  - rbac.yaml
+  - service.yaml
+  - deployment.yaml
+  - network-policy.yaml
+
+configMapGenerator:
+  - name: mc-router-config
+    files:
+      - config.yaml=template/config.yaml
+
+images:
+  - name: itzg/mc-router
+    newTag: 1.46.2@sha256:802a6adef1a298fd0557b6c2223b94a7bc06cd16a007315d5ba2f498e72ce5de
+
+

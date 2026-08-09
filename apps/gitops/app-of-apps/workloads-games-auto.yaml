@@ -1,18 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: workloads-games
+  name: workloads-games-auto
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
-          - name: minecraft-vanilla
-            path: apps/workloads/games/minecraft/overlays/vanilla
-          - name: minecraft-vault-hunters
-            path: apps/workloads/games/minecraft/overlays/vault-hunters
-          - name: satisfactory
-            path: apps/workloads/games/satisfactory
+          - name: romm
+            path: apps/workloads/games/romm
+          - name: mc-router
+            path: apps/workloads/games/mc-router
   template:
     metadata:
       name: "{{name}}"
@@ -27,6 +25,9 @@ spec:
         server: https://kubernetes.default.svc
         namespace: "games"
       syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
