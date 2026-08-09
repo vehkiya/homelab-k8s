@@ -14,6 +14,7 @@ configMapGenerator:
       - config.yaml=template/config.yaml
 
 images:
-  - name: ghcr.io/itzg/mc-router
-    newTag: 1.4.2@sha256:d8b7b75f97ee899c754d924d5506a72e8111956e18f8e0be22a61ddaccd6beaa
+  - name: itzg/mc-router
+    newTag: 1.46.2@sha256:802a6adef1a298fd0557b6c2223b94a7bc06cd16a007315d5ba2f498e72ce5de
+
 

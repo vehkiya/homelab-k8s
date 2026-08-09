@@ -234,5 +234,9 @@ spec:
           configMap:
             name: minecraft-backup-script
             defaultMode: 0755
+        - name: voicechat-template
+          configMap:
+            name: minecraft-voicechat-template
         - name: rcon-tools
           emptyDir: {}
+
