@@ -28,7 +28,7 @@ images:
   - name: ghcr.io/home-operations/qbittorrent
     newTag: 5.2.3@sha256:4fcf15b7f265c2c8d7bc2a7e13240a07e0593c326f3cf3b5b9bb69eec5b79299
   - name: ghcr.io/hononeko/qbit-ntfy-sidecar
-    newTag: 1.0.1@sha256:3aaa53c009f229b25eb7375814d2610fbf8eccf7b6eb7a651136105e2bf03352
+    newTag: 1.1.0@sha256:99ae517544583fa65d4c41aa84cf6dfc95bd430756c5783f8a3fac0401392576
   - name: ghcr.io/qdm12/gluetun
     newTag: v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027
   - name: ghcr.io/hononeko/qbit-gluetun-sync
