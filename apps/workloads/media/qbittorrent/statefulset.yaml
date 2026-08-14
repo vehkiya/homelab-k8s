@@ -229,22 +229,34 @@ spec:
           env:
             - name: QBIT_HOST
               value: "http://localhost:8080"
+            - name: QBIT_PUBLIC_URL
+              value: "https://download.kerrlab.app"
             - name: NTFY_SERVER
               value: "http://ntfy.automation.svc.cluster.local"
             - name: NTFY_TOPIC
               value: "downloads-live-updates"
+            - name: NOTIFICATION_MODE
+              value: "grouped"
+            - name: GROUP_UPDATE_INTERVAL
+              value: "15"
+            - name: MAX_DISPLAY_TORRENTS
+              value: "5"
+            - name: AUTO_DISCOVERY_INTERVAL
+              value: "300"
+            - name: NOTIFY_HEALTH_ERRORS
+              value: "true"
+            - name: NOTIFY_PROGRESS
+              value: "true"
+            - name: NOTIFY_COMPLETE
+              value: "true"
             - name: NTFY_PRIORITY_PROGRESS
               value: "low"
             - name: NTFY_PRIORITY_COMPLETE
               value: "default"
-            - name: NOTIFY_COMPLETE
-              value: "true"
             - name: PROGRESS_FORMAT
               value: "bar"
             - name: ALLOWED_SUBNETS
               value: "127.0.0.1/32,::1/128"
-            - name: POLL_INTERVAL
-              value: "30"
           envFrom:
             - secretRef:
                 name: ntfy-credentials
@@ -255,6 +267,15 @@ spec:
             limits:
               cpu: "50m"
               memory: "64Mi"
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
       dnsConfig:
         options:
           - name: ndots
