@@ -20,11 +20,17 @@ spec:
         - ports:
             - port: "http"
               protocol: "TCP"
-    # === Allow access from qBittorrent ===
+    # === Allow access from Media Webhooks (qBittorrent, Sonarr, Radarr) ===
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: qbittorrent
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: sonarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: radarr
       toPorts:
         - ports:
             - port: "5678"

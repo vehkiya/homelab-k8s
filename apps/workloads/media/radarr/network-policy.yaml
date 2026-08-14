@@ -51,6 +51,12 @@ spec:
         - k8sService:
             serviceName: ntfy
             namespace: automation
+        - k8sService:
+            serviceName: n8n-main
+            namespace: automation
+        - k8sService:
+            serviceName: n8n-webhook-processor
+            namespace: automation
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: automation
@@ -58,6 +64,15 @@ spec:
       toPorts:
         - ports:
             - port: "80"
+              protocol: TCP
+    # === Allow access to n8n ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: n8n
+      toPorts:
+        - ports:
+            - port: "5678"
               protocol: TCP
     # === Allow access to Postgres on Fortress ===
     - toCIDR:
