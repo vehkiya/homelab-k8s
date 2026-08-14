@@ -24,6 +24,17 @@ spec:
         - k8sService:
             serviceName: bazarr-ui
             namespace: media
+        - k8sService:
+            serviceName: media-webhook-notifier
+            namespace: automation
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: media-webhook-notifier
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   # Allow Ingress (Inbound)
   ingress:
     - fromEndpoints:

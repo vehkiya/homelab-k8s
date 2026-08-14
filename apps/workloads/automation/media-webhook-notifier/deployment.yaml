@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media-webhook-notifier
+  labels:
+    app.kubernetes.io/name: media-webhook-notifier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: media-webhook-notifier
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: media-webhook-notifier
+        networking/expose-http-api: "true"
+    spec:
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        runAsNonRoot: true
+      containers:
+        - name: notifier
+          image: ghcr.io/hononeko/media-webhook-notifier:1.0.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - name: http-api
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: QBITTORRENT_URL
+              value: "http://qbittorrent-ui.media.svc.cluster.local:8080"
+          envFrom:
+            - secretRef:
+                name: media-webhook-notifier-secret
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: http-api
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http-api
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
