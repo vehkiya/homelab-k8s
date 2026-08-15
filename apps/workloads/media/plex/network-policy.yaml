@@ -54,6 +54,9 @@ spec:
             app: home-assistant
             k8s:io.kubernetes.pod.namespace: iot
         - matchLabels:
+            app.kubernetes.io/name: media-webhook-notifier
+            k8s:io.kubernetes.pod.namespace: automation
+        - matchLabels:
             app: kometa
       toPorts:
         - ports:
