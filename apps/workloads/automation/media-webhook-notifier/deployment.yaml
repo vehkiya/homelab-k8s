@@ -21,7 +21,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: notifier
-          image: ghcr.io/hononeko/media-webhook-notifier:1.0.0
+          image: ghcr.io/hononeko/media-webhook-notifier:1.1.0
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -40,6 +40,14 @@ spec:
               value: "8080"
             - name: QBITTORRENT_URL
               value: "http://qbittorrent-ui.media.svc.cluster.local:8080"
+            - name: MEDIA_SERVER_TYPE
+              value: "plex"
+            - name: MEDIA_SERVER_URL
+              value: "http://plex-ui.media.svc.cluster.local:32400"
+            - name: MEDIA_SERVER_PUBLIC_URL
+              value: "https://plex.kerrlab.app"
+            - name: LOG_LEVEL
+              value: "INFO"
           envFrom:
             - secretRef:
                 name: media-webhook-notifier-secret

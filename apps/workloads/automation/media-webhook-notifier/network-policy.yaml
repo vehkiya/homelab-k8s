@@ -45,6 +45,21 @@ spec:
               protocol: TCP
             - port: "web-ui"
               protocol: TCP
+    # Allow communication to Plex in media namespace
+    - toServices:
+        - k8sService:
+            serviceName: plex-ui
+            namespace: media
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: plex
+      toPorts:
+        - ports:
+            - port: "32400"
+              protocol: TCP
+            - port: "web-ui"
+              protocol: TCP
     # Allow outbound internet communication for Telegram Bot API & external webhooks
     - toEntities:
         - "world"
