@@ -7,3 +7,7 @@ resources:
   - service.yaml
   - secret.yaml
   - network-policy.yaml
+
+images:
+  - name: ghcr.io/hononeko/media-webhook-notifier
+    newTag: 1.4.0@sha256:e8395d7154a61154bb56abb20ef4b7163a598a8829d4e408070ee6a06ca6de22
