@@ -31,6 +31,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: n8n
             k8s:io.kubernetes.pod.namespace: automation
+        - matchLabels:
+            app.kubernetes.io/name: media-webhook-notifier
+            k8s:io.kubernetes.pod.namespace: automation
       toPorts:
         - ports:
             - port: "web-ui"
