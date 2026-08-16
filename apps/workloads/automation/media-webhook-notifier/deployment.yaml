@@ -53,11 +53,6 @@ spec:
           envFrom:
             - secretRef:
                 name: media-webhook-notifier-secret
-          volumeMounts:
-            - name: templates
-              mountPath: /config/templates.yaml
-              subPath: templates.yaml
-              readOnly: true
           livenessProbe:
             httpGet:
               path: /livez
