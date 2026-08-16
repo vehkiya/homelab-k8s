@@ -77,7 +77,3 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
-      volumes:
-        - name: templates
-          configMap:
-            name: media-webhook-notifier-templates
