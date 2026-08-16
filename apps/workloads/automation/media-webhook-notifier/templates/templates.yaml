@@ -8,90 +8,84 @@ theme:
 
 events:
   grab:
-    title: "⏳ Queueing: {title}"
-    subtitle: "{instance_name}"
+    title: "🎬 {title}"
+    subtitle: "{instance_name} • {indexer}"
     body: |
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Group:</b> {release_group}
-      ▪ <b>Size:</b> {size}
+      ▪ <b>Release:</b> <code>{release_group}</code>
+      ▪ <b>Quality:</b> {quality} • {size}
       ▪ <b>Indexer:</b> {indexer}
 
   download_progress:
-    title: "⏳ Downloading: {title}"
+    title: "⬇️ {title}"
     subtitle: "{instance_name}"
     body: |
       <code>{progress_bar}</code> <b>{progress_percent}%</b>
+
       ▪ <b>Speed:</b> {speed} (ETA: {eta})
-      ▪ <b>Downloaded:</b> {downloaded_size} / {total_size}
+      ▪ <b>Transferred:</b> {downloaded_size} / {total_size}
       ▪ <b>Peers:</b> {peers_info}
 
   download_complete:
-    title: "✅ Download Complete: {title}"
-    subtitle: "{instance_name}"
+    title: "✨ {title}"
+    subtitle: "{instance_name} • Downloaded"
     body: |
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Size:</b> {total_size}
-      ▪ <b>Indexer:</b> {indexer}
+      ▪ <b>Quality:</b> {quality} • {total_size}
+      ▪ <b>Status:</b> Ready for import
 
   download_stalled:
-    title: "⚠️ Download Stalled: {title}"
-    subtitle: "{instance_name}"
+    title: "⚠️ {title}"
+    subtitle: "{instance_name} • Stalled"
     body: |
-      ▪ <b>Status:</b> Stalled (0 B/s)
-      ▪ <b>Progress:</b> {progress_percent}% {progress_bar}
+      ▪ <b>Status:</b> Download Stalled (0 B/s)
+      ▪ <b>Progress:</b> {progress_percent}% <code>{progress_bar}</code>
       ▪ <b>Quality:</b> {quality}
 
   import:
-    title: "{import_icon} {import_action}: {title}"
+    title: "{import_icon} {title}"
     subtitle: "{instance_name} • {import_type}"
     body: |
-      ▪ <b>Quality:</b> {quality}
       ▪ <b>Specs:</b> {specs}
-      ▪ <b>Size:</b> {size}
+      ▪ <b>Quality:</b> {quality} • {size}
 
       <i>{overview}</i>
 
   media_available:
-    title: "🍿 Now Available: {title}"
-    subtitle: "{instance_name}"
+    title: "🍿 {title}"
+    subtitle: "{media_server_name}"
     body: |
       ▪ <b>Specs:</b> {specs}
-      ▪ <b>Rating:</b> {score}
+      ▪ <b>Rating:</b> ⭐ {rating}
 
       <i>{overview}</i>
     actions:
-      - label: "🎬 Watch on Plex"
+      - label: "▶️ Watch on Plex"
         url: "{deep_link_url}"
         style: "PRIMARY"
 
   manual_interaction:
-    title: "✋ Manual Import Required: {title}"
-    subtitle: "{instance_name} • Manual Intervention"
+    title: "⚠️ Manual Import Required: {title}"
+    subtitle: "{instance_name} • {reason}"
     body: |
-      ▪ <b>Reason:</b> {reason}
-      ▪ <b>Release:</b> {release_title}
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Size:</b> {size}
-      ▪ <b>Indexer:</b> {indexer}
+      ▪ <b>Release:</b> <code>{release_title}</code>
+      ▪ <b>Quality:</b> {quality} • {size}
       ▪ <b>Client:</b> {client}
     actions:
-      - label: "📁 Open in {source_name}"
-        url: "{web_url}"
+      - label: "📁 Open Queue in {source_name}"
+        url: "{web_url}/activity/queue"
         style: "PRIMARY"
 
   request:
-    title: "{request_icon} {request_action}: {subject}"
+    title: "{request_icon} {subject}"
     subtitle: "{instance_name} • {request_status}"
     body: |
-      ▪ <b>Requested By:</b> {requested_by}
-      ▪ <b>Media Type:</b> {media_type}
-      ▪ <b>Quality:</b> {quality}
+      ▪ <b>Requested By:</b> @{requested_by}
+      ▪ <b>Details:</b> {media_type} {quality}
       ▪ <b>Issue:</b> {issue_type} ({issue_status})
-      ▪ <b>Comment:</b> {comment}
-      ▪ <b>Details:</b> {message}
+      ▪ <b>Note:</b> <i>{comment}</i>
+      ▪ <b>Message:</b> {message}
     actions:
       - label: "🌐 Open in {instance_name}"
-        url: "{web_url}"
+        url: "{web_url}/issues"
         style: "PRIMARY"
 
   health:
@@ -99,4 +93,4 @@ events:
     subtitle: "{instance_name} • {health_type}"
     body: |
       ▪ <b>Issue:</b> {issue_type}
-      ▪ <b>Message:</b> {message}
+      ▪ <b>Diagnostic:</b> {message}
