@@ -40,8 +40,6 @@ spec:
               value: "8080"
             - name: ENABLE_PREVIEW
               value: "false"
-            - name: TEMPLATES_FILE
-              value: "/config/templates.yaml"
             - name: QBITTORRENT_URL
               value: "http://qbittorrent-ui.media.svc.cluster.local:8080"
             - name: MEDIA_SERVER_TYPE
