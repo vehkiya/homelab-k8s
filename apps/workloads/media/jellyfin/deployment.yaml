@@ -1,0 +1,273 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+        networking/expose-web-ui: "true"
+    spec:
+      resourceClaims:
+        - name: intel-gpu
+          resourceClaimName: shared-intel-gpu-claim
+      affinity:
+        nodeAffinity:
+          # Hard-pinned to 'performance' nodes for DRA GPU device allocation
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - performance
+      terminationGracePeriodSeconds: 120
+      initContainers:
+        - name: init-config
+          image: ghcr.io/hononeko/k8s-config-tools
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mkdir -p /config/config
+              mkdir -p /config/plugins/configurations
+              echo "Applying reverse proxy and network configuration template..."
+              gomplate -f /templates/network.xml -o /config/config/network.xml
+
+              if [ ! -f /config/config/encoding.xml ]; then
+                echo "Initializing QSV hardware transcoding template..."
+                gomplate -f /templates/encoding.xml -o /config/config/encoding.xml
+              fi
+
+              if [ ! -f /config/config/system.xml ]; then
+                echo "Initializing system configuration template..."
+                gomplate -f /templates/system.xml -o /config/config/system.xml
+              fi
+
+              if [ ! -f /config/plugins/configurations/Jellyfin.Plugin.LDAP_Auth.xml ]; then
+                echo "Initializing LDAP-Auth plugin configuration template..."
+                gomplate -f /templates/ldap.xml -o /config/plugins/configurations/Jellyfin.Plugin.LDAP_Auth.xml
+              fi
+          envFrom:
+            - secretRef:
+                name: jellyfin-secrets
+                optional: true
+          volumeMounts:
+            - name: config-templates
+              mountPath: /templates
+            - name: config
+              mountPath: /config
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+        - name: init-db-sync
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/sh
+            - -c
+            - |
+              DB_DIR="/config/data"
+              mkdir -p "$DB_DIR"
+              echo "Syncing Jellyfin database from Longhorn to local emptyDir..."
+              rsync -aH --no-perms --no-o --no-g -O --delete "$DB_DIR/" /config-db/
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: config-db
+              mountPath: /config-db
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "128Mi"
+            limits:
+              cpu: "100m"
+              memory: "256Mi"
+        - name: config-sync
+          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          restartPolicy: Always
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/sh
+            - -c
+            - |
+              DB_DIR="/config/data"
+              while true; do
+                sleep 900
+                echo "Running 15-minute DB backup..."
+                if [ -f "/config-db/jellyfin.db" ]; then
+                  for db in /config-db/*.db; do
+                    db_name=$(basename "$db")
+                    if ! sqlite3 "$db" ".backup '$DB_DIR/$db_name'"; then
+                      echo "ERROR: Failed to backup $db_name" >&2
+                    fi
+                  done
+                  rsync -aH --no-perms --no-o --no-g -O --exclude="*.db*" /config-db/ "$DB_DIR/" 2>/dev/null || true
+                fi
+              done
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    DB_DIR="/config/data"
+                    if [ -f "/config-db/jellyfin.db" ]; then
+                      echo "Pod shutting down. Running final DB backup..."
+                      for db in /config-db/*.db; do
+                        db_name=$(basename "$db")
+                        if ! sqlite3 "$db" ".backup '$DB_DIR/$db_name'"; then
+                          echo "ERROR: Failed to backup $db_name" >&2
+                        fi
+                      done
+                      rsync -aH --no-perms --no-o --no-g -O --exclude="*.db*" /config-db/ "$DB_DIR/" 2>/dev/null || true
+                    fi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: config-db
+              mountPath: /config-db
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "128Mi"
+            limits:
+              cpu: "100m"
+              memory: "256Mi"
+      containers:
+        - name: jellyfin
+          image: ghcr.io/jellyfin/jellyfin
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
+            - name: JELLYFIN_PublishedServerUrl
+              value: "https://jellyfin.kerrlab.app"
+          envFrom:
+            - secretRef:
+                name: jellyfin-secrets
+                optional: true
+          ports:
+            - name: web-ui
+              containerPort: 8096
+              protocol: TCP
+            - name: auto-discovery
+              containerPort: 7359
+              protocol: UDP
+            - name: dlna
+              containerPort: 1900
+              protocol: UDP
+          startupProbe:
+            httpGet:
+              path: /health
+              port: web-ui
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: web-ui
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: web-ui
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          volumeMounts:
+            - name: media
+              mountPath: /data
+            - name: config
+              mountPath: /config
+            - name: config-db
+              mountPath: /config/data
+            - name: cache
+              mountPath: /cache
+            - name: transcode
+              mountPath: /transcode
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+            limits:
+              cpu: "4000m"
+              memory: "8Gi"
+            claims:
+              - name: intel-gpu
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroupChangePolicy: OnRootMismatch
+        fsGroup: 100
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1027
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-config-longhorn-pvc
+        - name: config-db
+          emptyDir:
+            sizeLimit: 8Gi
+        - name: config-templates
+          configMap:
+            name: jellyfin-config-template
+        - name: cache
+          emptyDir: {}
+        - name: transcode
+          emptyDir:
+            sizeLimit: 16Gi

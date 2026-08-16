@@ -1,0 +1,82 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: jellyfin-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: jellyfin
+
+  egress:
+    # Rule: Allow Internet (Jellyfin -> Metadata providers, TMDb, TVDb, plugins)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "443"
+              protocol: UDP
+            - port: "80"
+              protocol: TCP
+    # Allow egress to Bazarr for webhooks
+    - toServices:
+        - k8sService:
+            serviceName: bazarr-ui
+            namespace: media
+    # Allow LDAP authentication queries to LLDAP
+    - toEndpoints:
+        - matchLabels:
+            app: lldap
+            k8s:io.kubernetes.pod.namespace: security
+      toPorts:
+        - ports:
+            - port: "3890"
+              protocol: TCP
+            - port: "636"
+              protocol: TCP
+            - port: "6360"
+              protocol: TCP
+    - toServices:
+        - k8sService:
+            serviceName: lldap
+            namespace: security
+
+  # Allow Ingress (Inbound)
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: sonarr
+        - matchLabels:
+            app: radarr
+        - matchLabels:
+            app: seerr
+        - matchLabels:
+            app: bazarr
+        - matchLabels:
+            app: posterizarr
+        - matchLabels:
+            app: home-assistant
+            k8s:io.kubernetes.pod.namespace: iot
+        - matchLabels:
+            app: kometa
+      toPorts:
+        - ports:
+            - port: "8096"
+              protocol: "TCP"
+    # === Allow access from local networks (Direct LB Access & Discovery) ===
+    - fromCIDR:
+        - "10.10.1.0/24"
+        - "192.168.1.0/24"
+        - "192.168.4.0/24"
+        - "192.168.11.0/24"
+        - "192.168.29.0/24"
+        - "100.64.0.0/10"
+      toPorts:
+        - ports:
+            - port: "8096"
+              protocol: "TCP"
+            - port: "7359"
+              protocol: "UDP"
+            - port: "1900"
+              protocol: "UDP"
