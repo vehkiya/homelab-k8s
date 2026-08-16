@@ -8,11 +8,6 @@ resources:
   - secret.yaml
   - network-policy.yaml
 
-configMapGenerator:
-  - name: media-webhook-notifier-templates
-    files:
-      - templates.yaml=templates/templates.yaml
-
 images:
   - name: ghcr.io/hononeko/media-webhook-notifier
     newTag: 2.1.0@sha256:05046866ab4934bd7fdba6b475c30648c5b7866d2b091754968840cf56aa0491
