@@ -15,4 +15,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/hononeko/media-webhook-notifier
-    newTag: 2.0.0@sha256:89a052af62c612d0e05d2596f03edba77d7d904c4478b387a5dc6305821fe0a1
+    newTag: 2.0.0@sha256:9ee8e536fd5c2709c0ace9a51f6e4b79a7e499dbb6d75b7b15ae115899582b80
