@@ -8,7 +8,6 @@ resources:
   - external-secret.yaml
   - service-voice.yaml
 
-
 # 2. Add Name Suffix
 nameSuffix: -vh
 
@@ -36,13 +35,13 @@ patches:
       metadata:
         name: minecraft-config
       data:
-        #  CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/vault-hunters-1-18-2"
-        CF_SLUG: "vault-hunters-1-18-2"
-        CF_FORCE_SYNCHRONIZE: "TRUE"
+        #  CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/vault-hunters-third-edition-remastered"
+        CF_SLUG: "vault-hunters-third-edition-remastered"
+        CF_FORCE_SYNCHRONIZE: "FALSE"
         TYPE: "AUTO_CURSEFORGE"
         VERSION: "1.18.2"
         OPS: "Kerrlab,JusApee"
-        SERVER_NAME: "Vault Hunters S4 Server"
+        SERVER_NAME: "Vault Hunters S5 Server"
         DIFFICULTY: "hard"
         SPAWN_PROTECTION: "0"
         USE_AIKAR_FLAGS: "TRUE"
@@ -183,4 +182,3 @@ patches:
             port: 24455
             targetPort: 24454
             protocol: UDP
-
