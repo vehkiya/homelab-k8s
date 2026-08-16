@@ -7,96 +7,108 @@ theme:
   progress_bar_style: "default"
 
 events:
-  grab:
-    title: "⏳ Queueing: {title}"
-    subtitle: "{instance_name}"
-    body: |
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Group:</b> {release_group}
-      ▪ <b>Size:</b> {size}
-      ▪ <b>Indexer:</b> {indexer}
+  download:
+    progress:
+      title: "⏳ Downloading: {title}"
+      subtitle: "{instance_name}"
+      body: |
+        <code>{progress_bar}</code> <b>{progress_percent}%</b>
 
-  download_progress:
-    title: "⏳ Downloading: {title}"
-    subtitle: "{instance_name}"
-    body: |
-      <code>{progress_bar}</code> <b>{progress_percent}%</b>
-      ▪ <b>Speed:</b> {speed} (ETA: {eta})
-      ▪ <b>Downloaded:</b> {downloaded_size} / {total_size}
-      ▪ <b>Peers:</b> {peers_info}
+        ▪ <b>Speed:</b> {speed} (ETA: {eta})
+        ▪ <b>Transferred:</b> {downloaded_size} / {total_size}
+        ▪ <b>Peers:</b> {peers_info}
 
-  download_complete:
-    title: "✅ Download Complete: {title}"
-    subtitle: "{instance_name}"
-    body: |
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Size:</b> {total_size}
-      ▪ <b>Indexer:</b> {indexer}
+    complete:
+      title: "✅ Download Complete: {title}"
+      subtitle: "{instance_name} • Downloaded"
+      body: |
+        ▪ <b>Quality:</b> {quality} • {total_size}
+        ▪ <b>Status:</b> Ready for import
 
-  download_stalled:
-    title: "⚠️ Download Stalled: {title}"
-    subtitle: "{instance_name}"
-    body: |
-      ▪ <b>Status:</b> Stalled (0 B/s)
-      ▪ <b>Progress:</b> {progress_percent}% {progress_bar}
-      ▪ <b>Quality:</b> {quality}
+    stalled:
+      title: "⚠️ Download Stalled: {title}"
+      subtitle: "{instance_name} • Stalled"
+      body: |
+        ▪ <b>Status:</b> Download Stalled (0 B/s)
+        ▪ <b>Progress:</b> {progress_percent}% <code>{progress_bar}</code>
+        ▪ <b>Quality:</b> {quality}
 
-  import:
-    title: "{import_icon} {import_action}: {title}"
-    subtitle: "{instance_name} • {import_type}"
-    body: |
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Specs:</b> {specs}
-      ▪ <b>Size:</b> {size}
+  servarr:
+    grab:
+      title: "⏳ Queueing: {title}"
+      subtitle: "{instance_name} • {indexer}"
+      body: |
+        ▪ <b>Release:</b> <code>{release_group}</code>
+        ▪ <b>Quality:</b> {quality} • {size}
+        ▪ <b>Indexer:</b> {indexer}
 
-      <i>{overview}</i>
+    import:
+      title: "{import_icon} {import_action}: {title}"
+      subtitle: "{instance_name} • {import_type}"
+      body: |
+        ▪ <b>Specs:</b> {specs}
+        ▪ <b>Quality:</b> {quality}
+        ▪ <b>Size:</b> {size}
 
-  media_available:
-    title: "🍿 Now Available: {title}"
-    subtitle: "{instance_name}"
-    body: |
-      ▪ <b>Specs:</b> {specs}
-      ▪ <b>Rating:</b> {score}
+        <i>{overview}</i>
 
-      <i>{overview}</i>
-    actions:
-      - label: "🎬 Watch on Plex"
-        url: "{deep_link_url}"
-        style: "PRIMARY"
+    manual_interaction:
+      title: "⚠️ Manual Import Required: {title}"
+      subtitle: "{instance_name} • {reason}"
+      body: |
+        ▪ <b>Release:</b> <code>{release_title}</code>
+        ▪ <b>Size:</b> {size}
+        ▪ <b>Indexer:</b> {indexer}
+        ▪ <b>Client:</b> {client}
+      actions:
+        - label: "📁 Open in {source_name}"
+          url: "{web_url}/activity/queue"
+          style: "PRIMARY"
 
-  manual_interaction:
-    title: "✋ Manual Import Required: {title}"
-    subtitle: "{instance_name} • Manual Intervention"
-    body: |
-      ▪ <b>Reason:</b> {reason}
-      ▪ <b>Release:</b> {release_title}
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Size:</b> {size}
-      ▪ <b>Indexer:</b> {indexer}
-      ▪ <b>Client:</b> {client}
-    actions:
-      - label: "📁 Open in {source_name}"
-        url: "{web_url}"
-        style: "PRIMARY"
+    health:
+      title: "{health_icon} {health_status}: {instance_name}"
+      subtitle: "{instance_name} • {health_type}"
+      body: |
+        ▪ <b>Issue:</b> {issue_type}
+        ▪ <b>Diagnostic:</b> {message}
 
-  request:
-    title: "{request_icon} {request_action}: {subject}"
-    subtitle: "{instance_name} • {request_status}"
-    body: |
-      ▪ <b>Requested By:</b> {requested_by}
-      ▪ <b>Media Type:</b> {media_type}
-      ▪ <b>Quality:</b> {quality}
-      ▪ <b>Issue:</b> {issue_type} ({issue_status})
-      ▪ <b>Comment:</b> {comment}
-      ▪ <b>Details:</b> {message}
-    actions:
-      - label: "🌐 Open in {instance_name}"
-        url: "{web_url}"
-        style: "PRIMARY"
+  media_server:
+    available:
+      title: "🍿 Now Available: {title}"
+      subtitle: "{media_server_name}"
+      body: |
+        ▪ <b>Specs:</b> {specs}
+        ▪ <b>Rating:</b> ⭐ {rating}
 
-  health:
-    title: "{health_icon} {health_status}: {instance_name}"
-    subtitle: "{instance_name} • {health_type}"
-    body: |
-      ▪ <b>Issue:</b> {issue_type}
-      ▪ <b>Message:</b> {message}
+        <i>{overview}</i>
+      actions:
+        - label: "▶️ Watch on Plex"
+          url: "{deep_link_url}"
+          style: "PRIMARY"
+
+  seerr:
+    request:
+      title: "{request_icon} {subject}"
+      subtitle: "{instance_name} • {request_status}"
+      body: |
+        ▪ <b>Requested By:</b> @{requested_by}
+        ▪ <b>Details:</b> {media_type} {quality}
+        ▪ <b>Note:</b> <i>{comment}</i>
+        ▪ <b>Message:</b> {message}
+      actions:
+        - label: "🌐 Open in {instance_name}"
+          url: "{web_url}"
+          style: "PRIMARY"
+
+    issue:
+      title: "{request_icon} {subject}"
+      subtitle: "{instance_name} • {request_status}"
+      body: |
+        ▪ <b>Reported By:</b> @{requested_by}
+        ▪ <b>Issue:</b> {issue_type} ({issue_status})
+        ▪ <b>Comment:</b> <i>{comment}</i>
+        ▪ <b>Details:</b> {message}
+      actions:
+        - label: "⚠️ View Issue in {instance_name}"
+          url: "{web_url}"
+          style: "PRIMARY"
