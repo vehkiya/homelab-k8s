@@ -18,7 +18,7 @@ data:
     # 1. Check if 0 players are online currently
     if rcon-cli --password "$RCON_PASSWORD" "list" | grep -q "There are 0"; then
       echo "ℹ️  0 players online. Checking for recent activity..."
-    
+
       # Ensure 'find' supports -mmin (install findutils if needed)
       if ! find --help 2>&1 | grep -q "mmin"; then
         echo "Installing findutils..."
@@ -62,8 +62,8 @@ data:
     rcon-cli --password "$RCON_PASSWORD" "say §6[Backup] §fServer backup completed!"
     echo "✅ Backup Complete: $BACKUP_PATH"
 
-    # Prune (Keep last 10)
+    # Prune (Keep last 5)
     cd /backups
-    ls -d backup-*/ 2>/dev/null | sort -r | tail -n +11 | xargs -r rm -rf
+    ls -d backup-*/ 2>/dev/null | sort -r | tail -n +6 | xargs -r rm -rf
 
     echo "🧹 Pruning complete."
