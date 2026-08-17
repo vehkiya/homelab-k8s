@@ -10,4 +10,4 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/media-webhook-notifier
-    newTag: 2.3.0@sha256:40dbdd3e6ed5ba1ad0e6a91c070077061e342b4d121a9831416fc3cb9a94abff
+    newTag: 2.4.0@sha256:cb275d108bfc85de1313076162b8277bd06b00b24cfeb5645e20c9d37e3aab98
