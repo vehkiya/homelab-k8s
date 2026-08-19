@@ -25,7 +25,7 @@ images:
   - name: busybox
     newTag: 1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   - name: ghcr.io/n8n-io/n8n
-    newTag: 2.36.0@sha256:7c941e99b99bf13c4fc40ec76ad9e92dc6b95e80a4557b8046721d845fca1206
+    newTag: 2.36.1@sha256:67452a32990e0426ae2b78fcf1fc92d41e7cf0765686ce6623cc4003a23ed446
 patches:
   - path: hpa-patch.yaml
     target:
