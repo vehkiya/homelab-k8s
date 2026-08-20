@@ -78,10 +78,10 @@ taskRunners:
   # Resource limits for task runner sidecar containers
   resources:
     requests:
-      cpu: "50m"
+      cpu: "10m"
       memory: "128Mi"
     limits:
-      cpu: "250m"
+      cpu: "100m"
       memory: "256Mi"
 
   # Additional environment variables for task runners
@@ -119,24 +119,24 @@ extraVolumeMounts: []
 resources:
   main:
     requests:
-      cpu: "100m"
+      cpu: "40m"
       memory: "384Mi"
     limits:
       cpu: "500m"
       memory: "1024Mi"
   worker:
     requests:
-      cpu: "100m"
+      cpu: "40m"
       memory: "256Mi"
     limits:
       cpu: "500m"
       memory: "1024Mi"
   webhookProcessor:
     requests:
-      cpu: "50m"
+      cpu: "20m"
       memory: "256Mi"
     limits:
-      cpu: "250m"
+      cpu: "200m"
       memory: "512Mi"
 
 # ----- Node placement -----

@@ -67,7 +67,11 @@ patches:
             containers:
               - name: kube-multus
                 resources:
+                  requests:
+                    cpu: "10m"
+                    memory: "32Mi"
                   limits:
+                    cpu: "100m"
                     memory: "1280Mi"
     target:
       kind: DaemonSet

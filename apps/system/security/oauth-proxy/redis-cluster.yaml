@@ -11,11 +11,11 @@ spec:
     imagePullPolicy: IfNotPresent
     resources:
       requests:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: "10m"
+        memory: "16Mi"
       limits:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: "100m"
+        memory: "128Mi"
     # ---=== Secret === ---
     redisSecret:
       name: oauth-proxy-secrets
@@ -24,6 +24,13 @@ spec:
   sentinel:
     size: 3
     image: quay.io/opstree/redis-sentinel:v8.4.2
+    resources:
+      requests:
+        cpu: "10m"
+        memory: "32Mi"
+      limits:
+        cpu: "100m"
+        memory: "64Mi"
     redisSecret:
       name: oauth-proxy-secrets
       key: OAUTH2_PROXY_REDIS_PASSWORD

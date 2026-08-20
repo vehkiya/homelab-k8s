@@ -102,10 +102,10 @@ spec:
               mountPath: /var/www/cocktails/storage/bar-assistant
           resources:
             requests:
-              cpu: "100m"
+              cpu: "20m"
               memory: "256Mi"
             limits:
-              cpu: "1000m"
+              cpu: "500m"
               memory: "1Gi"
       volumes:
         - name: bar-data
