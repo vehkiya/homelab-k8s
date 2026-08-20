@@ -116,12 +116,12 @@ spec:
               imagePullPolicy: IfNotPresent
               args: ["--run", "--read-only-config"]
               resources:
-                limits:
-                  cpu: 500m
-                  memory: 512Mi
                 requests:
-                  cpu: 500m
-                  memory: 512Mi
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 1000m
+                  memory: 1Gi
               securityContext:
                 allowPrivilegeEscalation: false
                 seccompProfile:
