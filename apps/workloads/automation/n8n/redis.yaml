@@ -18,15 +18,6 @@ spec:
     redisSecret:
       name: n8n-secrets
       key: QUEUE_BULL_REDIS_PASSWORD
-    # ---=== Storage === ---
-  storage:
-    volumeClaimTemplate:
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
-        storageClassName: "longhorn"
   # ---=== Pod Security === ---
   podSecurityContext:
     runAsUser: 1000

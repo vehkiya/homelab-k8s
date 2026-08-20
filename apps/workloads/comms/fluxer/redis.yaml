@@ -16,14 +16,6 @@ spec:
     redisSecret:
       name: fluxer-secrets
       key: REDIS_PASSWORD
-  storage:
-    volumeClaimTemplate:
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 1Gi
-        storageClassName: "longhorn"
   podSecurityContext:
     runAsUser: 1000
     fsGroup: 1000
