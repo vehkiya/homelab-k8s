@@ -1,9 +1,15 @@
 persistence:
-  defaultClassReplicaCount: 2
+  defaultClassReplicaCount: 3
 ingress:
   enabled: false
 
 defaultSettings:
+  # Increase default replica count for high availability across cluster nodes
+  defaultReplicaCount: 3
+  # Priority class for system-managed Longhorn components
+  priorityClass: "longhorn-critical"
+  # Lower guaranteed instance manager CPU to prevent OutOfcpu on dense nodes
+  guaranteedInstanceManagerCPU: 5
   # Do not automatically create disks on all nodes. 
   # This allows us to control which nodes provide storage via labels.
   createDefaultDiskLabeledNodes: true

@@ -20,15 +20,6 @@ spec:
     redisSecret:
       name: authelia-secrets
       key: REDIS_PASSWORD
-  # ---=== Storage === ---
-  storage:
-    volumeClaimTemplate:
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 1Gi
-        storageClassName: "longhorn"
   # ---=== Sentinel ===---
   sentinel:
     size: 3
