@@ -39,11 +39,12 @@ bpf:
   preallocateMaps: false
   hostLegacyRouting: false
   masquerade: true
-  mapDynamicSizeRatio: 0.025
+  mapDynamicSizeRatio: 0.0075
   distributedLRU:
     enabled: true
 
-enableIPv4BIGTCP: false
+enableIPv4BIGTCP: true
+enableIPv6BIGTCP: true
 bpfClockProbe: true
 
 ipMasqAgent:
