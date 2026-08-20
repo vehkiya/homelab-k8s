@@ -17,7 +17,7 @@ spec:
     spec:
       resourceClaims:
         - name: intel-gpu
-          resourceClaimTemplateName: intel-gpu-claim-template
+          resourceClaimName: shared-intel-gpu-claim
       affinity:
         nodeAffinity:
           # NOTE: Hard-pinned to 'performance' nodes because Kubernetes DRA (Dynamic Resource Allocation)
