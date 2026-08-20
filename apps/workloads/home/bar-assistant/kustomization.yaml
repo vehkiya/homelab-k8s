@@ -26,6 +26,6 @@ images:
   - name: busybox
     newTag: 1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   - name: ghcr.io/karlomikus/barassistant
-    newTag: 6.1.0@sha256:a785c2cc0794b2fc0af420700e47e9a20e46cc6593b93348d7b96dd97498af56
+    newTag: 6.2.0@sha256:f6e31280af762dbb64ab2f441932b000a26cb33c43ca5c29c1d78f68021e4ba7
   - name: ghcr.io/karlomikus/salt-rim
-    newTag: 5.1.0@sha256:4fe9ed6b556f98b3b9d4d18525e38e9285921fa47ecacd9e91d39c8709c547d8
+    newTag: 5.2.0@sha256:d50cd9bc9975c2329d5313bf7ffe84f271aee22a2f744a62dfe378922441f98a
