@@ -53,7 +53,6 @@ ipMasqAgent:
     nonMasqueradeCIDRs:
       - 10.244.0.0/16 # Pods CIDR
       - 10.96.0.0/12 # Services CIDR
-      - 192.168.4.0/24 # IoT VLAN
       - "fdf0:10:244::/48" # Pods IPv6 CIDR
       - "fd00:2:244::/64" # IoT VLAN IPv6 Subnet
       - "fd00::/8" # All IPv6 ULA / Thread Mesh Subnets
