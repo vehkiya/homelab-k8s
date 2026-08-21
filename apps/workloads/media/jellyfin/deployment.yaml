@@ -82,7 +82,7 @@ spec:
               cpu: "100m"
               memory: "64Mi"
         - name: init-db-sync
-          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          image: ghcr.io/hononeko/k8s-backup-tools
           securityContext:
             runAsUser: 1027
             runAsGroup: 100
@@ -114,7 +114,7 @@ spec:
               cpu: "100m"
               memory: "256Mi"
         - name: config-sync
-          image: ghcr.io/hononeko/k8s-backup-tools:0.1.0
+          image: ghcr.io/hononeko/k8s-backup-tools
           restartPolicy: Always
           securityContext:
             runAsUser: 1027
@@ -253,6 +253,10 @@ spec:
         runAsGroup: 100
         runAsNonRoot: true
         runAsUser: 1027
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       volumes:
         - name: media
           persistentVolumeClaim:

@@ -41,25 +41,41 @@ spec:
         - k8sService:
             serviceName: lldap
             namespace: security
+    # Allow egress to notification and webhook services
+    - toServices:
+        - k8sService:
+            serviceName: ntfy
+            namespace: automation
+        - k8sService:
+            serviceName: media-webhook-notifier
+            namespace: automation
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: media-webhook-notifier
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: ntfy
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
 
   # Allow Ingress (Inbound)
   ingress:
     - fromEndpoints:
         - matchLabels:
-            app: sonarr
-        - matchLabels:
-            app: radarr
-        - matchLabels:
             app: seerr
         - matchLabels:
             app: bazarr
         - matchLabels:
-            app: posterizarr
-        - matchLabels:
             app: home-assistant
             k8s:io.kubernetes.pod.namespace: iot
-        - matchLabels:
-            app: kometa
       toPorts:
         - ports:
             - port: "8096"

@@ -23,6 +23,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: plex
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: jellyfin
       toPorts:
         - ports:
             - port: "8080"
