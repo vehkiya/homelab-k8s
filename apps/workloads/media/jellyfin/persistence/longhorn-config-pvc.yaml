@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: jellyfin
+    recurring-job.longhorn.io/source: "enabled"
+    recurring-job.longhorn.io/daily-s3-backup: "enabled"
+  name: jellyfin-config-longhorn-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: longhorn-retain
+  volumeMode: Filesystem
