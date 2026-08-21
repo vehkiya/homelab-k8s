@@ -39,20 +39,26 @@ bpf:
   preallocateMaps: false
   hostLegacyRouting: false
   masquerade: true
-  mapDynamicSizeRatio: 0.025
+  mapDynamicSizeRatio: 0.0075
   distributedLRU:
     enabled: true
 
-enableIPv4BIGTCP: false
+enableIPv4BIGTCP: true
+enableIPv6BIGTCP: true
 bpfClockProbe: true
 
 ipMasqAgent:
-  enabled: false
+  enabled: true
   config:
     nonMasqueradeCIDRs:
       - 10.244.0.0/16 # Pods CIDR
-      - 10.96.0.0/12
-      - "fdf0:10:244::/48"
+      - 10.96.0.0/12 # Services CIDR
+      - 192.168.4.0/24 # IoT VLAN
+      - "fdf0:10:244::/48" # Pods IPv6 CIDR
+      - "fd00:2:244::/64" # IoT VLAN IPv6 Subnet
+      - "fd00::/8" # All IPv6 ULA / Thread Mesh Subnets
+    masqLinkLocal: false
+    masqLinkLocalIPv6: false
 
 bandwidthManager:
   enabled: true
@@ -60,7 +66,7 @@ bandwidthManager:
 
 enableIPv4Masquerade: true
 enableIPv6Masquerade: true
-# enableMasqueradeRouteSource: true
+# enableMasqueradeRouteSource: true (incompatible with bpf.masquerade: true; use ipMasqAgent instead)
 
 externalIPs:
   enabled: false
