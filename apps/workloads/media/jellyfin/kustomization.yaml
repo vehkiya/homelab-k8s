@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - rate-limit.yaml
+  - network-policy.yaml
+  - secret.yaml
+
+configMapGenerator:
+  - name: jellyfin-config-template
+    files:
+      - encoding.xml=templates/encoding.xml
+      - network.xml=templates/network.xml
+      - system.xml=templates/system.xml
+      - ldap.xml=templates/ldap.xml
+generatorOptions:
+  disableNameSuffixHash: true
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: jellyfin
+      app.kubernetes.io/part-of: media-services
+
+images:
+  - name: ghcr.io/jellyfin/jellyfin
+    newTag: 10.11.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
+  - name: ghcr.io/hononeko/k8s-backup-tools
+    newTag: 0.1.0@sha256:aca7cccf5f3d92f545c1b8a9b5f53c938f23de43039a9f8500b7fd01c7e35525

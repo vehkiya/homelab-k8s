@@ -12,6 +12,18 @@ spec:
             deviceClassName: gpu.intel.com
 ---
 apiVersion: resource.k8s.io/v1
+kind: ResourceClaim
+metadata:
+  name: shared-intel-gpu-claim
+  namespace: media
+spec:
+  devices:
+    requests:
+      - name: intel-gpu
+        exactly:
+          deviceClassName: gpu.intel.com
+---
+apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
   name: intel-gpu-claim-template

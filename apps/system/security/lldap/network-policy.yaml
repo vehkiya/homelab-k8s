@@ -17,14 +17,19 @@ spec:
         - ports:
             - port: "17170"
               protocol: TCP
-    # 2. Allow LDAP query access only from Authelia (and other SSO consumers in security namespace)
+    # 2. Allow LDAP query access from Authelia and Jellyfin
     - fromEndpoints:
         - matchLabels:
             app: authelia
             k8s:io.kubernetes.pod.namespace: security
+        - matchLabels:
+            app: jellyfin
+            k8s:io.kubernetes.pod.namespace: media
       toPorts:
         - ports:
             - port: "3890"
+              protocol: TCP
+            - port: "636"
               protocol: TCP
             - port: "6360"
               protocol: TCP

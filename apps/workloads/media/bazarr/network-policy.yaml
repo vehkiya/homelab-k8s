@@ -10,10 +10,12 @@ spec:
 
   # ----=== Ingress ===----
   ingress:
-    # === Allow access from Plex for webhooks ===
+    # === Allow access from Plex and Jellyfin for webhooks ===
     - fromEndpoints:
         - matchLabels:
             app: plex
+        - matchLabels:
+            app: jellyfin
       toPorts:
         - ports:
             - port: "web-ui"
@@ -25,6 +27,9 @@ spec:
     - toServices:
         - k8sService:
             serviceName: plex-ui
+            namespace: media
+        - k8sService:
+            serviceName: jellyfin-ui
             namespace: media
         - k8sService:
             serviceName: qbittorrent-ui

@@ -60,6 +60,9 @@ spec:
             serviceName: plex-ui
             namespace: media
         - k8sService:
+            serviceName: jellyfin-ui
+            namespace: media
+        - k8sService:
             serviceName: seerr-ui
             namespace: media
         - k8sService:

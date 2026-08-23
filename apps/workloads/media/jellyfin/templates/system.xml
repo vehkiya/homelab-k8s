@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServerConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ServerName>Jellyfin</ServerName>
+  <EnableMetrics>true</EnableMetrics>
+  <EnableNormalizedItemByNameIds>true</EnableNormalizedItemByNameIds>
+  <IsPortAuthorized>true</IsPortAuthorized>
+  <QuickConnectAvailable>true</QuickConnectAvailable>
+  <EnableCaseSensitiveItemIds>true</EnableCaseSensitiveItemIds>
+  <DisableLiveTvChannelUserDataName>true</DisableLiveTvChannelUserDataName>
+  <PreferredMetadataLanguage>en</PreferredMetadataLanguage>
+  <MetadataCountryCode>US</MetadataCountryCode>
+  <CachePath>/cache</CachePath>
+</ServerConfiguration>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NetworkConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RequireHttps>false</RequireHttps>
+  <BaseUrl />
+  <PublicHttpsPort>443</PublicHttpsPort>
+  <HttpServerPortNumber>8096</HttpServerPortNumber>
+  <HttpsPortNumber>8920</HttpsPortNumber>
+  <EnableHttps>false</EnableHttps>
+  <EnableIPV6>true</EnableIPV6>
+  <EnableIPV4>true</EnableIPV4>
+  <EnableRemoteAccess>true</EnableRemoteAccess>
+  <InternalHttpPort>8096</InternalHttpPort>
+  <InternalHttpsPort>8920</InternalHttpsPort>
+  <AutoDiscovery>true</AutoDiscovery>
+  <EnableUPnP>false</EnableUPnP>
+  <KnownProxies>
+    <string>10.42.0.0/16</string>
+    <string>10.43.0.0/16</string>
+    <string>10.10.1.0/24</string>
+    <string>10.20.1.0/24</string>
+    <string>127.0.0.1</string>
+  </KnownProxies>
+  <LocalNetworkAddresses>
+    <string>10.10.1.0/24</string>
+    <string>192.168.1.0/24</string>
+    <string>192.168.4.0/24</string>
+    <string>192.168.11.0/24</string>
+    <string>192.168.29.0/24</string>
+    <string>100.64.0.0/10</string>
+  </LocalNetworkAddresses>
+  <PublishedServerUrl>https://jellyfin.kerrlab.app</PublishedServerUrl>
+  <TrustAllIP6Interfaces>true</TrustAllIP6Interfaces>
+</NetworkConfiguration>
