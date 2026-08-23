@@ -30,4 +30,4 @@ images:
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: ghcr.io/hononeko/k8s-backup-tools
-    newTag: 0.1.0@sha256:aca7cccf5f3d92f545c1b8a9b5f53c938f23de43039a9f8500b7fd01c7e35525
+    newTag: 0.1.1@sha256:40266da88413e2850417dc67d6d15e9d42249588248735f7ad1ef21a977e5bf0
