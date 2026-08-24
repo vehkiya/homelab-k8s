@@ -49,6 +49,7 @@ patches:
         OPS: "Kerrlab"
         WHITELIST: "Kerrlab,JusApee"
         LEVEL: "world"
+        SEED: "-6704946889428376289"
         ENABLE_AUTOPAUSE: "TRUE"
         AUTOPAUSE_TIMEOUT_ESTABLISHED: "900"
         AUTOPAUSE_TIMEOUT_INIT: "600"
