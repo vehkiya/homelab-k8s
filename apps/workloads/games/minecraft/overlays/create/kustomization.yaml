@@ -1,0 +1,178 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: games
+
+resources:
+  - ../../base
+  - external-secret.yaml
+
+nameSuffix: -create
+
+configurations:
+  - kustomize-config.yaml
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app: minecraft-create
+
+images:
+  - name: ghcr.io/itzg/minecraft-server
+    newTag: stable-java21@sha256:41041d799cee7743867f9a25bf12f2deeeb5a2392f3e4433d188cac4ad5e1e3a
+
+patches:
+  # === Override config ===
+  - target:
+      kind: ConfigMap
+      name: minecraft-config
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: minecraft-config
+      data:
+        TYPE: "MODRINTH"
+        # File provided via NFS aux mount
+        MODRINTH_MODPACK: "/nfs/Techtonia 1.0.0.mrpack"
+        EULA: "TRUE"
+        VERSION: "1.21.1"
+        MOTD: "Techtonia Modpack Server"
+        INIT_MEMORY: "8G"
+        MAX_MEMORY: "12G"
+        DIFFICULTY: "hard"
+        SPAWN_PROTECTION: "0"
+        VIEW_DISTANCE: "16"
+        SIMULATION_DISTANCE: "16"
+        USE_AIKAR_FLAGS: "TRUE"
+        USE_MEOWICE_FLAGS: "TRUE"
+        FORCE_SYNCHRONIZE: "true"
+        OPS: "Kerrlab"
+        WHITELIST: "Kerrlab,JusApee"
+        LEVEL: "world"
+        ENABLE_AUTOPAUSE: "TRUE"
+        AUTOPAUSE_TIMEOUT_ESTABLISHED: "900"
+        AUTOPAUSE_TIMEOUT_INIT: "600"
+
+  # === Override backup schedule ===
+  - target:
+      kind: ConfigMap
+      name: minecraft-backup-script
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: minecraft-backup-script
+      data:
+        DEFAULT_BACKUP_SCHEDULE: "30 * * * *"
+
+  # === Increase default storage size ===
+  - target:
+      kind: PersistentVolumeClaim
+      name: minecraft-data-pvc
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: minecraft-data-pvc
+      spec:
+        resources:
+          requests:
+            storage: 64Gi
+
+  # === Update backup PV for overlay ===
+  - target:
+      kind: PersistentVolume
+      name: minecraft-backup-nfs
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: minecraft-backup-nfs
+        labels:
+          pv-name: minecraft-backup-nfs-create
+      spec:
+        nfs:
+          # Point to parent folder so we can access sibling files
+          path: /volume1/cluster/minecraft/create
+
+  # === Patch base PVC so it refers the defined PV ===
+  - target:
+      kind: PersistentVolumeClaim
+      name: minecraft-backup-pvc
+    patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: minecraft-backup-pvc
+      spec:
+        selector:
+          matchLabels:
+            pv-name: minecraft-backup-nfs-create
+
+  # === Patch Deployment (Aux Mount + Unique Secret) ===
+  - target:
+      kind: StatefulSet
+      name: minecraft
+    patch: |-
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: minecraft
+      spec:
+        template:
+          spec:
+            containers:
+              # Main Container
+              - name: minecraft
+                resources:
+                  requests:
+                    cpu: "2000m"
+                    memory: "10Gi"
+                  limits:
+                    cpu: "2000m"
+                    memory: "14Gi"
+                volumeMounts:
+                  - name: backups
+                    mountPath: /nfs
+                    readOnly: true
+                envFrom:
+                  - configMapRef:
+                      name: minecraft-config
+                  - secretRef:
+                      name: minecraft-create-secret
+                env:
+                  - name: RCON_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: minecraft-create-secret
+                        key: RCON_PASSWORD
+              # Sidecar
+              - name: backup-sidecar
+                env:
+                  - name: RCON_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: minecraft-create-secret
+                        key: RCON_PASSWORD
+
+  # === Patch Service (Internal ClusterIP for mc-router routing) ===
+  - target:
+      kind: Service
+      name: minecraft
+    patch: |-
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: minecraft
+        annotations:
+          mc-router.itzg.me/externalServerName: "create.mc.kerrlab.app"
+      spec:
+        $patch: replace
+        type: ClusterIP
+        selector:
+          app: minecraft-create
+        ports:
+          - name: minecraft-tcp
+            port: 25565
+            targetPort: 25565
+            protocol: TCP

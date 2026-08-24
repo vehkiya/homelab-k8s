@@ -11,6 +11,7 @@ spec:
           - minecraft
           - minecraft-vanilla
           - minecraft-vh
+          - minecraft-create
   ingress:
     # Allow TCP connections from mc-router
     - fromEndpoints:

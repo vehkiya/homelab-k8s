@@ -25,6 +25,7 @@ spec:
                 - minecraft
                 - minecraft-vanilla
                 - minecraft-vh
+                - minecraft-create
       toPorts:
         - ports:
             - port: "25565"
