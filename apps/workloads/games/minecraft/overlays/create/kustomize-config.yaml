@@ -1,0 +1,6 @@
+# kustomize-config.yaml
+commonLabels:
+  - kind: CiliumNetworkPolicy
+    group: cilium.io
+    path: spec/endpointSelector/matchLabels
+    create: false
