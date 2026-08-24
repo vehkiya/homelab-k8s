@@ -27,22 +27,22 @@ resources:
 
 images:
   - name: ghcr.io/fluxerapp/fluxer-api
-    newTag: 2026.824.101414@sha256:827180ad4053b9db1bdf7b6499534509ddcca6779555ccecd114ddc6a7f14d31
+    newTag: 2026.824.124238@sha256:d7dd92208e0aefee204febe2d990e01d6b81baece2940325992f47e7c13b6f14
   - name: ghcr.io/fluxerapp/fluxer-gateway
     newTag: 2026.821.120321@sha256:d25691a2db56a45a1ca90894222d9231af45555f019ee2d5a2063b719632ce70
   - name: ghcr.io/fluxerapp/fluxer-media-proxy
-    newTag: 2026.820.180132@sha256:7526902e503b702d3b73c6d6d511e0a639f4bd1c3d8a8d575df1229d75c66b80
+    newTag: 2026.824.124210@sha256:9e363958aca17c63802181938adb9303dbb6ae8920b9d962a17b0fdbb55e57ad
   - name: ghcr.io/fluxerapp/fluxer-static
-    newTag: 2026.812.125337@sha256:cfe98ae544df51c98cf5a1c217799c6c357ee1896f7f5f6e3ad788d89787356a
+    newTag: 2026.824.124247@sha256:87396a59da90fea9d48811bbbf9b44d05febe8a753813fd45dc56aae537b2207
   - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
-    newTag: 2026.823.155229@sha256:d398a10265567ad1aaee76c07a9aef8ea8bfb7f26d4975a51235090cf688b9a4
+    newTag: 2026.824.124232@sha256:f04d91d01d04607cd04aebe1c6058096419114a2e86236692ce9eaf628459ef4
   - name: ghcr.io/fluxerapp/fluxer-snowflakes
     newTag: 2026.630.20736@sha256:0450e2bf7acef2d93a10191421cc5a9799f50ebe3e4a13420856c3e4ce37cc3c
   - name: ghcr.io/fluxerapp/fluxer-users
     newTag: 2026.820.183344@sha256:46c69860b75eb0fe57cb10b144ffe3c696450d13d4d62045b803f53cd54f9d1c
   - name: ghcr.io/fluxerapp/fluxer-messages
-    newTag: 2026.820.183348@sha256:96c344ee6a76877b8eb5fb2871218cc2e3f9372ab1aaac2aab020b40359fe19e
+    newTag: 2026.824.124246@sha256:930bbc0efa0e0931ee22a8fd9e43540899faa835d4babed642cf9f0374b7c82f
   - name: ghcr.io/fluxerapp/fluxer-unfurl
-    newTag: 2026.820.180459@sha256:f3441151d717c15e239506b994515902cbb3e35d30d3367c2c646fbac979ee84
+    newTag: 2026.824.124244@sha256:53cfc6b52acf6851fbb44cc8b6c0851b04256ef8e7d5278fc588eac709d628bb
   - name: ghcr.io/fluxerapp/fluxer-admin
-    newTag: 2026.818.35650@sha256:a5182e0e4a4d048e0cde5252376508a94c78498b73badd509ecf1057528a72fb
+    newTag: 2026.824.124241@sha256:9c6dd02e1c92b8f092ca5edd7619a8bbd75e5144ded65501eacc12a786315700
