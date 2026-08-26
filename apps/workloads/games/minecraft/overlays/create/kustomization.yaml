@@ -37,14 +37,15 @@ patches:
         EULA: "TRUE"
         VERSION: "1.21.1"
         MOTD: "Techtonia Modpack Server"
-        INIT_MEMORY: "8G"
+        INIT_MEMORY: "12G"
         MAX_MEMORY: "12G"
+        JVM_XX_OPTS: "-XX:+UseZGC -XX:+ZGenerational"
+        USE_AIKAR_FLAGS: "FALSE"
+        USE_MEOWICE_FLAGS: "FALSE"
         DIFFICULTY: "hard"
         SPAWN_PROTECTION: "0"
-        VIEW_DISTANCE: "16"
-        SIMULATION_DISTANCE: "16"
-        USE_AIKAR_FLAGS: "TRUE"
-        USE_MEOWICE_FLAGS: "TRUE"
+        VIEW_DISTANCE: "8"
+        SIMULATION_DISTANCE: "32"
         FORCE_SYNCHRONIZE: "true"
         OPS: "Kerrlab"
         WHITELIST: "Kerrlab,JusApee"
@@ -128,10 +129,10 @@ patches:
                 resources:
                   requests:
                     cpu: "2000m"
-                    memory: "10Gi"
+                    memory: "12Gi"
                   limits:
                     cpu: "2000m"
-                    memory: "14Gi"
+                    memory: "16Gi"
                 volumeMounts:
                   - name: backups
                     mountPath: /nfs
