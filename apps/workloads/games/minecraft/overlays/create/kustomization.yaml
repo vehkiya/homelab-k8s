@@ -44,8 +44,9 @@ patches:
         USE_MEOWICE_FLAGS: "FALSE"
         DIFFICULTY: "hard"
         SPAWN_PROTECTION: "0"
-        VIEW_DISTANCE: "8"
-        SIMULATION_DISTANCE: "32"
+        VIEW_DISTANCE: "10"
+        SIMULATION_DISTANCE: "24"
+        MAX_TICK_TIME: "120000"
         FORCE_SYNCHRONIZE: "true"
         OPS: "Kerrlab"
         WHITELIST: "Kerrlab,JusApee"
@@ -128,10 +129,10 @@ patches:
               - name: minecraft
                 resources:
                   requests:
-                    cpu: "2000m"
+                    cpu: "4000m"
                     memory: "12Gi"
                   limits:
-                    cpu: "2000m"
+                    cpu: "8000m"
                     memory: "16Gi"
                 volumeMounts:
                   - name: backups
