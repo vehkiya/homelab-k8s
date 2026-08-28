@@ -34,4 +34,4 @@ data:
   AUTHELIA_CLIENT_ID: "bar-assistant"
   AUTHELIA_REDIRECT_URI: "https://bar.kerrlab.app/oauth/callback"
   GEN_AI_PROVIDER: "gemini"
-  GEN_AI_MODEL: "gemini-flash-latest"
+  GEN_AI_MODEL: "gemini-flash-lite-latest"
