@@ -1,28 +1,85 @@
-apiVersion: redis.redis.opstreelabs.in/v1beta2
-kind: Redis
+apiVersion: v1
+kind: Service
 metadata:
   name: redis-bar-assistant
+  labels:
+    app: redis-bar-assistant
 spec:
-  kubernetesConfig:
-    # ---=== Redis === ---
-    image: quay.io/opstree/redis:v8.4.2
-    imagePullPolicy: IfNotPresent
-    resources:
-      requests:
-        cpu: "10m"
-        memory: "16Mi"
-      limits:
-        cpu: "200m"
-        memory: "256Mi"
-    # ---=== Secret === ---
-    redisSecret:
-      name: bar-assistant-secrets
-      key: REDIS_PASSWORD
-  # ---=== Pod Security === ---
-  podSecurityContext:
-    runAsUser: 1000
-    fsGroup: 1000
-  # ---=== Exporter === ---
-  redisExporter:
-    enabled: false
-    image: quay.io/opstree/redis-exporter:v1.44.0
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+  selector:
+    app: redis-bar-assistant
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-bar-assistant
+  labels:
+    app: redis-bar-assistant
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: redis-bar-assistant
+  template:
+    metadata:
+      labels:
+        app: redis-bar-assistant
+    spec:
+      containers:
+        - name: valkey
+          image: docker.io/valkey/valkey
+          command:
+            - sh
+            - -c
+            - "exec valkey-server --requirepass \"$VALKEY_PASSWORD\" --dir /data --save \"\" --appendonly no"
+          env:
+            - name: VALKEY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bar-assistant-secrets
+                  key: REDIS_PASSWORD
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "20m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - name: data
+          emptyDir: {}

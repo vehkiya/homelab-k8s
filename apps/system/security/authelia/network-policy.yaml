@@ -11,17 +11,10 @@ spec:
   egress:
     - toEndpoints:
         - matchLabels:
-            "k8s:app": "authelia-redis"
+            app: authelia-dragonfly
       toPorts:
         - ports:
             - port: "6379"
-              protocol: "TCP"
-    - toEndpoints:
-        - matchLabels:
-            "k8s:app": "authelia-redis-s"
-      toPorts:
-        - ports:
-            - port: "26379"
               protocol: "TCP"
     - toEndpoints:
         - matchLabels:
