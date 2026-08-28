@@ -23,16 +23,18 @@ spec:
         - ports:
             - port: "6360"
               protocol: TCP
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: cloudnative-pg
-            k8s:io.kubernetes.pod.namespace: data-services
-        - matchLabels:
-            cnpg.io/cluster: postgres-db
-            k8s:io.kubernetes.pod.namespace: data-services
+    # Connection to external PostgreSQL DB on Synology
+    - toCIDR:
+        - 10.10.1.218/32
       toPorts:
         - ports:
-            - port: "5432"
+            - port: "15432"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
               protocol: TCP
     - toEntities:
         - "world"
