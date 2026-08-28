@@ -29,25 +29,10 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            "k8s:io.kubernetes.pod.namespace": "data-services"
-            "k8s:app": "redis"
+            app: oauth-dragonfly
       toPorts:
         - ports:
             - port: "6379"
-              protocol: "TCP"
-    - toEndpoints:
-        - matchLabels:
-            "k8s:app": "oauth-redis"
-      toPorts:
-        - ports:
-            - port: "6379"
-              protocol: "TCP"
-    - toEndpoints:
-        - matchLabels:
-            "k8s:app": "oauth-redis-s"
-      toPorts:
-        - ports:
-            - port: "26379"
               protocol: "TCP"
     - toEntities:
         - "world"

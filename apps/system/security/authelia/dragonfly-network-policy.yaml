@@ -1,15 +1,15 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: bar-assistant-redis-policy
+  name: authelia-dragonfly-policy
 spec:
   endpointSelector:
     matchLabels:
-      app: redis-bar-assistant
+      app: authelia-dragonfly
   ingress:
     - fromEndpoints:
         - matchLabels:
-            app: bar-assistant
+            app: authelia
       toPorts:
         - ports:
             - port: "6379"

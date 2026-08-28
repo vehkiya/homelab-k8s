@@ -71,13 +71,19 @@ spec:
             - name: REDIS_HOST
               value: redis-bar-assistant
             - name: PHP_FPM_PM_CONTROL
-              value: "ondemand"
+              value: "dynamic"
             - name: PHP_FPM_PM_MAX_CHILDREN
-              value: "5"
+              value: "16"
+            - name: PHP_FPM_PM_START_SERVERS
+              value: "4"
+            - name: PHP_FPM_PM_MIN_SPARE_SERVERS
+              value: "2"
+            - name: PHP_FPM_PM_MAX_SPARE_SERVERS
+              value: "6"
             - name: PHP_MEMORY_LIMIT
-              value: "192M"
+              value: "256M"
             - name: PHP_OPCACHE_MEMORY_CONSUMPTION
-              value: "64"
+              value: "128"
           ports:
             - containerPort: 8080
               name: http-api
