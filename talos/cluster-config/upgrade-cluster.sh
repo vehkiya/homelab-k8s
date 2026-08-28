@@ -4,7 +4,8 @@
 # Orchestrates a Talos Linux cluster upgrade according to the LifecycleService plan.
 
 # --- Configuration ---
-SINGLE_NODE_UPGRADE_SCRIPT="./upgrade-node.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SINGLE_NODE_UPGRADE_SCRIPT="${SCRIPT_DIR}/upgrade-node.sh"
 DOMAIN=".kube.kerrlab.app"
 # --- End Configuration ---
 

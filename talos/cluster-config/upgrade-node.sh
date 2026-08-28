@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-source ./backup-node.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/backup-node.sh"
 
 FORCE_FLAG=""
 STAGE_FLAG=""
@@ -41,7 +42,7 @@ for cmd in talosctl jq curl kubectl yq; do
     fi
 done
 
-FACTORY_PARAMS="image-factory-parameters.yaml"
+FACTORY_PARAMS="${SCRIPT_DIR}/image-factory-parameters.yaml"
 
 echo "=== Phase 1: Pre-Check ==="
 echo "Checking connectivity to node $NODE..."
@@ -62,13 +63,13 @@ backup_machine_config "$NODE" || exit 1 # Exit if backup fails
 # Backup: etcd snapshot if controlplane
 # The machine config was just backed up, we can read its type from the YAML using yq
 # We filter out 'null' because the YAML may contain multiple documents
-if ! NODE_TYPE=$(yq -r '.machine.type' "backup/${NODE}.yaml" | grep -v null | head -n 1); then
+if ! NODE_TYPE=$(yq -r '.machine.type' "${SCRIPT_DIR}/backup/${NODE}.yaml" | grep -v null | head -n 1); then
     echo "Warning: Failed to determine node type using yq. Proceeding with etcd snapshot just in case..."
     NODE_TYPE="controlplane"
 fi
 if [ "$NODE_TYPE" = "controlplane" ] || [ "$NODE_TYPE" = "init" ]; then
     TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-    SNAPSHOT_FILE="backup/history/etcd-${NODE}-${TIMESTAMP}.snapshot"
+    SNAPSHOT_FILE="${SCRIPT_DIR}/backup/history/etcd-${NODE}-${TIMESTAMP}.snapshot"
     echo "Node $NODE is a control-plane node. Taking etcd snapshot to $SNAPSHOT_FILE..."
     if ! talosctl -n "$NODE" etcd snapshot "$SNAPSHOT_FILE"; then
         echo "Warning: Failed to take etcd snapshot. Proceeding carefully..."
