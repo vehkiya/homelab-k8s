@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: static-proxy
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: static-proxy
 spec:
@@ -32,6 +34,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: static-proxy
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   selector:
     app: static-proxy

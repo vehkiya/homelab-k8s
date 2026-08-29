@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: snowflakes
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: snowflakes
 spec:
@@ -37,6 +39,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: snowflakes-shard
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: snowflakes-shard
 spec:
@@ -74,6 +78,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: users
 spec:
@@ -109,6 +115,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-shard
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: users-shard
 spec:
@@ -146,6 +154,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: messages
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: messages
 spec:
@@ -181,6 +191,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: messages-shard
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: messages-shard
 spec:
@@ -218,6 +230,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: unfurl
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: unfurl
 spec:
@@ -253,6 +267,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: unfurl-shard
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: unfurl-shard
 spec:
