@@ -27,15 +27,15 @@ resources:
 
 images:
   - name: ghcr.io/fluxerapp/fluxer-api
-    newTag: 2026.828.171908@sha256:c36926c92d993c47211f0a1f620beae10db79ee4d61852bb531c06d93c93f23f
+    newTag: 2026.829.160505@sha256:4ccc1f8de6a4161c099aa10c6736b3990ad0946527b54b71f222e42e04236cac
   - name: ghcr.io/fluxerapp/fluxer-gateway
-    newTag: 2026.821.120321@sha256:d25691a2db56a45a1ca90894222d9231af45555f019ee2d5a2063b719632ce70
+    newTag: 2026.829.142617@sha256:d4e32398acabb5e7a1b42854dfc67544c93c1307b6ff22e17fdc54e3d2e3d3a9
   - name: ghcr.io/fluxerapp/fluxer-media-proxy
-    newTag: 2026.824.124210@sha256:9e363958aca17c63802181938adb9303dbb6ae8920b9d962a17b0fdbb55e57ad
+    newTag: 2026.829.140725@sha256:cc06053bb82edf6a2ddc47d3e71b49a01bd70516f44aa6b2cb66188b8e8f7699
   - name: ghcr.io/fluxerapp/fluxer-static
     newTag: 2026.824.124247@sha256:87396a59da90fea9d48811bbbf9b44d05febe8a753813fd45dc56aae537b2207
   - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
-    newTag: 2026.828.190354@sha256:7f60366dd5a8ff66bd8fa2a8c2931d0a95cd404b0b2fedb03c8da19c4a08aec5
+    newTag: 2026.829.153637@sha256:2dafc50b62456d948b519c0fe54ad8431ff03bc71afe8679a66edb4ef3544ff1
   - name: ghcr.io/fluxerapp/fluxer-snowflakes
     newTag: 2026.630.20736@sha256:0450e2bf7acef2d93a10191421cc5a9799f50ebe3e4a13420856c3e4ce37cc3c
   - name: ghcr.io/fluxerapp/fluxer-users
@@ -43,8 +43,8 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-messages
     newTag: 2026.824.124246@sha256:930bbc0efa0e0931ee22a8fd9e43540899faa835d4babed642cf9f0374b7c82f
   - name: ghcr.io/fluxerapp/fluxer-unfurl
-    newTag: 2026.824.124244@sha256:53cfc6b52acf6851fbb44cc8b6c0851b04256ef8e7d5278fc588eac709d628bb
+    newTag: 2026.829.140729@sha256:7b142dbc33ebe6be6eb12f6d8e6dc79388ebafd3caf62717baff3deb96d1572a
   - name: ghcr.io/fluxerapp/fluxer-admin
-    newTag: 2026.824.124241@sha256:9c6dd02e1c92b8f092ca5edd7619a8bbd75e5144ded65501eacc12a786315700
+    newTag: 2026.829.130751@sha256:9f96d6d5725fbee75b1ac3e9c8b10d26795bfa56610da2fdc8cc0f7f1014f4ca
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v1.40.1@sha256:ebf3c6c213e82fb51b4521660cca13f06f3421dc5b1ed14f2f474c50b5e29986
