@@ -19,8 +19,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/(^|/)kustomization\\.yaml$/"
+      "fileMatch": [
+        "(^|/)kustomization\\.yaml$"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z\\-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+-\\s+https://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?:refs/tags/)?(?<currentValue>[^/]+)/"
@@ -163,6 +163,23 @@
       "groupName": "fluxerapp",
       "matchPackageNames": [
         "/^ghcr\\.io/fluxerapp//"
+      ]
+    },
+    {
+      "groupName": "dragonfly",
+      "matchPackageNames": [
+        "ghcr.io/dragonflydb/dragonfly",
+        "dragonflydb/dragonfly",
+        "/dragonfly/"
+      ]
+    },
+    {
+      "groupName": "valkey",
+      "matchPackageNames": [
+        "docker.io/valkey/valkey",
+        "valkey/valkey",
+        "valkey",
+        "/valkey/"
       ]
     }
   ]
