@@ -27,7 +27,7 @@ images:
   - name: ghcr.io/n8n-io/n8n
     newTag: 2.37.6@sha256:97ce2e6bd5d7e4ff7c38620dde28f9465d8af3970463dd65f2546b56f1a3df25
   - name: docker.io/valkey/valkey
-    newTag: 9.1.1@sha256:70739f85ad2ee01a726a965584a0f94895f01b0c60b3cc8b0aeef11eaa6888cf
+    newTag: 9.1.1@sha256:64e361b630ecf18dff7ca4df6a88e6eafc193687eb48cff2c7e0a293ab67d29a
 patches:
   - path: hpa-patch.yaml
     target:
