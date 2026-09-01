@@ -314,7 +314,7 @@ experimental:
       version: "v1.7.1"
     requestid:
       moduleName: "github.com/mdklapwijk/traefik-plugin-request-id"
-      version: "v0.1.0"
+      version: "v0.1.1"
     souin:
       moduleName: "github.com/darkweak/souin"
       version: "v1.7.8"
