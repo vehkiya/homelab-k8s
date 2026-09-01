@@ -94,6 +94,7 @@ spec:
     - name: http
       port: 7880
       targetPort: 7880
+      appProtocol: kubernetes.io/h2c
     - name: tcp-media
       port: 7881
       targetPort: 7881
