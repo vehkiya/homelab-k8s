@@ -84,6 +84,7 @@ ports:
     http:
       middlewares:
         - traefik-crowdsec-bouncer@kubernetescrd
+        - traefik-souin-cache@kubernetescrd
         - traefik-request-id@kubernetescrd
         - traefik-compress@kubernetescrd
         - traefik-error-pages@kubernetescrd
