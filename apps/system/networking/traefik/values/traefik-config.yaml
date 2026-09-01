@@ -258,7 +258,8 @@ extraObjects:
     spec:
       errors:
         status:
-          - "400-599"
+          - "403-404"
+          - "500-599"
         service:
           name: error-pages-svc
           port: 8080
@@ -320,7 +321,8 @@ extraObjects:
       plugin:
         souin:
           default_cache:
-            ttl: 300s
+            ttl: 0s
+            default_cache_control: "no-store"
             max_body_bytes: 5242880
             allowed_http_verbs:
               - GET

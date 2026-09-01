@@ -26,17 +26,12 @@ spec:
         - name: plex-ui
           port: 32400
 
-    # 2. General Web UI, API, and metadata (with root redirect & rate limit)
+    # 2. General Web UI, API, and metadata (with rate limit)
     - matches:
         - path:
             type: PathPrefix
             value: /
       filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: plex-redirect-web
         - type: ExtensionRef
           extensionRef:
             group: traefik.io

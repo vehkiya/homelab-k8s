@@ -7,7 +7,6 @@ resources:
   - service.yaml
   - http-route.yaml
   - rate-limit.yaml
-  - redirect-web.yaml
   - network-policy.yaml
   - restore-job.yaml
 
