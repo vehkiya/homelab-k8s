@@ -55,6 +55,7 @@ ports:
     port: 9443
     http:
       middlewares:
+        - traefik-souin-cache@kubernetescrd
         - traefik-request-id@kubernetescrd
         - traefik-compress@kubernetescrd
         - traefik-error-pages@kubernetescrd
