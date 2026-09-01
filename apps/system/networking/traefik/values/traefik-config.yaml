@@ -186,7 +186,7 @@ extraObjects:
           crowdsecLapiHost: crowdsec-service.security.svc.cluster.local:8080
           crowdsecLapiKeyFile: "/etc/crowdsec-bouncer/bouncer-key"
           updateIntervalSeconds: 60
-          mode: stream
+          crowdsecMode: stream
           crowdsecAppsecEnabled: true
           crowdsecAppsecHost: crowdsec-appsec-service.security.svc.cluster.local:7422
           crowdsecAppsecFailureBlock: true
