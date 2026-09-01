@@ -63,14 +63,10 @@ kind: CiliumNetworkPolicy
 metadata:
   name: "cnp-traefik-internal-services"
 spec:
-  description: "Allow Traefik to access internal helper services (error-pages, dragonfly cache)."
+  description: "Allow Traefik to access internal error-pages service."
   endpointSelector:
-    matchExpressions:
-      - key: "app.kubernetes.io/name"
-        operator: In
-        values:
-          - "error-pages"
-          - "traefik-dragonfly"
+    matchLabels:
+      app.kubernetes.io/name: "error-pages"
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -79,6 +75,4 @@ spec:
       toPorts:
         - ports:
             - port: "8080"
-              protocol: TCP
-            - port: "6379"
               protocol: TCP

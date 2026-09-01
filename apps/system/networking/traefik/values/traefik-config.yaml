@@ -309,13 +309,10 @@ extraObjects:
         souin:
           default_cache:
             ttl: 300s
+            default_cache_control: "public, max-age=300"
             allowed_http_verbs:
               - GET
               - HEAD
-            redis:
-              configuration:
-                initaddress: "traefik-dragonfly.traefik.svc.cluster.local:6379"
-                selectdb: 0
           log_level: info
 
 experimental:
