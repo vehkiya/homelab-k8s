@@ -302,29 +302,6 @@ extraObjects:
       plugin:
         requestid:
           headerName: "X-Request-Id"
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: souin-cache
-      namespace: traefik
-    spec:
-      plugin:
-        souin:
-          default_cache:
-            ttl: 0s
-            default_cache_control: "no-store"
-            max_body_bytes: 5242880
-            allowed_http_verbs:
-              - GET
-              - HEAD
-            regex:
-              exclude: '(/api/|/auth|/oauth|/ws|/stream|/webhook|/login|/logout|/identity|/myplex|/users/)'
-          urls:
-            '.*\.(css|js|woff2?|ttf|eot|svg|png|jpe?g|webp|avif|ico|wasm)$':
-              ttl: 86400s
-              default_cache_control: "public, max-age=86400"
-          log_level: info
-
 experimental:
   fastProxy:
     enabled: true
@@ -335,9 +312,6 @@ experimental:
     requestid:
       moduleName: "github.com/mdklapwijk/traefik-plugin-request-id"
       version: "v0.1.1"
-    souin:
-      moduleName: "github.com/darkweak/souin"
-      version: "v1.7.8"
 
 resources:
   requests:
