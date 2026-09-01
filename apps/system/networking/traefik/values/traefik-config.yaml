@@ -1,9 +1,7 @@
 providers:
-  # Disable the Ingress provider (optional)
-  # We do not want to use Ingress objects anymore!
-  # kubernetesIngress:
-  # enabled: false
-  # Enable the GatewayAPI provider
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
   kubernetesGateway:
     enabled: true
     nativeLBByDefault: false
