@@ -55,7 +55,6 @@ ports:
     port: 9443
     http:
       middlewares:
-        - traefik-souin-cache@kubernetescrd
         - traefik-request-id@kubernetescrd
         - traefik-compress@kubernetescrd
         - traefik-error-pages@kubernetescrd
@@ -85,7 +84,6 @@ ports:
     http:
       middlewares:
         - traefik-crowdsec-bouncer@kubernetescrd
-        - traefik-souin-cache@kubernetescrd
         - traefik-request-id@kubernetescrd
         - traefik-compress@kubernetescrd
         - traefik-error-pages@kubernetescrd
@@ -344,7 +342,7 @@ experimental:
 resources:
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 128Mi
   limits:
-    cpu: 2000m
-    memory: 1536Mi
+    cpu: 1000m
+    memory: 512Mi
