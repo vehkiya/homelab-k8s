@@ -328,7 +328,7 @@ extraObjects:
               - GET
               - HEAD
             regex:
-              exclude: '(/api/|/auth|/oauth|/ws|/stream|/webhook)'
+              exclude: '(/api/|/auth|/oauth|/ws|/stream|/webhook|/login|/logout|/identity|/myplex|/users/)'
           urls:
             '.*\.(css|js|woff2?|ttf|eot|svg|png|jpe?g|webp|avif|ico|wasm)$':
               ttl: 86400s
