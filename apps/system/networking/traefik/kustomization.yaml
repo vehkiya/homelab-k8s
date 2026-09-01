@@ -20,6 +20,11 @@ resources:
   - services.yaml
   - gateways.yaml
   - network-policy.yaml
+  - error-pages.yaml
+
+images:
+  - name: ghcr.io/tarampampam/error-pages
+    newTag: 3.4.1@sha256:fadd887eb57a9763198eb434bfddaa52a15a33b9a12c1cfb69304ca9fc4536d9
 
 patches:
   - target:

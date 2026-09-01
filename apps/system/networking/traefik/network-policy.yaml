@@ -57,3 +57,22 @@ spec:
         - "kube-apiserver"
         - "cluster"
         - "world"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "cnp-traefik-internal-services"
+spec:
+  description: "Allow Traefik to access internal error-pages service."
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: "error-pages"
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: "traefik"
+            k8s:io.kubernetes.pod.namespace: "traefik"
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP

@@ -56,6 +56,10 @@ ports:
   websecure:
     port: 9443
     http:
+      middlewares:
+        - traefik-request-id@kubernetescrd
+        - traefik-compress@kubernetescrd
+        - traefik-error-pages@kubernetescrd
       encodedCharacters:
         allowEncodedSlash: false
         allowEncodedBackSlash: false
@@ -82,6 +86,10 @@ ports:
     http:
       middlewares:
         - traefik-crowdsec-bouncer@kubernetescrd
+        - traefik-coraza-waf@kubernetescrd
+        - traefik-request-id@kubernetescrd
+        - traefik-compress@kubernetescrd
+        - traefik-error-pages@kubernetescrd
       encodedCharacters:
         allowEncodedSlash: false
         allowEncodedBackSlash: false
@@ -243,6 +251,70 @@ extraObjects:
         - h2
         - http/1.1
 
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: error-pages
+      namespace: traefik
+    spec:
+      errors:
+        status:
+          - "400-599"
+        service:
+          name: error-pages-svc
+          port: 8080
+        query: "/{status}.html"
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: compress
+      namespace: traefik
+    spec:
+      compress:
+        encodings:
+          - br
+          - zstd
+          - gzip
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: request-id
+      namespace: traefik
+    spec:
+      plugin:
+        requestid:
+          headerName: "X-Request-Id"
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: coraza-waf
+      namespace: traefik
+    spec:
+      plugin:
+        coraza:
+          directives:
+            - SecRuleEngine On
+            - SecRequestBodyAccess On
+            - SecResponseBodyAccess Off
+            - SecDebugLog /dev/stdout
+            - SecDebugLogLevel 0
+            - Include @owasp_crs
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: souin-cache
+      namespace: traefik
+    spec:
+      plugin:
+        souin:
+          default_cache:
+            ttl: 300s
+            default_cache_control: "public, max-age=300"
+            allowed_http_verbs:
+              - GET
+              - HEAD
+          log_level: info
+
 experimental:
   fastProxy:
     enabled: true
@@ -250,11 +322,20 @@ experimental:
     crowdsec:
       moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
       version: "v1.7.1"
+    coraza:
+      moduleName: "github.com/jcchavezs/coraza-http-wasm-traefik"
+      version: "v0.3.0"
+    requestid:
+      moduleName: "github.com/mdklapwijk/traefik-plugin-request-id"
+      version: "v0.1.0"
+    souin:
+      moduleName: "github.com/darkweak/souin"
+      version: "v1.7.8"
 
 resources:
   requests:
-    cpu: 50m
-    memory: 64Mi
+    cpu: 100m
+    memory: 128Mi
   limits:
-    cpu: 500m
-    memory: 256Mi
+    cpu: 1000m
+    memory: 512Mi
