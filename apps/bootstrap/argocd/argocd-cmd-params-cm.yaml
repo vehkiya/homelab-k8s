@@ -14,6 +14,10 @@ data:
 
   redis.compression: "gzip"
 
+  reposerver.parallelism.limit: "10"
+  reposerver.git.submodule.enabled: "false"
+  controller.repo.server.timeout.seconds: "120"
+
   server.log.level: "warn"
   reposerver.log.level: "warn"
   controller.log.level: "warn"
