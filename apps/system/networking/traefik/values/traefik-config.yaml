@@ -296,6 +296,11 @@ extraObjects:
             allowed_http_verbs:
               - GET
               - HEAD
+            mode: "bypass_strict"
+          urls:
+            ".*":
+              ttl: 300s
+              default_cache_control: "public, max-age=300"
           log_level: info
 
 experimental:
