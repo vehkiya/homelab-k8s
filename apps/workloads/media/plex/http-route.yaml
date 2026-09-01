@@ -11,11 +11,32 @@ spec:
   hostnames:
     - "plex.kerrlab.app"
   rules:
+    # 1. Direct media streaming paths (transcoded video and direct file chunks)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /video
+        - path:
+            type: PathPrefix
+            value: /library/parts
+        - path:
+            type: PathPrefix
+            value: /media
+      backendRefs:
+        - name: plex-ui
+          port: 32400
+
+    # 2. General Web UI, API, and metadata (with root redirect & rate limit)
     - matches:
         - path:
             type: PathPrefix
             value: /
       filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: plex-redirect-web
         - type: ExtensionRef
           extensionRef:
             group: traefik.io
