@@ -292,15 +292,15 @@ extraObjects:
         souin:
           default_cache:
             ttl: 300s
-            default_cache_control: "public, max-age=300"
             allowed_http_verbs:
               - GET
               - HEAD
-            mode: "bypass_strict"
+            regex:
+              exclude: '(/api/|/auth|/oauth|/ws|/stream|/webhook)'
           urls:
-            ".*":
-              ttl: 300s
-              default_cache_control: "public, max-age=300"
+            '.*\.(css|js|woff2?|ttf|eot|svg|png|jpe?g|webp|avif|ico|wasm)$':
+              ttl: 86400s
+              default_cache_control: "public, max-age=86400"
           log_level: info
 
 experimental:
