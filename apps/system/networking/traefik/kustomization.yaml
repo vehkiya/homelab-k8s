@@ -24,7 +24,7 @@ resources:
 
 images:
   - name: ghcr.io/tarampampam/error-pages
-    newTag: 3.4.1@sha256:fadd887eb57a9763198eb434bfddaa52a15a33b9a12c1cfb69304ca9fc4536d9
+    newTag: 4.2.5@sha256:6d42b5d6e1a014fa2373e3587f9e85c25589a089fd5f6fc4f2a496858f5e365d
 
 patches:
   - target:
