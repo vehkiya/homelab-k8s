@@ -274,6 +274,34 @@ extraObjects:
           - br
           - zstd
           - gzip
+        minResponseBodyBytes: 1024
+        excludedContentTypes:
+          - "video/mp4"
+          - "video/MP2T"
+          - "video/webm"
+          - "video/x-matroska"
+          - "video/quicktime"
+          - "audio/mp4"
+          - "audio/mpeg"
+          - "audio/ogg"
+          - "audio/flac"
+          - "audio/aac"
+          - "audio/wav"
+          - "image/jpeg"
+          - "image/png"
+          - "image/gif"
+          - "image/webp"
+          - "image/avif"
+          - "application/x-mpegURL"
+          - "application/vnd.apple.mpegurl"
+          - "application/dash+xml"
+          - "application/octet-stream"
+          - "application/zip"
+          - "application/gzip"
+          - "application/x-tar"
+          - "application/x-rar-compressed"
+          - "application/x-7z-compressed"
+          - "application/pdf"
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
