@@ -55,6 +55,7 @@ ports:
     port: 9443
     http:
       middlewares:
+        - traefik-souin-cache@kubernetescrd
         - traefik-request-id@kubernetescrd
         - traefik-compress@kubernetescrd
         - traefik-error-pages@kubernetescrd
@@ -292,10 +293,16 @@ extraObjects:
         souin:
           default_cache:
             ttl: 300s
-            default_cache_control: "public, max-age=300"
+            max_body_bytes: 5242880
             allowed_http_verbs:
               - GET
               - HEAD
+            regex:
+              exclude: '(/api/|/auth|/oauth|/ws|/stream|/webhook)'
+          urls:
+            '.*\.(css|js|woff2?|ttf|eot|svg|png|jpe?g|webp|avif|ico|wasm)$':
+              ttl: 86400s
+              default_cache_control: "public, max-age=86400"
           log_level: info
 
 experimental:
