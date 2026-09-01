@@ -27,6 +27,17 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z\\-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+-\\s+https://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?:refs/tags/)?(?<currentValue>[^/]+)/"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Traefik experimental plugins",
+      "fileMatch": [
+        "(^|/)apps/system/networking/traefik/.*\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "moduleName:\\s*\"github\\.com/(?<depName>[^/]+/[^\"]+)\"\\s+version:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-tags"
     }
   ],
   "packageRules": [
