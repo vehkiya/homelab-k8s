@@ -19,6 +19,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: romm-rate-limit
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking
