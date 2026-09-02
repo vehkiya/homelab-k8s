@@ -9,16 +9,36 @@ spec:
   hostnames:
     - "event.kerrlab.app"
   rules:
+    # 1. Thumbnails & Uploaded Photos (Cached)
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /thumbnails
+        - path:
+            type: PathPrefix
+            value: /uploads
+        - path:
+            type: PathPrefix
+            value: /custom_resources
+        - path:
+            type: Exact
+            value: /favicon.ico
       filters:
         - type: ExtensionRef
           extensionRef:
             group: traefik.io
             kind: Middleware
             name: http-cache
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080
+
+    # 2. Upload API, Auth & App Shell (Bypass Cache)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking

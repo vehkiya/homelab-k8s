@@ -9,16 +9,43 @@ spec:
   hostnames:
     - "pdf.kerrlab.app"
   rules:
+    # 1. Static Assets (Cached)
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /css
+        - path:
+            type: PathPrefix
+            value: /js
+        - path:
+            type: PathPrefix
+            value: /images
+        - path:
+            type: PathPrefix
+            value: /fonts
+        - path:
+            type: Exact
+            value: /favicon.ico
+        - path:
+            type: PathPrefix
+            value: /static
       filters:
         - type: ExtensionRef
           extensionRef:
             group: traefik.io
             kind: Middleware
             name: http-cache
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080
+
+    # 2. PDF Conversions, Uploads & App Shell (Bypass Cache)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
         - type: ResponseHeaderModifier
           responseHeaderModifier:
             set:

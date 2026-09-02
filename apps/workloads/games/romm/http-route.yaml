@@ -9,16 +9,42 @@ spec:
   hostnames:
     - "romm.kerrlab.app"
   rules:
+    # 1. Static Assets, Box Arts & Web Emulators (Cached)
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /assets
+        - path:
+            type: PathPrefix
+            value: /resources
+        - path:
+            type: PathPrefix
+            value: /emulators
+        - path:
+            type: Exact
+            value: /favicon.ico
+        - path:
+            type: Exact
+            value: /apple-touch-icon.png
+        - path:
+            type: Exact
+            value: /site.webmanifest
       filters:
         - type: ExtensionRef
           extensionRef:
             group: traefik.io
             kind: Middleware
             name: http-cache
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080
+
+    # 2. Dynamic APIs & Root Shell (Bypass Cache)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking
