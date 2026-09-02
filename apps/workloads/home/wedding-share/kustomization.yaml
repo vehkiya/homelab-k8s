@@ -13,7 +13,6 @@ resources:
   - service.yaml
   - http-route.yaml
   - httpscaledobject.yaml
-  - http-cache-middleware.yaml
   - network-policy.yaml
 images:
   - name: cirx08/wedding_share

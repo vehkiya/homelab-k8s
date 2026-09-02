@@ -9,6 +9,38 @@ spec:
   hostnames:
     - "bar.kerrlab.app"
   rules:
+    # Rule 1: Static Photos & Uploads (CACHED)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /storage
+        - path:
+            type: PathPrefix
+            value: /uploads
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: http-cache
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
+    # Rule 2: Frontend Static Assets (COMPRESSED)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /assets
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
+      backendRefs:
+        - name: salt-rim
+          port: 8080
+    # Rule 3: Dynamic REST API (DIRECT / UNCACHED)
     - matches:
         - path:
             type: PathPrefix
@@ -16,24 +48,17 @@ spec:
       backendRefs:
         - name: bar-assistant
           port: 8080
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /storage
-      backendRefs:
-        - name: bar-assistant
-          port: 8080
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /uploads
-      backendRefs:
-        - name: bar-assistant
-          port: 8080
+    # Rule 4: Frontend App Shell (UNCACHED / COMPRESSED)
     - matches:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
       backendRefs:
         - name: salt-rim
           port: 8080

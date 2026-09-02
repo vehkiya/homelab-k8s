@@ -16,7 +16,7 @@ spec:
           - GET
           - HEAD
         regex:
-          exclude: ".*(/auth|/login|/oauth|/token|/verify|/users|/admin|/gateway|/ws|/download|/process|/upload).*"
+          exclude: ".*(/auth|/login|/oauth|/token|/verify|/users|/admin|/gateway|/ws|/download|/process|/api/upload).*"
         badger:
           configuration:
             Dir: "/plugins-storage/souin-badger"
