@@ -36,4 +36,4 @@ spec:
       - application/x-rar-compressed
       - application/x-7z-compressed
       - application/pdf
-    minResponseBodyBytes: 1024
+    minResponseBodyBytes: 16384

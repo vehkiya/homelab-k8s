@@ -265,7 +265,7 @@ extraObjects:
           - br
           - zstd
           - gzip
-        minResponseBodyBytes: 1024
+        minResponseBodyBytes: 16384
         excludedContentTypes:
           - "video/mp4"
           - "video/MP2T"
