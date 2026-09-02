@@ -15,6 +15,8 @@ spec:
         allowed_http_verbs:
           - GET
           - HEAD
+        regex:
+          exclude: ".*(/auth|/login|/oauth|/token|/verify|/users|/admin|/gateway|/ws|/download|/process|/upload).*"
         badger:
           configuration:
             Dir: "/plugins-storage/souin-badger"

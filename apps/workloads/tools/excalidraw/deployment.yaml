@@ -25,4 +25,4 @@ spec:
               memory: "64Mi"
           ports:
             - name: web-ui
-              containerPort: 8080
+              containerPort: 80
