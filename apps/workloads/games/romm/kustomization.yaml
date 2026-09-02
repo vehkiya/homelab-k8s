@@ -9,6 +9,7 @@ resources:
   - external-http-route.yaml
   - httpscaledobject.yaml
   - rate-limit.yaml
+  - http-cache-middleware.yaml
   - network-policy.yaml
 images:
   - name: rommapp/romm

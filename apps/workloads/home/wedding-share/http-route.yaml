@@ -13,8 +13,13 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: http-cache
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking
           port: 8080
-      filters: []

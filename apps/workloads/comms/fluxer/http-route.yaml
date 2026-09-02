@@ -103,6 +103,12 @@ spec:
         - path:
             type: PathPrefix
             value: /embeds
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: http-cache
       backendRefs:
         - name: static-proxy
           port: 80
