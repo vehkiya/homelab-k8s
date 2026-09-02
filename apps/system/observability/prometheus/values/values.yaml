@@ -1,7 +1,7 @@
 prometheus:
   prometheusSpec:
     retention: 15d
-    retentionSize: 40Gi
+    retentionSize: 40GiB
     walCompression: true
     enableFeatures:
       - memory-snapshot-on-shutdown
