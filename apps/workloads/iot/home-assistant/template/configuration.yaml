@@ -4,19 +4,7 @@ default_config:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - 100.64.0.0/10
-    - 10.10.1.0/24
-    # 1. Trust Kubernetes Pod Subnet.
     - 10.244.0.0/16
-    # 2. Trust Kubernetes Service Subnet.
-    # This covers internal service-to-service communication.
-    - 10.96.0.0/12
-
-    # 3. Trust entire HomeLab VLAN.
-    # This covers K8s node IPs and the Traefik LoadBalancer IP (10.10.1.221).
-    - 10.10.1.0/24
-
-    # 4. Standard loopback addresses (always good to include)
     - 127.0.0.1
     - ::1
 
@@ -53,9 +41,9 @@ template:
           last_updated: "{{ trigger.event.data.last_updated }}"
 
   - trigger:
-      - platform: event
+      - trigger: event
         event_type: "refresh_17track"
-      - platform: homeassistant
+      - trigger: homeassistant
         event: start
     action:
       - action: seventeentrack.get_packages
@@ -68,9 +56,6 @@ template:
         state: "{{ track_data['packages'] | length if track_data is defined and 'packages' in track_data else 0 }}"
         attributes:
           packages: "{{ track_data['packages'] if track_data is defined and 'packages' in track_data else [] }}"
-
-go2rtc:
-  url: http://go2rtc-svc.iot.svc.cluster.local:1984
 
 homeassistant:
   allowlist_external_dirs:

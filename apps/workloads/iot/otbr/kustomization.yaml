@@ -11,6 +11,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - secret.yaml
+  - network-policy.yaml
   - persistence
 
 configMapGenerator:
