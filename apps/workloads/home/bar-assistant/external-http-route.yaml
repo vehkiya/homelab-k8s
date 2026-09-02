@@ -36,20 +36,11 @@ spec:
       backendRefs:
         - name: bar-assistant
           port: 8080
+    # Rule 3: Static Photos & Uploads (CACHED + RATE-LIMITED)
     - matches:
         - path:
             type: PathPrefix
             value: /storage
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: bar-assistant-rate-limit
-      backendRefs:
-        - name: bar-assistant
-          port: 8080
-    - matches:
         - path:
             type: PathPrefix
             value: /uploads
@@ -59,9 +50,34 @@ spec:
             group: traefik.io
             kind: Middleware
             name: bar-assistant-rate-limit
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: http-cache
       backendRefs:
         - name: bar-assistant
           port: 8080
+    # Rule 4: Frontend Static Assets (COMPRESSED + RATE-LIMITED)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /assets
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: bar-assistant-rate-limit
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
+      backendRefs:
+        - name: salt-rim
+          port: 8080
+    # Rule 5: Frontend App Shell (UNCACHED / COMPRESSED + RATE-LIMITED)
     - matches:
         - path:
             type: PathPrefix
@@ -72,6 +88,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: bar-assistant-rate-limit
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
       backendRefs:
         - name: salt-rim
           port: 8080
