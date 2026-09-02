@@ -4,19 +4,7 @@ default_config:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - 100.64.0.0/10
-    - 10.10.1.0/24
-    # 1. Trust Kubernetes Pod Subnet.
     - 10.244.0.0/16
-    # 2. Trust Kubernetes Service Subnet.
-    # This covers internal service-to-service communication.
-    - 10.96.0.0/12
-
-    # 3. Trust entire HomeLab VLAN.
-    # This covers K8s node IPs and the Traefik LoadBalancer IP (10.10.1.221).
-    - 10.10.1.0/24
-
-    # 4. Standard loopback addresses (always good to include)
     - 127.0.0.1
     - ::1
 
