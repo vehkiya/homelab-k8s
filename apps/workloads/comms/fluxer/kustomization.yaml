@@ -23,6 +23,7 @@ resources:
   - admin.yaml
   - microservices.yaml
   - http-route.yaml
+  - http-cache-middleware.yaml
   - network-policy.yaml
 
 images:

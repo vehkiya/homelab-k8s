@@ -14,6 +14,11 @@ spec:
             type: PathPrefix
             value: /
       filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: http-cache
         - type: ResponseHeaderModifier
           responseHeaderModifier:
             set:
