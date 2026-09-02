@@ -40,11 +40,17 @@ spec:
           namespace: networking
           port: 8080
 
-    # 2. Dynamic APIs & Root Shell (Bypass Cache)
+    # 2. Dynamic APIs & Root Shell (Bypass Cache / Compressed)
     - matches:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
       backendRefs:
         - name: keda-add-ons-http-interceptor-proxy
           namespace: networking

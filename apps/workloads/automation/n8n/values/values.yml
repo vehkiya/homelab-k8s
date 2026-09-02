@@ -142,7 +142,18 @@ resources:
 # ----- Node placement -----
 nodeSelector: {}
 tolerations: []
-affinity: {}
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - n8n
+          topologyKey: kubernetes.io/hostname
 
 # ----- Security -----
 # Note: readOnlyRootFilesystem is intentionally not set. n8n writes to
@@ -265,8 +276,7 @@ hpa:
 
 # ----- Pod Disruption Budget -----
 pdb:
-  enabled: true
-  minAvailable: 1
+  enabled: false
 
 # ----- Webhook config -----
 webhook:

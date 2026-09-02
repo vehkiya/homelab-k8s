@@ -39,11 +39,17 @@ spec:
         - name: seerr-ui
           port: 5055
 
-    # 2. Dynamic Web UI, Login, APIs & CSRF (Bypass Cache)
+    # 2. Dynamic Web UI, Login, APIs & CSRF (Bypass Cache / Compressed)
     - matches:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: compress
       backendRefs:
         - name: seerr-ui
           port: 5055
