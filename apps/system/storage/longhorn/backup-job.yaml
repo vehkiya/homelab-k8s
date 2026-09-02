@@ -4,9 +4,28 @@ metadata:
   name: daily-s3-backup
   namespace: longhorn-system
 spec:
+  name: daily-s3-backup
   cron: "0 2 * * *" # Runs daily at 2 AM
   task: "backup"
   retain: 3
   concurrency: 1
+  groups:
+    - default
+  labels:
+    type: "daily"
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: daily-snapshot-cleanup
+  namespace: longhorn-system
+spec:
+  name: daily-snapshot-cleanup
+  cron: "0 3 * * *" # Runs daily at 3 AM
+  task: "snapshot-cleanup"
+  retain: 0
+  concurrency: 1
+  groups:
+    - default
   labels:
     type: "daily"

@@ -3,6 +3,23 @@ spegel:
   containerdRegistryConfigPath: /etc/cri/conf.d/hosts
   prependExisting: true
 
+resources:
+  requests:
+    cpu: "10m"
+    memory: "64Mi"
+  limits:
+    cpu: "100m"
+    memory: "128Mi"
+
+configuration:
+  resources:
+    requests:
+      cpu: "5m"
+      memory: "16Mi"
+    limits:
+      cpu: "50m"
+      memory: "64Mi"
+
 service:
   registry:
     usePreferSameNodeTrafficDistribution: true

@@ -61,13 +61,15 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /app/config
+            - name: cache
+              mountPath: /app/config/cache
           resources:
             requests:
-              cpu: "10m"
-              memory: "384Mi"
+              cpu: "25m"
+              memory: "512Mi"
             limits:
-              cpu: "250m"
-              memory: "1000Mi"
+              cpu: "500m"
+              memory: "1536Mi"
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -85,3 +87,6 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: seerr-config-longhorn-pvc
+        - name: cache
+          emptyDir:
+            sizeLimit: 4Gi

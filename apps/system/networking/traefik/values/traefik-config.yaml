@@ -4,7 +4,7 @@ providers:
     allowCrossNamespace: true
   kubernetesGateway:
     enabled: true
-    nativeLBByDefault: false
+    nativeLBByDefault: true
     experimentalChannel: true
 # Allow the Gateway to expose HTTPRoute from all namespaces
 deployment:
@@ -346,7 +346,7 @@ experimental:
 resources:
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 512Mi
   limits:
-    cpu: 1000m
-    memory: 1024Mi
+    cpu: 2000m
+    memory: 1536Mi

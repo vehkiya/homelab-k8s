@@ -1,5 +1,18 @@
 prometheus:
   prometheusSpec:
+    retention: 15d
+    retentionSize: 40Gi
+    walCompression: true
+    enableFeatures:
+      - memory-snapshot-on-shutdown
+      - new-service-discovery-manager
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1536Mi
+      limits:
+        cpu: 2000m
+        memory: 3072Mi
     securityContext:
       fsGroup: 2000
       runAsNonRoot: true
@@ -19,6 +32,13 @@ prometheus:
 
 alertmanager:
   alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
     storage:
       volumeClaimTemplate:
         spec:
@@ -30,6 +50,13 @@ alertmanager:
 grafana:
   deploymentStrategy:
     type: Recreate
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
   persistence:
     enabled: true
     storageClassName: longhorn

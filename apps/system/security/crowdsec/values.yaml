@@ -38,6 +38,13 @@ lapi:
     - name: inject-secrets
       image: ghcr.io/hononeko/k8s-config-tools
       command: [ "gomplate", "-f", "/template/config.yaml", "-o", "/share/config.yaml.local" ]
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 50m
+          memory: 64Mi
       env:
         - name: DB_USER
           valueFrom:
