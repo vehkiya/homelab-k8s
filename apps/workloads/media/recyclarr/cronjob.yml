@@ -20,16 +20,16 @@ spec:
             runAsUser: 1000
             runAsGroup: 1000
             fsGroup: 1000
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "32Mi"
-            limits:
-              cpu: "125m"
-              memory: "128Mi"
           containers:
             - name: recyclarr
               image: ghcr.io/recyclarr/recyclarr
+              resources:
+                requests:
+                  cpu: "10m"
+                  memory: "32Mi"
+                limits:
+                  cpu: "125m"
+                  memory: "128Mi"
               args:
                 - "sync"
               env:
