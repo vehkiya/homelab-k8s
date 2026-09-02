@@ -41,9 +41,9 @@ template:
           last_updated: "{{ trigger.event.data.last_updated }}"
 
   - trigger:
-      - platform: event
+      - trigger: event
         event_type: "refresh_17track"
-      - platform: homeassistant
+      - trigger: homeassistant
         event: start
     action:
       - action: seventeentrack.get_packages
@@ -56,9 +56,6 @@ template:
         state: "{{ track_data['packages'] | length if track_data is defined and 'packages' in track_data else 0 }}"
         attributes:
           packages: "{{ track_data['packages'] if track_data is defined and 'packages' in track_data else [] }}"
-
-go2rtc:
-  url: http://go2rtc-svc.iot.svc.cluster.local:1984
 
 homeassistant:
   allowlist_external_dirs:
