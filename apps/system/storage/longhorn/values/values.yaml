@@ -23,6 +23,10 @@ defaultSettings:
   # Default Backup Target
   backupTarget: "s3://longhorn-backups@us-east-1/"
   backupTargetCredentialSecret: "s3-backup-secret"
+  # Automated snapshot cleanup & space reclamation
+  autoCleanupSnapshots: true
+  autoCleanupSystemGeneratedSnapshot: true
+  autoDeletePodWhenVolumeDetachedUnexpectedly: true
 
 longhornManager:
   resources:

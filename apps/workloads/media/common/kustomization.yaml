@@ -1,5 +1,4 @@
 resources:
   - namespace.yaml
   - forward-auth-middleware.yaml
-  - http-cache-middleware.yaml
   - compress-middleware.yaml

@@ -9,37 +9,7 @@ spec:
   hostnames:
     - "seerr.kerrlab.app"
   rules:
-    # 1. Static Assets & TMDB Image Proxy (Cached)
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /_next/static
-        - path:
-            type: PathPrefix
-            value: /api/v1/image
-        - path:
-            type: PathPrefix
-            value: /images
-        - path:
-            type: Exact
-            value: /favicon.ico
-        - path:
-            type: Exact
-            value: /apple-touch-icon.png
-        - path:
-            type: Exact
-            value: /site.webmanifest
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: http-cache
-      backendRefs:
-        - name: seerr-ui
-          port: 5055
-
-    # 2. Dynamic Web UI, Login, APIs & CSRF (Bypass Cache / Compressed)
+    # Dynamic Web UI, Login, APIs & Assets (UNCACHED / COMPRESSED)
     - matches:
         - path:
             type: PathPrefix

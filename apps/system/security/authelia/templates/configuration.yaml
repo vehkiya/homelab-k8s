@@ -29,8 +29,8 @@ session:
     password: "{{ .Env.REDIS_PASSWORD }}"
     timeout: "5s"
     max_retries: 0
-    maximum_active_connections: 8
-    minimum_idle_connections: 0
+    maximum_active_connections: 32
+    minimum_idle_connections: 4
 
 # Identity Validation
 identity_validation:

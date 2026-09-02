@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: longhorn-volume-trimmer
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn-volume-trimmer
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-volume-trimmer
+  template:
+    metadata:
+      labels:
+        app: longhorn-volume-trimmer
+        app.kubernetes.io/name: longhorn-volume-trimmer
+    spec:
+      tolerations:
+        - operator: Exists
+      containers:
+        - name: trimmer
+          image: ghcr.io/hononeko/k8s-config-tools
+          securityContext:
+            privileged: true
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                echo "[$(date)] Starting weekly Longhorn volume trim..."
+                for d in $(find /host-plugins/ -name "globalmount" 2>/dev/null); do
+                  echo "Trimming: $d"
+                  fstrim -v "$d" 2>&1 || true
+                done
+                echo "[$(date)] Trim cycle complete. Sleeping 7 days..."
+                sleep 604800
+              done
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: csi-mounts
+              mountPath: /host-plugins
+              mountPropagation: HostToContainer
+      volumes:
+        - name: csi-mounts
+          hostPath:
+            path: /var/lib/kubelet/plugins/kubernetes.io/csi/driver.longhorn.io
