@@ -17,4 +17,4 @@ images:
   - name: busybox
     newTag: 1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   - name: ghcr.io/koenkk/zigbee2mqtt
-    newTag: 2.14.0@sha256:c13d177dd7f7f396574ab00926188ad542cfb68c6a5d5f84021bebd9adf6ede9
+    newTag: 2.14.1@sha256:fef0de769dcd04c27b3a6d277b61046eb96284bdd4198dcb1687c3a01b3020f3
