@@ -15,4 +15,4 @@ images:
   - name: ghcr.io/mend/renovate-ce
     newTag: 15.4.0@sha256:553e91001d9f9a7bf53ec795393ec0a36d00116a2394fe7535bdfac524cdebf7
   - name: ghcr.io/dragonflydb/dragonfly
-    newTag: v1.40.1@sha256:ebf3c6c213e82fb51b4521660cca13f06f3421dc5b1ed14f2f474c50b5e29986
+    newTag: v1.40.2@sha256:18afa43e911f1dff18c7d1eb452361876d9702bb1cdff5c5d75c69617a4065c9

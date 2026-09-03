@@ -18,7 +18,7 @@ images:
   - name: ghcr.io/authelia/authelia
     newTag: 4.39.21@sha256:b2a221b30da111d6717bdf81bdf0b180915921447dde4c533a796c9a33a75d72
   - name: ghcr.io/dragonflydb/dragonfly
-    newTag: v1.40.1@sha256:ebf3c6c213e82fb51b4521660cca13f06f3421dc5b1ed14f2f474c50b5e29986
+    newTag: v1.40.2@sha256:18afa43e911f1dff18c7d1eb452361876d9702bb1cdff5c5d75c69617a4065c9
 configMapGenerator:
   - name: authelia-config
     files:
