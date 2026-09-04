@@ -33,4 +33,4 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: the-lounge-config-pvc
+            claimName: the-lounge-config-longhorn-pvc

@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: home
 
 resources:
-  - storage.yaml
+  - longhorn-config-pvc.yaml
 
 labels:
   - pairs:
