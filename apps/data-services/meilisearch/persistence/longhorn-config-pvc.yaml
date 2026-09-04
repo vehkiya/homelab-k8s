@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/instance: meilisearch-kubernetes
+    app.kubernetes.io/name: meilisearch
+  name: meilisearch-config-longhorn-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn-retain
+  volumeMode: Filesystem

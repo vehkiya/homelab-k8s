@@ -103,7 +103,7 @@ spec:
           name: tmp
         - name: data
           persistentVolumeClaim:
-            claimName: meilisearch-pvc
+            claimName: meilisearch-config-longhorn-pvc
   updateStrategy:
     rollingUpdate:
       partition: 0
