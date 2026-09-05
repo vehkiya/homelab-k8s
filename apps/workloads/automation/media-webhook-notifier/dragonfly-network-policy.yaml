@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: media-webhook-notifier-dragonfly-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: media-webhook-notifier-dragonfly
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: media-webhook-notifier
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: "TCP"

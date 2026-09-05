@@ -50,6 +50,10 @@ spec:
               value: "https://plex.kerrlab.app"
             - name: LOG_LEVEL
               value: "INFO"
+            - name: STATE_TYPE
+              value: "redis"
+            - name: STATE_URL
+              value: "redis://media-webhook-notifier-dragonfly.automation.svc.cluster.local:6379"
           envFrom:
             - secretRef:
                 name: media-webhook-notifier-secret

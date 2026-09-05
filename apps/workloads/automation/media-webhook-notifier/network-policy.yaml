@@ -48,6 +48,14 @@ spec:
               protocol: TCP
             - port: "web-ui"
               protocol: TCP
+    # Allow communication to local Dragonfly cache
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: media-webhook-notifier-dragonfly
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
     # Allow outbound internet communication for Telegram Bot API & external webhooks
     - toEntities:
         - "world"
