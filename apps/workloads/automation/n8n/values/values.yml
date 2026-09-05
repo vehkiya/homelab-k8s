@@ -126,7 +126,7 @@ resources:
       memory: "1024Mi"
   worker:
     requests:
-      cpu: "40m"
+      cpu: "100m"
       memory: "256Mi"
     limits:
       cpu: "500m"
@@ -266,7 +266,7 @@ hpa:
     enabled: true
     minReplicas: 2
     maxReplicas: 4
-    targetCPUUtilizationPercentage: 70
+    targetCPUUtilizationPercentage: 80
   # Webhook processor pods autoscaling (webhook handling)
   webhookProcessor:
     enabled: true

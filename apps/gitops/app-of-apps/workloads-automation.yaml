@@ -32,5 +32,16 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          name: n8n-worker
+          jsonPointers:
+            - /spec/replicas
+        - group: apps
+          kind: Deployment
+          name: n8n-webhook-processor
+          jsonPointers:
+            - /spec/replicas
   syncPolicy:
     preserveResourcesOnDeletion: true

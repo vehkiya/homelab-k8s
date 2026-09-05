@@ -33,3 +33,19 @@ patches:
     target:
       kind: HorizontalPodAutoscaler
       name: n8n-webhook-processor
+  - path: hpa-patch.yaml
+    target:
+      kind: HorizontalPodAutoscaler
+      name: n8n-worker
+  - patch: |-
+      - op: remove
+        path: /spec/replicas
+    target:
+      kind: Deployment
+      name: n8n-worker
+  - patch: |-
+      - op: remove
+        path: /spec/replicas
+    target:
+      kind: Deployment
+      name: n8n-webhook-processor
