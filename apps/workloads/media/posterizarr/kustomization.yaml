@@ -23,4 +23,4 @@ images:
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: ghcr.io/fscorrupt/posterizarr
-    newTag: 3.2.0@sha256:23ad7aed87b7692c2ad2f209cd1285575eaf90c7825614766d954d4762a55cec
+    newTag: 3.3.0@sha256:afd978eb93ccb9099020e7388985abfc4fe271df8f7ac1fbbe43daf5a24ed46d
