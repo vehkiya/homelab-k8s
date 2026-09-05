@@ -5,6 +5,25 @@
     "FanartTvAPIKey": "{{ .Env.FANART_PERSONAL_API_KEY }}",
     "PlexToken": "{{ .Env.PLEX_TOKEN }}",
     "FavProvider": "tmdb",
+    "ProviderPriorityMode": "Simple",
+    "ProviderOrder": [
+      "TMDB",
+      "TVDB",
+      "Fanart",
+      "Plex"
+    ],
+    "MovieProviderOrder": [
+      "TMDB",
+      "TVDB",
+      "Fanart",
+      "Plex"
+    ],
+    "ShowProviderOrder": [
+      "TVDB",
+      "TMDB",
+      "Fanart",
+      "Plex"
+    ],
     "WidthHeightFilter": "false",
     "PosterMinWidth": "2000",
     "PosterMinHeight": "3000",
@@ -24,7 +43,8 @@
     "PreferredBackgroundLanguageOrder": [
       "xx",
       "en"
-    ]
+    ],
+    "TmdbLanguageMappings": {}
   },
   "PlexPart": {
     "LibstoExclude": [
@@ -63,7 +83,10 @@
     "UseUptimeKuma": "false",
     "AppriseUrl": "discord://{WebhookID}/{WebhookToken}/",
     "Discord": "{{ .Env.DISCORD_WEBHOOK }}",
-    "UptimeKumaUrl": "http://status.kerrlab.app/"
+    "UptimeKumaUrl": "http://status.kerrlab.app/",
+    "AgregarrTriggerEnabled": "false",
+    "AgregarrUrl": "",
+    "AgregarrApiKey": ""
   },
   "PrerequisitePart": {
     "AssetPath": "/assets",
