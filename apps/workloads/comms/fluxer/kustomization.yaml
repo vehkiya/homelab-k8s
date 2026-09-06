@@ -36,7 +36,7 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-static
     newTag: 2026.904.231629@sha256:9ee33af916f1f208ab81bb8eef0ad086453e3b9631ae055975f5c71a0e4f33d4
   - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
-    newTag: 2026.906.210253@sha256:0b1af01ea1c8ac8f98336fed34699bd5f9ea789d1534b1c6d365c2b7ad8b075a
+    newTag: 2026.906.221621@sha256:934a83b38474a839961d2378db0bbbff34a26d5a72b086bde81e7bc87a1d8676
   - name: ghcr.io/fluxerapp/fluxer-snowflakes
     newTag: 2026.901.193545@sha256:0ab5dd47a938ead3b382643a10798abc51d3f9d9d92d96127c111111933f48fa
   - name: ghcr.io/fluxerapp/fluxer-users
