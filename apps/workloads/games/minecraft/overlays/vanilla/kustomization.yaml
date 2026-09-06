@@ -52,9 +52,6 @@ patches:
         OPS: "Kerrlab"
         WHITELIST: "Kerrlab,QtpDiana,JusApee"
         LEVEL: "sushi-world"
-        ENABLE_AUTOPAUSE: "TRUE"
-        AUTOPAUSE_TIMEOUT_ESTABLISHED: "900"
-        AUTOPAUSE_TIMEOUT_INIT: "600"
         VOICE_CHAT_PORT: "24454"
 
 

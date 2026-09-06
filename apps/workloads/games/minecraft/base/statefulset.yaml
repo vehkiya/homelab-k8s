@@ -6,7 +6,6 @@ metadata:
     app: minecraft
 spec:
   serviceName: minecraft
-  replicas: 1
   updateStrategy:
     type: RollingUpdate
   selector:

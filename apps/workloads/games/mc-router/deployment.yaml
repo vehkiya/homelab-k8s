@@ -28,11 +28,8 @@ spec:
             - "--in-kube-cluster"
             - "--kube-namespace=games"
             - "--auto-scale-down=true"
-            - "--auto-scale-down-after=2h"
+            - "--auto-scale-down-after=1h"
             - "--auto-scale-up=true"
-
-
-
           ports:
             - name: minecraft-tcp
               containerPort: 25565

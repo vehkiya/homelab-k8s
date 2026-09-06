@@ -55,10 +55,6 @@ patches:
         OVERRIDE_WHITELIST: "true"
         CF_FORCE_INCLUDE_MODS: "spark"
         CF_OVERRIDES_SKIP_EXISTING: "false"
-
-        ENABLE_AUTOPAUSE: "TRUE"
-        AUTOPAUSE_TIMEOUT_ESTABLISHED: "900"
-        AUTOPAUSE_TIMEOUT_INIT: "600"
         VOICE_CHAT_PORT: "24455"
 
   # === Override backup schedule ===
