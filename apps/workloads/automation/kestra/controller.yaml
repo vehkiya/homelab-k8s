@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kestra-webserver
+  name: kestra-controller
   namespace: automation
   labels:
     app.kubernetes.io/name: kestra
-    app.kubernetes.io/component: webserver
+    app.kubernetes.io/component: controller
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: kestra
-      app.kubernetes.io/component: webserver
+      app.kubernetes.io/component: controller
   template:
     metadata:
       labels:
         app.kubernetes.io/name: kestra
-        app.kubernetes.io/component: webserver
-        networking/expose-web-ui: "true"
+        app.kubernetes.io/component: controller
     spec:
       affinity:
         podAntiAffinity:
@@ -29,7 +28,7 @@ spec:
                     - key: app.kubernetes.io/component
                       operator: In
                       values:
-                        - webserver
+                        - controller
                 topologyKey: kubernetes.io/hostname
       securityContext:
         runAsNonRoot: true
@@ -39,12 +38,11 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: webserver
+        - name: controller
           image: kestra/kestra:latest
           args:
             - server
-            - webserver
-            - --no-controller
+            - controller
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -57,8 +55,8 @@ spec:
             - secretRef:
                 name: kestra-credentials
           ports:
-            - name: web-ui
-              containerPort: 8080
+            - name: grpc
+              containerPort: 50051
           resources:
             requests:
               cpu: "250m"
@@ -79,16 +77,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kestra-webserver
+  name: kestra-controller
   namespace: automation
   labels:
     app.kubernetes.io/name: kestra
-    app.kubernetes.io/component: webserver
+    app.kubernetes.io/component: controller
 spec:
   ports:
-    - name: web-ui
-      port: 8080
-      targetPort: web-ui
+    - name: grpc
+      port: 50051
+      targetPort: grpc
   selector:
     app.kubernetes.io/name: kestra
-    app.kubernetes.io/component: webserver
+    app.kubernetes.io/component: controller
