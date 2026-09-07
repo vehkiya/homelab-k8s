@@ -11,7 +11,35 @@ spec:
         values:
           - kestra
 
+  ingress:
+    # === Allow intra-cluster gRPC from workers to controller ===
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kestra
+      toPorts:
+        - ports:
+            - port: "50051"
+              protocol: TCP
+    # === Allow intra-cluster HTTP from workers to webserver (SDK) ===
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kestra
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+
   egress:
+    # === Allow intra-cluster communication between Kestra components ===
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kestra
+      toPorts:
+        - ports:
+            - port: "50051"
+              protocol: TCP
+            - port: "8080"
+              protocol: TCP
     # === Allow egress to NAS PostgreSQL ===
     - toCIDR:
         - "10.10.1.218/32"

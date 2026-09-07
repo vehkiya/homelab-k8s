@@ -44,6 +44,7 @@ spec:
           args:
             - server
             - webserver
+            - --no-controller
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -63,8 +64,8 @@ spec:
               cpu: "250m"
               memory: "512Mi"
             limits:
-              cpu: "500m"
-              memory: "1Gi"
+              cpu: "1000m"
+              memory: "1.5Gi"
           volumeMounts:
             - name: config
               mountPath: /app/conf/application.yml

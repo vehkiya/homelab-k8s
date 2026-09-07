@@ -16,6 +16,17 @@ kestra:
       bucket: kestra
       region: us-east-1
       secure: true
+  worker:
+    controllers:
+      type: STATIC
+      static:
+        endpoints:
+          - host: kestra-controller
+            port: 50051
+  tasks:
+    sdk:
+      authentication:
+        url: "http://kestra-webserver:8080"
   jdbc:
     postgres:
       url: jdbc:postgresql://fortress.kerrlab.app:15432/kestra

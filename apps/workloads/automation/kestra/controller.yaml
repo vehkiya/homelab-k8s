@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kestra-worker
+  name: kestra-controller
   namespace: automation
   labels:
     app.kubernetes.io/name: kestra
-    app.kubernetes.io/component: worker
+    app.kubernetes.io/component: controller
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: kestra
-      app.kubernetes.io/component: worker
+      app.kubernetes.io/component: controller
   template:
     metadata:
       labels:
         app.kubernetes.io/name: kestra
-        app.kubernetes.io/component: worker
+        app.kubernetes.io/component: controller
     spec:
       affinity:
         podAntiAffinity:
@@ -28,7 +28,7 @@ spec:
                     - key: app.kubernetes.io/component
                       operator: In
                       values:
-                        - worker
+                        - controller
                 topologyKey: kubernetes.io/hostname
       securityContext:
         runAsNonRoot: true
@@ -38,11 +38,11 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: worker
+        - name: controller
           image: kestra/kestra:latest
           args:
             - server
-            - worker
+            - controller
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -54,6 +54,9 @@ spec:
           envFrom:
             - secretRef:
                 name: kestra-credentials
+          ports:
+            - name: grpc
+              containerPort: 50051
           resources:
             requests:
               cpu: "250m"
@@ -70,3 +73,20 @@ spec:
         - name: config
           configMap:
             name: kestra-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kestra-controller
+  namespace: automation
+  labels:
+    app.kubernetes.io/name: kestra
+    app.kubernetes.io/component: controller
+spec:
+  ports:
+    - name: grpc
+      port: 50051
+      targetPort: grpc
+  selector:
+    app.kubernetes.io/name: kestra
+    app.kubernetes.io/component: controller
