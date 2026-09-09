@@ -195,6 +195,15 @@
       "changelogUrl": "https://github.com/matter-js/matterjs-server/blob/main/CHANGELOG.md"
     },
     {
+      "description": "Weekly update schedule for Fluxer workload",
+      "matchFileNames": [
+        "apps/workloads/comms/fluxer/**"
+      ],
+      "schedule": [
+        "every weekend"
+      ]
+    },
+    {
       "groupName": "fluxerapp",
       "matchPackageNames": [
         "/^ghcr\\.io/fluxerapp//"
