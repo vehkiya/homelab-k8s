@@ -1,0 +1,46 @@
+pill_separator:
+  name: Pill Separator
+  version: 1.0.0
+  creator: vehkiya
+  description: Centers separator title inside a rounded pill with a subtle horizontal background line.
+  supported:
+    - separator
+  code: |
+    /* 1. Container centering */
+    .bubble-container {
+      display: flex;
+      background: none;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      overflow: visible;
+      --bubble-separator-border: none;
+      position: relative;
+    }
+
+    /* 2. Centered pill text on top of line */
+    .bubble-name {
+      margin: 0 !important;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      position: relative;
+      z-index: 2;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background-color: var(--bubble-sub-button-background-color, var(--bubble-icon-background-color, var(--secondary-background-color)));
+    }
+
+    /* 3. Subtle background horizontal line */
+    .bubble-line {
+      border-radius: 6px;
+      opacity: 0.6;
+      height: 6px;
+      background-color: var(--bubble-line-background-color, var(--ha-card-background-color, var(--secondary-background-color)));
+      position: absolute;
+      left: 8px;
+      right: 14px;
+      margin: 0 !important;
+      z-index: 1;
+      flex-grow: 0;
+    }

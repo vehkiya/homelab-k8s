@@ -31,7 +31,13 @@ spec:
       initContainers:
         - name: prepare-config
           image: ghcr.io/hononeko/k8s-config-tools
-          command: [ "gomplate", "--left-delim", "[[", "--right-delim", "]]", "-f", "/template/configuration.yaml.template", "-o", "/config/configuration.yaml" ]
+          command:
+            - /bin/sh
+            - -c
+            - |
+              gomplate --left-delim "[[" --right-delim "]]" -f /template/configuration.yaml.template -o /config/configuration.yaml
+              mkdir -p /config/bubble_card/modules
+              cp -f /template/pill_separator.yaml /config/bubble_card/modules/pill_separator.yaml
           volumeMounts:
             - name: config-template
               mountPath: /template

@@ -19,6 +19,7 @@ configMapGenerator:
   - name: home-assistant-config
     files:
       - configuration.yaml.template=template/configuration.yaml
+      - pill_separator.yaml=template/pill_separator.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
