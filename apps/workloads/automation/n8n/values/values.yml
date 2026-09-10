@@ -155,6 +155,12 @@ affinity:
                   - n8n
           topologyKey: kubernetes.io/hostname
 
+# ----- DNS Config -----
+dnsConfig:
+  options:
+    - name: ndots
+      value: "1"
+
 # ----- Security -----
 # Note: readOnlyRootFilesystem is intentionally not set. n8n writes to
 # ~/.n8n/, /tmp/, and other paths at runtime. Enabling it would require
@@ -283,8 +289,8 @@ webhook:
   # Enable webhook functionality
   enabled: true
   # Custom webhook URL base domain (if not set, will use ingress host)
-  # Format: https://your-domain.com (n8n adds /webhook path automatically)
-  url: "https://n8n.kerrlab.app"
+  # Set to empty because N8N_WEBHOOK_URL is managed via n8n-config ConfigMap (WEBHOOK_URL is deprecated)
+  url: ""
   # Timeout for webhook requests in milliseconds
   timeout: 120000
   # Additional webhook environment variables
