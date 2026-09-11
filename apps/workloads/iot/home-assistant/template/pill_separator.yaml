@@ -1,46 +1,74 @@
 pill_separator:
   name: Pill Separator
-  version: 1.0.0
+  version: 1.2.0
   creator: vehkiya
-  description: Centers separator title inside a rounded pill with a subtle horizontal background line.
+  description: Centers separator title inside an adaptive translucent frosted glass pill with horizontal divider lines on both sides.
   supported:
     - separator
   code: |
-    /* 1. Container centering */
+    /* 1. Container centering with symmetric padding */
     .bubble-container {
       display: flex;
-      background: none;
+      background: none !important;
       align-items: center;
       justify-content: center;
       height: 40px;
       overflow: visible;
       --bubble-separator-border: none;
       position: relative;
+      gap: 12px;
+      padding: 0 10px;
+      box-sizing: border-box;
     }
 
-    /* 2. Centered pill text on top of line */
+    /* 2. Hide empty icon element so it doesn't offset center alignment */
+    .bubble-icon:not([icon]),
+    .bubble-icon[icon=""] {
+      display: none !important;
+    }
+    .bubble-icon {
+      margin: 0 6px 0 0 !important;
+      --mdc-icon-size: 18px;
+      color: var(--primary-text-color) !important;
+    }
+
+    /* 3. Left horizontal line (stops at pill left edge) */
+    .bubble-container::before {
+      content: '';
+      flex: 1;
+      height: 2px;
+      border-radius: 4px;
+      background-color: var(--bubble-line-color, color-mix(in srgb, var(--primary-text-color, currentColor) 18%, transparent)) !important;
+      margin: 0 !important;
+      position: static !important;
+    }
+
+    /* 4. Adaptive translucent frosted glass pill */
     .bubble-name {
       margin: 0 !important;
       font-size: 14px;
       font-weight: 600;
+      color: var(--primary-text-color) !important;
       white-space: nowrap;
+      flex: 0 0 auto;
       position: relative;
       z-index: 2;
-      padding: 4px 14px;
+      padding: 5px 16px;
       border-radius: 20px;
-      background-color: var(--bubble-sub-button-background-color, var(--bubble-icon-background-color, var(--secondary-background-color)));
+      background-color: color-mix(in srgb, var(--card-background-color, #888) 65%, transparent) !important;
+      background-image: var(--ha-card-glass-tint, none) !important;
+      backdrop-filter: var(--ha-card-backdrop-filter, blur(16px) saturate(1.6)) !important;
+      -webkit-backdrop-filter: var(--ha-card-backdrop-filter, blur(16px) saturate(1.6)) !important;
+      border: 1px solid var(--bubble-border-color, color-mix(in srgb, var(--primary-text-color, #888) 12%, var(--ha-card-border-color, rgba(255, 255, 255, 0.2)))) !important;
+      box-shadow: var(--ha-card-glass-inset-shadow, 0 2px 8px color-mix(in srgb, var(--primary-text-color, #000) 10%, transparent)) !important;
     }
 
-    /* 3. Subtle background horizontal line */
+    /* 5. Right horizontal line (starts at pill right edge) */
     .bubble-line {
-      border-radius: 6px;
-      opacity: 0.6;
-      height: 6px;
-      background-color: var(--bubble-line-background-color, var(--ha-card-background-color, var(--secondary-background-color)));
-      position: absolute;
-      left: 8px;
-      right: 14px;
+      flex: 1;
+      height: 2px;
+      border-radius: 4px;
+      background-color: var(--bubble-line-color, color-mix(in srgb, var(--primary-text-color, currentColor) 18%, transparent)) !important;
       margin: 0 !important;
-      z-index: 1;
-      flex-grow: 0;
+      position: static !important;
     }
