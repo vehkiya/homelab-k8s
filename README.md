@@ -59,7 +59,7 @@ The cluster hosts a diverse ecosystem of applications, organized by domain:
 ├── apps/
 │   ├── bootstrap/          # Day-0 components (Cilium, CoreDNS, External-Secrets, ArgoCD)
 │   ├── cluster-core/       # Foundation (Cert-Manager, Traefik)
-│   ├── cluster-addons/     # Common services (Authelia, OAuth-Proxy)
+│   ├── cluster-addons/     # Common services (Authelia, LLDAP)
 │   ├── gitops/             # ArgoCD & Renovate configuration
 │   ├── storage/            # Synology CSI, Longhorn, Databases
 │   ├── monitoring/         # Prometheus, Metrics-Server, Uptime
