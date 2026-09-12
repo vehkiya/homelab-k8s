@@ -195,3 +195,58 @@ When testing or debugging manual cluster edits (e.g. via `kubectl apply`), ArgoC
    Once testing is complete, the PR is merged, and the user explicitly requests to finalize/resume:
    * Switch to `master` and pull the latest changes (`git checkout master && git pull origin master`).
    * Re-apply the `app-of-apps` manifest (`kubectl apply -f apps/gitops/app-of-apps/<app-name>.yaml`) to restore ArgoCD automated sync in the cluster.
+
+---
+
+## 8. Infrastructure Changes & OpenTofu Workflow
+
+Bare-metal node configurations and foundational Day-0 cluster bootstrapping are managed declaratively using OpenTofu in `infra/tofu/`.
+
+### Architecture & Layer Boundaries
+
+* **Layer 1 (`infra/tofu/talos/`):** Manages bare-metal Talos Linux node configurations (`lab-1`, `lab-2`, `lab-3`, `worker-1`), kernel parameters, hardware extensions via Talos Image Factory schematics (`image-factory-parameters.yaml`), network interfaces/VLANs, and automated offline disaster-recovery backups (`_output/`).
+* **Layer 2 (`infra/tofu/bootstrap/`):** Bridges bare metal to GitOps. Manages the Day-0 `vaultwarden-credentials` secret (with `argocd.argoproj.io/sync-options: Prune=false` and `helm.sh/resource-policy: keep`), Cilium CNI, CoreDNS, External Secrets Operator, and ArgoCD root bootstrap enrollment.
+
+### State & Secret Hygiene in Infrastructure
+
+* **Client-Side State Encryption:** Both layers use remote S3 backend storage on NAS SeaweedFS with client-side AES-GCM encryption (`tofu_encryption_passphrase`).
+* **Never Commit State or Credentials:** `terraform.tfvars`, `*.tfvars.json`, `*.tfstate`, and `_output/` must remain git-ignored. Never stage or commit unencrypted state, credentials, or passphrases.
+* **Variable Hygiene:** When adding or modifying input variables in `variables.tf`, always update the corresponding `terraform.tfvars.example` with safe, placeholder defaults.
+
+### Modern Talos Configuration Standards
+
+* **No Deprecated `.machine.files`:** Use dedicated Talos configuration documents:
+  * `kind: HostnameConfig` for node hostnames.
+  * `kind: CRICustomizationConfig` for container runtime settings (e.g. `20-customization`).
+  * `kind: EtcFileConfig` for system configurations (e.g. `nfsmount.conf`).
+* **Schematic Pinning:** When adding Talos system extensions, update `image-factory-parameters.yaml` so the schematic ID is dynamically computed and pinned.
+
+### Validation & Testing Workflow
+
+Before committing any changes under `infra/`:
+
+1. **Format Code:**
+   Ensure all OpenTofu configuration files conform to standard formatting:
+
+   ```bash
+   tofu fmt -check -recursive infra/tofu
+   ```
+
+   To automatically format:
+
+   ```bash
+   tofu fmt -recursive infra/tofu
+   ```
+
+2. **Offline Validation (No Backend/Credentials Required):**
+   For any modified layer directory (e.g., `infra/tofu/talos`, `infra/tofu/bootstrap`):
+
+   ```bash
+   tofu -chdir=<layer-directory> init -backend=false
+   tofu -chdir=<layer-directory> validate
+   ```
+
+3. **Execution Safety & Live Testing:**
+   * Always run `tofu plan` first to review prospective diffs before proposing or executing an apply.
+   * Do not run `tofu apply -auto-approve` without explicit human authorization, especially on bare-metal control plane nodes.
+   * Upgrades to Talos OS or Kubernetes must be coordinated sequentially node-by-node, verifying etcd health and node readiness between updates.
