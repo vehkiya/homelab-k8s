@@ -35,7 +35,46 @@ data "talos_client_configuration" "this" {
 }
 
 locals {
-  custom_config_documents = <<-EOT
+  effective_dhi_username = var.dhi_username != "" ? var.dhi_username : var.docker_hub_username
+  effective_dhi_token    = var.dhi_token != "" ? var.dhi_token : var.docker_hub_token
+
+  effective_docker_hub_username = var.docker_hub_username != "" ? var.docker_hub_username : var.dhi_username
+  effective_docker_hub_token    = var.docker_hub_token != "" ? var.docker_hub_token : var.dhi_token
+
+  registry_auths = merge(
+    var.extra_registry_auths,
+    local.effective_dhi_username != "" && local.effective_dhi_token != "" ? {
+      "dhi.io" = {
+        username = local.effective_dhi_username
+        password = local.effective_dhi_token
+      }
+    } : {},
+    local.effective_docker_hub_username != "" && local.effective_docker_hub_token != "" ? {
+      "docker.io" = {
+        username = local.effective_docker_hub_username
+        password = local.effective_docker_hub_token
+      }
+    } : {},
+    var.ghcr_username != "" && var.ghcr_token != "" ? {
+      "ghcr.io" = {
+        username = var.ghcr_username
+        password = var.ghcr_token
+      }
+    } : {}
+  )
+
+  registry_auth_documents = join("", [
+    for host, creds in local.registry_auths : <<-DOC
+---
+apiVersion: v1alpha1
+kind: RegistryAuthConfig
+name: ${jsonencode(host)}
+username: ${jsonencode(creds.username)}
+password: ${jsonencode(creds.password)}
+DOC
+  ])
+
+  base_custom_config_documents = <<-EOT
 ---
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
@@ -63,6 +102,8 @@ contents: |
   nodiratime=True
   noatime=True
 EOT
+
+  custom_config_documents = "${local.base_custom_config_documents}${local.registry_auth_documents}"
 
   rendered_machine_configurations = {
     for k, v in var.nodes : k => "${data.talos_machine_configuration.config[k].machine_configuration}\n${local.custom_config_documents}"

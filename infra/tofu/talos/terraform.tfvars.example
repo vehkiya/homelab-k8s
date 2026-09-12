@@ -44,3 +44,21 @@ nodes = {
     install_disk  = "/dev/nvme0n1"
   }
 }
+
+# Image Registry Authentication (Optional)
+# Docker Hub & Docker Hardened Images (dhi.io) share Docker ID / PAT credentials.
+# If dhi_username/token is omitted, docker_hub_username/token is used as a fallback (and vice-versa).
+docker_hub_username = ""
+docker_hub_token    = ""
+dhi_username        = ""
+dhi_token           = ""
+ghcr_username       = ""
+ghcr_token          = ""
+
+# Additional Custom Registries (Optional)
+# extra_registry_auths = {
+#   "quay.io" = {
+#     username = "user"
+#     password = "password"
+#   }
+# }
