@@ -36,6 +36,8 @@ machine:
         dhcp: false
         vip:
           ip: ${cluster_vip}
+    nameservers:
+      - 10.10.1.1
   install:
     disk: ${install_disk}
     image: ${installer_image}
@@ -51,6 +53,7 @@ machine:
     node.kubernetes.io/exclude-from-external-load-balancers: ""
 
 cluster:
+  allowSchedulingOnControlPlanes: true
   apiServer:
     image: registry.k8s.io/kube-apiserver:${kubernetes_version}
     extraArgs:

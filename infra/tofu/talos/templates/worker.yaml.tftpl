@@ -1,4 +1,8 @@
 machine:
+  certSANs:
+    - ${node_ip}
+    - ${hostname}
+    - ${hostname}.kube.kerrlab.app
   network:
     interfaces:
       - interface: bond0
@@ -41,9 +45,6 @@ machine:
       - iommu=pt
       - cpufreq.default_governor=performance
       - nvme_core.io_timeout=60
-  sysctls:
-    user.max_user_namespaces: "11255"
-    vm.nr_hugepages: "512"
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
