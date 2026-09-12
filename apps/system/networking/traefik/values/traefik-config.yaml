@@ -35,12 +35,7 @@ updateStrategy:
     maxSurge: 0
 ingressRoute:
   dashboard:
-    enabled: true
-    matchRule: Host(`proxy.kerrlab.app`)
-    entryPoints: [ "websecure" ]
-    # Add custom middlewares : authentication and redirection
-    middlewares:
-      - name: traefik-dashboard-auth
+    enabled: false # Migrated to Gateway API HTTPRoute in http-route.yaml
 log:
   level: WARN
 accessLog:

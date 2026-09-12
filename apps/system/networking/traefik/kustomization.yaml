@@ -21,6 +21,7 @@ resources:
   - gateways.yaml
   - network-policy.yaml
   - error-pages.yaml
+  - http-route.yaml
 
 images:
   - name: ghcr.io/tarampampam/error-pages
