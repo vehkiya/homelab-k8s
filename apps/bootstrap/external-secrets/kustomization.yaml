@@ -22,3 +22,5 @@ images:
     newTag: 2026.8.0@sha256:e28ca6684ec735b19d239c8f6f66af6eb497b48061ba8dba5c0e3bc50465a940
   - name: alpine/k8s
     newTag: 1.37.0@sha256:b421c2e9419edb98db39b6ab641669f4db7bb2acf354f22450c6b7e7176d1ff4
+  - name: dhi.io/external-secrets
+    newTag: 2.10.0@sha256:11cb25e0bbcc472943039ddbb3f1dfc8a7268da402f0ba499da8a43f68cc08b8
