@@ -65,6 +65,12 @@ spec:
                 secretKeyRef:
                   name: renovate-secrets
                   key: DOCKER_PASSWORD
+            - name: RENOVATE_HOST_RULES
+              valueFrom:
+                secretKeyRef:
+                  name: renovate-secrets
+                  key: RENOVATE_HOST_RULES
+
           volumeMounts:
             - name: cache-volume
               mountPath: "/tmp/renovate/cache"
