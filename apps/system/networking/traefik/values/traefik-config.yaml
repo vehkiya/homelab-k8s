@@ -6,7 +6,8 @@ image:
 providers:
   kubernetesCRD:
     enabled: true
-    allowCrossNamespace: true
+    allowCrossNamespace: false
+    safeNaming: true
   kubernetesGateway:
     enabled: true
     nativeLBByDefault: true
@@ -54,11 +55,20 @@ accessLog:
         Set-Cookie: redact
 
 ports:
+  traefik:
+    http:
+      aliasHeadersStrategy: delete
+  metrics:
+    http:
+      aliasHeadersStrategy: delete
   web:
     port: 8000
+    http:
+      aliasHeadersStrategy: delete
   websecure:
     port: 9443
     http:
+      aliasHeadersStrategy: delete
       middlewares:
         - traefik-request-id@kubernetescrd
         - traefik-compress@kubernetescrd
@@ -87,6 +97,7 @@ ports:
     expose:
       default: true
     http:
+      aliasHeadersStrategy: delete
       middlewares:
         - traefik-crowdsec-bouncer@kubernetescrd
         - traefik-request-id@kubernetescrd
