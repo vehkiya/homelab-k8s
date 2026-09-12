@@ -12,6 +12,8 @@ providers:
     enabled: true
     nativeLBByDefault: true
     experimentalChannel: true
+  kubernetesIngress:
+    enabled: false
 # Allow the Gateway to expose HTTPRoute from all namespaces
 deployment:
   kind: DaemonSet
@@ -33,9 +35,14 @@ updateStrategy:
   rollingUpdate:
     maxUnavailable: 1 # @schema type:[integer, string, null]
     maxSurge: 0
+ingressClass:
+  enabled: false
+
 ingressRoute:
   dashboard:
     enabled: false # Migrated to Gateway API HTTPRoute in http-route.yaml
+  healthcheck:
+    enabled: false
 log:
   level: WARN
 accessLog:
