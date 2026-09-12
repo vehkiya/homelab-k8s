@@ -7,11 +7,14 @@ providers:
   kubernetesCRD:
     enabled: true
     allowCrossNamespace: false
-    safeNaming: true
+    safeNaming: false
   kubernetesGateway:
     enabled: true
     nativeLBByDefault: true
     experimentalChannel: true
+
+additionalArguments:
+  - "--providers.kubernetescrd.safeNaming=false"
 # Allow the Gateway to expose HTTPRoute from all namespaces
 deployment:
   kind: DaemonSet
