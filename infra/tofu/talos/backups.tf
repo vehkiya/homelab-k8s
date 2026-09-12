@@ -3,7 +3,7 @@ resource "local_sensitive_file" "machineconfigs" {
   for_each = var.nodes
 
   filename        = "${path.module}/_output/machineconfigs/${each.key}.yaml"
-  content         = data.talos_machine_configuration.config[each.key].machine_configuration
+  content         = local.rendered_machine_configurations[each.key]
   file_permission = "0600"
 }
 

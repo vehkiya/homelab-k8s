@@ -34,11 +34,46 @@ data "talos_client_configuration" "this" {
   endpoints            = [var.cluster_vip]
 }
 
+locals {
+  custom_config_documents = <<-EOT
+---
+apiVersion: v1alpha1
+kind: CRICustomizationConfig
+name: 20-customization
+content: |
+  [plugins."io.containerd.cri.v1.images"]
+    discard_unpacked_layers = false
+
+  # Set cdi dirs to /var/ because default locations are not writeable in talos
+  [plugins."io.containerd.cri.v1.runtime"]
+    cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic", "/var/run/cdi"]
+
+  [plugins."io.containerd.cri.v1.runtime".containerd]
+            default_runtime_name = "crun"
+---
+apiVersion: v1alpha1
+kind: EtcFileConfig
+name: nfsmount.conf
+mode: 0644
+contents: |
+  [ NFSMount_Global_Options ]
+  nfsvers=4.1
+  hard=True
+  nconnect=16
+  nodiratime=True
+  noatime=True
+EOT
+
+  rendered_machine_configurations = {
+    for k, v in var.nodes : k => "${data.talos_machine_configuration.config[k].machine_configuration}\n${local.custom_config_documents}"
+  }
+}
+
 resource "talos_machine_configuration_apply" "node" {
   for_each = var.nodes
 
   node                        = each.value.ip
   client_configuration        = local.talos_client_config
-  machine_configuration_input = data.talos_machine_configuration.config[each.key].machine_configuration
+  machine_configuration_input = local.rendered_machine_configurations[each.key]
   apply_mode                  = "no_reboot"
 }

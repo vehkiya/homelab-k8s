@@ -43,31 +43,6 @@ machine:
     net.ipv4.tcp_wmem: 4096 65536 16777216
     net.ipv6.conf.all.accept_ra: "2"
     net.ipv6.conf.all.accept_ra_rt_info_max_plen: "64"
-  files:
-    - content: |
-        [plugins."io.containerd.cri.v1.images"]
-          discard_unpacked_layers = false
-
-        # Set cdi dirs to /var/ because default locations are not writeable in talos
-        [plugins."io.containerd.cri.v1.runtime"]
-          cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic", "/var/run/cdi"]
-
-        [plugins."io.containerd.cri.v1.runtime".containerd]
-                  default_runtime_name = "crun"
-      permissions: 0o0
-      path: /etc/cri/conf.d/20-customization.part
-      op: create
-    - content: |
-        [ NFSMount_Global_Options ]
-        nfsvers=4.1
-        hard=True
-        nconnect=16
-        nodiratime=True
-        noatime=True
-      permissions: 0o644
-      path: /etc/nfsmount.conf
-      op: overwrite
-
 cluster:
   network:
     cni:
