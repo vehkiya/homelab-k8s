@@ -28,6 +28,6 @@ images:
   - name: ghcr.io/karlomikus/barassistant
     newTag: 6.7.0@sha256:286d2f7d52bef72307471deb19d2daf7e0f639ad438693b022f7ebe900065184
   - name: ghcr.io/karlomikus/salt-rim
-    newTag: 5.5.0@sha256:bc8dd30b5dbd87dd24ac39e42bd54476bfa5cb986e74aacd8645fe7e4a681eb7
+    newTag: 5.6.0@sha256:77f2e5f55a494c93617b7fd2da43899d505fc2f87d2f5b9290442ae93d95a1ec
   - name: docker.io/valkey/valkey
     newTag: 9.1.2@sha256:c123e3715db63d06d4ad6964884037aa0d5d4d703939b9929954112889708e1d
