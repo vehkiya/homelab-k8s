@@ -62,3 +62,11 @@ ghcr_token          = ""
 #     password = "password"
 #   }
 # }
+
+# Network UPS Tools (NUT) Client (Optional)
+# enable_nut_client = true
+# nut_host          = "10.10.1.218"
+# nut_ups_name      = "ups"
+# nut_user          = "monuser"
+# nut_password      = "secret"
+

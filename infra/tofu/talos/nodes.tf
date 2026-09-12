@@ -103,10 +103,76 @@ contents: |
   noatime=True
 EOT
 
-  custom_config_documents = "${local.base_custom_config_documents}${local.registry_auth_documents}"
+  nut_client_document = var.enable_nut_client ? (<<-EOT
+---
+apiVersion: v1alpha1
+kind: ExtensionServiceConfig
+name: nut-client
+configFiles:
+  - content: |
+      # MONITOR <upsname>@<host> <powervalue> <username> <password> <type>
+      MONITOR ${var.nut_ups_name}@${var.nut_host} 1 ${var.nut_user} ${var.nut_password} slave
+
+      # Since Talos is immutable, we use the standard poweroff
+      SHUTDOWNCMD "/sbin/poweroff"
+
+      # Recommended timings for NAS-hosted UPS
+      POLLFREQ 5
+      POLLFREQALERT 1
+      HOSTSYNC 15
+      FINALDELAY 5
+    mountPath: /usr/local/etc/nut/upsmon.conf
+EOT
+  ) : ""
+
+
+  ethernet_offload_features = <<-EOT
+features:
+  rx-gro: true
+  rx-hashing: true
+  rx-lro: false
+  tx-checksum-ip-generic: false
+  tx-checksum-ipv6: false
+  tx-nocache-copy: true
+  tx-scatter-gather: false
+  tx-tcp-ecn-segmentation: false
+  tx-tcp-segmentation: false
+  tx-tcp6-segmentation: false
+EOT
+
+  node_physical_nics = {
+    "lab-1" = "enp0s20f0u3"
+    "lab-2" = "enp0s20f0u3"
+    "lab-3" = "enp0s20f0u1"
+  }
+
+  node_ethernet_documents = {
+    for k, v in var.nodes : k => join("", concat(
+      [
+        <<-DOC
+---
+apiVersion: v1alpha1
+kind: EthernetConfig
+name: bond0
+${local.ethernet_offload_features}
+DOC
+      ],
+      lookup(local.node_physical_nics, k, null) != null ? [
+        <<-DOC
+---
+apiVersion: v1alpha1
+kind: EthernetConfig
+name: ${local.node_physical_nics[k]}
+${local.ethernet_offload_features}
+DOC
+      ] : []
+    ))
+  }
+
+  custom_config_documents = "${local.base_custom_config_documents}${local.nut_client_document}${local.registry_auth_documents}"
 
   rendered_machine_configurations = {
-    for k, v in var.nodes : k => "${data.talos_machine_configuration.config[k].machine_configuration}\n${local.custom_config_documents}"
+    for k, v in var.nodes : k => "${data.talos_machine_configuration.config[k].machine_configuration}\n${local.custom_config_documents}${local.node_ethernet_documents[k]}"
   }
 }
 

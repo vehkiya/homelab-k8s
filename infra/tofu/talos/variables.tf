@@ -148,3 +148,35 @@ variable "extra_registry_auths" {
   default   = {}
   sensitive = true
 }
+
+variable "enable_nut_client" {
+  description = "Whether to configure nut-client ExtensionServiceConfig"
+  type        = bool
+  default     = true
+}
+
+variable "nut_host" {
+  description = "IP address or hostname of the NUT UPS server"
+  type        = string
+  default     = "10.10.1.218"
+}
+
+variable "nut_ups_name" {
+  description = "Name of UPS on the NUT server"
+  type        = string
+  default     = "ups"
+}
+
+variable "nut_user" {
+  description = "Username for NUT client authentication"
+  type        = string
+  default     = "monuser"
+}
+
+variable "nut_password" {
+  description = "Password for NUT client authentication"
+  type        = string
+  default     = "secret"
+  sensitive   = true
+}
+
