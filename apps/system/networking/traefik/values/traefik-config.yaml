@@ -7,14 +7,11 @@ providers:
   kubernetesCRD:
     enabled: true
     allowCrossNamespace: false
-    safeNaming: false
+    safeNaming: true
   kubernetesGateway:
     enabled: true
     nativeLBByDefault: true
     experimentalChannel: true
-
-additionalArguments:
-  - "--providers.kubernetescrd.safeNaming=false"
 # Allow the Gateway to expose HTTPRoute from all namespaces
 deployment:
   kind: DaemonSet
@@ -68,9 +65,9 @@ ports:
     http:
       aliasHeadersStrategy: delete
       middlewares:
-        - traefik-request-id@kubernetescrd
-        - traefik-compress@kubernetescrd
-        - traefik-error-pages@kubernetescrd
+        - traefik_request-id@kubernetescrd
+        - traefik_compress@kubernetescrd
+        - traefik_error-pages@kubernetescrd
       encodedCharacters:
         allowEncodedSlash: false
         allowEncodedBackSlash: false
@@ -97,10 +94,10 @@ ports:
     http:
       aliasHeadersStrategy: delete
       middlewares:
-        - traefik-crowdsec-bouncer@kubernetescrd
-        - traefik-request-id@kubernetescrd
-        - traefik-compress@kubernetescrd
-        - traefik-error-pages@kubernetescrd
+        - traefik_crowdsec-bouncer@kubernetescrd
+        - traefik_request-id@kubernetescrd
+        - traefik_compress@kubernetescrd
+        - traefik_error-pages@kubernetescrd
       encodedCharacters:
         allowEncodedSlash: false
         allowEncodedBackSlash: false
