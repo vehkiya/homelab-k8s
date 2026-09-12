@@ -40,10 +40,12 @@ infra/tofu/
 ## Remote State & Client-Side Encryption
 
 Both layers utilize a remote S3 backend backed by NAS SeaweedFS (`https://s3.kerrlab.app`), stored in bucket `homelab-k8s-terraform`:
+
 - **Layer 1 State Key:** `talos/cluster.tfstate`
 - **Layer 2 State Key:** `bootstrap/k8s.tfstate`
 
 ### State & Plan Encryption
+
 State files and execution plans are protected via **client-side AES-GCM encryption** using a PBKDF2 key derived from `tofu_encryption_passphrase`. Unencrypted state is never written to disk or the remote S3 bucket.
 
 > **Security Note:** `terraform.tfvars`, `*.tfvars.json`, `*.tfstate`, and `_output/` are strictly git-ignored under the **Zero-Credential Leakage Policy**. Store your `tofu_encryption_passphrase` securely in Vaultwarden.
@@ -55,6 +57,7 @@ State files and execution plans are protected via **client-side AES-GCM encrypti
 Layer 1 manages bare-metal node configuration, kernel modules, network interfaces, VLANs, and Talos/Kubernetes version upgrades.
 
 ### Features:
+
 - **Declarative Node Matrix:** All 4 nodes (`lab-1`, `lab-2`, `lab-3`, `worker-1`) declared in `variables.tf` / `terraform.tfvars`.
 - **Modern Talos Manifest Documents:** Uses dedicated `kind: HostnameConfig` documents and v1.14+ HostDNS / admission control configurations.
 - **Factory Schematic Pinning:** Computes and pins Talos Image Factory schematic ID for extensions (`iscsi-tools`, `nut-client`, `thunderbolt`, `realtek-r8152`).
@@ -64,6 +67,7 @@ Layer 1 manages bare-metal node configuration, kernel modules, network interface
   - `_output/kubeconfig`
 
 ### Quick Start:
+
 ```bash
 cd infra/tofu/talos
 
@@ -80,7 +84,9 @@ tofu apply
 ```
 
 ### Performing Node OS & Kubernetes Version Upgrades
+
 To upgrade node OS or Kubernetes:
+
 1. Update `talos_version` or `kubernetes_version` in `terraform.tfvars`.
 2. Run `tofu plan` to review the rendered diffs.
 3. Apply changes node-by-node or across the cluster with `tofu apply`.
@@ -92,6 +98,7 @@ To upgrade node OS or Kubernetes:
 Layer 2 establishes the foundational Kubernetes cluster services and bridges the gap between bare-metal provisioning and continuous GitOps (ArgoCD).
 
 ### Components Managed:
+
 1. **`vaultwarden-credentials` Secret:** Declared in `external-secrets` namespace with `argocd.argoproj.io/sync-options: Prune=false` and `helm.sh/resource-policy: keep` so ArgoCD never prunes the Day-0 bootstrap secret.
 2. **Cilium CNI (`apps/bootstrap/cilium`):** Deploys Cilium via Kustomize + Helm, waits for `ds/cilium` rollout.
 3. **CoreDNS (`apps/bootstrap/coredns`):** Deploys CoreDNS DaemonSet, waits for `ds/coredns` rollout.
@@ -100,6 +107,7 @@ Layer 2 establishes the foundational Kubernetes cluster services and bridges the
 6. **Root Bootstrap ApplicationSet (`apps/gitops/app-of-apps/bootstrap.yaml`):** Enrolls bootstrap apps into ArgoCD continuous sync.
 
 ### Quick Start:
+
 ```bash
 cd infra/tofu/bootstrap
 
