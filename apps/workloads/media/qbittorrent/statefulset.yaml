@@ -81,12 +81,17 @@ spec:
               cpu: "250m"
               memory: "512Mi"
           startupProbe:
-            httpGet:
-              path: /
-              port: 9999
-            failureThreshold: 30
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  test -s /tmp/gluetun/forwarded_port && \
+                    wget -qO- http://127.0.0.1:9999 >/dev/null
+            initialDelaySeconds: 15
             periodSeconds: 5
             timeoutSeconds: 5
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /
