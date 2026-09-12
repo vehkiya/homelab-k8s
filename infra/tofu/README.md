@@ -66,7 +66,7 @@ Layer 1 manages bare-metal node configuration, kernel modules, network interface
   - `_output/talosconfig`
   - `_output/kubeconfig`
 
-### Quick Start:
+### Quick Start
 
 ```bash
 cd infra/tofu/talos
@@ -97,7 +97,7 @@ To upgrade node OS or Kubernetes:
 
 Layer 2 establishes the foundational Kubernetes cluster services and bridges the gap between bare-metal provisioning and continuous GitOps (ArgoCD).
 
-### Components Managed:
+### Components Managed
 
 1. **`vaultwarden-credentials` Secret:** Declared in `external-secrets` namespace with `argocd.argoproj.io/sync-options: Prune=false` and `helm.sh/resource-policy: keep` so ArgoCD never prunes the Day-0 bootstrap secret.
 2. **Cilium CNI (`apps/bootstrap/cilium`):** Deploys Cilium via Kustomize + Helm, waits for `ds/cilium` rollout.
@@ -106,7 +106,7 @@ Layer 2 establishes the foundational Kubernetes cluster services and bridges the
 5. **ArgoCD (`apps/bootstrap/argocd`):** Deploys ArgoCD HA stack, waits for `argocd-server` rollout.
 6. **Root Bootstrap ApplicationSet (`apps/gitops/app-of-apps/bootstrap.yaml`):** Enrolls bootstrap apps into ArgoCD continuous sync.
 
-### Quick Start:
+### Quick Start
 
 ```bash
 cd infra/tofu/bootstrap

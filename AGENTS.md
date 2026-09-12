@@ -11,24 +11,25 @@ Before executing any `git commit` or `git push` operations, the agent **MUST** a
 ### Audit Workflow
 
 Before performing any commit, run:
+
 ```bash
 git diff --cached
 ```
 
 Review the diff output to ensure it does **NOT** contain any of the following:
 
-*   **Plaintext Secrets:** Passwords, API tokens, database connection strings, or Auth credentials.
-*   **Thread Datasets:** Active dataset keys, pre-shared keys (PSKc), or network keys (e.g., raw TLVs). These must be managed via Vault/ExternalSecrets.
-*   **Private Keys & Certificates:** SSL/TLS private keys, SSH keys, or certificate files (e.g. `-----BEGIN ...`).
-*   **Decrypted Vault Assets:** Raw data fetched from Vaultwarden or config files that should remain git-ignored.
+* **Plaintext Secrets:** Passwords, API tokens, database connection strings, or Auth credentials.
+* **Thread Datasets:** Active dataset keys, pre-shared keys (PSKc), or network keys (e.g., raw TLVs). These must be managed via Vault/ExternalSecrets.
+* **Private Keys & Certificates:** SSL/TLS private keys, SSH keys, or certificate files (e.g. `-----BEGIN ...`).
+* **Decrypted Vault Assets:** Raw data fetched from Vaultwarden or config files that should remain git-ignored.
 
 ### Remediation Process
 
 If any sensitive data is discovered in the audit:
 
-1.  **Unstage the file:** Immediately unstage the affected file(s) (`git restore --staged <file>`).
-2.  **Abort the operation:** Cancel the commit or push operation immediately. Do not attempt to proceed.
-3.  **Flag for human review:** Stop all automated edits or Git actions, report the specific leak details to the user, and wait for human review/remediation.
+1. **Unstage the file:** Immediately unstage the affected file(s) (`git restore --staged <file>`).
+2. **Abort the operation:** Cancel the commit or push operation immediately. Do not attempt to proceed.
+3. **Flag for human review:** Stop all automated edits or Git actions, report the specific leak details to the user, and wait for human review/remediation.
 
 ---
 
@@ -38,10 +39,11 @@ To prevent resource exhaustion, noisy neighbor issues, and out-of-memory kills, 
 
 ### Configuration Policy
 
-*   **CPU:** Must specify both `requests.cpu` and `limits.cpu`.
-*   **Memory:** Must specify both `requests.memory` and `limits.memory`.
+* **CPU:** Must specify both `requests.cpu` and `limits.cpu`.
+* **Memory:** Must specify both `requests.memory` and `limits.memory`.
 
 Example:
+
 ```yaml
 resources:
   requests:
@@ -62,27 +64,32 @@ Before pushing any changes or finalizing a pull request, the agent **MUST** run 
 
 1. **Locate and Render Kustomize Layers:**
    Locate all directories containing a `kustomization.yaml` that are closest parents to the modified files. For each directory, render the layer using Kustomize:
+
    ```bash
    kustomize build <layer-directory> --enable-helm > built.yaml
    ```
 
 2. **YAML Linting:**
    Check the modified YAML files (and the rendered `built.yaml`) for syntax and formatting:
+
    ```bash
    yamllint <file.yaml>
    ```
 
 3. **Kubernetes Conformity (Kubeconform):**
    Validate the rendered manifest structure using `kubeconform`. Ensure you ignore missing CRD schemas and skip validations for `Secret` and `SealedSecret` resources:
+
    ```bash
    kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" -cache ~/.cache/kubeconform built.yaml
    ```
 
 4. **Kubernetes Best Practices (Kube-Linter):**
    Audit the rendered manifests against security policies:
+
    ```bash
    kube-linter lint built.yaml
    ```
+
    *(Optional: If the layer uses Helm or remote sources, use `yq` to annotate Pod-bearing or Service resources with `"kube-linter.io/ignore-all" = "true"` to avoid upstream resource configuration alerts).*
 
 ---
@@ -91,8 +98,8 @@ Before pushing any changes or finalizing a pull request, the agent **MUST** run 
 
 To ensure reproducible deployments and compatibility with automated dependency managers (like Renovate):
 
-*   **No `:latest` or Generic Tags:** All container image declarations MUST be pinned to specific semantic tags (e.g., `v1.2.7`) or specific image digests (SHAs).
-*   **Renovate Compatibility:** Always specify tags in a format that can be easily parsed and updated by Renovate.
+* **No `:latest` or Generic Tags:** All container image declarations MUST be pinned to specific semantic tags (e.g., `v1.2.7`) or specific image digests (SHAs).
+* **Renovate Compatibility:** Always specify tags in a format that can be easily parsed and updated by Renovate.
 
 ---
 
@@ -100,8 +107,8 @@ To ensure reproducible deployments and compatibility with automated dependency m
 
 To ensure maximum security and prevent plaintext secrets from entering the repository:
 
-*   **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
-*   **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
+* **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
+* **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
 
 ---
 
@@ -168,16 +175,20 @@ When testing or debugging manual cluster edits (e.g. via `kubectl apply`), ArgoC
 1. **Locate the App-of-Apps Manifest:**
    Find the matching ApplicationSet in `apps/gitops/app-of-apps/` (e.g., `workloads-iot.yaml`, `workloads-media.yaml`).
 2. **Comment out `automated` Sync Policy:**
+
    ```yaml
          syncPolicy:
            # automated:
            #   prune: true
            #   selfHeal: true
    ```
+
 3. **Apply to Cluster:**
+
    ```bash
    kubectl apply -f apps/gitops/app-of-apps/<app-name>.yaml
    ```
+
 4. **Perform Testing:** Run your `kubectl apply` commands for testing.
 5. **Revert Local File:** Revert the `apps/gitops/app-of-apps/<app-name>.yaml` file back to its un-commented state so git remains clean.
 6. **Post-Merge Cleanup (Only Upon Explicit User Confirmation):**
