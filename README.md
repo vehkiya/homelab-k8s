@@ -51,14 +51,15 @@ The cluster hosts a diverse ecosystem of applications, organized by domain:
 
 ```text
 ├── apps/
-│   ├── cluster-core/       # Foundation (Cilium, Cert-Manager, Traefik)
+│   ├── bootstrap/          # Day-0 components (Cilium, CoreDNS, External-Secrets, ArgoCD)
+│   ├── cluster-core/       # Foundation (Cert-Manager, Traefik)
 │   ├── cluster-addons/     # Common services (Authelia, OAuth-Proxy)
 │   ├── gitops/             # ArgoCD & Renovate configuration
 │   ├── storage/            # Synology CSI, Longhorn, Databases
 │   ├── monitoring/         # Prometheus, Metrics-Server, Uptime
 │   └── applications/       # End-user services (Media, Home, IoT, Games)
-├── talos/
-│   └── cluster-config/     # Talos machine configurations and backup scripts
+├── infra/
+│   └── tofu/               # OpenTofu IaC (Layer 1: Talos OS & Layer 2: Day-0 Bootstrap)
 └── README.md
 ```
 
@@ -78,7 +79,7 @@ The cluster utilizes Intel GPU hardware for media transcoding:
 - **Intel Device Plugin:** Exposes the i915 GPU to containers for Plex and other media tools.
 
 ### Backup Strategy
-Cluster state and critical configurations are backed up using the scripts provided in `talos/cluster-config/`, ensuring quick recovery in the event of hardware failure.
+Cluster state and node configurations are declaratively managed using OpenTofu in [`infra/tofu/talos/`](file:///home/vehkiya/projects/homelab-k8s/infra/tofu/talos) and [`infra/tofu/bootstrap/`](file:///home/vehkiya/projects/homelab-k8s/infra/tofu/bootstrap), with remote state encrypted in NAS S3 and automated offline recovery backups rendered into `infra/tofu/talos/_output/`.
 
 ---
 *Maintained with ❤️ by vehkiya*

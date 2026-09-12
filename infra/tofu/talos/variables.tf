@@ -41,12 +41,6 @@ variable "tofu_encryption_passphrase" {
   default     = ""
 }
 
-variable "existing_cluster_config_path" {
-  description = "Path to an existing machine config backup file to extract current cluster CAs and secrets without generating new ones"
-  type        = string
-  default     = "../../../talos/cluster-config/backup/lab-1.kube.kerrlab.app.yaml"
-}
-
 variable "nodes" {
   description = "Topology map of all bare-metal nodes in the cluster"
   type = map(object({
