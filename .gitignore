@@ -5,3 +5,16 @@
 
 .gemini/
 gha-creds-*.json
+
+### OpenTofu / Terraform ###
+**/.terraform/
+**/.tofu/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+*.tfplan
+_output/

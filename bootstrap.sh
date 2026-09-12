@@ -42,7 +42,7 @@ apply_and_wait "Cilium" "apps/bootstrap/cilium" "ds/cilium" "kube-system"
 apply_and_wait "CoreDNS" "apps/bootstrap/coredns" "ds/coredns" "kube-system"
 
 # 3. Deploy External Secrets Operator
-apply_and_wait "External Secrets Operator" "apps/bootstrap/external-secrets-operator" "deployment/external-secrets" "external-secrets"
+apply_and_wait "External Secrets Operator" "apps/bootstrap/external-secrets" "deployment/external-secrets" "external-secrets"
 
 # 4. Deploy ArgoCD
 apply_and_wait "ArgoCD" "apps/bootstrap/argocd" "deployment/argocd-server" "argocd"

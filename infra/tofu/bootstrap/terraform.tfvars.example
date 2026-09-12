@@ -1,0 +1,10 @@
+tofu_encryption_passphrase = "replace-with-your-strong-passphrase"
+
+# Path to kubeconfig if not using default Layer 1 output
+# kubeconfig_path = "../talos/_output/kubeconfig"
+
+# Vaultwarden Credentials for External-Secrets Bootstrap
+vaultwarden_client_id     = "user.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+vaultwarden_client_secret = "your-vaultwarden-api-client-secret"
+vaultwarden_host          = "https://vaultwarden.kerrlab.app"
+vaultwarden_password      = "your-vaultwarden-master-password"

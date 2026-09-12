@@ -1,0 +1,46 @@
+# Cluster Metadata
+cluster_name       = "homecluster"
+cluster_vip        = "10.10.1.250"
+cluster_endpoint   = "https://kube.kerrlab.app:6443"
+talos_version      = "v1.14.0"
+kubernetes_version = "v1.37.0"
+
+# Node Topology Matrix
+nodes = {
+  "lab-1" = {
+    role          = "controlplane"
+    ip            = "10.10.1.101"
+    ipv6          = "fd00:10:244::101"
+    vlan2_ip      = "192.168.4.101"
+    nic_driver    = "r8152"
+    mac_addresses = ["6c:1f:f7:28:72:32"]
+    install_disk  = "/dev/nvme0n1"
+  },
+  "lab-2" = {
+    role          = "controlplane"
+    ip            = "10.10.1.102"
+    ipv6          = "fd00:10:244::102"
+    vlan2_ip      = "192.168.4.102"
+    nic_driver    = "r8152"
+    mac_addresses = ["30:68:93:65:67:fe"]
+    install_disk  = "/dev/nvme0n1"
+  },
+  "lab-3" = {
+    role          = "controlplane"
+    ip            = "10.10.1.103"
+    ipv6          = "fd00:10:244::103"
+    vlan2_ip      = "192.168.4.103"
+    nic_driver    = "r8152"
+    mac_addresses = ["6c:1f:f7:28:67:32"]
+    install_disk  = "/dev/nvme0n1"
+  },
+  "worker-1" = {
+    role          = "worker"
+    ip            = "10.10.1.201"
+    ipv6          = "fd00:10:244::201"
+    vlan2_ip      = "192.168.4.201"
+    nic_driver    = "igc"
+    mac_addresses = ["38:05:25:32:c2:c5", "38:05:25:32:c2:c6"]
+    install_disk  = "/dev/nvme0n1"
+  }
+}
