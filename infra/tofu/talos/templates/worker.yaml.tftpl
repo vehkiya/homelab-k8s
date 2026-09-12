@@ -1,0 +1,50 @@
+machine:
+  network:
+    interfaces:
+      - interface: bond0
+        addresses:
+          - ${node_ip}/24
+          - ${ipv6}/64
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.10.1.1
+          - network: ::/0
+            gateway: fe80::1e0b:8bff:fe10:cb2b
+        bond:
+          mode: active-backup
+          interfaces: []
+          deviceSelectors:
+%{ for mac in macs ~}
+            - hardwareAddr: ${mac}
+              driver: ${driver}
+%{ endfor ~}
+        vlans:
+          - vlanId: 2
+            addresses:
+              - ${vlan2_ip}/24
+              - fd00:2:244::${element(split(".", node_ip), 3)}/64
+            routes: []
+            dhcp: false
+            mtu: 1500
+        mtu: 1500
+        dhcp: false
+    nameservers:
+      - 10.10.1.1
+  install:
+    disk: ${install_disk}
+    image: ${installer_image}
+    extraKernelArgs:
+      - talos.platform=metal
+      - intel_idle.max_cstate=0
+      - iommu.passthrough=1
+      - intel_iommu=on
+      - iommu=pt
+      - cpufreq.default_governor=performance
+      - nvme_core.io_timeout=60
+  sysctls:
+    user.max_user_namespaces: "11255"
+    vm.nr_hugepages: "512"
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: ${hostname}

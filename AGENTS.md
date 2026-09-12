@@ -9,22 +9,27 @@ This document outlines strict operational rules for AI coding assistants working
 Before executing any `git commit` or `git push` operations, the agent **MUST** audit all staged changes to prevent the accidental leakage of sensitive credentials, keys, or configuration tokens.
 
 ### Audit Workflow
+
 Before performing any commit, run:
+
 ```bash
 git diff --cached
 ```
 
 Review the diff output to ensure it does **NOT** contain any of the following:
-*   **Plaintext Secrets:** Passwords, API tokens, database connection strings, or Auth credentials.
-*   **Thread Datasets:** Active dataset keys, pre-shared keys (PSKc), or network keys (e.g., raw TLVs). These must be managed via Vault/ExternalSecrets.
-*   **Private Keys & Certificates:** SSL/TLS private keys, SSH keys, or certificate files (e.g. `-----BEGIN ...`).
-*   **Decrypted Vault Assets:** Raw data fetched from Vaultwarden or config files that should remain git-ignored.
+
+* **Plaintext Secrets:** Passwords, API tokens, database connection strings, or Auth credentials.
+* **Thread Datasets:** Active dataset keys, pre-shared keys (PSKc), or network keys (e.g., raw TLVs). These must be managed via Vault/ExternalSecrets.
+* **Private Keys & Certificates:** SSL/TLS private keys, SSH keys, or certificate files (e.g. `-----BEGIN ...`).
+* **Decrypted Vault Assets:** Raw data fetched from Vaultwarden or config files that should remain git-ignored.
 
 ### Remediation Process
+
 If any sensitive data is discovered in the audit:
-1.  **Unstage the file:** Immediately unstage the affected file(s) (`git restore --staged <file>`).
-2.  **Abort the operation:** Cancel the commit or push operation immediately. Do not attempt to proceed.
-3.  **Flag for human review:** Stop all automated edits or Git actions, report the specific leak details to the user, and wait for human review/remediation.
+
+1. **Unstage the file:** Immediately unstage the affected file(s) (`git restore --staged <file>`).
+2. **Abort the operation:** Cancel the commit or push operation immediately. Do not attempt to proceed.
+3. **Flag for human review:** Stop all automated edits or Git actions, report the specific leak details to the user, and wait for human review/remediation.
 
 ---
 
@@ -33,10 +38,12 @@ If any sensitive data is discovered in the audit:
 To prevent resource exhaustion, noisy neighbor issues, and out-of-memory kills, **every pod container specification** (including init containers where appropriate) MUST explicitly set both resource requests and limits.
 
 ### Configuration Policy
-*   **CPU:** Must specify both `requests.cpu` and `limits.cpu`.
-*   **Memory:** Must specify both `requests.memory` and `limits.memory`.
+
+* **CPU:** Must specify both `requests.cpu` and `limits.cpu`.
+* **Memory:** Must specify both `requests.memory` and `limits.memory`.
 
 Example:
+
 ```yaml
 resources:
   requests:
@@ -57,27 +64,32 @@ Before pushing any changes or finalizing a pull request, the agent **MUST** run 
 
 1. **Locate and Render Kustomize Layers:**
    Locate all directories containing a `kustomization.yaml` that are closest parents to the modified files. For each directory, render the layer using Kustomize:
+
    ```bash
    kustomize build <layer-directory> --enable-helm > built.yaml
    ```
 
 2. **YAML Linting:**
    Check the modified YAML files (and the rendered `built.yaml`) for syntax and formatting:
+
    ```bash
    yamllint <file.yaml>
    ```
 
 3. **Kubernetes Conformity (Kubeconform):**
    Validate the rendered manifest structure using `kubeconform`. Ensure you ignore missing CRD schemas and skip validations for `Secret` and `SealedSecret` resources:
+
    ```bash
    kubeconform -summary -ignore-missing-schemas -strict -skip "Secret,SealedSecret" -cache ~/.cache/kubeconform built.yaml
    ```
 
 4. **Kubernetes Best Practices (Kube-Linter):**
    Audit the rendered manifests against security policies:
+
    ```bash
    kube-linter lint built.yaml
    ```
+
    *(Optional: If the layer uses Helm or remote sources, use `yq` to annotate Pod-bearing or Service resources with `"kube-linter.io/ignore-all" = "true"` to avoid upstream resource configuration alerts).*
 
 ---
@@ -85,16 +97,18 @@ Before pushing any changes or finalizing a pull request, the agent **MUST** run 
 ## 4. Strict Image Tag Pinning Policy
 
 To ensure reproducible deployments and compatibility with automated dependency managers (like Renovate):
-*   **No `:latest` or Generic Tags:** All container image declarations MUST be pinned to specific semantic tags (e.g., `v1.2.7`) or specific image digests (SHAs).
-*   **Renovate Compatibility:** Always specify tags in a format that can be easily parsed and updated by Renovate.
+
+* **No `:latest` or Generic Tags:** All container image declarations MUST be pinned to specific semantic tags (e.g., `v1.2.7`) or specific image digests (SHAs).
+* **Renovate Compatibility:** Always specify tags in a format that can be easily parsed and updated by Renovate.
 
 ---
 
 ## 5. Secret Hygiene & Vaultwarden Integration
 
 To ensure maximum security and prevent plaintext secrets from entering the repository:
-*   **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
-*   **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
+
+* **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
+* **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
 
 ---
 
@@ -103,7 +117,9 @@ To ensure maximum security and prevent plaintext secrets from entering the repos
 The cluster operates on a **default-deny network policy** baseline. To allow workload communication, you must define explicit ingress/egress rules using `CiliumNetworkPolicy` resources.
 
 ### Pre-configured Global Clusterwide Policies
+
 Certain system-wide connections are already enabled globally in `apps/bootstrap/cilium/global-network-policies.yaml`. You do **not** need to redefine rules for these in local workload policies:
+
 1. **DNS Resolution:** Egress to CoreDNS (port `53` UDP/TCP in `kube-system`) is allowed for all endpoints cluster-wide.
 2. **Health Probes:** Ingress communication from the `host` and `health` entities is allowed for kubelet liveness/readiness probes.
 3. **Traefik Ingress:**
@@ -111,7 +127,9 @@ Certain system-wide connections are already enabled globally in `apps/bootstrap/
    * Ingress from Traefik to any pod labeled with `networking/expose-http-api: "true"` targeting a named port `"http-api"` is automatically allowed.
 
 ### Named Port Ingress Mapping Example
+
 For a workload to utilize the global Traefik ingress policies:
+
 1. The **Pod template labels** must include `networking/expose-web-ui: "true"` (or `networking/expose-http-api: "true"`).
 2. The **Pod container ports** must have a named port `"web-ui"` (or `"http-api"`).
 3. The corresponding **Service** and **HTTPRoute** must target this `"web-ui"` (or `"http-api"`) named port.
@@ -157,19 +175,78 @@ When testing or debugging manual cluster edits (e.g. via `kubectl apply`), ArgoC
 1. **Locate the App-of-Apps Manifest:**
    Find the matching ApplicationSet in `apps/gitops/app-of-apps/` (e.g., `workloads-iot.yaml`, `workloads-media.yaml`).
 2. **Comment out `automated` Sync Policy:**
+
    ```yaml
          syncPolicy:
            # automated:
            #   prune: true
            #   selfHeal: true
    ```
+
 3. **Apply to Cluster:**
+
    ```bash
    kubectl apply -f apps/gitops/app-of-apps/<app-name>.yaml
    ```
+
 4. **Perform Testing:** Run your `kubectl apply` commands for testing.
 5. **Revert Local File:** Revert the `apps/gitops/app-of-apps/<app-name>.yaml` file back to its un-commented state so git remains clean.
 6. **Post-Merge Cleanup (Only Upon Explicit User Confirmation):**
    Once testing is complete, the PR is merged, and the user explicitly requests to finalize/resume:
    * Switch to `master` and pull the latest changes (`git checkout master && git pull origin master`).
    * Re-apply the `app-of-apps` manifest (`kubectl apply -f apps/gitops/app-of-apps/<app-name>.yaml`) to restore ArgoCD automated sync in the cluster.
+
+---
+
+## 8. Infrastructure Changes & OpenTofu Workflow
+
+Bare-metal node configurations and foundational Day-0 cluster bootstrapping are managed declaratively using OpenTofu in `infra/tofu/`.
+
+### Architecture & Layer Boundaries
+
+* **Layer 1 (`infra/tofu/talos/`):** Manages bare-metal Talos Linux node configurations (`lab-1`, `lab-2`, `lab-3`, `worker-1`), kernel parameters, hardware extensions via Talos Image Factory schematics (`image-factory-parameters.yaml`), network interfaces/VLANs, and automated offline disaster-recovery backups (`_output/`).
+* **Layer 2 (`infra/tofu/bootstrap/`):** Bridges bare metal to GitOps. Manages the Day-0 `vaultwarden-credentials` secret (with `argocd.argoproj.io/sync-options: Prune=false` and `helm.sh/resource-policy: keep`), Cilium CNI, CoreDNS, External Secrets Operator, and ArgoCD root bootstrap enrollment.
+
+### State & Secret Hygiene in Infrastructure
+
+* **Client-Side State Encryption:** Both layers use remote S3 backend storage on NAS SeaweedFS with client-side AES-GCM encryption (`tofu_encryption_passphrase`).
+* **Never Commit State or Credentials:** `terraform.tfvars`, `*.tfvars.json`, `*.tfstate`, and `_output/` must remain git-ignored. Never stage or commit unencrypted state, credentials, or passphrases.
+* **Variable Hygiene:** When adding or modifying input variables in `variables.tf`, always update the corresponding `terraform.tfvars.example` with safe, placeholder defaults.
+
+### Modern Talos Configuration Standards
+
+* **No Deprecated `.machine.files`:** Use dedicated Talos configuration documents:
+  * `kind: HostnameConfig` for node hostnames.
+  * `kind: CRICustomizationConfig` for container runtime settings (e.g. `20-customization`).
+  * `kind: EtcFileConfig` for system configurations (e.g. `nfsmount.conf`).
+* **Schematic Pinning:** When adding Talos system extensions, update `image-factory-parameters.yaml` so the schematic ID is dynamically computed and pinned.
+
+### Validation & Testing Workflow
+
+Before committing any changes under `infra/`:
+
+1. **Format Code:**
+   Ensure all OpenTofu configuration files conform to standard formatting:
+
+   ```bash
+   tofu fmt -check -recursive infra/tofu
+   ```
+
+   To automatically format:
+
+   ```bash
+   tofu fmt -recursive infra/tofu
+   ```
+
+2. **Offline Validation (No Backend/Credentials Required):**
+   For any modified layer directory (e.g., `infra/tofu/talos`, `infra/tofu/bootstrap`):
+
+   ```bash
+   tofu -chdir=<layer-directory> init -backend=false
+   tofu -chdir=<layer-directory> validate
+   ```
+
+3. **Execution Safety & Live Testing:**
+   * Always run `tofu plan` first to review prospective diffs before proposing or executing an apply.
+   * Do not run `tofu apply -auto-approve` without explicit human authorization, especially on bare-metal control plane nodes.
+   * Upgrades to Talos OS or Kubernetes must be coordinated sequentially node-by-node, verifying etcd health and node readiness between updates.

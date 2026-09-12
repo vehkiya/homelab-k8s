@@ -1,0 +1,56 @@
+name: OpenTofu
+
+on:
+  pull_request:
+    paths:
+      - 'infra/**'
+      - '.github/workflows/tofu.yaml'
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'infra/**'
+      - '.github/workflows/tofu.yaml'
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@a1320f892987e89d278cc92dc5adc984fb93aca4 # v2.0.2
+        with:
+          tofu_version: 1.12.6
+          tofu_wrapper: false
+
+      - name: OpenTofu Format Check
+        run: tofu fmt -check -recursive infra/tofu
+
+      - name: Cache OpenTofu plugins
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ~/.terraform.d/plugin-cache
+          key: ${{ runner.os }}-tofu-cache-${{ hashFiles('infra/tofu/**/.terraform.lock.hcl') }}
+          restore-keys: |
+            ${{ runner.os }}-tofu-cache-
+
+      - name: OpenTofu Init & Validate
+        run: |
+          export TF_PLUGIN_CACHE_DIR="${HOME}/.terraform.d/plugin-cache"
+          mkdir -p "$TF_PLUGIN_CACHE_DIR"
+          set -euo pipefail
+
+          MODULES=$(find infra -name "*.tf" -exec dirname {} + | sort -u)
+
+          for dir in $MODULES; do
+            echo "::group::Validating $dir"
+            echo "Initializing $dir..."
+            tofu -chdir="$dir" init -backend=false
+            echo "Validating $dir..."
+            tofu -chdir="$dir" validate
+            echo "::endgroup::"
+          done
