@@ -43,6 +43,11 @@ machine:
     net.ipv4.tcp_wmem: 4096 65536 16777216
     net.ipv6.conf.all.accept_ra: "2"
     net.ipv6.conf.all.accept_ra_rt_info_max_plen: "64"
+    net.ipv6.conf.all.forwarding: "1"
+    net.ipv6.conf.default.accept_ra: "2"
+    net.ipv6.conf.default.accept_ra_rt_info_max_plen: "64"
+    user.max_user_namespaces: "11255"
+    vm.nr_hugepages: "512"
 cluster:
   network:
     cni:
@@ -57,3 +62,5 @@ cluster:
   proxy:
     disabled: true
     image: registry.k8s.io/kube-proxy:${kubernetes_version}
+  coreDNS:
+    disabled: true
