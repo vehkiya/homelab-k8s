@@ -43,26 +43,26 @@ spec:
                 - NET_ADMIN
             allowPrivilegeEscalation: false
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: VPN_SERVICE_PROVIDER
               value: "protonvpn"
             - name: VPN_TYPE
               value: "wireguard"
             - name: SERVER_COUNTRIES
               value: "Switzerland"
-            - name: PORT_FORWARDING
-              value: "on"
             - name: PORT_FORWARD_ONLY
+              value: "on"
+            - name: VPN_PORT_FORWARDING
               value: "on"
             - name: FIREWALL_INPUT_PORTS
               value: "8080,9091,9999"
             - name: FIREWALL_OUTBOUND_SUBNETS
-              value: "10.244.0.0/16,10.10.0.0/16,fdf0:10:244::/48"
-            - name: DNS_ADDRESS
-              value: "10.96.0.10"
-            - name: DOT
+              value: "10.244.0.0/16,10.10.0.0/16,10.96.0.0/12,fdf0:10:244::/48"
+            - name: DNS_SERVER
               value: "off"
-            - name: VPN_PORT_FORWARDING
-              value: "on"
+            - name: DNS_UPSTREAM_PLAIN_ADDRESSES
+              value: "10.96.0.10:53"
             - name: HEALTH_SERVER_ADDRESS
               value: "0.0.0.0:9999"
             - name: WIREGUARD_PRIVATE_KEY
