@@ -26,7 +26,7 @@ images:
   - name: busybox
     newTag: 1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   - name: ghcr.io/karlomikus/barassistant
-    newTag: 6.6.0@sha256:eb946b9910c2f050b1dab993521e51328b2e8f6922248aa4368c72757fbe0498
+    newTag: 6.7.0@sha256:286d2f7d52bef72307471deb19d2daf7e0f639ad438693b022f7ebe900065184
   - name: ghcr.io/karlomikus/salt-rim
     newTag: 5.5.0@sha256:bc8dd30b5dbd87dd24ac39e42bd54476bfa5cb986e74aacd8645fe7e4a681eb7
   - name: docker.io/valkey/valkey
