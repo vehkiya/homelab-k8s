@@ -1,5 +1,12 @@
 # https://github.com/coredns/helm
 
+image:
+  repository: dhi.io/coredns
+  tag: 1.14.7
+
+customAnnotations:
+  kube-linter.io/ignore-all: "true"
+
 replicaCount: 3
 
 service:

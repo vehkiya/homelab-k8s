@@ -14,6 +14,10 @@ helmCharts:
 resources:
   - network-policy.yaml
 
+images:
+  - name: dhi.io/coredns
+    newTag: 1.14.7@sha256:ca012b96b14d5777b8893b569f500b3cd265b308e22727ca358d294591c8853b
+
 patches:
   - target:
       group: apps
