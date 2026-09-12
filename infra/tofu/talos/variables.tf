@@ -96,3 +96,55 @@ variable "cluster_secrets" {
   sensitive = true
   default   = null
 }
+
+variable "docker_hub_username" {
+  description = "Docker Hub (docker.io) registry username"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "docker_hub_token" {
+  description = "Docker Hub (docker.io) registry Personal Access Token (PAT) or password"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "dhi_username" {
+  description = "Docker Hardened Images (dhi.io) registry username (defaults to docker_hub_username if unset)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "dhi_token" {
+  description = "Docker Hardened Images (dhi.io) registry token/PAT (defaults to docker_hub_token if unset)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "ghcr_username" {
+  description = "GitHub Container Registry (ghcr.io) username"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "ghcr_token" {
+  description = "GitHub Container Registry (ghcr.io) Personal Access Token (read:packages)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "extra_registry_auths" {
+  description = "Optional additional registry credentials mapped by registry host"
+  type = map(object({
+    username = string
+    password = string
+  }))
+  default   = {}
+  sensitive = true
+}
