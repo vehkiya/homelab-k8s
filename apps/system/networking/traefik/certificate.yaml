@@ -1,15 +1,16 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: lldap-tls
-  namespace: security
+  name: kerrlab-app-tls
+  namespace: traefik
 spec:
-  secretName: lldap-tls-cert
-  dnsNames:
-    - lldap.kerrlab.app
+  secretName: kerrlab-app-tls
   issuerRef:
     name: zerossl-prod
     kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - "*.kerrlab.app"
   privateKey:
     algorithm: ECDSA
     size: 384
