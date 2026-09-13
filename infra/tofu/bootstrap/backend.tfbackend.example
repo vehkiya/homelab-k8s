@@ -1,0 +1,2 @@
+bucket   = "tofu"
+endpoint = "https://<cloudflare-account-id>.r2.cloudflarestorage.com"

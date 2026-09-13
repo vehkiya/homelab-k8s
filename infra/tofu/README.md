@@ -39,16 +39,18 @@ infra/tofu/
 
 ## Remote State & Client-Side Encryption
 
-Both layers utilize a remote S3 backend backed by NAS SeaweedFS (`https://s3.kerrlab.app`), stored in bucket `homelab-k8s-terraform`:
+Both layers utilize a remote S3 backend backed by Cloudflare R2 (`https://<cloudflare-account-id>.r2.cloudflarestorage.com`), stored in bucket `tofu`:
 
 - **Layer 1 State Key:** `talos/cluster.tfstate`
 - **Layer 2 State Key:** `bootstrap/k8s.tfstate`
+
+Backend endpoints and bucket names are decoupled via git-ignored `backend.tfbackend` files (`backend.tfbackend.example` provided).
 
 ### State & Plan Encryption
 
 State files and execution plans are protected via **client-side AES-GCM encryption** using a PBKDF2 key derived from `tofu_encryption_passphrase`. Unencrypted state is never written to disk or the remote S3 bucket.
 
-> **Security Note:** `terraform.tfvars`, `*.tfvars.json`, `*.tfstate`, and `_output/` are strictly git-ignored under the **Zero-Credential Leakage Policy**. Store your `tofu_encryption_passphrase` securely in Vaultwarden.
+> **Security Note:** `terraform.tfvars`, `backend.tfbackend`, `*.tfvars.json`, `*.tfstate`, and `_output/` are strictly git-ignored under the **Zero-Credential Leakage Policy**. Store your `tofu_encryption_passphrase` securely in Vaultwarden.
 
 ---
 

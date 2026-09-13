@@ -1,0 +1,36 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tofu-sync-policy
+  namespace: tofu-sync
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: tofu-sync
+  ingress: []
+  egress:
+    # 1. Cloudflare R2 S3 Endpoint
+    - toFQDNs:
+        - matchPattern: "*.r2.cloudflarestorage.com"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    # 2. Local SeaweedFS (NAS fortress)
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "s3.kerrlab.app"
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP

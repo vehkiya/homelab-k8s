@@ -2,10 +2,8 @@ terraform {
   required_version = ">= 1.8.0"
 
   backend "s3" {
-    bucket                      = "homelab-k8s-terraform"
     key                         = "bootstrap/k8s.tfstate"
-    region                      = "us-east-1"
-    endpoint                    = "https://s3.kerrlab.app"
+    region                      = "auto"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     skip_region_validation      = true
