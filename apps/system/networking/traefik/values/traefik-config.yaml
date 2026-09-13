@@ -17,6 +17,7 @@ providers:
 # Allow the Gateway to expose HTTPRoute from all namespaces
 deployment:
   kind: DaemonSet
+  goMemLimitPercentage: 0.75
   additionalVolumes:
     - name: plugins
     - name: crowdsec-bouncer-key-vol
@@ -367,4 +368,4 @@ resources:
     memory: 512Mi
   limits:
     cpu: 2000m
-    memory: 1536Mi
+    memory: 2Gi
