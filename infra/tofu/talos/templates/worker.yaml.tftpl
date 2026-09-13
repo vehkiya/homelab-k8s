@@ -24,9 +24,7 @@ machine:
 %{ endfor ~}
         vlans:
           - vlanId: 2
-            addresses:
-              - ${vlan2_ip}/24
-              - fd00:2:244::${element(split(".", node_ip), 3)}/64
+            addresses: []
             routes: []
             dhcp: false
             mtu: 1500

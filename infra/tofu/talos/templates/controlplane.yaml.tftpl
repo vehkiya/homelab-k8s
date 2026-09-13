@@ -26,9 +26,7 @@ machine:
 %{ endfor ~}
         vlans:
           - vlanId: 2
-            addresses:
-              - ${vlan2_ip}/24
-              - fd00:2:244::${element(split(".", node_ip), 3)}/64
+            addresses: []
             routes: []
             dhcp: false
             mtu: 1500
@@ -61,6 +59,9 @@ machine:
 
 cluster:
   allowSchedulingOnControlPlanes: true
+  etcd:
+    advertisedSubnets:
+      - 10.10.1.0/24
   apiServer:
     image: registry.k8s.io/kube-apiserver:${kubernetes_version}
     extraArgs:
