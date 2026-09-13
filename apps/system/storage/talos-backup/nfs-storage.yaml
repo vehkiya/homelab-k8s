@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: talos-backup-nfs-pv
+  labels:
+    pv-name: talos-backup-nfs-pv
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - soft
+    - timeo=30
+    - retrans=2
+    - nfsvers=4.1
+    - async
+    - noatime
+    - rsize=1048576
+    - wsize=1048576
+  nfs:
+    server: fortress.kerrlab.app
+    path: /volume1/cluster
+  storageClassName: synostorage-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: talos-backup-nfs-pvc
+  namespace: talos-backup
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  selector:
+    matchLabels:
+      pv-name: talos-backup-nfs-pv
+  storageClassName: synostorage-nfs

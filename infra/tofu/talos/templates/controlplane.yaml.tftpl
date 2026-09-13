@@ -48,6 +48,13 @@ machine:
       - cpufreq.default_governor=performance
       - nvme_core.io_timeout=255
       - nvme_core.default_ps_max_latency_us=0
+  features:
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:etcd:backup
+      allowedKubernetesNamespaces:
+        - talos-backup
   nodeLabels:
     intel.feature.node.kubernetes.io/gpu: "true"
     node.kubernetes.io/exclude-from-external-load-balancers: ""
@@ -96,3 +103,5 @@ cluster:
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: ${hostname}
+
+

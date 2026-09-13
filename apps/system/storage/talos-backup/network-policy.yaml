@@ -1,0 +1,32 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: talos-backup-policy
+  namespace: talos-backup
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: talos-backup
+  ingress: []
+  egress:
+    # 1. Talos API on control plane nodes & cluster VIP
+    - toCIDR:
+        - "10.10.1.250/32" # VIP
+        - "10.10.1.101/32" # lab-1
+        - "10.10.1.102/32" # lab-2
+        - "10.10.1.103/32" # lab-3
+      toPorts:
+        - ports:
+            - port: "50000"
+              protocol: TCP
+    # 2. NFS Storage on Synology NAS
+    - toCIDR:
+        - "10.10.1.218/32" # fortress.kerrlab.app
+      toPorts:
+        - ports:
+            - port: "2049"
+              protocol: TCP
+            - port: "111"
+              protocol: TCP
+            - port: "111"
+              protocol: UDP
