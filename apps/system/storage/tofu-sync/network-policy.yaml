@@ -10,8 +10,8 @@ spec:
   ingress: []
   egress:
     # 1. Cloudflare R2 S3 Endpoint
-    - toFQDNs:
-        - matchPattern: "*.r2.cloudflarestorage.com"
+    - toEntities:
+        - "world"
       toPorts:
         - ports:
             - port: "443"
