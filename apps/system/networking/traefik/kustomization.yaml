@@ -15,6 +15,7 @@ helmCharts:
     includeCRDs: true
 
 resources:
+  - certificate.yaml
   - dashboard-auth.yaml
   - bouncer-secret.yaml
   - services.yaml
