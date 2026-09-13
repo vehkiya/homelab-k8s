@@ -13,12 +13,14 @@ resources:
 
 images:
   - name: quay.io/argoproj/argocd
-    newTag: v3.5.2@sha256:e2aadfae709d904e87f46ba4aa49601d827b3022db22cd4d03aae816a2e7097b
+    newName: dhi.io/argocd
+    newTag: 3.5.2@sha256:63b043cfc1184ece55d445e03a750fe8e780ea16ae411c2ee1dee2b6fe0f7a77
+  - name: ghcr.io/dexidp/dex
+    newName: dhi.io/dex
+    newTag: 2.45.1@sha256:366bccc1495c4e6d249b918b04549e0dafea2105e3d345aca8dff6dbea56b4a8
   - name: public.ecr.aws/docker/library/redis
     newName: dhi.io/redis
     newTag: 8.10.1-compat@sha256:c903ad2b5b20ad3dd3750a8d26e5a34aebbf92ae6ae9e632a511f37c87b74485
-  - name: busybox
-    newTag: 1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
 
 patches:
   - path: argocd-cm.yaml
