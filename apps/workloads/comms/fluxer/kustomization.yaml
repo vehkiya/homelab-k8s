@@ -28,7 +28,7 @@ resources:
 
 images:
   - name: ghcr.io/fluxerapp/fluxer-api
-    newTag: 2026.912.205228@sha256:1a43ac74853cea0aed148ef781e20159f03dacb3e6fe808e2aaf9342993280de
+    newTag: 2026.913.154316@sha256:9d0e79ec3d528ccc04c514e973d5292acd075c2a568a0aabe89cd3a9b3c43fea
   - name: ghcr.io/fluxerapp/fluxer-gateway
     newTag: 2026.911.234319@sha256:536b31dd17f93ead99ce5be981ea301e7d7d879f97bd69e13777fd7e68152398
   - name: ghcr.io/fluxerapp/fluxer-media-proxy
@@ -36,16 +36,16 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-static
     newTag: 2026.908.125537@sha256:ac67e91f84a90e36003008ecb2d84435d5dbf2f35e6221708d9016e4be08c989
   - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
-    newTag: 2026.911.234315@sha256:3582c136acdfa0aee7268c52bacbdcce8974dc23ed9423f43bf22c7a8b40e779
+    newTag: 2026.913.154310@sha256:5ed73a6810ea8974395cd5efbdbe77dce7a4c7a8fa2b01dd1027396537243e6a
   - name: ghcr.io/fluxerapp/fluxer-snowflakes
-    newTag: 2026.908.125521@sha256:e927531e6e1571fcdc8e5b76f81ec1a3806ec7f52dcf462e9cb081be603930fd
+    newTag: 2026.913.154309@sha256:efea576af300039233652f3e01002327a484303f50cd53e9b0f5bbc58164c698
   - name: ghcr.io/fluxerapp/fluxer-users
-    newTag: 2026.908.125523@sha256:e7650e80bf64325e97f0afb30049446cb39104109e69bfc8e16f3251ed9ed045
+    newTag: 2026.913.154317@sha256:be0c2ab6c3fb7852c97a41e49de10e20efc03e90aeabd49e97c97e3e0c05b7b6
   - name: ghcr.io/fluxerapp/fluxer-messages
-    newTag: 2026.908.212941@sha256:aac921d388b58253dac8485182986d4616dd6cacf52767928c4365af2165c9d8
+    newTag: 2026.913.154254@sha256:bc8faba3bc28aaf5eb0af665188d52d667fe3e1cfcd1fba82bfdce22ccbca8a1
   - name: ghcr.io/fluxerapp/fluxer-unfurl
-    newTag: 2026.908.212922@sha256:ceae64bd71a5d65e3989dd01d8ff220b82c6188d0c583f9cb8e5a3f674e575c0
+    newTag: 2026.913.154247@sha256:9c71c9e9eef02461fc5918951225f27113687f7ffae20c677109143db4fd906f
   - name: ghcr.io/fluxerapp/fluxer-admin
-    newTag: 2026.912.205113@sha256:47e9af7b41ceb0010f29ba4776f85c6b79e66b5457cfba302cf39caa30564de2
+    newTag: 2026.913.154316@sha256:1ab33ba71adf95493e710e8f19483162436b0b2c2a0ff8f5e081df5fac3e327b
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v1.40.2@sha256:18afa43e911f1dff18c7d1eb452361876d9702bb1cdff5c5d75c69617a4065c9
