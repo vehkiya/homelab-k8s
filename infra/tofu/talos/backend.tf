@@ -1,9 +1,7 @@
 terraform {
   backend "s3" {
-    bucket                      = "homelab-k8s-terraform"
     key                         = "talos/cluster.tfstate"
-    region                      = "us-east-1"
-    endpoint                    = "https://s3.kerrlab.app"
+    region                      = "auto"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     skip_region_validation      = true
