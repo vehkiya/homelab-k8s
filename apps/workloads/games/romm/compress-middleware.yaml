@@ -8,7 +8,6 @@ spec:
     encodings:
       - br
       - zstd
-      - gzip
     excludedContentTypes:
       - video/mp4
       - video/MP2T
