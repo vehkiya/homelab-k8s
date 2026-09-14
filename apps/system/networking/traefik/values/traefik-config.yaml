@@ -283,7 +283,6 @@ extraObjects:
         encodings:
           - br
           - zstd
-          - gzip
         minResponseBodyBytes: 16384
         excludedContentTypes:
           - "video/mp4"
