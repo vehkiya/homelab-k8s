@@ -26,17 +26,11 @@ spec:
       backendRefs:
         - name: bar-assistant
           port: 8080
-    # Rule 2: Frontend Static Assets (COMPRESSED)
+    # Rule 2: Frontend Static Assets (DIRECT)
     - matches:
         - path:
             type: PathPrefix
             value: /assets
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: compress
       backendRefs:
         - name: salt-rim
           port: 8080
@@ -48,17 +42,11 @@ spec:
       backendRefs:
         - name: bar-assistant
           port: 8080
-    # Rule 4: Frontend App Shell (UNCACHED / COMPRESSED)
+    # Rule 4: Frontend App Shell (DIRECT / UNCACHED)
     - matches:
         - path:
             type: PathPrefix
             value: /
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: compress
       backendRefs:
         - name: salt-rim
           port: 8080

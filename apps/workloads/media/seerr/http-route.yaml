@@ -9,17 +9,11 @@ spec:
   hostnames:
     - "seerr.kerrlab.app"
   rules:
-    # Dynamic Web UI, Login, APIs & Assets (UNCACHED / COMPRESSED)
+    # Dynamic Web UI, Login, APIs & Assets (DIRECT)
     - matches:
         - path:
             type: PathPrefix
             value: /
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: compress
       backendRefs:
         - name: seerr-ui
           port: 5055

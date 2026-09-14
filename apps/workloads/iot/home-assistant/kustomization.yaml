@@ -11,7 +11,6 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
-  - compress-middleware.yaml
   - nad.yaml
   - network-policy.yaml
 

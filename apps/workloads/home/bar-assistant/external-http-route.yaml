@@ -58,7 +58,7 @@ spec:
       backendRefs:
         - name: bar-assistant
           port: 8080
-    # Rule 4: Frontend Static Assets (COMPRESSED + RATE-LIMITED)
+    # Rule 4: Frontend Static Assets (RATE-LIMITED)
     - matches:
         - path:
             type: PathPrefix
@@ -69,15 +69,10 @@ spec:
             group: traefik.io
             kind: Middleware
             name: bar-assistant-rate-limit
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: compress
       backendRefs:
         - name: salt-rim
           port: 8080
-    # Rule 5: Frontend App Shell (UNCACHED / COMPRESSED + RATE-LIMITED)
+    # Rule 5: Frontend App Shell (UNCACHED / RATE-LIMITED)
     - matches:
         - path:
             type: PathPrefix
@@ -88,11 +83,6 @@ spec:
             group: traefik.io
             kind: Middleware
             name: bar-assistant-rate-limit
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: compress
       backendRefs:
         - name: salt-rim
           port: 8080
