@@ -1,3 +1,2 @@
 resources:
   - http-cache-middleware.yaml
-  - compress-middleware.yaml

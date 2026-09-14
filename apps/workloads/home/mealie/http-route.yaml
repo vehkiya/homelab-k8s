@@ -39,17 +39,11 @@ spec:
         - name: mealie-service
           port: 9000
 
-    # Rule 2: Dynamic API & Application Root (UNCACHED / COMPRESSED)
+    # Rule 2: Dynamic API & Application Root (UNCACHED / DIRECT)
     - matches:
         - path:
             type: PathPrefix
             value: /
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: compress
       backendRefs:
         - name: mealie-service
           port: 9000

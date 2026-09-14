@@ -10,7 +10,6 @@ resources:
   - httpscaledobject.yaml
   - rate-limit.yaml
   - http-cache-middleware.yaml
-  - compress-middleware.yaml
   - network-policy.yaml
 images:
   - name: rommapp/romm
