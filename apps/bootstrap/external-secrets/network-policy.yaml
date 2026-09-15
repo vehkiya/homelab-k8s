@@ -8,7 +8,7 @@ spec:
     matchExpressions:
       # Match ANY of the External Secrets pods
       - { key: app.kubernetes.io/name, operator: In, values: [ external-secrets, external-secrets-cert-controller, external-secrets-webhook ] }
-  egress:    # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
+  egress: # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
     - toEntities:
         - "kube-apiserver"
         - "host"          # Needed for Talos host network API
