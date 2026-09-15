@@ -11,7 +11,6 @@ metadata:
     lbipam.cilium.io/sharing-key: "minecraft-games"
     cilium.io/service-sharing-key: "minecraft-games"
 
-
 spec:
   type: LoadBalancer
   ipFamilyPolicy: SingleStack
@@ -23,6 +22,6 @@ spec:
     app: mc-router
   ports:
     - name: minecraft-tcp
-      port: 25565
+      port: 11036
       targetPort: 25565
       protocol: TCP
