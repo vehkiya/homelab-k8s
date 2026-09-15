@@ -8,7 +8,7 @@ spec:
     matchExpressions:
       # Match ANY of the External Secrets pods
       - { key: app.kubernetes.io/name, operator: In, values: [ external-secrets, external-secrets-cert-controller, external-secrets-webhook ] }
-  egress:    # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
+  egress: # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
     - toEntities:
         - "kube-apiserver"
         - "host"          # Needed for Talos host network API
@@ -44,7 +44,6 @@ spec:
   description: "Allow K8s API Server to reach the Webhook"
   endpointSelector:
     matchLabels:
-      # Matches the label we saw in your logs:
       app.kubernetes.io/name: external-secrets-webhook
   ingress:
     - fromEntities:
@@ -54,7 +53,7 @@ spec:
       toPorts:
         - ports:
             - port: "9443"
-              protocol: "TCP"# Rule: Allow traffic from the Node IPs (where API Server lives)
+              protocol: "TCP" # Rule: Allow traffic from the Node IPs (where API Server lives)
     - fromCIDR:
         - "10.10.1.101/32"
         - "10.10.1.102/32"
@@ -105,6 +104,15 @@ spec:
               protocol: "TCP"
             - port: "443"
               protocol: UDP
+    # === Allow access to OpenBao via Synology reverse proxy ===
+    - toCIDR:
+        - "10.10.1.218/32"
+      toFQDNs:
+        - matchName: "bao.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
