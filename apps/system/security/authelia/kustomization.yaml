@@ -16,7 +16,7 @@ images:
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: ghcr.io/authelia/authelia
-    newTag: 4.39.26@sha256:16b804fbf6704b456ffb6e474c8e9d2406f9544ca0fecfeca7b4dcbed647deb4
+    newTag: 4.39.27@sha256:40005803cd4e2eaeea4418517e9e9c7f515b55b31071a02829341ca2e50ca7c0
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v1.40.2@sha256:18afa43e911f1dff18c7d1eb452361876d9702bb1cdff5c5d75c69617a4065c9
 configMapGenerator:
