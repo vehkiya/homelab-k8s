@@ -21,7 +21,7 @@ spec:
   selector:
     app: mc-router
   ports:
-    - name: minecraft-tcp
+    - name: minecraft-tcp-external
       port: 11036
       targetPort: 25565
       protocol: TCP
