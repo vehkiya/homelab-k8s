@@ -13,6 +13,7 @@ data:
   FLUXER_CLIENT_IP_HEADER_NAME: "x-forwarded-for"
 
   FLUXER_PASSKEY_RP_ID: "fluxer.kerrlab.app"
+  FLUXER_PASSKEY_RP_NAME: "Fluxer"
 
   FLUXER_DATABASE_BACKEND: "postgres"
   FLUXER_POSTGRES_HOST: "fortress.kerrlab.app"
