@@ -48,4 +48,4 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-admin
     newTag: 2026.913.154316@sha256:1ab33ba71adf95493e710e8f19483162436b0b2c2a0ff8f5e081df5fac3e327b
   - name: ghcr.io/dragonflydb/dragonfly
-    newTag: v1.40.2@sha256:18afa43e911f1dff18c7d1eb452361876d9702bb1cdff5c5d75c69617a4065c9
+    newTag: v2.0.0@sha256:7426fdb31ddcf7bd9499b4205f36ebaa83b26149ba1609a0d5f8f474b3631233
