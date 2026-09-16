@@ -10,15 +10,15 @@ spec:
 
 
   secretStoreRef:
-    name: vaultwarden-store
+    name: openbao-store
     kind: ClusterSecretStore
 
   data:
     - secretKey: username
       remoteRef:
-        key: "eef82d3f-39ef-4e6f-bff2-d2dd9290810f"
-        property: "username"
+        key: traefik/dashboard-auth
+        property: username
     - secretKey: password
       remoteRef:
-        key: "eef82d3f-39ef-4e6f-bff2-d2dd9290810f"
-        property: "password"
+        key: traefik/dashboard-auth
+        property: password
