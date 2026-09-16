@@ -15,7 +15,7 @@ The cluster is built on a foundation of security, automation, and high availabil
 
 ### Security & Identity
 
-- **Secrets Management:** [External Secrets Operator](https://external-secrets.io/) - Integrates with a Vaultwarden backend to securely inject secrets without hardcoding them in Git.
+- **Secrets Management:** [External Secrets Operator](https://external-secrets.io/) - Integrates with a native [OpenBao](https://openbao.org/) backend via Kubernetes ServiceAccount auth to securely inject secrets without hardcoding them in Git.
 - **Certificate Management:** [Cert-Manager](https://cert-manager.io/) - Automated SSL/TLS certificates via Cloudflare (DNS-01 challenge) and ZeroSSL.
 - **Authentication:** [Authelia](https://www.authelia.com/) - Single Sign-On (SSO) with OpenID Connect (OIDC) and 2FA protection for all internal services.
 - **VPN:** [Tailscale](https://tailscale.com/) - Secure remote access to the cluster and internal services.

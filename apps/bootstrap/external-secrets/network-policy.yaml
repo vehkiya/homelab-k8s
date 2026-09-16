@@ -95,7 +95,7 @@ spec:
               protocol: "TCP"
             - port: "6443"
               protocol: "TCP"
-    # === Allow access to external secret stores (e.g., Bitwarden) ===
+    # === Allow access to external secret stores ===
     - toEntities:
         - "world"
       toPorts:
@@ -182,41 +182,4 @@ spec:
               protocol: "TCP"
             - port: "6443"
               protocol: "TCP"
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: bitwarden-cli-policy
-spec:
-  endpointSelector:
-    matchLabels:
-      app: bitwarden-cli
-  # ----=== Egress ===----
-  egress:
-    # === Allow access to the Bitwarden server ===
-    - toCIDR:
-        - "10.10.1.218/32"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: "ANY"
-  ingress:
-    # === Allow Kubelet Health Probes ===
-    - fromEntities:
-        - host
-        - remote-node
-      toPorts:
-        - ports:
-            - port: "8087"
-              protocol: "TCP"
 
-    # === Allow External Secrets Controller to talk to this pod ===
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: external-secrets
-        - matchLabels:
-            app: bitwarden-sync-cron
-      toPorts:
-        - ports:
-            - port: "8087"
-              protocol: "TCP"
