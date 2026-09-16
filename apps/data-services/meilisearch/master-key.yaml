@@ -7,11 +7,11 @@ spec:
     name: meilisearch-kubernetes-master-key
 
   secretStoreRef:
-    name: vaultwarden-fields
+    name: openbao-store
     kind: ClusterSecretStore
 
   data:
     - secretKey: MEILI_MASTER_KEY
       remoteRef:
-        key: "7a4a604c-607f-4a9f-a054-66caadf2e083"
-        property: "MASTER_KEY"
+        key: data-services/meilisearch
+        property: MEILI_MASTER_KEY
