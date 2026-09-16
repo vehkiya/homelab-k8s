@@ -21,7 +21,7 @@ Review the diff output to ensure it does **NOT** contain any of the following:
 * **Plaintext Secrets:** Passwords, API tokens, database connection strings, or Auth credentials.
 * **Thread Datasets:** Active dataset keys, pre-shared keys (PSKc), or network keys (e.g., raw TLVs). These must be managed via Vault/ExternalSecrets.
 * **Private Keys & Certificates:** SSL/TLS private keys, SSH keys, or certificate files (e.g. `-----BEGIN ...`).
-* **Decrypted Vault Assets:** Raw data fetched from Vaultwarden or config files that should remain git-ignored.
+* **Decrypted Vault Assets:** Raw data fetched from OpenBao/vault or config files that should remain git-ignored.
 
 ### Remediation Process
 
@@ -103,12 +103,12 @@ To ensure reproducible deployments and compatibility with automated dependency m
 
 ---
 
-## 5. Secret Hygiene & Vaultwarden Integration
+## 5. Secret Hygiene & OpenBao Integration
 
 To ensure maximum security and prevent plaintext secrets from entering the repository:
 
 * **No Base64 Standard Secrets:** Standard Kubernetes `Secret` manifests containing raw base64 data are strictly prohibited.
-* **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from Vaultwarden (or the cluster's default `SecretStore`).
+* **ExternalSecrets Only:** All sensitive variables, keys, and credentials must be declared using `ExternalSecret` resources that fetch target values dynamically from OpenBao (via the `openbao-store` `ClusterSecretStore`).
 
 ---
 
