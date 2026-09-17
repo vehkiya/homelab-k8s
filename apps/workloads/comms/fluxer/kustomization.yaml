@@ -23,6 +23,8 @@ resources:
   - admin.yaml
   - microservices.yaml
   - http-route.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
   - http-cache-middleware.yaml
   - network-policy.yaml
 
