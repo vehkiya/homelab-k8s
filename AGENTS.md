@@ -279,7 +279,7 @@ When integrating a workload via native OIDC in `apps/system/security/authelia/te
 
 1. **Secret Management:**
    * Generate an OIDC client secret and store it in OpenBao at `security/authelia/oidc-clients` under the key `<CLIENT>_SECRET`.
-   * Add the property reference to [`apps/system/security/authelia/oidc-secrets.yaml`](file:///home/vehkiya/projects/homelab-k8s/apps/system/security/authelia/oidc-secrets.yaml).
+   * Add the property reference to [`apps/system/security/authelia/oidc-secrets.yaml`](apps/system/security/authelia/oidc-secrets.yaml).
    * In the target workload, inject the secret using an `ExternalSecret` pointing to `tools/<app>` or `security/authelia/oidc-clients`.
 2. **Authorization Policies:**
    * **Admin Only:** Use `admin_only_policy` (e.g. OpenBao, Headlamp).
