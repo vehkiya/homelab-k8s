@@ -17,6 +17,8 @@ data:
   CUSTOM_OAUTH_SCOPES: "openid,profile,email,groups"
   CUSTOM_AUTH_PKCE: "true"
   CUSTOM_OAUTH_AUTO_LOGIN: "false"
+  DISABLE_PASSWORD_REGISTRATION: "true"
+  DISABLE_GUEST_ACCESS: "true"
   S3_ENDPOINT: "https://s3.kerrlab.app"
   S3_BUCKET: "kaneo"
   S3_REGION: "us-east-1"
