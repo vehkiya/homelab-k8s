@@ -30,6 +30,7 @@ spec:
       labels:
         app: kaneo-valkey
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
