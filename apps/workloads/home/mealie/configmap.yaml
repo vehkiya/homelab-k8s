@@ -18,7 +18,6 @@ data:
   OIDC_CONFIGURATION_URL: 'https://auth.kerrlab.app/.well-known/openid-configuration'
   OIDC_AUTO_REDIRECT: 'true'
   OIDC_CLIENT_ID: "mealie"
-  OIDC_USER_GROUP: "users"
   OIDC_ADMIN_GROUP: "administrators"
   OIDC_PROVIDER_NAME: "Authelia"
   OIDC_REMEMBER_ME: "true"

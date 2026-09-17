@@ -8,13 +8,13 @@
   <LdapBindUser>{{ .Env.LDAP_BIND_DN | default "uid=authelia,ou=people,dc=ldap,dc=kerrlab,dc=app" }}</LdapBindUser>
   <LdapBindPassword>{{ .Env.LDAP_BIND_PASSWORD }}</LdapBindPassword>
   <LdapBaseDn>{{ .Env.LDAP_BASE_DN | default "dc=ldap,dc=kerrlab,dc=app" }}</LdapBaseDn>
-  <LdapUserFilter>(&amp;(objectClass=person)(|(memberOf=cn=administrators,ou=groups,dc=ldap,dc=kerrlab,dc=app)(memberOf=cn=privileged-users,ou=groups,dc=ldap,dc=kerrlab,dc=app)(memberOf=cn=users,ou=groups,dc=ldap,dc=kerrlab,dc=app))(uid={0}))</LdapUserFilter>
+  <LdapUserFilter>(&amp;(objectClass=person)(|(memberOf=cn=administrators,ou=groups,dc=ldap,dc=kerrlab,dc=app)(memberOf=cn=privileged-users,ou=groups,dc=ldap,dc=kerrlab,dc=app)(memberOf=cn=users,ou=groups,dc=ldap,dc=kerrlab,dc=app)(memberOf=cn=app-jellyfin-users,ou=groups,dc=ldap,dc=kerrlab,dc=app))(uid={0}))</LdapUserFilter>
   <LdapSearchFilter>(uid={0})</LdapSearchFilter>
   <LdapSearchAttributes>
     <string>uid</string>
     <string>mail</string>
     <string>displayName</string>
   </LdapSearchAttributes>
-  <LdapAdminFilter>(&amp;(objectClass=person)(memberOf=cn=administrators,ou=groups,dc=ldap,dc=kerrlab,dc=app)(uid={0}))</LdapAdminFilter>
+  <LdapAdminFilter>(&amp;(objectClass=person)(|(memberOf=cn=administrators,ou=groups,dc=ldap,dc=kerrlab,dc=app)(memberOf=cn=privileged-users,ou=groups,dc=ldap,dc=kerrlab,dc=app))(uid={0}))</LdapAdminFilter>
   <CreateUsersFromLdap>true</CreateUsersFromLdap>
 </PluginConfiguration>
