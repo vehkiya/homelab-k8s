@@ -1,0 +1,94 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kaneo-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: kaneo
+  egress:
+    # 1. Connection to PostgreSQL and S3 on Fortress
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    # 2. Connection to Reverse Proxy / Traefik
+    - toCIDR:
+        - "10.10.1.16/32"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    # 3. Connection to Authelia and S3 by FQDN
+    - toFQDNs:
+        - matchName: "auth.kerrlab.app"
+        - matchName: "s3.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    # 4. Outbound internet access (OIDC/S3/webhooks)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    # 5. Connection to Valkey
+    - toEndpoints:
+        - matchLabels:
+            app: kaneo-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kaneo-valkey-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: kaneo-valkey
+  ingress:
+    # Allow access from Kaneo
+    - fromEndpoints:
+        - matchLabels:
+            app: kaneo
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
