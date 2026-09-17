@@ -12,6 +12,8 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
   - network-policy.yaml
   - valkey.yaml
 

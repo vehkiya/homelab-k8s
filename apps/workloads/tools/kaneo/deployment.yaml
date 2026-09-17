@@ -20,6 +20,7 @@ spec:
         app: kaneo
         networking/expose-web-ui: "true"
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
         seccompProfile:

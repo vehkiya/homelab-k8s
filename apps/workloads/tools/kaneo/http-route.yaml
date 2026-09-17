@@ -6,8 +6,6 @@ spec:
   parentRefs:
     - name: internal-gateway
       namespace: traefik
-    - name: external-gateway
-      namespace: traefik
   hostnames:
     - "kaneo.kerrlab.app"
   rules:
