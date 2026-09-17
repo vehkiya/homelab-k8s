@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kaneo
+  labels:
+    app: kaneo
+spec:
+  type: ClusterIP
+  ports:
+    - name: web-ui
+      port: 5173
+      targetPort: web-ui
+      protocol: TCP
+  selector:
+    app: kaneo

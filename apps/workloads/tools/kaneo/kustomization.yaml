@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tools
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: kaneo
+
+resources:
+  - configmap.yaml
+  - external-secrets.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - network-policy.yaml
+
+images:
+  - name: ghcr.io/usekaneo/kaneo
+    newTag: 2.25.0@sha256:a85a23996c36166cfcebcb4ee161b40cc62c7b924faf06353684a84d5e84162c
