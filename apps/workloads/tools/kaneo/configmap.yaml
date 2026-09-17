@@ -24,3 +24,4 @@ data:
   S3_REGION: "us-east-1"
   S3_FORCE_PATH_STYLE: "true"
   TRUSTED_PROXIES: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+  REDIS_URL: "redis://kaneo-valkey:6379"

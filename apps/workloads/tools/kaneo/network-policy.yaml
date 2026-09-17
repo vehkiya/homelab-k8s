@@ -66,3 +66,29 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
+    # 5. Connection to Valkey
+    - toEndpoints:
+        - matchLabels:
+            app: kaneo-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kaneo-valkey-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: kaneo-valkey
+  ingress:
+    # Allow access from Kaneo
+    - fromEndpoints:
+        - matchLabels:
+            app: kaneo
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
