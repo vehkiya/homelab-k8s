@@ -97,22 +97,56 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    # Allow guests, standard users, and administrators to access bar-assistant and RomM subdomains
-    - domain: "bar.kerrlab.app"
+    # 1. Privileged & Admin Only (Infrastructure, Indexers, Downloaders via Forward Auth)
+    - domain:
+        - "prowlarr.kerrlab.app"
+        - "qbittorrent.kerrlab.app"
+        - "sonarr.kerrlab.app"
+        - "sonarr-tv.kerrlab.app"
+        - "sonarr-anime.kerrlab.app"
+        - "radarr.kerrlab.app"
+        - "bazarr.kerrlab.app"
+        - "posterizarr.kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:administrators"]
+        - ["group:privileged-users"]
+
+    # 2. Selective Per-App Entitlements (Allowing global users + specific guest grants)
+    - domain: "recipes.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
         - ["group:privileged-users"]
         - ["group:users"]
-        - ["group:guests"]
+        - ["group:app-mealie-users"]
+
     - domain: "romm.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
         - ["group:privileged-users"]
         - ["group:users"]
+        - ["group:app-romm-users"]
+
+    - domain: "bar.kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:administrators"]
+        - ["group:privileged-users"]
+        - ["group:users"]
+        - ["group:app-bar-assistant-users"]
         - ["group:guests"]
-    # Allow only standard users and administrators to access all other subdomains of kerrlab.app
+
+    - domain: "kaneo.kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:administrators"]
+        - ["group:privileged-users"]
+        - ["group:users"]
+        - ["group:app-kaneo-users"]
+
+    # 3. Catch-all for standard services (*.kerrlab.app)
     - domain: "*.kerrlab.app"
       policy: two_factor
       subject:
@@ -190,6 +224,27 @@ identity_providers:
           - "name"
           - "groups"
     authorization_policies:
+      admin_only_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+      privileged_users_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+      autobrr_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:app-autobrr-users"]
       general_policy:
         default_policy: 'deny'
         rules:
@@ -206,12 +261,61 @@ identity_providers:
               - ["group:administrators"]
               - ["group:privileged-users"]
               - ["group:users"]
-      admin_only_policy:
+      mealie_policy:
         default_policy: 'deny'
         rules:
           - policy: 'two_factor'
             subject:
               - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:users"]
+              - ["group:app-mealie-users"]
+      romm_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:users"]
+              - ["group:app-romm-users"]
+      kaneo_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:users"]
+              - ["group:app-kaneo-users"]
+      nodecast_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:users"]
+              - ["group:app-nodecast-users"]
+      fluxer_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:users"]
+              - ["group:app-fluxer-users"]
+      bar_assistant_policy:
+        default_policy: 'deny'
+        rules:
+          - policy: 'two_factor'
+            subject:
+              - ["group:administrators"]
+              - ["group:privileged-users"]
+              - ["group:users"]
+              - ["group:app-bar-assistant-users"]
+              - ["group:guests"]
       guest_allowed_policy:
         default_policy: 'deny'
         rules:
@@ -227,7 +331,7 @@ identity_providers:
         client_name: "Bar Assistant"
         client_secret: "{{ .Env.BAR_ASSISTANT_SECRET }}"
         public: false
-        authorization_policy: "guest_allowed_policy"
+        authorization_policy: "bar_assistant_policy"
         consent_mode: "pre-configured"
         pre_configured_consent_duration: "30 days"
         redirect_uris:
@@ -250,7 +354,7 @@ identity_providers:
         client_name: "Mealie"
         client_secret: "{{ .Env.MEALIE_SECRET }}"
         public: false
-        authorization_policy: "general_policy"
+        authorization_policy: "mealie_policy"
         require_pkce: true
         pkce_challenge_method: "S256"
         consent_mode: "pre-configured"
@@ -277,7 +381,7 @@ identity_providers:
         client_name: "Autobrr"
         client_secret: "{{ .Env.AUTOBRR_SECRET }}"
         public: false
-        authorization_policy: "general_policy"
+        authorization_policy: "autobrr_policy"
         require_pkce: false
         pkce_challenge_method: ""
         consent_mode: "pre-configured"
@@ -304,7 +408,7 @@ identity_providers:
         public: false
         require_pkce: true
         pkce_challenge_method: "S256"
-        authorization_policy: "general_policy"
+        authorization_policy: "admin_only_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -327,7 +431,7 @@ identity_providers:
         client_name: "RomM"
         client_secret: "{{ .Env.ROMM_SECRET }}"
         public: false
-        authorization_policy: "guest_allowed_policy"
+        authorization_policy: "romm_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -350,7 +454,7 @@ identity_providers:
         client_name: "NodeCast"
         client_secret: "{{ .Env.NODECAST_SECRET }}"
         public: false
-        authorization_policy: "general_policy"
+        authorization_policy: "nodecast_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -373,7 +477,7 @@ identity_providers:
         client_name: "Fluxer"
         client_secret: "{{ .Env.FLUXER_SECRET }}"
         public: false
-        authorization_policy: "general_policy"
+        authorization_policy: "fluxer_policy"
         grant_types:
           - "authorization_code"
         response_types:
@@ -422,7 +526,7 @@ identity_providers:
         client_name: "Kaneo"
         client_secret: "{{ .Env.KANEO_SECRET }}"
         public: false
-        authorization_policy: "general_policy"
+        authorization_policy: "kaneo_policy"
         require_pkce: true
         pkce_challenge_method: "S256"
         consent_mode: "pre-configured"

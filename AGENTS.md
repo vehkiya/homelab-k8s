@@ -250,3 +250,54 @@ Before committing any changes under `infra/`:
    * Always run `tofu plan` first to review prospective diffs before proposing or executing an apply.
    * Do not run `tofu apply -auto-approve` without explicit human authorization, especially on bare-metal control plane nodes.
    * Upgrades to Talos OS or Kubernetes must be coordinated sequentially node-by-node, verifying etcd health and node readiness between updates.
+
+---
+
+## 9. Identity & Access Management (LLDAP & Authelia OIDC / Forward-Auth)
+
+Authentication and authorization across the cluster are centrally backed by **LLDAP** (Lightweight LDAP) and brokered via **Authelia** (OIDC Identity Provider and Traefik Forward-Auth).
+
+### Group Taxonomy & Lifecycle Tiers
+
+The cluster operates on a hybrid two-layer RBAC model consisting of **Global Lifecycle Personas** and **Scoped App Entitlements**:
+
+1. **`administrators` (Platform Root):**
+   * Infrastructure, OpenBao, Kubernetes `cluster-admin` (Headlamp), and Authelia root access.
+2. **`privileged-users` (Global Power Users / Service Admins):**
+   * Elevated admin/editor/superuser permissions inside workloads that support RBAC (e.g. RomM editor, Jellyfin admin).
+   * Authorized to access backend infrastructure and media downloaders (*arr stack, Prowlarr, qBittorrent) via Forward-Auth.
+3. **`users` (Standard Homelab Citizens):**
+   * Default access to all general consumer workloads across `*.kerrlab.app` (recipes, media playback, Kaneo, etc.).
+4. **`guests` (Default Unprivileged Tier):**
+   * Default baseline group assigned upon new account creation. Denied access everywhere by default (`default_policy: deny`), except explicitly designated public/guest services (e.g., Bar Assistant).
+5. **`app-<service>-users` (Scoped Per-App Guest Entitlements):**
+   * Grants a `guest` user access to a single specific application (e.g., `app-mealie-users`, `app-kaneo-users`, `app-romm-users`) without promoting them to global `users`.
+
+### OIDC Client Registration Standards (Authelia)
+
+When integrating a workload via native OIDC in `apps/system/security/authelia/templates/configuration.yaml`:
+
+1. **Secret Management:**
+   * Generate an OIDC client secret and store it in OpenBao at `security/authelia/oidc-clients` under the key `<CLIENT>_SECRET`.
+   * Add the property reference to [`apps/system/security/authelia/oidc-secrets.yaml`](file:///home/vehkiya/projects/homelab-k8s/apps/system/security/authelia/oidc-secrets.yaml).
+   * In the target workload, inject the secret using an `ExternalSecret` pointing to `tools/<app>` or `security/authelia/oidc-clients`.
+2. **Authorization Policies:**
+   * **Admin Only:** Use `admin_only_policy` (e.g. OpenBao, Headlamp).
+   * **Privileged Only:** Use `privileged_users_policy` (or a dedicated policy like `autobrr_policy`).
+   * **Standard Workloads:** Create a dedicated policy (e.g. `<service>_policy`) that accepts `administrators`, `privileged-users`, `users`, and `app-<service>-users`.
+3. **Claims & Scopes:**
+   * Declare scopes: `openid`, `profile`, `email`, `groups` (and `offline_access` when refresh tokens are required).
+   * Use `claims_policy: with_groups` whenever the workload consumes groups for in-app role mappings.
+
+### Workload Role Mapping Hygiene
+
+* **Do Not Restrict User Groups in App Config:** Avoid hardcoding single group restrictions inside app manifests (e.g. `OIDC_USER_GROUP: "users"`), as this rejects guests holding `app-<service>-users`. Let Authelia gate admission at the SSO layer.
+* **Map Elevated Groups:** Map `administrators` to in-app Admin/Owner, and `privileged-users` to in-app Admin/Editor where supported.
+
+### Forward-Auth Configuration Standards
+
+* Forward-auth services utilize the Traefik middleware `authelia-forward-auth`.
+* In Authelia's `access_control.rules`:
+  * Specific domain rules **MUST** be placed before the catch-all `*.kerrlab.app`.
+  * Administrative, torrent, and media management tools (`prowlarr`, `qbittorrent`, `sonarr`, `radarr`, `bazarr`, `posterizarr`) **MUST** be restricted to `administrators` and `privileged-users`.
+  * Services supporting guest access must explicitly list their `group:app-<service>-users`.
