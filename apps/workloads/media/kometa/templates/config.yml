@@ -7,7 +7,7 @@ libraries:
       name: anime
       url: http://sonarr-anime-ui.media.svc.cluster.local:8989
       token: {{ .Env.SONARR_TOKEN }}
-      root_folder_path:
+      root_folder_path: /data/media/anime
   Movies:
     library_name: Movies
     collection_files:
@@ -52,7 +52,7 @@ libraries:
       name: tv
       url: http://sonarr-tv-ui.media.svc.cluster.local:8989
       token: {{ .Env.SONARR_TOKEN }}
-      root_foler_path: #TODO
+      root_folder_path: /data/media/tv
 settings:
   run_order: [ 'operations', 'metadata', 'collections', 'overlays' ]
   overlay_artwork_filetype: webp_lossy
