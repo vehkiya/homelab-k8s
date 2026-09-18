@@ -14,7 +14,7 @@ images:
   - name: binwiederhier/ntfy
     newTag: v2.28.0@sha256:6ef4b819f722fccdc036af611c4774cfdc2de821ab74fdd48bbf4c9d6f8973da
   - name: alpine
-    newTag: 3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+    newTag: 3.24.2@sha256:3cf95fe0816180395592b8373f3ec60663f076127617bbacb4eacf9667afe2e9
 
 configMapGenerator:
   - name: ntfy-config
