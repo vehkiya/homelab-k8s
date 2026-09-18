@@ -17,4 +17,4 @@ images:
   - name: busybox
     newTag: 1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   - name: eclipse-mosquitto
-    newTag: 2.0.22@sha256:05b5c328c11046613c4b8137b27021c15342c9fc90ae9c2f4750ed3ece5967bd
+    newTag: 2.0.22@sha256:199ea8ef2e35ec2b1b37e59cfd1dbae538ed4dfa4a2251a121a52215a6248a21
