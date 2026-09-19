@@ -12,6 +12,6 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/media-webhook-notifier
-    newTag: 2.9.3@sha256:4d7a7e3a010453978737a5aa689b36bdcdbd6b52fa3821cb3a6fc6d672b97918
+    newTag: 2.9.4@sha256:e7072f037a8a5ede6abe68616aaec8aaaa5260f8e0f870e1ea6cf65988518a1a
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v2.0.0@sha256:7426fdb31ddcf7bd9499b4205f36ebaa83b26149ba1609a0d5f8f474b3631233
