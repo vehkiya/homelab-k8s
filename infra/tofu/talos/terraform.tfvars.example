@@ -2,7 +2,7 @@
 cluster_name       = "homecluster"
 cluster_vip        = "10.10.1.250"
 cluster_endpoint   = "https://kube.kerrlab.app:6443"
-talos_version      = "v1.14.0"
+talos_version      = "v1.14.1"
 kubernetes_version = "v1.37.0"
 
 # Node Topology Matrix
