@@ -5,7 +5,7 @@ metadata:
 spec:
   ports:
     - port: 8080
-      targetPort: 8080
+      targetPort: http-api
       name: http-api
   selector:
     app: renovate-server
