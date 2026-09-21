@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keeper
+  labels:
+    app: keeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: keeper
+  template:
+    metadata:
+      labels:
+        app: keeper
+        networking/expose-web-ui: "true"
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - name: keeper
+          image: ghcr.io/ridafkih/keeper-standalone:2.24.1
+          ports:
+            - name: web-ui
+              containerPort: 80
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: keeper-config
+            - secretRef:
+                name: keeper-secrets
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1536Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web-ui
+              httpHeaders:
+                - name: Accept
+                  value: text/html
+            initialDelaySeconds: 45
+            periodSeconds: 20
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web-ui
+              httpHeaders:
+                - name: Accept
+                  value: text/html
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: keeper-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: keeper-data
+          persistentVolumeClaim:
+            claimName: keeper-data-pvc

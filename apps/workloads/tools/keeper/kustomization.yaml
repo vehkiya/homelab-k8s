@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tools
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: keeper
+
+resources:
+  - configmap.yaml
+  - external-secrets.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
+  - network-policy.yaml
+
+images:
+  - name: ghcr.io/ridafkih/keeper-standalone
+    newTag: 2.24.1@sha256:5d3e13e03c918a38cf6c4fe353e8109186faf0c59bc72df3a8b87aa1eb866adb

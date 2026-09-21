@@ -1,0 +1,57 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: keeper-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: keeper
+  egress:
+    # 1. Connection to Reverse Proxy / Traefik
+    - toCIDR:
+        - "10.10.1.16/32"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    # 2. Outbound internet access
+    # (Google Calendar, Outlook, CalDAV, ICS, webhooks)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    # 3. Connection to local network
+    # (for local CalDAV / Nextcloud / Radicale servers)
+    - toCIDR:
+        - "10.10.1.0/24"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8080"
+              protocol: TCP
+            - port: "5232"
+              protocol: TCP
