@@ -1,0 +1,73 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: keeper-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: keeper
+  egress:
+    # 1. Connection to PostgreSQL on Fortress
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    # 2. Connection to Valkey
+    - toEndpoints:
+        - matchLabels:
+            app: keeper-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    # 3. Outbound internet access
+    # (Google Calendar, Outlook, CalDAV, ICS, webhooks)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    # 4. Connection to local network
+    # (for local CalDAV / Nextcloud / Radicale servers)
+    - toCIDR:
+        - "10.10.1.0/24"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8080"
+              protocol: TCP
+            - port: "5232"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: keeper-valkey-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: keeper-valkey
+  ingress:
+    # Allow access from Keeper
+    - fromEndpoints:
+        - matchLabels:
+            app: keeper
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP

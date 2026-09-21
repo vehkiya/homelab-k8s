@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keeper-config
+data:
+  POSTGRES_HOST: "fortress.kerrlab.app"
+  POSTGRES_PORT: "15432"
+  POSTGRES_DB: "keeper"
+  REDIS_URL: "redis://keeper-valkey:6379"
+  BETTER_AUTH_URL: "https://keeper.kerrlab.app"
+  TRUSTED_ORIGINS: "https://keeper.kerrlab.app"
+  WEBHOOK_PUBLIC_URL: "https://keeper.kerrlab.app"
+  MCP_PUBLIC_URL: "https://keeper.kerrlab.app/mcp"
+  VITE_MCP_URL: "http://127.0.0.1:3002"
+  COMMERCIAL_MODE: "false"
+  BLOCK_PRIVATE_RESOLUTION: "false"
