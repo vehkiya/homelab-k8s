@@ -25,7 +25,7 @@ images:
   - name: busybox
     newTag: 1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   - name: ghcr.io/n8n-io/n8n
-    newTag: 2.40.3@sha256:e397d0aab215cc1a3ed865bd0c2d7982dff9390fa298f3c188d084425cd6fb16
+    newTag: 2.40.4@sha256:e78d46514fda1869378ec3caa1cc40e97eb71cf2f1d5e973d989ad80917e594c
   - name: docker.io/valkey/valkey
     newTag: 9.1.2@sha256:c123e3715db63d06d4ad6964884037aa0d5d4d703939b9929954112889708e1d
 patches:
