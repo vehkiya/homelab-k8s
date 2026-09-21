@@ -35,4 +35,4 @@ images:
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: kometateam/kometa
-    newTag: v2.4.8@sha256:c58f6d4af511613f218b6dafbfc84078af4e5a6089790c1fdba58fd7c5dad70a
+    newTag: v2.5.0@sha256:a8a3e3269158bfd9855bb4d46b8763df75ec511a66a41f4b5ea81de8604d22af
