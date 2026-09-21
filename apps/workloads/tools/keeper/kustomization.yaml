@@ -10,7 +10,7 @@ labels:
 resources:
   - configmap.yaml
   - external-secrets.yaml
-  - pvc.yaml
+  - valkey.yaml
   - deployment.yaml
   - service.yaml
   - http-route.yaml
@@ -19,5 +19,9 @@ resources:
   - network-policy.yaml
 
 images:
-  - name: ghcr.io/ridafkih/keeper-standalone
-    newTag: 2.24.1@sha256:5d3e13e03c918a38cf6c4fe353e8109186faf0c59bc72df3a8b87aa1eb866adb
+  - name: ghcr.io/ridafkih/keeper-services
+    newTag: 2.24.1@sha256:41b2e63f50cf996416703317478c61c1af1ae0d36892f062a60598b884bfdaa5
+  - name: ghcr.io/ridafkih/keeper-mcp
+    newTag: 2.24.1@sha256:32f1a3d0134945626292b728296dc2340e571c6e0b55afe225e408ff22c8c9eb
+  - name: docker.io/valkey/valkey
+    newTag: 9.1.2@sha256:c123e3715db63d06d4ad6964884037aa0d5d4d703939b9929954112889708e1d

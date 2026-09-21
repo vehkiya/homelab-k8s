@@ -8,7 +8,10 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: keeper
@@ -22,10 +25,10 @@ spec:
       enableServiceLinks: false
       containers:
         - name: keeper
-          image: ghcr.io/ridafkih/keeper-standalone:2.24.1
+          image: ghcr.io/ridafkih/keeper-services:2.24.1
           ports:
             - name: web-ui
-              containerPort: 80
+              containerPort: 3000
               protocol: TCP
           envFrom:
             - configMapRef:
@@ -38,7 +41,7 @@ spec:
               memory: "256Mi"
             limits:
               cpu: "1000m"
-              memory: "1536Mi"
+              memory: "1024Mi"
           livenessProbe:
             httpGet:
               path: /
@@ -46,7 +49,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: text/html
-            initialDelaySeconds: 45
+            initialDelaySeconds: 30
             periodSeconds: 20
             timeoutSeconds: 5
           readinessProbe:
@@ -56,13 +59,52 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: text/html
-            initialDelaySeconds: 20
+            initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 5
-          volumeMounts:
-            - name: keeper-data
-              mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: keeper-data
-          persistentVolumeClaim:
-            claimName: keeper-data-pvc
+        - name: mcp
+          image: ghcr.io/ridafkih/keeper-mcp:2.24.1
+          ports:
+            - name: mcp
+              containerPort: 3002
+              protocol: TCP
+          env:
+            - name: MCP_PORT
+              value: "3002"
+            - name: MCP_PUBLIC_URL
+              value: "https://keeper.kerrlab.app/mcp"
+            - name: MCP_API_URL
+              value: "http://127.0.0.1:3001"
+            - name: BETTER_AUTH_URL
+              value: "https://keeper.kerrlab.app"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: keeper-secrets
+                  key: DATABASE_URL
+            - name: BETTER_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: keeper-secrets
+                  key: BETTER_AUTH_SECRET
+          resources:
+            requests:
+              cpu: "20m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: mcp
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: mcp
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
