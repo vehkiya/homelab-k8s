@@ -14,10 +14,10 @@ spec:
         networking/expose-http-api: "true"
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
+        runAsUser: 12021
+        runAsGroup: 0
         runAsNonRoot: true
-        fsGroup: 1000
+        fsGroup: 0
       containers:
         - name: renovate-server
           image: ghcr.io/mend/renovate-ce
