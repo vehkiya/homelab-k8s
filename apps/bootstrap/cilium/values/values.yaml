@@ -107,6 +107,19 @@ operator:
     limits:
       cpu: 100m
       memory: 128Mi
+  prometheus:
+    enabled: true
+    port: 9963
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: kube-prometheus-stack
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    labelValue: "1"
+    namespace: observability
+
 
 bgpControlPlane:
   enabled: true
@@ -161,6 +174,17 @@ prometheus:
   metricsService: true
   enabled: true
   port: 9962
+  serviceMonitor:
+    enabled: true
+    trustCRDsExist: true
+    labels:
+      release: kube-prometheus-stack
+
+dashboards:
+  enabled: true
+  label: grafana_dashboard
+  labelValue: "1"
+  namespace: observability
 
 wellKnownIdentities:
   enabled: true
@@ -175,3 +199,4 @@ pmtuDiscovery:
   enabled: true
 
 MTU: 1500
+

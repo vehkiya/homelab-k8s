@@ -13,6 +13,15 @@ spec:
         - ports:
             - port: "10250"
               protocol: "TCP"
+    # === Allow Prometheus to scrape metrics ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9402"
+              protocol: "TCP"
   # ----=== Egress ===----
   egress:
     # === Allow access to the Kubernetes API server ===

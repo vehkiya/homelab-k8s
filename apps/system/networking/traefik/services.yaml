@@ -44,3 +44,20 @@ spec:
       port: 443
       targetPort: 8443
       protocol: UDP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-metrics
+  labels:
+    app.kubernetes.io/name: "traefik"
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: "traefik"
+  ports:
+    - name: metrics
+      port: 9100
+      targetPort: 9100
+      protocol: TCP
+

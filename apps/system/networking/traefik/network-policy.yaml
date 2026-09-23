@@ -50,6 +50,16 @@ spec:
             - port: "9443"
               protocol: "TCP"
 
+    # Rule 4: Allow Prometheus in observability namespace to scrape metrics (9100)
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9100"
+              protocol: "TCP"
+
 
   egress:
     # Rule 1: Allow Traefik to talk to kube-apiserver

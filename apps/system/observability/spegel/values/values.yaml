@@ -23,3 +23,15 @@ configuration:
 service:
   registry:
     usePreferSameNodeTrafficDistribution: true
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack
+
+grafanaDashboard:
+  enabled: true
+  mode: Sidecar
+  labels:
+    grafana_dashboard: "1"
+

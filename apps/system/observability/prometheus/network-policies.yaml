@@ -159,6 +159,8 @@ spec:
         - ports:
             - port: "9093"
               protocol: TCP
+            - port: "8080"
+              protocol: TCP
     # 4. Allow scraping of in-namespace targets
     - toEndpoints:
         - matchLabels:
@@ -173,13 +175,15 @@ spec:
               protocol: TCP
             - port: "9100"
               protocol: TCP
-    # 5. Allow scraping of kubelets
+    # 5. Allow scraping of kubelets and node-exporter on host network
     - toEntities:
         - host
         - remote-node
       toPorts:
         - ports:
             - port: "10250"
+              protocol: TCP
+            - port: "9100"
               protocol: TCP
     # 6. Allow scraping of coredns
     - toEndpoints:
@@ -217,6 +221,56 @@ spec:
         - ports:
             - port: "6060"
               protocol: TCP
+    # 10. Allow scraping of Traefik in traefik namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "9100"
+              protocol: TCP
+    # 11. Allow scraping of Cert-Manager in cert-manager namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cert-manager
+            app.kubernetes.io/name: cert-manager
+      toPorts:
+        - ports:
+            - port: "9402"
+              protocol: TCP
+    # 12. Allow scraping of External Secrets in external-secrets namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: external-secrets
+            app.kubernetes.io/name: external-secrets
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    # 13. Allow scraping of Cilium Agent and Operator
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: cilium
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: cilium-operator
+      toPorts:
+        - ports:
+            - port: "9962"
+              protocol: TCP
+            - port: "9963"
+              protocol: TCP
+    # 14. Allow scraping of Spegel in spegel namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: spegel
+            app.kubernetes.io/name: spegel
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2
@@ -234,6 +288,8 @@ spec:
       toPorts:
         - ports:
             - port: "9093"
+              protocol: TCP
+            - port: "8080"
               protocol: TCP
     - fromEndpoints:
         - matchLabels:
