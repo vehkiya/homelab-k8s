@@ -83,3 +83,30 @@ spec:
               protocol: "TCP"
             - port: "7422"
               protocol: "TCP"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-unifi-bouncer-policy
+  namespace: security
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-unifi-bouncer
+  egress:
+    # 1. Allow egress to UniFi gateway API
+    - toCIDR:
+        - "10.10.1.1/32"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+    # 2. Allow egress to CrowdSec LAPI
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"
