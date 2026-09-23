@@ -1,0 +1,88 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: homelab-critical-alerts
+  namespace: observability
+  labels:
+    app: kube-prometheus-stack
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: homelab.critical.rules
+      rules:
+        # 1. Security: ExternalSecrets Sync Failure
+        - alert: ExternalSecretSyncFailed
+          expr: externalsecret_status_condition{condition="Ready", status="False"} == 1
+          for: 15m
+          labels:
+            severity: critical
+            category: Security
+          annotations:
+            summary: "ExternalSecret sync failed"
+            description: "ExternalSecret {{ $labels.name }} in namespace {{ $labels.exported_namespace }} failed to sync with OpenBao for more than 15 minutes."
+
+        # 2. Security: TLS Certificate Expiring Soon
+        - alert: CertManagerCertExpiringSoon
+          expr: certmanager_certificate_expiration_timestamp_seconds - time() < (3 * 86400)
+          for: 1h
+          labels:
+            severity: critical
+            category: Security
+          annotations:
+            summary: "TLS Certificate expiring soon"
+            description: "Certificate {{ $labels.name }} in namespace {{ $labels.exported_namespace }} will expire in less than 3 days."
+
+        # 3. Security: TLS Certificate Not Ready
+        - alert: CertManagerCertNotReady
+          expr: certmanager_certificate_ready_status{condition="False"} == 1
+          for: 30m
+          labels:
+            severity: warning
+            category: Security
+          annotations:
+            summary: "TLS Certificate not ready"
+            description: "Certificate {{ $labels.name }} in namespace {{ $labels.exported_namespace }} is not in Ready state."
+
+        # 4. Storage: PersistentVolumeClaim Unbound
+        - alert: KubePersistentVolumeUnbound
+          expr: kube_persistentvolumeclaim_status_phase{phase!="Bound"} == 1
+          for: 15m
+          labels:
+            severity: critical
+            category: Storage
+          annotations:
+            summary: "PersistentVolumeClaim unbound"
+            description: "PVC {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} has been in phase {{ $labels.phase }} for more than 15 minutes."
+
+        # 5. Networking: Traefik Ingress High 5xx Error Rate
+        - alert: TraefikHigh5xxErrorRate
+          expr: (sum(rate(traefik_entrypoint_requests_total{code=~"5.."}[5m])) by (entrypoint) / sum(rate(traefik_entrypoint_requests_total[5m])) by (entrypoint)) * 100 > 10
+          for: 5m
+          labels:
+            severity: critical
+            category: Networking
+          annotations:
+            summary: "Traefik ingress high 5xx error rate"
+            description: "Traefik entrypoint {{ $labels.entrypoint }} is experiencing {{ $value | printf \"%.1f\" }}% HTTP 5xx errors over the last 5 minutes."
+
+        # 6. Infrastructure: Node Under Hardware Pressure
+        - alert: NodeHardwarePressure
+          expr: kube_node_status_condition{condition=~"MemoryPressure|DiskPressure|PIDPressure", status="true"} == 1
+          for: 5m
+          labels:
+            severity: critical
+            category: Infrastructure
+          annotations:
+            summary: "Node under hardware pressure"
+            description: "Node {{ $labels.node }} is experiencing {{ $labels.condition }}."
+
+        # 7. Workloads: Critical Core Pod CrashLooping
+        - alert: CriticalNamespacePodCrashLooping
+          expr: rate(kube_pod_container_status_restarts_total{namespace=~"kube-system|security|traefik|observability"}[15m]) * 60 * 5 > 0
+          for: 10m
+          labels:
+            severity: critical
+            category: Workloads
+          annotations:
+            summary: "Critical core pod crashlooping"
+            description: "Pod {{ $labels.pod }} in core namespace {{ $labels.namespace }} (container {{ $labels.container }}) is restarting frequently."
