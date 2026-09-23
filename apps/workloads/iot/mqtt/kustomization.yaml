@@ -15,6 +15,6 @@ resources:
   - network-policy.yaml
 images:
   - name: busybox
-    newTag: 1.38@sha256:cac8f90bbee42dc962a6b38bb1a235948d070385bb9d996bba15a6db8d364008
+    newTag: 1.38@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
   - name: eclipse-mosquitto
     newTag: 2.0.22@sha256:199ea8ef2e35ec2b1b37e59cfd1dbae538ed4dfa4a2251a121a52215a6248a21
