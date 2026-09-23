@@ -128,7 +128,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "traefik_service_requests_total{service=~\"$service\"}",
+          "expr": "traefik_service_requests_total{service=~\"(?:httproute-)?(?:.*-)?($service)(?:-gw-.*|@kubernetescrd)\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -212,7 +212,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(traefik_service_request_duration_seconds_sum{service=~\"$service\"}) / sum(traefik_service_requests_total{service=~\"$service\"}) * 1000",
+          "expr": "sum(traefik_service_request_duration_seconds_sum{service=~\"(?:httproute-)?(?:.*-)?($service)(?:-gw-.*|@kubernetescrd)\"}) / sum(traefik_service_requests_total{service=~\"(?:httproute-)?(?:.*-)?($service)(?:-gw-.*|@kubernetescrd)\"}) * 1000",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -290,7 +290,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(traefik_service_requests_total{service=~\"$service\"}[5m]))",
+          "expr": "sum(rate(traefik_service_requests_total{service=~\"(?:httproute-)?(?:.*-)?($service)(?:-gw-.*|@kubernetescrd)\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -628,11 +628,11 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(traefik_service_requests_total[5m])) by (service) ",
+          "expr": "sum by (service_name) (label_replace(sum(rate(traefik_service_requests_total[5m])) by (service), \"service_name\", \"$1\", \"service\", \"^(?:httproute-)?([a-z0-9_-]+?)(?:-gw-.*|@kubernetescrd)$\"))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
-          "legendFormat": "{{ service }}",
+          "legendFormat": "{{ service_name }}",
           "refId": "A",
           "datasource": {
             "type": "prometheus",
@@ -772,7 +772,7 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "",
+        "regex": "/(?:httproute-)?([a-z0-9_-]+?)(?:-gw-.*|@kubernetescrd)/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
