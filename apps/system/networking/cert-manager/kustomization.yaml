@@ -17,3 +17,13 @@ resources:
   - zerossl-eab-external-secret.yaml
   - zerossl-issuer-cf-solver.yaml
   - network-policy.yaml
+
+configMapGenerator:
+  - name: cert-manager-dashboard
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - cert-manager.json=dashboards/cert-manager.json
+generatorOptions:
+  disableNameSuffixHash: true

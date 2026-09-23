@@ -34,3 +34,14 @@ certController:
       cpu: 100m
       memory: 128Mi
 
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack
+
+grafanaDashboard:
+  enabled: true
+  sidecarLabel: "grafana_dashboard"
+  sidecarLabelValue: "1"
+
+

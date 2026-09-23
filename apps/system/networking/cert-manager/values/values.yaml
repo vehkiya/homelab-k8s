@@ -9,7 +9,9 @@ dns01RecursiveNameservers: "1.1.1.1:53,8.8.8.8:53"
 
 prometheus:
   servicemonitor:
-    enabled: false
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
 
 resources:
   requests:

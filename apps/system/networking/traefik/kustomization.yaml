@@ -23,6 +23,17 @@ resources:
   - network-policy.yaml
   - error-pages.yaml
   - http-route.yaml
+  - servicemonitor.yaml
+
+configMapGenerator:
+  - name: traefik-dashboard
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - traefik.json=dashboards/traefik.json
+generatorOptions:
+  disableNameSuffixHash: true
 
 images:
   - name: ghcr.io/tarampampam/error-pages
