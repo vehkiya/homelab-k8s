@@ -23,6 +23,13 @@ configMapGenerator:
   - name: crowdsec-agent-config
     files:
       - config.yaml.local=templates/agent-config.yaml
+  - name: crowdsec-dashboards
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - crowdsec-overview.json=dashboards/crowdsec-overview.json
+      - crowdsec-metrics.json=dashboards/crowdsec-metrics.json
 generatorOptions:
   disableNameSuffixHash: true
 
