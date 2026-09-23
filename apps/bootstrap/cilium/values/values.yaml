@@ -115,10 +115,7 @@ operator:
       labels:
         release: kube-prometheus-stack
   dashboards:
-    enabled: true
-    label: grafana_dashboard
-    labelValue: "1"
-    namespace: observability
+    enabled: false
 
 
 bgpControlPlane:
@@ -181,10 +178,7 @@ prometheus:
       release: kube-prometheus-stack
 
 dashboards:
-  enabled: true
-  label: grafana_dashboard
-  labelValue: "1"
-  namespace: observability
+  enabled: false
 
 wellKnownIdentities:
   enabled: true

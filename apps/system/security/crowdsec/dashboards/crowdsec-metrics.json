@@ -216,7 +216,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(process_start_time_seconds{instance=~\"$instance\"})*1000",
+          "expr": "min(process_start_time_seconds{namespace=\"security\", instance=~\"$instance\"}) * 1000",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -2504,7 +2504,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "rate(process_cpu_seconds_total{instance=~\"$instance\"}[$__interval])*100",
+              "expr": "rate(process_cpu_seconds_total{namespace=\"security\", instance=~\"$instance\"}[$__interval])*100",
               "instant": false,
               "legendFormat": "{{ instance }}",
               "range": true,
@@ -2609,7 +2609,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "process_resident_memory_bytes{instance=~\"$instance\"}",
+              "expr": "process_resident_memory_bytes{namespace=\"security\", instance=~\"$instance\"}",
               "instant": false,
               "legendFormat": "{{ instance }}",
               "range": true,

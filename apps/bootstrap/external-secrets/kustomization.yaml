@@ -19,3 +19,13 @@ resources:
 images:
   - name: dhi.io/external-secrets
     newTag: 2.11.0@sha256:85e9fcf15edea3cbb0cfd7a4e4d8ba489a0841c03261b3bd8d5b01638a2dc6e3
+
+configMapGenerator:
+  - name: external-secrets-dashboard
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - external-secrets.json=dashboards/external-secrets.json
+generatorOptions:
+  disableNameSuffixHash: true

@@ -53,7 +53,7 @@ data:
       ignoreDifferences: |
         jsonPointers:
         - /status
-  kustomize.buildOptions: "--enable-helm"
+  kustomize.buildOptions: "--enable-helm --helm-kube-version 1.37.0"
 
   # Enables application status badge feature
   statusbadge.enabled: "true"
