@@ -22,6 +22,6 @@ images:
   - name: ghcr.io/ridafkih/keeper-services
     newTag: 2.24.1@sha256:41b2e63f50cf996416703317478c61c1af1ae0d36892f062a60598b884bfdaa5
   - name: ghcr.io/ridafkih/keeper-mcp
-    newTag: 2.24.2@sha256:bdbd07e8466fb0dd97effff76fce9bb29a8d858190e04026226e1cf6c6b596e0
+    newTag: 2.24.4@sha256:cb1c785a5263f524e4dffe8d2630b6706cc85a37fc10949d554a03b271318bfa
   - name: docker.io/valkey/valkey
     newTag: 9.1.2@sha256:418652cfb58ef879d4978c33553735d7147016032d5aefaa14c828e611eb9dfd
