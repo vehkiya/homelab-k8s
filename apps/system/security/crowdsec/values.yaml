@@ -36,7 +36,7 @@ lapi:
   extraInitContainers:
     - name: inject-secrets
       image: ghcr.io/hononeko/k8s-config-tools
-      command: [ "gomplate", "-f", "/template/config.yaml", "-o", "/share/config.yaml.local" ]
+      command: ["gomplate", "-f", "/template/config.yaml", "-o", "/share/config.yaml.local"]
       resources:
         requests:
           cpu: 10m
@@ -76,6 +76,13 @@ lapi:
         - name: crowdsec-config-share
           mountPath: /share
 
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+
   resources:
     requests:
       cpu: 25m
@@ -104,9 +111,33 @@ agent:
     - namespace: traefik
       podName: traefik-*
       program: traefik
+    - namespace: security
+      podName: authelia-*
+      program: authelia
+    - namespace: media
+      podName: jellyfin-*
+      program: jellyfin
   env:
     - name: COLLECTIONS
-      value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios"
+      value: >-
+        crowdsecurity/traefik
+        crowdsecurity/http-cve
+        crowdsecurity/whitelist-good-actors
+        crowdsecurity/base-http-scenarios
+        LePresidente/authelia
+        crowdsecurity/http-dos
+        LePresidente/jellyfin
+        crowdsecurity/plex
+    - name: SCENARIOS
+      value: "crowdsecurity/ban-defcon-drop_range"
+    - name: POSTOVERFLOWS
+      value: "crowdsecurity/ipv6_to_range"
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
   resources:
     requests:
       cpu: 25m
@@ -125,11 +156,18 @@ agent:
 # --- AppSec (WAF) Configuration ---
 appsec:
   enabled: true
+  replicas: 2
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
   acquisitions:
     - source: appsec
       listen_addr: "0.0.0.0:7422"
       path: /
-      appsec_config: crowdsecurity/virtual-patching
+      appsec_config: crowdsecurity/appsec-default
       labels:
         type: appsec
   env:

@@ -39,6 +39,15 @@ spec:
               protocol: "TCP"
             - port: "7422"
               protocol: "TCP"
+    # 4. Allow Prometheus scraping from observability namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "6060"
+              protocol: "TCP"
 
   egress:
     # 1. Allow egress to external PostgreSQL database
@@ -71,10 +80,14 @@ metadata:
   name: crowdsec-security-namespace-egress
   namespace: security
 spec:
-  endpointSelector: {}
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
   egress:
     - toEndpoints:
-        - {}
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
       toPorts:
         - ports:
             - port: "8080"
@@ -83,6 +96,7 @@ spec:
               protocol: "TCP"
             - port: "7422"
               protocol: "TCP"
+
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy

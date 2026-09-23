@@ -208,6 +208,16 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+    # 9. Allow scraping of CrowdSec in security namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
+      toPorts:
+        - ports:
+            - port: "6060"
+              protocol: TCP
+
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
