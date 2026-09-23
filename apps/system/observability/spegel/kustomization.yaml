@@ -13,3 +13,13 @@ namespace: spegel
 resources:
   - namespace.yaml
   - network-policy.yaml
+
+configMapGenerator:
+  - name: spegel-dashboard
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - spegel.json=dashboards/spegel.json
+generatorOptions:
+  disableNameSuffixHash: true

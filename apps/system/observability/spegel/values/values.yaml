@@ -30,8 +30,4 @@ serviceMonitor:
     release: kube-prometheus-stack
 
 grafanaDashboard:
-  enabled: true
-  mode: Sidecar
-  labels:
-    grafana_dashboard: "1"
-
+  enabled: false

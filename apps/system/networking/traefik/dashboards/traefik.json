@@ -128,7 +128,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "traefik_service_requests_total{service=\"$service\"}",
+          "expr": "traefik_service_requests_total{service=~\"$service\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -212,7 +212,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(traefik_service_request_duration_seconds_sum{service=\"$service\"}) / sum(traefik_service_requests_total{service=\"$service\"}) * 1000",
+          "expr": "sum(traefik_service_request_duration_seconds_sum{service=~\"$service\"}) / sum(traefik_service_requests_total{service=~\"$service\"}) * 1000",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -290,7 +290,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(traefik_service_requests_total{service=\"$service\"}[5m]))",
+          "expr": "sum(rate(traefik_service_requests_total{service=~\"$service\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -748,29 +748,33 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {},
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(service)",
+        "definition": "label_values(traefik_service_requests_total, service)",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
+        "includeAll": true,
+        "label": "Service",
+        "multi": true,
         "name": "service",
         "options": [],
         "query": {
-          "query": "label_values(service)",
+          "query": "label_values(traefik_service_requests_total, service)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -778,29 +782,33 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {},
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "",
+        "definition": "label_values(traefik_entrypoint_requests_total, entrypoint)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
+        "label": "Entrypoint",
         "multi": true,
         "name": "entrypoint",
         "options": [],
         "query": {
-          "query": "label_values(entrypoint)",
+          "query": "label_values(traefik_entrypoint_requests_total, entrypoint)",
           "refId": "Prometheus-entrypoint-Variable-Query"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
