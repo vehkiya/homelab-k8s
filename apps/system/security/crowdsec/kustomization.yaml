@@ -5,6 +5,8 @@ namespace: security
 resources:
   - secrets.yaml
   - network-policy.yaml
+  - bouncer-unifi.yaml
+  - cronjob-prune.yaml
 
 helmCharts:
   - name: crowdsec
@@ -27,3 +29,7 @@ generatorOptions:
 images:
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
+  - name: ghcr.io/teifun2/cs-unifi-bouncer
+    newTag: v1.4.0@sha256:6d68590366ed57b38bc4c30b99849299b686023174e58847ccc94059ab9d5f2b
+  - name: alpine/k8s
+    newTag: 1.37.0@sha256:b421c2e9419edb98db39b6ab641669f4db7bb2acf354f22450c6b7e7176d1ff4
