@@ -76,6 +76,13 @@ lapi:
         - name: crowdsec-config-share
           mountPath: /share
 
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+
   resources:
     requests:
       cpu: 25m
@@ -104,9 +111,18 @@ agent:
     - namespace: traefik
       podName: traefik-*
       program: traefik
+    - namespace: security
+      podName: authelia-*
+      program: authelia
   env:
     - name: COLLECTIONS
-      value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios"
+      value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios LePresidente/authelia"
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
   resources:
     requests:
       cpu: 25m
@@ -125,6 +141,13 @@ agent:
 # --- AppSec (WAF) Configuration ---
 appsec:
   enabled: true
+  replicas: 2
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
   acquisitions:
     - source: appsec
       listen_addr: "0.0.0.0:7422"
