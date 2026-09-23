@@ -110,3 +110,16 @@ spec:
         - ports:
             - port: "8080"
               protocol: "TCP"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-prune-policy
+  namespace: security
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-prune
+  egress:
+    - toEntities:
+        - "kube-apiserver"
