@@ -28,6 +28,12 @@ variable "kubernetes_version" {
   default     = "v1.37.0"
 }
 
+variable "max_pods" {
+  description = "Maximum number of pods that can run on a node"
+  type        = number
+  default     = 250
+}
+
 variable "schematic_id" {
   description = "Talos Image Factory schematic ID (optional override; computed automatically from image-factory-parameters.yaml if empty)"
   type        = string

@@ -11,6 +11,7 @@ data "talos_machine_configuration" "config" {
   config_patches = [
     templatefile("${path.module}/templates/common.yaml.tftpl", {
       kubernetes_version = var.kubernetes_version
+      max_pods           = var.max_pods
     }),
     templatefile("${path.module}/templates/${each.value.role}.yaml.tftpl", {
       hostname           = each.key
