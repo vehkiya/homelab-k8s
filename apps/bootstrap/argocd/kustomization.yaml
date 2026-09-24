@@ -17,7 +17,7 @@ images:
     newTag: 3.5.3@sha256:a4235c93203349e8cbd465baa4085ac5af2d420158b398c6c40af177f2dd6dfc
   - name: ghcr.io/dexidp/dex
     newName: dhi.io/dex
-    newTag: 2.45.1@sha256:ea054466320916346e97345f6e67a347395ee065011b891f414661c64ab9c2e4
+    newTag: 2.45.1@sha256:4bf4ddeefa9766814df8bb2fd543ab12c25f188eb99c9640be1fdba5f8a3a90e
   - name: public.ecr.aws/docker/library/redis
     newName: dhi.io/redis
     newTag: 8.10.2-compat@sha256:56bb4ae0352d251a9b131643defd709c9c3c35b06d5ee13272ec9a86bdd388e4
