@@ -11,6 +11,10 @@ spec:
   externalTrafficPolicy: Local
   trafficDistribution: PreferSameNode # 1.35 feature
   ports:
+    - name: web
+      port: 80
+      targetPort: 8000
+      protocol: TCP
     - name: websecure
       port: 443
       targetPort: 9443

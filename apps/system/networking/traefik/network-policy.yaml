@@ -21,20 +21,22 @@ spec:
             - port: "8443"
               protocol: "TCP"
 
-    # Rule 2: Allow cluster, host, and remote-node to internal websecure (9443)
+    # Rule 2: Allow cluster, host, and remote-node to internal web (8000) and websecure (9443)
     - fromEntities:
         - "cluster"
         - "host"
         - "remote-node"
       toPorts:
         - ports:
-            # === Internal websecure entrypoint ===
+            # === Internal web & websecure entrypoints ===
+            - port: "8000"
+              protocol: "TCP"
             - port: "9443"
               protocol: "UDP"
             - port: "9443"
               protocol: "TCP"
 
-    # Rule 3: Allow trusted internal LAN, VLANs, and Tailscale VPN to internal websecure (9443)
+    # Rule 3: Allow trusted internal LAN, VLANs, and Tailscale VPN to internal web (8000) and websecure (9443)
     - fromCIDR:
         - "10.10.1.0/24"
         - "192.168.1.0/24"
@@ -44,7 +46,9 @@ spec:
         - "100.64.0.0/10"
       toPorts:
         - ports:
-            # === Internal websecure entrypoint ===
+            # === Internal web & websecure entrypoints ===
+            - port: "8000"
+              protocol: "TCP"
             - port: "9443"
               protocol: "UDP"
             - port: "9443"
