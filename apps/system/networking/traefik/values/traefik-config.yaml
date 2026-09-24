@@ -66,8 +66,14 @@ ports:
       aliasHeadersStrategy: delete
   web:
     port: 8000
+    exposedPort: 80
     http:
       aliasHeadersStrategy: delete
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   websecure:
     port: 9443
     http:
@@ -290,6 +296,11 @@ experimental:
     requestid:
       moduleName: "github.com/mdklapwijk/traefik-plugin-request-id"
       version: "v0.1.1"
+
+additionalArguments:
+  - "--serversTransport.maxIdleConnsPerHost=50"
+  - "--serversTransport.forwardingTimeouts.dialTimeout=10s"
+  - "--serversTransport.forwardingTimeouts.idleConnTimeout=90s"
 
 resources:
   requests:
