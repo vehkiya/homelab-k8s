@@ -3,6 +3,7 @@ machine:
     image: ghcr.io/siderolabs/kubelet:${kubernetes_version}
     extraConfig:
       serializeImagePulls: false
+      maxPods: ${max_pods}
     defaultRuntimeSeccompProfileEnabled: true
     nodeIP:
       validSubnets:
