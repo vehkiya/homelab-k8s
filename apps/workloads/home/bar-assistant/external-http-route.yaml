@@ -50,11 +50,6 @@ spec:
             group: traefik.io
             kind: Middleware
             name: bar-assistant-rate-limit
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: http-cache
       backendRefs:
         - name: bar-assistant
           port: 8080

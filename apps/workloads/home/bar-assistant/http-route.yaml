@@ -17,12 +17,6 @@ spec:
         - path:
             type: PathPrefix
             value: /uploads
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: http-cache
       backendRefs:
         - name: bar-assistant
           port: 8080
