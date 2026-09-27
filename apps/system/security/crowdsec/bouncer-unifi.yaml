@@ -40,6 +40,8 @@ spec:
           env:
             - name: CROWDSEC_URL
               value: "http://crowdsec-service:8080/"
+            - name: CROWDSEC_UPDATE_INTERVAL
+              value: "3m"
             - name: CROWDSEC_BOUNCER_API_KEY
               valueFrom:
                 secretKeyRef:
