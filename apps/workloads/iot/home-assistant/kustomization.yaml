@@ -25,6 +25,6 @@ generatorOptions:
 
 images:
   - name: ghcr.io/home-operations/home-assistant
-    newTag: 2026.9.4@sha256:c94ced77e2af72c605396b0c5636dd51528b8af6ad004a41990128845e2d682b
+    newTag: 2026.9.4@sha256:cd5ffc0a3bc873b35f20189ef22ee7ee9e8875fe666928dfee263cd464cc053d
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
