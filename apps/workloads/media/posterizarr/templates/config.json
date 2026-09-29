@@ -24,12 +24,12 @@
       "Fanart",
       "Plex"
     ],
-    "WidthHeightFilter": "false",
+    "WidthHeightFilter": "true",
     "PosterMinWidth": "2000",
     "PosterMinHeight": "3000",
     "BgTcMinWidth": "3840",
     "BgTcMinHeight": "2160",
-    "tmdb_vote_sorting": "vote_average",
+    "tmdb_vote_sorting": "vote_count",
     "JellyfinAPIKey": "",
     "EmbyAPIKey": "",
     "PreferredLanguageOrder": [
@@ -44,11 +44,37 @@
       "xx",
       "en"
     ],
-    "TmdbLanguageMappings": {}
+    "PreferredTCLanguageOrder": [
+      "xx",
+      "en"
+    ],
+    "LogoLanguageOrder": [
+      "en"
+    ],
+    "TmdbLanguageMappings": {},
+    "LibraryLanguageOverrides": {
+      "Anime": {
+        "PreferredLanguageOrder": [
+          "xx",
+          "en",
+          "ja"
+        ],
+        "ApplyToPoster": true,
+        "ApplyToSeason": true,
+        "ApplyToBackground": true,
+        "ApplyToLogo": true,
+        "EnableProviderOrderOverride": false,
+        "ProviderOrder": [
+          "TMDB",
+          "TVDB",
+          "Fanart",
+          "Plex"
+        ]
+      }
+    }
   },
   "PlexPart": {
-    "LibstoExclude": [
-    ],
+    "LibstoExclude": [],
     "PlexUrl": "http://plex-ui.media.svc.cluster.local:32400",
     "UsePlex": "true",
     "UploadExistingAssets": "false"
@@ -89,6 +115,7 @@
     "AgregarrApiKey": ""
   },
   "PrerequisitePart": {
+    "ParallelJobs": "5",
     "AssetPath": "/assets",
     "SkipAddText": "true",
     "FollowSymlink": "false",
@@ -98,20 +125,30 @@
     "ManualAssetPath": "/assets/manual",
     "PlexUpload": "false",
     "show_skipped": "true",
-    "magickinstalllocation": "C:\\PosterTemp\\ImageMagickPortable",
+    "magickinstalllocation": "",
     "maxLogs": "5",
     "logLevel": "2",
     "font": "Montserrat-Medium.ttf",
+    "collectionfont": "Montserrat-Medium.ttf",
     "RTLFont": "Colus-Regular.ttf",
     "backgroundfont": "Comfortaa-Medium.ttf",
     "titlecardfont": "Montserrat-Medium.ttf",
-    "overlayfile": "overlay-innerglow.png",
-    "seasonoverlayfile": "overlay-innerglow.png",
-    "backgroundoverlayfile": "backgroundoverlay-innerglow.png",
-    "titlecardoverlayfile": "backgroundoverlay-innerglow.png",
-    "poster4k": "overlay-innerglow.png",
-    "Poster1080p": "overlay-innerglow.png",
+    "overlayfile": "gradient_poster_overlay-rgba-0.7.png",
+    "showoverlayfile": "",
+    "seasonoverlayfile": "gradient_poster_overlay-rgba-0.7.png",
+    "collectionoverlayfile": "gradient_poster_overlay-rgba-0.7.png",
+    "backgroundoverlayfile": "gradient_background_overlay-rgba-0.7.png",
+    "showbackgroundoverlayfile": "",
+    "titlecardoverlayfile": "gradient_background_overlay-rgba-0.7.png",
+    "poster4k": "gradient_poster_overlay-rgba-0.7.png",
+    "Poster1080p": "gradient_poster_overlay-rgba-0.7.png",
+    "Background4k": "gradient_background_overlay-rgba-0.7.png",
+    "Background1080p": "gradient_background_overlay-rgba-0.7.png",
+    "TC4k": "gradient_background_overlay-rgba-0.7.png",
+    "TC1080p": "gradient_background_overlay-rgba-0.7.png",
     "UsePosterResolutionOverlays": "false",
+    "UseBackgroundResolutionOverlays": "false",
+    "UseTCResolutionOverlays": "false",
     "LibraryFolders": "true",
     "Posters": "true",
     "SeasonPosters": "true",
@@ -125,7 +162,16 @@
     "SkipJapTitle": "false",
     "AssetCleanup": "false",
     "AutoUpdateIM": "false",
-    "DisableHashValidation": "false"
+    "DisableHashValidation": "false",
+    "UseLogo": "true",
+    "UseBGLogo": "true",
+    "UseClearlogo": "true",
+    "UseClearart": "false",
+    "LogoTextFallback": "true",
+    "ConvertLogoColor": "false",
+    "LogoFlatColor": "white",
+    "PreserveMultiColorLogos": "true",
+    "FileTestOnTrigger": "true"
   },
   "OverlayPart": {
     "ImageProcessing": "true",
@@ -171,7 +217,7 @@
     "TextGravity": "south"
   },
   "ShowTitleOnSeasonPosterPart": {
-    "AddShowTitletoSeason": "false",
+    "AddShowTitletoSeason": "true",
     "fontAllCaps": "true",
     "AddTextStroke": "false",
     "strokecolor": "black",
@@ -182,6 +228,41 @@
     "MaxWidth": "1900",
     "MaxHeight": "500",
     "text_offset": "+300",
+    "lineSpacing": "0",
+    "TextGravity": "south"
+  },
+  "CollectionPosterOverlayPart": {
+    "fontAllCaps": "true",
+    "AddBorder": "true",
+    "AddText": "true",
+    "AddTextStroke": "false",
+    "strokecolor": "black",
+    "strokewidth": "6",
+    "AddOverlay": "true",
+    "fontcolor": "white",
+    "bordercolor": "black",
+    "minPointSize": "100",
+    "maxPointSize": "250",
+    "borderwidth": "30",
+    "MaxWidth": "1900",
+    "MaxHeight": "500",
+    "text_offset": "+300",
+    "lineSpacing": "0",
+    "TextGravity": "south"
+  },
+  "CollectionTitlePosterPart": {
+    "AddCollectionTitle": "true",
+    "CollectionTitle": "Collection",
+    "fontAllCaps": "true",
+    "AddTextStroke": "false",
+    "strokecolor": "black",
+    "strokewidth": "6",
+    "fontcolor": "white",
+    "minPointSize": "50",
+    "maxPointSize": "100",
+    "MaxWidth": "1000",
+    "MaxHeight": "140",
+    "text_offset": "+150",
     "lineSpacing": "0",
     "TextGravity": "south"
   },
@@ -210,12 +291,15 @@
     "AddOverlay": "true",
     "AddBorder": "true",
     "bordercolor": "black",
-    "borderwidth": "30"
+    "borderwidth": "30",
+    "SkipWords": [
+      "TBA"
+    ]
   },
   "TitleCardTitleTextPart": {
     "fontAllCaps": "true",
     "AddEPTitleText": "true",
-    "AddTextStroke": "false",
+    "AddTextStroke": "true",
     "strokecolor": "black",
     "strokewidth": "6",
     "fontcolor": "white",
@@ -232,7 +316,7 @@
     "EpisodeTCText": "Episode",
     "fontAllCaps": "true",
     "AddEPText": "true",
-    "AddTextStroke": "false",
+    "AddTextStroke": "true",
     "strokecolor": "black",
     "strokewidth": "4",
     "fontcolor": "white",
