@@ -130,6 +130,16 @@ spec:
               mountPath: /assets
             - name: config
               mountPath: /config
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    if [ ! -f /config/Overlayfiles/gradient_poster_overlay-rgba-0.7.png ]; then
+                      unzip -q -o /app/Overlayfiles/gradient_background_poster_overlays.zip -d /config/Overlayfiles
+                    fi
           resources:
             requests:
               cpu: "100m"

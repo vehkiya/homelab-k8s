@@ -1,56 +1,105 @@
+pill_style: &pill_style
+  horizontal_align: left
+  vertical_align: top
+  horizontal_offset: 70
+  vertical_offset: 70
+  font: config/fonts/Montserrat-Medium.ttf
+  font_size: 44
+  font_color: "#FFFFFF"
+  back_color: "#18181BF2"
+  back_line_color: "#FFFFFF40"
+  back_line_width: 2
+  back_radius: 16
+  back_padding: 18
+
 overlays:
-  HDR:
-    overlay:
-      name: text(HDR)
-      vertical_offset: 20
-      horizontal_offset: 18
-      horizontal_align: left
-      vertical_align: bottom
-      font_size: 63
-      font_color: "#FFFFFF"
-      back_color: "#00000099"
-      back_radius: 30
-      back_padding: 30
-      back_height: 80
-      back_width: 205
-    plex_search:
-      all:
-        hdr: true
-  4K:
-    overlay:
-      name: text(4K)
-      vertical_offset: 20
-      horizontal_offset: 18
-      horizontal_align: left
-      vertical_align: bottom
-      font_size: 63
-      font_color: "#FFFFFF"
-      back_color: "#00000099"
-      back_radius: 30
-      back_padding: 30
-      back_height: 80
-      back_width: 205
-    plex_search:
-      all:
-        resolution: 4K
+  # 1. 4K HDR (4K + HDR)
   4k-hdr:
     suppress_overlays:
       - 4K
-      - HDR
+      - 1080p-hdr
+      - 1080p
+      - 720p-hdr
+      - 720p
+      - standard
     overlay:
-      name: text(4K HDR)
-      vertical_offset: 20
-      horizontal_offset: 18
-      horizontal_align: left
-      vertical_align: bottom
-      font_size: 63
-      font_color: "#FFFFFF"
-      back_color: "#00000099"
-      back_radius: 30
-      back_padding: 30
-      back_height: 80
-      back_width: 205
+      name: "text(4K HDR  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
     plex_search:
       all:
         resolution: 4K
         hdr: true
+
+  # 2. 4K SDR
+  4K:
+    suppress_overlays:
+      - 1080p-hdr
+      - 1080p
+      - 720p-hdr
+      - 720p
+      - standard
+    overlay:
+      name: "text(4K  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
+    plex_search:
+      all:
+        resolution: 4K
+
+  # 3. 1080p HDR
+  1080p-hdr:
+    suppress_overlays:
+      - 1080p
+      - 720p-hdr
+      - 720p
+      - standard
+    overlay:
+      name: "text(1080p HDR  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
+    plex_search:
+      all:
+        resolution: 1080p
+        hdr: true
+
+  # 4. 1080p SDR
+  1080p:
+    suppress_overlays:
+      - 720p-hdr
+      - 720p
+      - standard
+    overlay:
+      name: "text(1080p  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
+    plex_search:
+      all:
+        resolution: 1080p
+
+  # 5. 720p HDR
+  720p-hdr:
+    suppress_overlays:
+      - 720p
+      - standard
+    overlay:
+      name: "text(720p HDR  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
+    plex_search:
+      all:
+        resolution: 720p
+        hdr: true
+
+  # 6. 720p SDR
+  720p:
+    suppress_overlays:
+      - standard
+    overlay:
+      name: "text(720p  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
+    plex_search:
+      all:
+        resolution: 720p
+
+  # 7. Standard (SD / 480p / 576p / unclassified)
+  standard:
+    overlay:
+      name: "text(SD  •  <<runtimeH>>h <<runtimeM>>m)"
+      <<: *pill_style
+    plex_all: true

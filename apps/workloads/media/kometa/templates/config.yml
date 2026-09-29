@@ -12,37 +12,9 @@ libraries:
     library_name: Movies
     collection_files:
       - file: config/movies.yaml
+    reapply_overlays: false
     remove_overlays: false
     overlay_files:
-      - default: status
-        template_variables:
-          horizontal_align: center
-          vertical_align: bottom
-          vertical_offset: 23
-          horizontal_offset: 0
-          back_height: 149
-          back_width: 965
-          font: config/fonts/Montserrat-Medium.ttf
-          font_size: 80
-          font_color_airing: '#27C24C'
-          font_color_returning: '#FFA500'
-          font_color_canceled: '#ED1F1F'
-          font_color_ended: '#FF0000'
-          back_color: '#00000000'
-      - default: runtimes
-        template_variables:
-          builder_level: episode
-          horizontal_align: right
-          font_color: "#FFFFFF"
-          back_color: "#00000099"
-          back_radius: 30
-          back_padding: 30
-          back_height: 80
-          vertical_offset: 20
-          horizontal_offset: 18
-          text: ''
-          back_width: 205
-      - remove_overlays: false
       - file: config/overlay.yaml
   TV Shows:
     library_name: TV Shows
