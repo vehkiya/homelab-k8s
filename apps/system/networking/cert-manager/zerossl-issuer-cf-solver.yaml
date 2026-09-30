@@ -5,7 +5,6 @@ metadata:
 spec:
   acme:
     server: https://acme.zerossl.com/v2/DV90
-    email: sergiu@kerrlab.app
 
     privateKeySecretRef:
       name: zerossl-prod
