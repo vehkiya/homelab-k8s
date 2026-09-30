@@ -1,3 +1,4 @@
+---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -7,16 +8,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: penpot-frontend
   ingress:
-    # 1. Ingress from Traefik
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "web-ui"
-              protocol: TCP
-    # 2. Ingress from internal penpot microservices
+    # Ingress from internal penpot microservices
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: penpot-exporter
