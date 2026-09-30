@@ -1,0 +1,336 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: penpot-frontend-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: penpot-frontend
+  ingress:
+    # 1. Ingress from Traefik
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    # 2. Ingress from internal penpot microservices
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-exporter
+        - matchLabels:
+            app.kubernetes.io/name: penpot-admin-console
+        - matchLabels:
+            app.kubernetes.io/name: penpot-mcp
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+  egress:
+    # 1. Egress to Backend (:6060), Exporter (:6061), Admin-Console (:3000), MCP (:4401/:4402)
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-backend
+      toPorts:
+        - ports:
+            - port: "6060"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-exporter
+      toPorts:
+        - ports:
+            - port: "6061"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-admin-console
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-mcp
+      toPorts:
+        - ports:
+            - port: "4401"
+              protocol: TCP
+            - port: "4402"
+              protocol: TCP
+    # 2. Outbound web for fonts & templates
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: penpot-backend-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: penpot-backend
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+        - matchLabels:
+            app.kubernetes.io/name: penpot-exporter
+        - matchLabels:
+            app.kubernetes.io/name: penpot-admin-console
+      toPorts:
+        - ports:
+            - port: "6060"
+              protocol: TCP
+  egress:
+    # 1. Connection to PostgreSQL on Fortress
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    # 2. Connection to Valkey
+    - toEndpoints:
+        - matchLabels:
+            app: penpot-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    # 3. Connection to S3, Authelia, and internal gateway on LAN
+    - toCIDR:
+        - "10.10.1.0/24"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "s3.kerrlab.app"
+        - matchName: "auth.kerrlab.app"
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    # 4. Outbound internet
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+    # 5. Connection to Admin-Console (Nitrate) and Exporter
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-admin-console
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-exporter
+      toPorts:
+        - ports:
+            - port: "6061"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: penpot-exporter-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: penpot-exporter
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+        - matchLabels:
+            app.kubernetes.io/name: penpot-backend
+      toPorts:
+        - ports:
+            - port: "6061"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: penpot-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-backend
+      toPorts:
+        - ports:
+            - port: "6060"
+              protocol: TCP
+    - toCIDR:
+        - "10.10.1.0/24"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "s3.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+            - port: "8333"
+              protocol: TCP
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: penpot-admin-console-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: penpot-admin-console
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+        - matchLabels:
+            app.kubernetes.io/name: penpot-backend
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+  egress:
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "fortress.kerrlab.app"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-backend
+      toPorts:
+        - ports:
+            - port: "6060"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: penpot-mcp-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: penpot-mcp
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+      toPorts:
+        - ports:
+            - port: "4401"
+              protocol: TCP
+            - port: "4402"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-frontend
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: penpot-valkey-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: penpot-valkey
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: penpot-backend
+        - matchLabels:
+            app.kubernetes.io/name: penpot-exporter
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP

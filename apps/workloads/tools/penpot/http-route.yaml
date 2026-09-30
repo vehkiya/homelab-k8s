@@ -1,0 +1,23 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: penpot-route
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "penpot.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            remove:
+              - "X-Forwarded-Host"
+      backendRefs:
+        - name: penpot
+          port: 8080
