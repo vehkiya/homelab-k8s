@@ -12,6 +12,7 @@ helmCharts:
     valuesFile: values/values.yml
 
 resources:
+  - frontend-mcp-config.yaml
   - external-secrets.yaml
   - valkey.yaml
   - http-route.yaml
@@ -25,6 +26,18 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/ports/0/name
         value: web-ui
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: mcp-messages-config
+          configMap:
+            name: penpot-frontend-mcp-config
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: mcp-messages-config
+          mountPath: /etc/nginx/overrides/server.d/mcp-messages.conf
+          subPath: mcp-messages.conf
   - target:
       kind: Service
       name: penpot

@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: penpot-frontend-mcp-config
+data:
+  mcp-messages.conf: |
+    location /messages {
+        set $mcp_messages_backend http://penpot-mcp.tools.svc.cluster.local:4401/messages$is_args$args;
+        proxy_pass $mcp_messages_backend;
+        proxy_http_version 1.1;
+    }
+    location /mcp/messages {
+        set $mcp_messages_alt http://penpot-mcp.tools.svc.cluster.local:4401/messages$is_args$args;
+        proxy_pass $mcp_messages_alt;
+        proxy_http_version 1.1;
+    }
