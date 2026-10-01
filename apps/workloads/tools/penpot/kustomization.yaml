@@ -6,7 +6,7 @@ namespace: tools
 helmCharts:
   - name: penpot
     repo: https://helm.penpot.app
-    version: 1.10.0
+    version: 1.11.1
     releaseName: penpot
     namespace: tools
     valuesFile: values/values.yml
