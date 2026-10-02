@@ -54,9 +54,15 @@ spec:
               value: "redis"
             - name: STATE_URL
               value: "redis://media-webhook-notifier-dragonfly.automation.svc.cluster.local:6379"
+            - name: TEMPLATES_FILE
+              value: "/config/templates.yaml"
           envFrom:
             - secretRef:
                 name: media-webhook-notifier-secret
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
           livenessProbe:
             httpGet:
               path: /livez
@@ -76,3 +82,7 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
+      volumes:
+        - name: config
+          configMap:
+            name: media-webhook-notifier-config

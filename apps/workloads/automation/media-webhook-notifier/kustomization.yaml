@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: automation
 
 resources:
+  - configmap.yaml
   - deployment.yaml
   - service.yaml
   - secret.yaml
@@ -12,6 +13,6 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/media-webhook-notifier
-    newTag: 2.9.5@sha256:243f32e21e3feace86a76243b1900d43bab61d2ed2e62f5315883a0296e2d48e
+    newTag: 2.10.0@sha256:164fa7b16e7d7ed4a7c4be5ea2af41599f84139a7b5f621ca279f163064ca310
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v2.0.0@sha256:7426fdb31ddcf7bd9499b4205f36ebaa83b26149ba1609a0d5f8f474b3631233
