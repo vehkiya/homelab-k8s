@@ -5,6 +5,10 @@ on:
   push:
     branches: [main, master]
 
+env:
+  # renovate: datasource=npm depName=renovate
+  RENOVATE_VERSION: 44.131.0
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -30,10 +34,6 @@ jobs:
           tar xf kube-linter-linux.tar.gz
           sudo mv kube-linter /usr/local/bin/
           rm kube-linter-linux.tar.gz
-
-      - name: Get Renovate version
-        id: renovate-version
-        run: echo "VERSION=$(npm view renovate version)" >> $GITHUB_OUTPUT
 
       - name: Lint YAML
         uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3
@@ -120,7 +120,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-renovate-${{ steps.renovate-version.outputs.VERSION }}
+          key: ${{ runner.os }}-node-renovate-${{ env.RENOVATE_VERSION }}
 
       - name: Validate Renovate Config
-        run: npx --prefer-offline --yes --package renovate@${{ steps.renovate-version.outputs.VERSION }} renovate-config-validator
+        run: npx --prefer-offline --yes --package renovate@${{ env.RENOVATE_VERSION }} renovate-config-validator
