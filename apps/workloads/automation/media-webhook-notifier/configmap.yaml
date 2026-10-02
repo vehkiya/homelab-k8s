@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: media-webhook-notifier-config
+  labels:
+    app.kubernetes.io/name: media-webhook-notifier
+data:
+  templates.yaml: |
+    events:
+      download:
+        complete:
+          silent: true
+      servarr:
+        grab:
+          silent: true
+        import:
+          silent: true
+        health:
+          silent: true
