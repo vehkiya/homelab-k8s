@@ -71,9 +71,9 @@ servers:
           fallthrough in-addr.arpa ip6.arpa
           ttl 30
       - name: forward
-        parameters: . /etc/resolv.conf
+        parameters: . 10.10.1.1 1.1.1.1 1.0.0.1
         configBlock: |-
-          policy random
+          policy sequential
           max_concurrent 1000
       - name: cache
         parameters: 600
