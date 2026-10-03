@@ -16,11 +16,8 @@ resources:
   - salt-rim-service.yaml
   - network-policy.yaml
   - secret.yaml
-  - middlewares.yaml
   - redis.yaml
   - redis-network-policy.yaml
-  - external-http-route.yaml
-  - rate-limit.yaml
 
 images:
   - name: busybox
