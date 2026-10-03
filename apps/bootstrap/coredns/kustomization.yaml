@@ -33,3 +33,11 @@ patches:
         path: /spec/replicas
       - op: remove
         path: /spec/strategy
+      # Start the replacement pod before stopping the old one, so a node never lacks a local CoreDNS
+      - op: add
+        path: /spec/updateStrategy
+        value:
+          type: RollingUpdate
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0

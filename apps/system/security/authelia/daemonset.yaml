@@ -9,6 +9,12 @@ spec:
   selector:
     matchLabels:
       app: authelia
+  # Start the replacement pod before stopping the old one, so a node never lacks a local Authelia
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:

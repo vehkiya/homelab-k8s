@@ -9,6 +9,15 @@ customAnnotations:
 
 replicaCount: 3
 
+# Keep CoreDNS scheduled ahead of regular workloads under node pressure.
+priorityClassName: system-cluster-critical
+
+# Dedicated ServiceAccount so the coredns ClusterRole isn't bound to kube-system:default.
+# Not named "coredns": Talos's bootstrap manifests already own a ServiceAccount with that name.
+serviceAccount:
+  create: true
+  name: coredns-sa
+
 service:
   name: coredns
   clusterIP: "10.96.0.10" # Default coredns service IP in the 10.96.0.0/12 range
