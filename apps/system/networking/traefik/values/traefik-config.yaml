@@ -197,11 +197,18 @@ extraObjects:
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
-      name: traefik-dashboard-auth
+      name: authelia-forward-auth
       namespace: traefik
     spec:
-      basicAuth:
-        secret: traefik-dashboard-auth-secret
+      forwardAuth:
+        address: "http://authelia.security.svc.cluster.local:9091/api/authz/forward-auth"
+        trustForwardHeader: true
+        maxResponseBodySize: 2097152
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups"
+          - "Remote-Email"
+          - "Remote-Name"
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
