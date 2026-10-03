@@ -13,7 +13,7 @@ data:
   CUSTOM_OAUTH_AUTHORIZATION_URL: "https://auth.kerrlab.app/api/oidc/authorization"
   CUSTOM_OAUTH_TOKEN_URL: "https://auth.kerrlab.app/api/oidc/token"
   CUSTOM_OAUTH_USER_INFO_URL: "https://auth.kerrlab.app/api/oidc/userinfo"
-  CUSTOM_OAUTH_LOGOUT_URL: "https://auth.kerrlab.app/logout"
+  CUSTOM_OAUTH_LOGOUT_URL: "https://auth.kerrlab.app/logout?rd=https%3A%2F%2Fkaneo.kerrlab.app%2Fauth%2Fsign-in"
   CUSTOM_OAUTH_SCOPES: "openid,profile,email,groups"
   CUSTOM_AUTH_PKCE: "true"
   CUSTOM_OAUTH_AUTO_LOGIN: "true"
