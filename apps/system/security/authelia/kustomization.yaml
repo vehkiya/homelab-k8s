@@ -13,8 +13,6 @@ resources:
   - dragonfly.yaml
   - dragonfly-network-policy.yaml
 images:
-  - name: ghcr.io/hononeko/k8s-config-tools
-    newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: ghcr.io/authelia/authelia
     newTag: 4.39.28@sha256:bd97cff4fcbf715b5ff1f9ae286afbe6033afce385302520b0368122d43a6f54
   - name: ghcr.io/dragonflydb/dragonfly
@@ -22,4 +20,4 @@ images:
 configMapGenerator:
   - name: authelia-config
     files:
-      - configuration-template.yml=templates/configuration.yaml
+      - configuration.yml=templates/configuration.yaml

@@ -12,8 +12,8 @@ server:
 session:
   name: authelia_session
   # This should match the root domain you are protecting
-  # The secret is loaded from an environment variable
-  secret: "{{ .Env.SESSION_SECRET }}"
+  # Secrets are read from mounted Secret files by Authelia's template filter (X_AUTHELIA_CONFIG_FILTERS=template)
+  secret: {{ secret "/secrets/authelia/SESSION_SECRET" | quote }}
   same_site: "lax"
   inactivity: "1h"
   expiration: "8h"
@@ -26,7 +26,7 @@ session:
   redis:
     host: "authelia-dragonfly.security.svc.cluster.local"
     port: 6379
-    password: "{{ .Env.REDIS_PASSWORD }}"
+    password: {{ secret "/secrets/authelia/REDIS_PASSWORD" | quote }}
     timeout: "5s"
     max_retries: 0
     maximum_active_connections: 32
@@ -46,7 +46,7 @@ identity_validation:
     # jwt_algorithm: 'HS256'
 
     ## The secret key used to sign and verify the JWT.
-    jwt_secret: "{{ .Env.JWT_SECRET }}"
+    jwt_secret: {{ secret "/secrets/authelia/JWT_SECRET" | quote }}
 
 # Regulation settings
 regulation:
@@ -56,22 +56,22 @@ regulation:
 
 # Storage configuration using PostgreSQL
 storage:
-  encryption_key: "{{ .Env.STORAGE_ENCRYPTION_KEY }}"
+  encryption_key: {{ secret "/secrets/authelia/STORAGE_ENCRYPTION_KEY" | quote }}
   postgres:
     timeout: "10s"
     address: "tcp://fortress.kerrlab.app:15432"
     database: authelia-db
     username: authelia_user
-    # The password is loaded from an environment variable
-    password: "{{ .Env.STORAGE_PASSWORD }}"
+    # Read from the mounted authelia-secrets Secret
+    password: {{ secret "/secrets/authelia/STORAGE_PASSWORD" | quote }}
 
 # Notifier configuration (SMTP example)
 notifier:
   smtp:
     address: "smtp://smtp.protonmail.ch:587"
     sender: "Authelia <accounts@kerrlab.app>"
-    username: "{{ .Env.SMTP_USERNAME }}"
-    password: "{{ .Env.SMTP_PASSWORD }}"
+    username: {{ secret "/secrets/authelia/SMTP_USERNAME" | quote }}
+    password: {{ secret "/secrets/authelia/SMTP_PASSWORD" | quote }}
     subject: "[Authelia] {title}"
     tls:
       server_name: "smtp.protonmail.ch"
@@ -90,7 +90,7 @@ authentication_backend:
     additional_users_dn: "ou=people"
     additional_groups_dn: "ou=groups"
     user: "uid=authelia,ou=people,dc=ldap,dc=kerrlab,dc=app"
-    password: "{{ .Env.LDAP_PASSWORD }}"
+    password: {{ secret "/secrets/authelia/LDAP_PASSWORD" | quote }}
     timeout: "10s"
 
 # Access control rules
@@ -116,6 +116,7 @@ access_control:
         - "radarr.kerrlab.app"
         - "bazarr.kerrlab.app"
         - "posterizarr.kerrlab.app"
+        - "download.kerrlab.app" # qBittorrent web UI
       policy: two_factor
       subject:
         - ["group:administrators"]
@@ -170,7 +171,7 @@ access_control:
 totp:
   disable: false
   issuer: "kerrlab.app"
-  algorithm: "sha256"
+  algorithm: "sha1"
   digits: 6
   period: 30
   skew: 1
@@ -215,10 +216,10 @@ webauthn:
 
 identity_providers:
   oidc:
-    hmac_secret: "{{ .Env.OIDC_HMAC_SECRET }}"
+    hmac_secret: {{ secret "/secrets/authelia/OIDC_HMAC_SECRET" | quote }}
     jwks:
       - key_id: 'oidc_pk'
-        key: {{ file.Read "/config/secrets/oidc/jwks/oidc_private.pem" | strings.Quote }}
+        key: {{ secret "/secrets/jwks/oidc_private.pem" | mindent 10 "|" | msquote }}
     claims_policies:
       with_email:
         id_token:
@@ -351,7 +352,7 @@ identity_providers:
       # ---- === Bar Assistant === ----
       - client_id: "bar-assistant"
         client_name: "Bar Assistant"
-        client_secret: "{{ .Env.BAR_ASSISTANT_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/BAR_ASSISTANT_SECRET" | quote }}
         public: false
         authorization_policy: "bar_assistant_policy"
         consent_mode: "pre-configured"
@@ -374,7 +375,7 @@ identity_providers:
       # ---- === Mealie === ----
       - client_id: "mealie"
         client_name: "Mealie"
-        client_secret: "{{ .Env.MEALIE_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/MEALIE_SECRET" | quote }}
         public: false
         authorization_policy: "mealie_policy"
         require_pkce: true
@@ -401,7 +402,7 @@ identity_providers:
       # ---- === Autobrr === ----
       - client_id: "autobrr"
         client_name: "Autobrr"
-        client_secret: "{{ .Env.AUTOBRR_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/AUTOBRR_SECRET" | quote }}
         public: false
         authorization_policy: "autobrr_policy"
         require_pkce: false
@@ -426,7 +427,7 @@ identity_providers:
       # ---- === Headlamp === ----
       - client_id: "headlamp"
         client_name: "Headlamp"
-        client_secret: "{{ .Env.HEADLAMP_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/HEADLAMP_SECRET" | quote }}
         public: false
         require_pkce: true
         pkce_challenge_method: "S256"
@@ -451,7 +452,7 @@ identity_providers:
       # ---- === RomM === ----
       - client_id: "romm"
         client_name: "RomM"
-        client_secret: "{{ .Env.ROMM_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/ROMM_SECRET" | quote }}
         public: false
         authorization_policy: "romm_policy"
         grant_types:
@@ -474,7 +475,7 @@ identity_providers:
       # ---- === NodeCast === ----
       - client_id: "nodecast"
         client_name: "NodeCast"
-        client_secret: "{{ .Env.NODECAST_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/NODECAST_SECRET" | quote }}
         public: false
         authorization_policy: "nodecast_policy"
         grant_types:
@@ -497,7 +498,7 @@ identity_providers:
       # ---- === Fluxer === ----
       - client_id: "fluxer"
         client_name: "Fluxer"
-        client_secret: "{{ .Env.FLUXER_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/FLUXER_SECRET" | quote }}
         public: false
         authorization_policy: "fluxer_policy"
         grant_types:
@@ -520,7 +521,7 @@ identity_providers:
       # ---- === OpenBao === ----
       - client_id: "openbao"
         client_name: "OpenBao"
-        client_secret: "{{ .Env.OPENBAO_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/OPENBAO_SECRET" | quote }}
         public: false
         authorization_policy: "admin_only_policy"
         require_pkce: true
@@ -546,7 +547,7 @@ identity_providers:
       # ---- === Kaneo === ----
       - client_id: "kaneo"
         client_name: "Kaneo"
-        client_secret: "{{ .Env.KANEO_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/KANEO_SECRET" | quote }}
         public: false
         authorization_policy: "kaneo_policy"
         require_pkce: true
@@ -572,7 +573,7 @@ identity_providers:
       # ---- === Penpot === ----
       - client_id: "penpot"
         client_name: "Penpot"
-        client_secret: "{{ .Env.PENPOT_SECRET }}"
+        client_secret: {{ secret "/secrets/oidc-clients/PENPOT_SECRET" | quote }}
         public: false
         authorization_policy: "penpot_policy"
         require_pkce: false

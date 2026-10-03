@@ -6,13 +6,16 @@ metadata:
   labels:
     app: authelia
 spec:
-  type: LoadBalancer
+  # In-cluster only (Traefik forward-auth and the auth.kerrlab.app route); nothing outside the
+  # cluster used the former LoadBalancer IP, and Cilium policy blocked it anyway.
+  type: ClusterIP
   ports:
     - port: 9091
       targetPort: web-ui
       protocol: TCP
       name: web-ui
-  externalTrafficPolicy: Local
-  trafficDistribution: PreferSameNode # 1.35 feature
+  # Only honored once Cilium service topology is enabled (loadBalancer.serviceTopology);
+  # today Cilium ignores the EndpointSlice node hints and spreads traffic across all nodes.
+  trafficDistribution: PreferSameNode
   selector:
     app: authelia
