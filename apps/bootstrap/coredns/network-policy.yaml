@@ -3,19 +3,29 @@ kind: CiliumNetworkPolicy
 metadata:
   name: "cnp-coredns"
 spec:
-  description: "Allows CoreDNS to receive queries, contact kube-apiserver for service discovery, and external resolvers for public DNS."
+  description: "Allows CoreDNS to receive queries, be scraped by Prometheus, contact kube-apiserver for service discovery, and external resolvers for public DNS."
   endpointSelector:
     matchLabels:
       k8s-app: coredns
   ingress:
-    # Rule 1: Allow DNS Queries from all endpoints
-    - fromEndpoints:
-        - {}
+    # Rule 1: Allow DNS Queries from every endpoint in the cluster (all namespaces, plus host/remote-node).
+    # Note: `fromEndpoints: [{}]` in a namespaced policy only matches pods in kube-system.
+    - fromEntities:
+        - "cluster"
       toPorts:
         - ports:
             - port: "53"
               protocol: "UDP"
             - port: "53"
+              protocol: "TCP"
+    # Rule 2: Allow Prometheus in observability namespace to scrape metrics (9153)
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9153"
               protocol: "TCP"
   egress:
     # Rule 1: Allow communication with kube-apiserver
