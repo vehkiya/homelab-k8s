@@ -8,3 +8,8 @@ spec:
     average: 50
     burst: 100
     period: "1s"
+    # Key on the real client IP. Traefik keeps X-Real-Ip only from trusted proxies (Cloudflare,
+    # cloudflared) and sets it to the TCP peer for everyone else. Cloudflare must overwrite it
+    # (Transform Rule: X-Real-IP = ip.src), otherwise proxied clients could choose their own bucket.
+    sourceCriterion:
+      requestHeaderName: X-Real-Ip
