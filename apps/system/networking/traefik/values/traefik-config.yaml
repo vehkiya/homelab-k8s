@@ -50,12 +50,16 @@ accessLog:
   enabled: true
   format: json
   fields:
+    # Drop all request/response headers by default; apps send credentials in
+    # headers (X-Plex-Token, X-Emby-Token, ...), so keep only an allowlist.
     headers:
-      defaultMode: keep
+      defaultMode: drop
       names:
-        Authorization: redact
-        Cookie: redact
-        Set-Cookie: redact
+        User-Agent: keep # Required by the CrowdSec Traefik log parser
+        Referer: keep
+        X-Forwarded-For: keep
+        X-Request-Id: keep
+        Cf-Connecting-Ip: keep
 
 ports:
   traefik:
