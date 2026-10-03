@@ -97,8 +97,17 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    # 1. Privileged & Admin Only (Infrastructure, Indexers, Downloaders via Forward Auth)
-    - domain:
+    # 1. Admin Only (Infrastructure dashboards via Forward Auth)
+    - domain: "proxy.kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:administrators"]
+    # Deny everyone else; without this, non-admins fall through to the *.kerrlab.app catch-all
+    - domain: "proxy.kerrlab.app"
+      policy: deny
+
+    # 2. Privileged & Admin Only (Indexers, Downloaders via Forward Auth)
+    - domain: &privileged_domains
         - "prowlarr.kerrlab.app"
         - "qbittorrent.kerrlab.app"
         - "sonarr.kerrlab.app"
@@ -111,8 +120,12 @@ access_control:
       subject:
         - ["group:administrators"]
         - ["group:privileged-users"]
+    # Deny everyone else on the same domains (shared via the anchor above); without this,
+    # other users fall through to the *.kerrlab.app catch-all
+    - domain: *privileged_domains
+      policy: deny
 
-    # 2. Selective Per-App Entitlements (Allowing global users + specific guest grants)
+    # 3. Selective Per-App Entitlements (Allowing global users + specific guest grants)
     - domain: "recipes.kerrlab.app"
       policy: two_factor
       subject:
@@ -146,7 +159,7 @@ access_control:
         - ["group:users"]
         - ["group:app-kaneo-users"]
 
-    # 3. Catch-all for standard services (*.kerrlab.app)
+    # 4. Catch-all for standard services (*.kerrlab.app)
     - domain: "*.kerrlab.app"
       policy: two_factor
       subject:
