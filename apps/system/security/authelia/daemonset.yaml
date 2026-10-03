@@ -27,41 +27,6 @@ spec:
         runAsGroup: 10000
         fsGroup: 10000
       enableServiceLinks: false
-      initContainers:
-        - name: prepare-config
-          image: ghcr.io/hononeko/k8s-config-tools
-          command:
-            - gomplate
-            - -f
-            - /config_templates/configuration-template.yml
-            - -o
-            - /config/configuration.yml
-          envFrom: # This injects all keys from the secret as environment variables
-            - secretRef:
-                name: authelia-secrets
-            - secretRef:
-                name: authelia-oidc-secrets
-          volumeMounts:
-            - name: config-template-volume
-              mountPath: /config_templates
-            - name: config-volume
-              mountPath: /config
-            - name: authelia-keys
-              mountPath: /config/secrets
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
-          resources:
-            requests:
-              cpu: 10m
-              memory: 32Mi
-            limits:
-              cpu: 50m
-              memory: 64Mi
       containers:
         - name: authelia
           image: ghcr.io/authelia/authelia
@@ -77,12 +42,28 @@ spec:
               containerPort: 9091
               protocol: TCP
           env:
+            # Authelia renders /config/configuration.yml itself and reads secrets from the
+            # mounted files via {{ secret "..." }}; nothing is written to disk.
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: "template"
-          # Load all keys from the 'authelia-secrets' Secret as environment variables
-          envFrom:
-            - secretRef:
-                name: authelia-secrets
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: web-ui
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: web-ui
+            periodSeconds: 5
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: web-ui
+            periodSeconds: 10
+            failureThreshold: 3
           resources:
             requests:
               cpu: 20m
@@ -91,20 +72,31 @@ spec:
               cpu: 500m
               memory: 256Mi
           volumeMounts:
-            - name: config-volume
+            - name: config
               mountPath: /config
-            - name: authelia-keys
-              mountPath: /config/secrets
-
+              readOnly: true
+            - name: secrets
+              mountPath: /secrets/authelia
+              readOnly: true
+            - name: oidc-client-secrets
+              mountPath: /secrets/oidc-clients
+              readOnly: true
+            - name: jwks
+              mountPath: /secrets/jwks
+              readOnly: true
       volumes:
-        - name: authelia-keys
+        - name: config
+          configMap:
+            name: authelia-config
+        - name: secrets
+          secret:
+            secretName: authelia-secrets
+        - name: oidc-client-secrets
+          secret:
+            secretName: authelia-oidc-secrets
+        - name: jwks
           secret:
             secretName: authelia-secrets-files
             items:
               - key: oidc_private.pem
-                path: oidc/jwks/oidc_private.pem
-        - name: config-template-volume
-          configMap:
-            name: authelia-config
-        - name: config-volume
-          emptyDir: {}
+                path: oidc_private.pem
