@@ -3,10 +3,10 @@ kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-all-policies
 spec:
-  description: "Combined policy for External Secrets components"
+  description: "Shared rules for the External Secrets controller, webhook and cert-controller"
   endpointSelector:
     matchExpressions:
-      # Match ANY of the External Secrets pods
+      # The chart labels the three components by name only (no app.kubernetes.io/component)
       - { key: app.kubernetes.io/name, operator: In, values: [ external-secrets, external-secrets-cert-controller, external-secrets-webhook ] }
   ingress:
     # Allow Prometheus in observability namespace to scrape metrics (8080)
@@ -18,62 +18,14 @@ spec:
         - ports:
             - port: "8080"
               protocol: "TCP"
-  egress: # 2. Kubernetes API Access (Critical Fix: Port 6443 + Entities)
+  egress:
+    # Kubernetes API. The kubernetes Service resolves to the control-plane nodes on 6443, which
+    # carry the kube-apiserver identity (also on the host identity of a control-plane node).
     - toEntities:
         - "kube-apiserver"
-        - "host"          # Needed for Talos host network API
-        - "remote-node"   # Needed if API is on another node
-    - toCIDR:
-        - 10.96.0.1/32     # Service IP
-        - 10.10.1.250/32   # VIP
-        - 10.10.1.101/32   # Node 1
-        - 10.10.1.102/32   # Node 2
-        - 10.10.1.103/32   # Node 3
-        - 10.10.1.201/32 # Worker 1
       toPorts:
         - ports:
-            - port: "443"  # Service Port
-              protocol: "TCP"
-            - port: "6443" # Actual Backend Port
-              protocol: "TCP"
-
-    # 3. External Webhook Access (for Main Controller)
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: external-secrets-webhook
-      toPorts:
-        - ports:
-            - port: "9443"
-              protocol: "TCP"
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: external-secrets-webhook-ingress
-spec:
-  description: "Allow K8s API Server to reach the Webhook"
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/name: external-secrets-webhook
-  ingress:
-    - fromEntities:
-        - "kube-apiserver"
-        - "host"          # Critical for Talos: Traffic often appears from the Node IP
-        - "remote-node"   # Critical: If API server is on a different node
-      toPorts:
-        - ports:
-            - port: "9443"
-              protocol: "TCP" # Rule: Allow traffic from the Node IPs (where API Server lives)
-    - fromCIDR:
-        - "10.10.1.101/32"
-        - "10.10.1.102/32"
-        - "10.10.1.103/32"
-        - "10.10.1.201/32" # Worker 1
-        # Also allow the VIP just in case source NAT is happening
-        - "10.10.1.250/32"
-      toPorts:
-        - ports:
-            - port: "9443"
+            - port: "6443"
               protocol: "TCP"
 ---
 apiVersion: cilium.io/v2
@@ -81,44 +33,14 @@ kind: CiliumNetworkPolicy
 metadata:
   name: external-secrets-controller-policy
 spec:
+  description: "Allow the External Secrets controller to reach OpenBao"
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: external-secrets
-      app.kubernetes.io/component: controller
-  # ----=== Egress ===----
   egress:
-    # === Allow access to the Kubernetes API server ===
-    - toEntities:
-        - "kube-apiserver"
-        - "host"
-        - "remote-node"
-    - toCIDR:
-        - 10.96.0.1/32 # K8s API ClusterIP
-        - 10.10.1.250/32   # VIP
-        - 10.10.1.101/32   # Node 1
-        - 10.10.1.102/32   # Node 2
-        - 10.10.1.103/32   # Node 3
-        - "10.10.1.201/32" # Worker 1
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: "TCP"
-            - port: "6443"
-              protocol: "TCP"
-    # === Allow access to external secret stores ===
-    - toEntities:
-        - "world"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: "TCP"
-            - port: "443"
-              protocol: UDP
-    # === Allow access to OpenBao via Synology reverse proxy ===
+    # OpenBao (bao.kerrlab.app) behind the Synology reverse proxy
     - toCIDR:
         - "10.10.1.218/32"
-      toFQDNs:
-        - matchName: "bao.kerrlab.app"
       toPorts:
         - ports:
             - port: "443"
@@ -127,69 +49,17 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: external-secrets-webhook-policy
+  name: external-secrets-webhook-ingress
 spec:
+  description: "Allow the Kubernetes API server to call the validating webhook"
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: external-secrets
-      app.kubernetes.io/component: webhook
-  # ----=== Ingress ===----
+      app.kubernetes.io/name: external-secrets-webhook
   ingress:
-    # === Allow webhook access from the API server ===
+    # The webhook listens on 10250 (--port=10250); the Service maps 443 to it
     - fromEntities:
         - "kube-apiserver"
       toPorts:
         - ports:
-            - port: "9443" # Standard webhook port
+            - port: "10250"
               protocol: "TCP"
-  # ----=== Egress ===----
-  egress:
-    # === Allow access to the Kubernetes API server ===
-    - toEntities:
-        - "kube-apiserver"
-        - "host"
-        - "remote-node"
-    - toCIDR:
-        - 10.96.0.1/32 # K8s API ClusterIP
-        - 10.10.1.250/32   # VIP
-        - 10.10.1.101/32   # Node 1
-        - 10.10.1.102/32   # Node 2
-        - 10.10.1.103/32   # Node 3
-        - "10.10.1.201/32" # Worker 1
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: "TCP"
-            - port: "6443"
-              protocol: "TCP"
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: external-secrets-certcontroller-policy
-spec:
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/name: external-secrets
-      app.kubernetes.io/component: certcontroller
-  # ----=== Egress ===----
-  egress:
-    # === Allow access to the Kubernetes API server ===
-    - toEntities:
-        - "kube-apiserver"
-        - "host"
-        - "remote-node"
-    - toCIDR:
-        - 10.96.0.1/32 # K8s API ClusterIP
-        - 10.10.1.250/32   # VIP
-        - 10.10.1.101/32   # Node 1
-        - 10.10.1.102/32   # Node 2
-        - 10.10.1.103/32   # Node 3
-        - 10.10.1.201/32 # Worker 1
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: "TCP"
-            - port: "6443"
-              protocol: "TCP"
-
