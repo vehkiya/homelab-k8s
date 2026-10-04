@@ -79,6 +79,12 @@ hubble:
 
 rollOutCiliumPods: true
 
+# Restart one agent at a time, so a bad agent version or config only affects a single node
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
 # resources configuration for cilium-agent daemonset
 resources:
   requests:
