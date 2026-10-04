@@ -307,6 +307,14 @@ spec:
         - ports:
             - port: "web-ui"
               protocol: TCP
+    # Valkey, configured via PENPOT_MCP_REDIS_URI (remote mode)
+    - toEndpoints:
+        - matchLabels:
+            app: penpot-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -322,6 +330,8 @@ spec:
             app.kubernetes.io/name: penpot-backend
         - matchLabels:
             app.kubernetes.io/name: penpot-exporter
+        - matchLabels:
+            app.kubernetes.io/name: penpot-mcp
       toPorts:
         - ports:
             - port: "6379"
