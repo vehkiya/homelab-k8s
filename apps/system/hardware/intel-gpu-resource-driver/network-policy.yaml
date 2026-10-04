@@ -1,0 +1,36 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: inteldeviceplugins-policy
+  namespace: inteldeviceplugins-system
+spec:
+  description: "Intel device plugins operator, GPU plugin and DRA kubelet plugin: Kubernetes API access"
+  endpointSelector: {}
+  egress:
+    # The kubernetes Service resolves to the control-plane nodes on 6443 (kube-apiserver identity)
+    - toEntities:
+        - "kube-apiserver"
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: "TCP"
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: inteldeviceplugins-webhook-ingress
+  namespace: inteldeviceplugins-system
+spec:
+  description: "Allow the Kubernetes API server to call the operator's admission webhooks"
+  endpointSelector:
+    matchLabels:
+      control-plane: controller-manager
+  ingress:
+    # inteldeviceplugins-webhook-service maps 443 to 9443. Includes the SGX pod mutator, which
+    # runs on every pod CREATE (failurePolicy Ignore, so a block would only add a timeout).
+    - fromEntities:
+        - "kube-apiserver"
+      toPorts:
+        - ports:
+            - port: "9443"
+              protocol: "TCP"

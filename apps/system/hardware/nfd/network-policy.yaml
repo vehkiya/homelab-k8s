@@ -1,0 +1,15 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: node-feature-discovery-policy
+spec:
+  description: "NFD master, worker and gc: Kubernetes API access"
+  endpointSelector: {}
+  egress:
+    # The kubernetes Service resolves to the control-plane nodes on 6443 (kube-apiserver identity)
+    - toEntities:
+        - "kube-apiserver"
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: "TCP"
