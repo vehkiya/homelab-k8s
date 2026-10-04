@@ -29,9 +29,9 @@ resources:
 
 images:
   - name: ghcr.io/fluxerapp/fluxer-api
-    newTag: 2026.1003.174727@sha256:77304096443813c779c221bf4d91427b3ba27633b4cc1edbef97ea018613932e
+    newTag: 2026.1004.10845@sha256:9701f0bf225425241a8d50ac2f995cc428e9c5e48befabea94740dc7224f8fbb
   - name: ghcr.io/fluxerapp/fluxer-gateway
-    newTag: 2026.1003.134037@sha256:a6a0125b476a5a81ff6683b7801a22ea790aa11c107762ac2e3bc2201109e0c1
+    newTag: 2026.1004.10845@sha256:4c22105096b28150cccd9e8fe5a09b416669cd58d9fdb5ea7f30ffd940be334d
   - name: ghcr.io/fluxerapp/fluxer-media-proxy
     newTag: 2026.1003.110721@sha256:5599a4e4119717e58fa6c3399c7889f29bb4c24d1f72e7c5d551bf31440626ac
   - name: ghcr.io/fluxerapp/fluxer-static
