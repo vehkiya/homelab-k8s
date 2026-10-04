@@ -1,0 +1,51 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: homelab-cilium-alerts
+  namespace: observability
+  labels:
+    app: kube-prometheus-stack
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: homelab.cilium.rules
+      rules:
+        # 1. A Cilium policy Cilium refused to load (e.g. toFQDNs and toCIDR in one rule, empty rule list)
+        - alert: CiliumPolicyInvalid
+          expr: |
+            kube_cilium_networkpolicy_condition{type="Valid"} == 0
+            or
+            kube_cilium_clusterwidenetworkpolicy_condition{type="Valid"} == 0
+          for: 10m
+          labels:
+            severity: warning
+            category: Networking
+          annotations:
+            summary: "Cilium network policy rejected as invalid"
+            description: "Cilium policy {{ with $labels.namespace }}{{ . }}/{{ end }}{{ $labels.name }} is Valid=False and is not enforced. Check its status message with kubectl get cnp/ccnp -o yaml."
+
+        # 2. A Cilium policy that Argo CD does not manage (applied by hand, or left behind outside git)
+        - alert: CiliumPolicyNotInGit
+          expr: |
+            (kube_cilium_networkpolicy_info unless on (namespace, name) kube_cilium_networkpolicy_argocd_tracked)
+            or
+            (kube_cilium_clusterwidenetworkpolicy_info unless on (name) kube_cilium_clusterwidenetworkpolicy_argocd_tracked)
+          for: 1h
+          labels:
+            severity: warning
+            category: Networking
+          annotations:
+            summary: "Cilium network policy not managed by Argo CD"
+            description: "Cilium policy {{ with $labels.namespace }}{{ . }}/{{ end }}{{ $labels.name }} has no Argo CD tracking id. Hand-applied policies can silently become load-bearing; move it into git or delete it."
+
+        # 3. Policy-denied drop storm on a node (LAB-19: namespaced policies not realized after an agent restart).
+        #    Normal per-node rate is ~2-15/s and peaked at ~52/s over a day including agent restarts.
+        - alert: CiliumPolicyDeniedDropStorm
+          expr: sum by (node) (rate(cilium_drop_count_total{reason="Policy denied"}[5m])) > 100
+          for: 5m
+          labels:
+            severity: critical
+            category: Networking
+          annotations:
+            summary: "Cilium dropping traffic as policy-denied on {{ $labels.node }}"
+            description: "Node {{ $labels.node }} drops {{ $value | humanize }} packets/s as Policy denied. If this follows a cilium-agent restart, check that endpoints realize their namespaced policies and force a CNP re-import if not (LAB-19 runbook)."
