@@ -128,6 +128,9 @@ loadBalancer:
   mode: dsr
   dsrDispatch: opt
   algorithm: maglev
+  # Honor Service trafficDistribution (PreferSameNode on coredns, authelia, spegel and traefik).
+  # Without it Cilium ignores the field and spreads requests across all nodes.
+  serviceTopology: true
 
 l2NeighDiscovery:
   enabled: true
