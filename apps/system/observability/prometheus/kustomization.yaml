@@ -14,6 +14,7 @@ resources:
   - network-policies.yaml
   - http-route.yaml
   - critical-alerts.yaml
+  - cilium-alerts.yaml
 
 patches:
   - path: patch-grafana-deployment.yaml

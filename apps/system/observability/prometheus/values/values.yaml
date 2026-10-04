@@ -93,3 +93,82 @@ coreDns:
 
 kubeProxy:
   enabled: false
+
+# Expose Cilium policy validity and Argo CD tracking as metrics, for the alerts in cilium-alerts.yaml
+kube-state-metrics:
+  rbac:
+    extraRules:
+      - apiGroups: ["cilium.io"]
+        resources: ["ciliumnetworkpolicies", "ciliumclusterwidenetworkpolicies"]
+        verbs: ["list", "watch"]
+  customResourceState:
+    enabled: true
+    config:
+      kind: CustomResourceStateMetrics
+      spec:
+        resources:
+          - groupVersionKind:
+              group: cilium.io
+              version: v2
+              kind: CiliumNetworkPolicy
+            metricNamePrefix: kube_cilium_networkpolicy
+            labelsFromPath:
+              name: [metadata, name]
+              namespace: [metadata, namespace]
+            metrics:
+              - name: info
+                help: "One series per CiliumNetworkPolicy"
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      uid: [metadata, uid]
+              # Only emitted when the annotation exists (kube-state-metrics skips the series otherwise)
+              - name: argocd_tracked
+                help: "CiliumNetworkPolicy managed by Argo CD, with its tracking id"
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      argocd_tracking_id: [metadata, annotations, "argocd.argoproj.io/tracking-id"]
+              - name: condition
+                help: "CiliumNetworkPolicy status conditions (1 = True)"
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, conditions]
+                    labelsFromPath:
+                      type: [type]
+                    valueFrom: [status]
+          - groupVersionKind:
+              group: cilium.io
+              version: v2
+              kind: CiliumClusterwideNetworkPolicy
+            metricNamePrefix: kube_cilium_clusterwidenetworkpolicy
+            labelsFromPath:
+              name: [metadata, name]
+            metrics:
+              - name: info
+                help: "One series per CiliumClusterwideNetworkPolicy"
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      uid: [metadata, uid]
+              # Only emitted when the annotation exists (kube-state-metrics skips the series otherwise)
+              - name: argocd_tracked
+                help: "CiliumClusterwideNetworkPolicy managed by Argo CD, with its tracking id"
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      argocd_tracking_id: [metadata, annotations, "argocd.argoproj.io/tracking-id"]
+              - name: condition
+                help: "CiliumClusterwideNetworkPolicy status conditions (1 = True)"
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, conditions]
+                    labelsFromPath:
+                      type: [type]
+                    valueFrom: [status]
