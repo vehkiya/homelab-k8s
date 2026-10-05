@@ -71,14 +71,3 @@ spec:
     - toEndpoints:
         - matchLabels:
             app: bar-assistant
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: salt-rim-policy
-spec:
-  endpointSelector:
-    matchLabels:
-      app: salt-rim
-  ingress:
-    []
