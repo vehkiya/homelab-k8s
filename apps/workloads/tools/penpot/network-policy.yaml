@@ -90,12 +90,6 @@ spec:
         - ports:
             - port: "15432"
               protocol: TCP
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "15432"
-              protocol: TCP
     # 2. Connection to Valkey
     - toEndpoints:
         - matchLabels:
@@ -107,18 +101,6 @@ spec:
     # 3. Connection to S3, Authelia, and internal gateway on LAN
     - toCIDR:
         - "10.10.1.0/24"
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-            - port: "8333"
-              protocol: TCP
-    - toFQDNs:
-        - matchName: "s3.kerrlab.app"
-        - matchName: "auth.kerrlab.app"
-        - matchName: "fortress.kerrlab.app"
       toPorts:
         - ports:
             - port: "80"
@@ -216,16 +198,6 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
-    - toFQDNs:
-        - matchName: "s3.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-            - port: "8333"
-              protocol: TCP
     - toEntities:
         - "world"
       toPorts:
@@ -256,12 +228,6 @@ spec:
   egress:
     - toCIDR:
         - "10.10.1.218/32"
-      toPorts:
-        - ports:
-            - port: "15432"
-              protocol: TCP
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
       toPorts:
         - ports:
             - port: "15432"

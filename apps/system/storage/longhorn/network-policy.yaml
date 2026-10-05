@@ -63,10 +63,3 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
-    # === Allow egress to s3.kerrlab.app ===
-    - toFQDNs:
-        - matchName: "s3.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP

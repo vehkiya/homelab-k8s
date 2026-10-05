@@ -47,13 +47,6 @@ spec:
         - ports:
             - port: "15432"
               protocol: TCP
-    # === Allow egress to s3.kerrlab.app (S3) ===
-    - toFQDNs:
-        - matchName: "s3.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
     # === Allow Internet Access for plugins and flows ===
     - toEntities:
         - "world"

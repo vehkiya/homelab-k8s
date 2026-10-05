@@ -15,12 +15,6 @@ spec:
         - ports:
             - port: "15432"
               protocol: TCP
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "15432"
-              protocol: TCP
     # 2. Connection to Valkey
     - toEndpoints:
         - matchLabels:

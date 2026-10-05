@@ -25,12 +25,3 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
-    - toFQDNs:
-        - matchName: "s3.kerrlab.app"
-        - matchName: "fortress.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-            - port: "8333"
-              protocol: TCP
