@@ -29,10 +29,11 @@ service:
     - IPv4
     - IPv6
 
-# Creates the coredns-metrics Service (:9153). The chart has no ServiceMonitor
-# of its own: metrics are scraped by kube-prometheus-stack's coreDns
-# ServiceMonitor, via its kube-prometheus-stack-coredns Service. Nothing in
-# this repo currently selects coredns-metrics.
+# Creates the coredns-metrics Service (:9153). The chart's own ServiceMonitor
+# (prometheus.monitor.enabled) stays off: metrics are scraped by
+# kube-prometheus-stack's coreDns ServiceMonitor, via its
+# kube-prometheus-stack-coredns Service. Nothing in this repo currently
+# selects coredns-metrics.
 prometheus:
   service:
     enabled: true
