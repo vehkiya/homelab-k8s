@@ -16,14 +16,6 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "15432"
-              protocol: TCP
-            - port: "8333"
-              protocol: TCP
     # 2. Connection to Reverse Proxy / Traefik
     - toCIDR:
         - "10.10.1.16/32"
@@ -47,17 +39,7 @@ spec:
               protocol: TCP
             - port: "9443"
               protocol: TCP
-    # 3. Connection to Authelia and S3 by FQDN
-    - toFQDNs:
-        - matchName: "auth.kerrlab.app"
-        - matchName: "s3.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-    # 4. Outbound internet access (OIDC/S3/webhooks)
+    # 3. Outbound internet access (OIDC/S3/webhooks)
     - toEntities:
         - "world"
       toPorts:
@@ -66,7 +48,7 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
-    # 5. Connection to Valkey
+    # 4. Connection to Valkey
     - toEndpoints:
         - matchLabels:
             app: kaneo-valkey

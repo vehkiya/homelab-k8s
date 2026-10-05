@@ -7,8 +7,6 @@ image:
 customAnnotations:
   kube-linter.io/ignore-all: "true"
 
-replicaCount: 3
-
 # Keep CoreDNS scheduled ahead of regular workloads under node pressure.
 priorityClassName: system-cluster-critical
 
@@ -31,26 +29,13 @@ service:
     - IPv4
     - IPv6
 
-# Ensure pods are spread across different nodes for high availability.
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-              - key: "app.kubernetes.io/name"
-                operator: In
-                values:
-                  - coredns
-          topologyKey: "kubernetes.io/hostname"
-
-# Enable Prometheus monitoring. The chart will create a ServiceMonitor resource.
+# Creates the coredns-metrics Service (:9153). The chart has no ServiceMonitor
+# of its own: metrics are scraped by kube-prometheus-stack's coreDns
+# ServiceMonitor, via its kube-prometheus-stack-coredns Service. Nothing in
+# this repo currently selects coredns-metrics.
 prometheus:
   service:
     enabled: true
-serviceMonitor:
-  enabled: true
 
 servers:
   - zones:

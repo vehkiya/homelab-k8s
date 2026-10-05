@@ -126,6 +126,25 @@ Certain system-wide connections are already enabled globally in `apps/bootstrap/
    * Ingress from Traefik to any pod labeled with `networking/expose-web-ui: "true"` targeting a named port `"web-ui"` is automatically allowed.
    * Ingress from Traefik to any pod labeled with `networking/expose-http-api: "true"` targeting a named port `"http-api"` is automatically allowed.
 
+### Choosing Egress Selectors
+
+Prefer selectors that Cilium enforces entirely in eBPF, without a proxy:
+
+* **`toEndpoints`** (label selectors) for in-cluster peers. `toServices` also works (selector-backed Services are translated to the backing pods, selector-less ones to the EndpointSlice IPs as CIDRs), but prefer labels. Don't use `toServices` for `default/kubernetes`.
+* **`toCIDR`** for fixed external IPs, such as the NAS at `10.10.1.218`.
+* **`toEntities`** for `kube-apiserver` (port `6443`; on control-plane nodes the host identity carries that label too) and `world`.
+* `toCIDR`, `toEntities` and `toEndpoints` are all **L3 selectors**. Ports always come from `toPorts`.
+
+Rules to keep in mind:
+
+* **`toFQDNs` is also an L3 selector**: Cilium turns each learned IP into a CIDR identity. It only works together with a DNS rule (`toPorts.rules.dns`), which redirects every DNS query from the selected pods through the cilium-agent DNS proxy. That costs extra DNS latency, makes the pods' DNS depend on the agent being up (an agent restart causes a DNS hiccup), and churns identities for CDN-backed names. Without a DNS rule, a `toFQDNs` rule is inert: it silently matches nothing.
+* **`toFQDNs` can't share an egress rule with any other L3 selector** (`toCIDR`, `toEndpoints`, ...). Cilium rejects the whole policy (`combining ToFQDNs and ToCIDR is not supported yet`). It must be its own rule.
+* Use `toFQDNs` (plus a DNS rule) only for external hosts whose IPs aren't stable, such as GitHub, plugin catalogs, ACME or SaaS/CDN endpoints. The coarser alternative is `toEntities: world` with `toPorts: 443`, which needs no proxy.
+* **L7 rules (DNS, HTTP, Kafka)** send all matched traffic through Envoy. Use them only when you need path- or method-level control.
+* **Webhooks:** allow `fromEntities: kube-apiserver` on the pod's **real** container port (for example External Secrets uses `10250`, not `9443`).
+* An egress or ingress list must contain at least one rule: a policy with only `ingress: []` is rejected as invalid. Under default-deny, delete the policy instead.
+* After applying, check `kubectl get cnp,ccnp -A` for `Valid=False`. The `CiliumPolicyInvalid` alert fires on rejected policies.
+
 ### Named Port Ingress Mapping Example
 
 For a workload to utilize the global Traefik ingress policies:

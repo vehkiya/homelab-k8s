@@ -39,15 +39,3 @@ images:
     newTag: 4.2.5@sha256:6d42b5d6e1a014fa2373e3587f9e85c25589a089fd5f6fc4f2a496858f5e365d
   - name: dhi.io/traefik
     newTag: 3.7.13@sha256:f3f03c346b8ef599c1ef8a975066d96561270c9737884dab222414e8d0fee473
-
-patches:
-  - target:
-      kind: Namespace
-      name: traefik
-    patch: |-
-      - op: add
-        path: /metadata/labels
-        value:
-          pod-security.kubernetes.io/audit: privileged
-          pod-security.kubernetes.io/enforce: privileged
-          pod-security.kubernetes.io/warn: privileged

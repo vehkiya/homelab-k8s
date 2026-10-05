@@ -43,14 +43,6 @@ spec:
               protocol: TCP
 
     # Allow access to PostgreSQL and SeaweedFS (S3) on fortress
-    - toFQDNs:
-        - matchName: "fortress.kerrlab.app"
-      toPorts:
-        - ports:
-            - port: "15432"
-              protocol: TCP
-            - port: "8333"
-              protocol: TCP
     - toCIDR:
         - "10.10.1.218/32"
       toPorts:
