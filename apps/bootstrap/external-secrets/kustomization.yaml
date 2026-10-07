@@ -18,7 +18,7 @@ resources:
   - network-policy.yaml
 images:
   - name: dhi.io/external-secrets
-    newTag: 2.11.0@sha256:7ae68ccb10b8784efad10968428de72c239b490078c5747ce7e6b854abf070cd
+    newTag: 2.12.0@sha256:080c15535292a79cffc6145564153f482e57acd7d2ba138699e812543c0b70ff
 
 configMapGenerator:
   - name: external-secrets-dashboard
