@@ -19,6 +19,6 @@ resources:
 
 images:
   - name: ghcr.io/usekaneo/kaneo
-    newTag: 2.37.0@sha256:c3a77cfea532916ceee60e49e6140a3e4ea17261e911a81c9e96332d9bba7cbb
+    newTag: 2.38.0@sha256:a5650b1b06ac0da0ede15e6a6ac7d2b3a4549b5de5ccac6aa44f2aadbcc493ad
   - name: docker.io/valkey/valkey
     newTag: 9.1.2@sha256:418652cfb58ef879d4978c33553735d7147016032d5aefaa14c828e611eb9dfd
