@@ -40,6 +40,12 @@ spec:
               value: "true"
             - name: TZ
               value: "Europe/Chisinau"
+            - name: ROMM_BASE_URL
+              value: "https://romm.kerrlab.app"
+            - name: ROMM_CORS_ALLOWED_ORIGINS
+              value: "https://romm.kerrlab.app"
+            - name: ROMM_SESSION_SECURE_COOKIE
+              value: "true"
             - name: DISABLE_USERPASS_LOGIN
               value: "true"
             - name: OIDC_ENABLED
