@@ -20,7 +20,7 @@ labels:
 
 images:
   - name: ghcr.io/itzg/minecraft-server
-    newTag: stable-java25-graalvm@sha256:553fbf8438607be92aa7fb374b83ea2ff3b9b2bec8f2e65d9a2fd88e677807e4
+    newTag: stable-java25-graalvm@sha256:ea45b7f480e5c2c927152bd5fb7646b79abe8aa9de4120adce3bb33896d917b9
 
 patches:
   # === Override config ===
