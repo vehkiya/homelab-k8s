@@ -198,9 +198,15 @@ extraObjects:
           crowdsecLapiHost: crowdsec-service.security.svc.cluster.local:8080
           crowdsecLapiKeyFile: "/etc/crowdsec-bouncer/bouncer-key"
           updateIntervalSeconds: 60
+          # Stream mode caches decisions in memory. Setting -1 disables fail-closed behavior on LAPI
+          # poll failures so transient LAPI downtime or rollouts never block DMZ traffic (cached bans remain).
+          updateMaxFailure: -1
           crowdsecMode: stream
           crowdsecAppsecEnabled: true
           crowdsecAppsecHost: crowdsec-appsec-service.security.svc.cluster.local:7422
+          # Fail-open if AppSec is unreachable so WAF restarts do not drop legitimate DMZ traffic (LAPI bans still protect).
+          crowdsecAppsecUnreachableBlock: false
+          # Fail-closed only if AppSec is active but returns an internal 500 error on a specific inspected request.
           crowdsecAppsecFailureBlock: true
           forwardedHeadersTrustedIPs: *trustedProxyIPs
           clientTrustedIPs:

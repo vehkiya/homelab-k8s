@@ -86,3 +86,14 @@ spec:
           annotations:
             summary: "Critical core pod crashlooping"
             description: "Pod {{ $labels.pod }} in core namespace {{ $labels.namespace }} (container {{ $labels.container }}) is restarting frequently."
+
+        # 8. Security: CrowdSec Service No Ready Endpoints
+        - alert: CrowdSecServiceNoReadyEndpoints
+          expr: kube_deployment_status_replicas_ready{namespace="security", deployment=~"crowdsec-(lapi|appsec)"} < 1
+          for: 1m
+          labels:
+            severity: critical
+            category: Security
+          annotations:
+            summary: "CrowdSec service has no ready endpoints"
+            description: "Deployment {{ $labels.deployment }} in namespace {{ $labels.namespace }} has 0 ready replicas for more than 1 minute."

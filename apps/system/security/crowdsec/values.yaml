@@ -7,6 +7,20 @@ config:
 lapi:
   enabled: true
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                type: lapi
+            topologyKey: kubernetes.io/hostname
   persistentVolume:
     data:
       enabled: false # SQLite is disabled, PostgreSQL handles persistence
@@ -157,6 +171,20 @@ agent:
 appsec:
   enabled: true
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                type: appsec
+            topologyKey: kubernetes.io/hostname
   metrics:
     enabled: true
     serviceMonitor:
