@@ -1,0 +1,30 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: crowdsec-lapi
+  labels:
+    k8s-app: crowdsec
+    type: lapi
+spec:
+  maxUnavailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: lapi
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: crowdsec-appsec
+  labels:
+    k8s-app: crowdsec
+    type: appsec
+spec:
+  maxUnavailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: appsec
