@@ -39,3 +39,27 @@ spec:
       allowedRoutes:
         namespaces:
           from: All # Allows any HTTPRoute from any namespace to attach
+---
+# plex-gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: plex-gateway
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: plex
+      protocol: HTTPS
+      port: 32443
+      hostname: "plex.kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: media

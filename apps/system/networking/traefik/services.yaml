@@ -48,6 +48,10 @@ spec:
       port: 443
       targetPort: 8443
       protocol: UDP
+    - name: plex
+      port: 32400
+      targetPort: 32443
+      protocol: TCP
 ---
 apiVersion: v1
 kind: Service
