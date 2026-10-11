@@ -200,6 +200,9 @@ extraObjects:
           updateIntervalSeconds: 60
           # Stream mode caches decisions in memory. Setting -1 disables fail-closed behavior on LAPI
           # poll failures so transient LAPI downtime or rollouts never block DMZ traffic (cached bans remain).
+          # Note: Existing cached bans expire over time based on their original TTL. If LAPI stays down
+          # prolonged periods (or Traefik restarts while LAPI is down, starting with an empty cache),
+          # protection degrades silently. This state is monitored by the CrowdSecTraefikBouncerNotPulling alert.
           updateMaxFailure: -1
           crowdsecMode: stream
           crowdsecAppsecEnabled: true

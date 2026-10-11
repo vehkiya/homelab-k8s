@@ -97,3 +97,14 @@ spec:
           annotations:
             summary: "CrowdSec service has no ready endpoints"
             description: "Deployment {{ $labels.deployment }} in namespace {{ $labels.namespace }} has 0 ready replicas for more than 1 minute."
+
+        # 9. Security: Traefik CrowdSec Bouncer Not Pulling Decisions
+        - alert: CrowdSecTraefikBouncerNotPulling
+          expr: sum(rate(cs_lapi_bouncer_requests_total{bouncer=~"traefik.*", route="/v1/decisions/stream"}[10m])) == 0
+          for: 10m
+          labels:
+            severity: critical
+            category: Security
+          annotations:
+            summary: "Traefik CrowdSec bouncer is not pulling decisions"
+            description: "CrowdSec LAPI has not received decision stream polls from Traefik for more than 10 minutes."

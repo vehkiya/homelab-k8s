@@ -19,6 +19,7 @@ lapi:
           podAffinityTerm:
             labelSelector:
               matchLabels:
+                k8s-app: crowdsec
                 type: lapi
             topologyKey: kubernetes.io/hostname
   persistentVolume:
@@ -183,6 +184,7 @@ appsec:
           podAffinityTerm:
             labelSelector:
               matchLabels:
+                k8s-app: crowdsec
                 type: appsec
             topologyKey: kubernetes.io/hostname
   metrics:
