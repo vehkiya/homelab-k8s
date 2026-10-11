@@ -29,24 +29,24 @@ resources:
 
 images:
   - name: ghcr.io/fluxerapp/fluxer-api
-    newTag: 2026.1010.212905@sha256:63bc2da0b365842ef690e26de024e2304c4e58f62b6c6b81c7757840159e3acb
+    newTag: 2026.1011.113345@sha256:1e879b1b70a82c473f948ee12015fb0c65ef09f0aeca3ce9fd4943c6244c34de
   - name: ghcr.io/fluxerapp/fluxer-gateway
     newTag: 2026.1010.212840@sha256:90de395ec83e2a47b6baca1862f9a06e5eb0b7e8ffe05afd1ece4aec0549d5d7
   - name: ghcr.io/fluxerapp/fluxer-media-proxy
-    newTag: 2026.1011.938@sha256:2b38901fbb94d340f17e32801bc0238bde6e5ef2d491021ad84d79ffc758d78c
+    newTag: 2026.1011.113357@sha256:b73c281a62f6501f051ead3e0c871bbf55e0a7ab1896c2eee251a364d9654666
   - name: ghcr.io/fluxerapp/fluxer-static
     newTag: 2026.1010.212914@sha256:864aa943be4f985c532554ccd93df28a13321396f35411cdbcb865230023858a
   - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
-    newTag: 2026.1010.212805@sha256:86bdb666958a1f27c410461cbd1c966d4286146f4266cb49f77a61b64a38c01c
+    newTag: 2026.1011.113919@sha256:86492f65b050343dc4bc76e8f062d398442cf0469097b7b0311e6ce37d05b974
   - name: ghcr.io/fluxerapp/fluxer-snowflakes
     newTag: 2026.1010.212912@sha256:ce6f5a9de53c6c5e329de40cc602b51c02d654b028dc74687a4a8e730d4a98b0
   - name: ghcr.io/fluxerapp/fluxer-users
     newTag: 2026.1010.212851@sha256:6a96cd3f7edf3c5391c60a5c428174e371a4fb0e6cf0962eb8bc3a19eee500f7
   - name: ghcr.io/fluxerapp/fluxer-messages
-    newTag: 2026.1010.212902@sha256:62c1bf95faa710129014e0f973f2ca0ce2b8c7f213ce5a33d62dc90d61ba6d33
+    newTag: 2026.1011.113418@sha256:f4a0d1068133b77d3848eb48e118f94bb60e87fbee9a32d553d481c5a7c60db2
   - name: ghcr.io/fluxerapp/fluxer-unfurl
     newTag: 2026.1010.212913@sha256:4917e2d9ad0a2b5b0043ca86b4573ee268e00faac1b902f4b33b3305ce013f91
   - name: ghcr.io/fluxerapp/fluxer-admin
-    newTag: 2026.1010.212831@sha256:917696921e97ebc7858d0c96d05dc49a722ecbbdf63c1ff7f88b8823c60080eb
+    newTag: 2026.1011.113411@sha256:eabdb5673e638dda260b8fba93d16e90b1791e2921fedbd623d93f8daf2676ec
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v2.0.2@sha256:061f00b201b58e12f974e4e96c761a881ee1c05e9d8ee967466a604b7299753b
