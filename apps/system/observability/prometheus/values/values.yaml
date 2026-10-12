@@ -94,12 +94,16 @@ coreDns:
 kubeProxy:
   enabled: false
 
-# Expose Cilium policy validity and Argo CD tracking as metrics, for the alerts in cilium-alerts.yaml
+# Expose Cilium policy validity and Argo CD tracking as metrics, for the alerts in cilium-alerts.yaml,
+# and Argo CD Application health and sync results, for the alerts in argocd-alerts.yaml
 kube-state-metrics:
   rbac:
     extraRules:
       - apiGroups: ["cilium.io"]
         resources: ["ciliumnetworkpolicies", "ciliumclusterwidenetworkpolicies"]
+        verbs: ["list", "watch"]
+      - apiGroups: ["argoproj.io"]
+        resources: ["applications"]
         verbs: ["list", "watch"]
   customResourceState:
     enabled: true
@@ -172,3 +176,29 @@ kube-state-metrics:
                     labelsFromPath:
                       type: [type]
                     valueFrom: [status]
+          - groupVersionKind:
+              group: argoproj.io
+              version: v1alpha1
+              kind: Application
+            metricNamePrefix: kube_argocd_application
+            labelsFromPath:
+              name: [metadata, name]
+              namespace: [metadata, namespace]
+            metrics:
+              - name: health_status
+                help: "Argo CD Application health status (1 = current status)"
+                each:
+                  type: StateSet
+                  stateSet:
+                    labelName: health_status
+                    path: [status, health, status]
+                    list: [Healthy, Progressing, Suspended, Degraded, Missing, Unknown]
+              # Only emitted once the Application has run a sync operation
+              - name: operation_phase
+                help: "Phase of the Argo CD Application's last sync operation (1 = current phase)"
+                each:
+                  type: StateSet
+                  stateSet:
+                    labelName: phase
+                    path: [status, operationState, phase]
+                    list: [Running, Terminating, Succeeded, Failed, Error]
