@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: kaneo
+spec:
+  # maxUnavailable rather than minAvailable: 1, which would block node drains while
+  # the HPA sits at a single replica.
+  maxUnavailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      app: kaneo

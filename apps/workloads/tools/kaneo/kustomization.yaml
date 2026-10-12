@@ -10,6 +10,8 @@ resources:
   - configmap.yaml
   - external-secrets.yaml
   - deployment.yaml
+  - hpa.yaml
+  - pdb.yaml
   - service.yaml
   - http-route.yaml
   - external-http-route.yaml
