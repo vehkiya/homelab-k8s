@@ -170,7 +170,6 @@ ports:
       middlewares:
         - traefik_crowdsec-bouncer@kubernetescrd
         - traefik_request-id@kubernetescrd
-        - traefik_error-pages@kubernetescrd
       encodedCharacters:
         allowEncodedSlash: false
         allowEncodedBackSlash: false
