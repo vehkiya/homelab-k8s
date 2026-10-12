@@ -6,7 +6,7 @@ spec:
   parentRefs:
     - name: internal-gateway
       namespace: traefik
-    - name: external-gateway
+    - name: plex-gateway
       namespace: traefik
   hostnames:
     - "plex.kerrlab.app"

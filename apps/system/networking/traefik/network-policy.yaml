@@ -9,7 +9,7 @@ spec:
       app.kubernetes.io/name: traefik
 
   ingress:
-    # Rule 1: Allow public internet and cluster to DMZ ports (8443)
+    # Rule 1: Allow public internet and cluster to DMZ ports (8443) and Plex entrypoint (32443)
     - fromEntities:
         - "world"
         - "cluster"
@@ -19,6 +19,9 @@ spec:
             - port: "8443"
               protocol: "UDP"
             - port: "8443"
+              protocol: "TCP"
+            # === Plex entrypoint ===
+            - port: "32443"
               protocol: "TCP"
 
     # Rule 2: Allow cluster, host, and remote-node to internal web (8000) and websecure (9443)
@@ -36,7 +39,7 @@ spec:
             - port: "9443"
               protocol: "TCP"
 
-    # Rule 3: Allow trusted internal LAN, VLANs, and Tailscale VPN to internal web (8000) and websecure (9443)
+    # Rule 3: Allow trusted internal LAN, VLANs, and Tailscale VPN to internal web (8000), websecure (9443), and Plex (32443)
     - fromCIDR:
         - "10.10.1.0/24"
         - "192.168.1.0/24"
@@ -52,6 +55,9 @@ spec:
             - port: "9443"
               protocol: "UDP"
             - port: "9443"
+              protocol: "TCP"
+            # === Plex entrypoint ===
+            - port: "32443"
               protocol: "TCP"
 
     # Rule 4: Allow Prometheus in observability namespace to scrape metrics (9100)

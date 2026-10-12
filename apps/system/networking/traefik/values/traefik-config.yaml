@@ -161,6 +161,31 @@ ports:
       trustedIPs: [ ]
     observability:
       metrics: true
+  plex:
+    port: 32443
+    expose:
+      default: false
+    http:
+      aliasHeadersStrategy: delete
+      middlewares:
+        - traefik_crowdsec-bouncer@kubernetescrd
+        - traefik_request-id@kubernetescrd
+      encodedCharacters:
+        allowEncodedSlash: false
+        allowEncodedBackSlash: false
+        allowEncodedNullCharacter: false
+        allowEncodedSemicolon: false
+        allowEncodedPercent: false
+        allowEncodedQuestionMark: false
+        allowEncodedHash: false
+      tls:
+        enabled: true
+    forwardedHeaders:
+      trustedIPs: []
+    proxyProtocol:
+      trustedIPs: []
+    observability:
+      metrics: true
 gateway:
   enabled: false # Created manually in gateways.yaml
 tlsStore:
