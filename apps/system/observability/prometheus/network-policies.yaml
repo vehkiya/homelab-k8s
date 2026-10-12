@@ -86,6 +86,15 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
+  ingress:
+    # Admission webhooks for PrometheusRules and AlertmanagerConfigs, on the container port (service 443 -> 10250).
+    # They use failurePolicy Ignore, so when blocked every apply waits out two 10s timeouts and Argo syncs crawl.
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
   egress:
     - toEntities:
         - kube-apiserver
