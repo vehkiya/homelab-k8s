@@ -8,6 +8,8 @@ resources:
   - service.yaml
   - secret.yaml
   - network-policy.yaml
+  - external-http-route.yaml
+  - rate-limit.yaml
   - dragonfly.yaml
   - dragonfly-network-policy.yaml
 
