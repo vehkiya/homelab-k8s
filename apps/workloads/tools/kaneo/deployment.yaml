@@ -5,7 +5,7 @@ metadata:
   labels:
     app: kaneo
 spec:
-  replicas: 1
+  # replicas is managed by the HPA (hpa.yaml)
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -30,9 +30,16 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: kaneo
       containers:
         - name: kaneo
-          image: ghcr.io/usekaneo/kaneo:2.25.0
+          image: ghcr.io/usekaneo/kaneo
           ports:
             - name: web-ui
               containerPort: 5173
