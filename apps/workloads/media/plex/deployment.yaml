@@ -184,7 +184,7 @@ spec:
               memory: "2Gi"
             limits:
               cpu: "3000m"
-              memory: "8Gi"
+              memory: "12Gi"
             claims:
               - name: intel-gpu
         - name: plex-logs
