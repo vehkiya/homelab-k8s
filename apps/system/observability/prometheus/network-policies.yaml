@@ -95,6 +95,14 @@ spec:
         - ports:
             - port: "10250"
               protocol: TCP
+    # Metrics scrape by Prometheus (same HTTPS listener)
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
   egress:
     - toEntities:
         - kube-apiserver
@@ -286,6 +294,14 @@ spec:
       toPorts:
         - ports:
             - port: "9090"
+              protocol: TCP
+    # 15. Allow scraping of the Prometheus operator (HTTPS on its webhook port)
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
+      toPorts:
+        - ports:
+            - port: "10250"
               protocol: TCP
 
 ---
