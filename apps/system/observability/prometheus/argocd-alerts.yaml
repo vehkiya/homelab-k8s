@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: homelab-argocd-alerts
+  namespace: observability
+  labels:
+    app: kube-prometheus-stack
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: homelab.argocd.rules
+      rules:
+        # 1. An Application is Degraded (crash-looping pods, failed Jobs), Missing (resources not created) or Unknown
+        - alert: ArgoCDAppUnhealthy
+          expr: kube_argocd_application_health_status{health_status=~"Degraded|Missing|Unknown"} == 1
+          for: 15m
+          labels:
+            severity: warning
+            category: GitOps
+          annotations:
+            summary: "Argo CD app {{ $labels.name }} is {{ $labels.health_status }}"
+            description: "Argo CD Application {{ $labels.name }} has been {{ $labels.health_status }} for more than 15 minutes. Run argocd app get {{ $labels.name }} to see which resources are failing."
+
+        # 2. An Application that never finishes Progressing (a rollout that never becomes ready, a PVC that never binds)
+        - alert: ArgoCDAppProgressingTooLong
+          expr: kube_argocd_application_health_status{health_status="Progressing"} == 1
+          for: 1h
+          labels:
+            severity: warning
+            category: GitOps
+          annotations:
+            summary: "Argo CD app {{ $labels.name }} stuck Progressing"
+            description: "Argo CD Application {{ $labels.name }} has been Progressing for more than 1 hour. Run argocd app get {{ $labels.name }} to see which resources are not ready."
+
+        # 3. The last sync failed. The phase stays Failed/Error until a later sync succeeds.
+        - alert: ArgoCDAppSyncFailed
+          expr: kube_argocd_application_operation_phase{phase=~"Failed|Error"} == 1
+          for: 10m
+          labels:
+            severity: warning
+            category: GitOps
+          annotations:
+            summary: "Argo CD sync failed for {{ $labels.name }}"
+            description: "The last sync of Argo CD Application {{ $labels.name }} ended in {{ $labels.phase }} and no sync has succeeded since, so the cluster no longer matches git. Check the message with argocd app get {{ $labels.name }}."
+
+        # 4. A sync that never finishes (a hung hook, a finalizer blocking a prune)
+        - alert: ArgoCDAppSyncStuck
+          expr: kube_argocd_application_operation_phase{phase=~"Running|Terminating"} == 1
+          for: 30m
+          labels:
+            severity: warning
+            category: GitOps
+          annotations:
+            summary: "Argo CD sync stuck for {{ $labels.name }}"
+            description: "A sync of Argo CD Application {{ $labels.name }} has been {{ $labels.phase }} for more than 30 minutes. Look for a hung hook Job or a resource waiting on a finalizer."
