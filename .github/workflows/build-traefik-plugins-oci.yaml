@@ -1,0 +1,74 @@
+name: Build Traefik Plugins OCI Artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - 'feat/**'
+    paths:
+      - '.github/workflows/build-traefik-plugins-oci.yaml'
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - image_name: crowdsec-bouncer-traefik-plugin
+            repo: maxlerebourg/crowdsec-bouncer-traefik-plugin
+            # renovate: datasource=github-releases depName=maxlerebourg/crowdsec-bouncer-traefik-plugin
+            version: v1.7.1
+          - image_name: traefik-plugin-request-id
+            repo: mdklapwijk/traefik-plugin-request-id
+            # renovate: datasource=github-releases depName=mdklapwijk/traefik-plugin-request-id
+            version: v0.1.1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download and prepare plugin source
+        run: |
+          echo "Preparing ${{ matrix.image_name }} version ${{ matrix.version }}"
+          mkdir -p workspace
+          
+          curl -L -s "https://github.com/${{ matrix.repo }}/archive/refs/tags/${{ matrix.version }}.tar.gz" -o plugin.tar.gz
+          tar -xzf plugin.tar.gz --strip-components=1 -C workspace/
+          rm -f plugin.tar.gz
+          
+          # Ensure proper permissions for distroless non-root Traefik user (65532)
+          chmod -R a+rX workspace/
+          
+          # Create minimal scratch Dockerfile
+          cat << 'EOF' > workspace/Dockerfile
+          FROM scratch
+          COPY . /
+          EOF
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: workspace
+          push: true
+          platforms: linux/amd64
+          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image_name }}:${{ matrix.version }}

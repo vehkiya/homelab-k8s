@@ -72,11 +72,10 @@ spec:
 
 
   egress:
-    # Rule 1: Allow Traefik to talk to kube-apiserver
+    # Rule 1: Allow Traefik to talk to kube-apiserver and cluster backends
     - toEntities:
         - "kube-apiserver"
         - "cluster"
-        - "world"
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy

@@ -19,14 +19,19 @@ deployment:
   kind: DaemonSet
   goMemLimitPercentage: 0.75
   additionalVolumes:
-    - name: plugins
+    - name: crowdsec-plugin-vol
+      image:
+        # renovate: datasource=github-releases depName=maxlerebourg/crowdsec-bouncer-traefik-plugin
+        reference: ghcr.io/vehkiya/crowdsec-bouncer-traefik-plugin:v1.7.1
+    - name: requestid-plugin-vol
+      image:
+        # renovate: datasource=github-releases depName=mdklapwijk/traefik-plugin-request-id
+        reference: ghcr.io/vehkiya/traefik-plugin-request-id:v0.1.1
     - name: crowdsec-bouncer-key-vol
       secret:
         secretName: crowdsec-bouncer-key
 
 additionalVolumeMounts:
-  - name: plugins
-    mountPath: /plugins-storage
   - name: crowdsec-bouncer-key-vol
     mountPath: /etc/crowdsec-bouncer
     readOnly: true
@@ -282,13 +287,17 @@ extraObjects:
 experimental:
   fastProxy:
     enabled: true
-  plugins:
+  localPlugins:
     crowdsec:
       moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-      version: "v1.7.1"
+      mountPath: "/plugins-local/src/github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      type: localPath
+      volumeName: crowdsec-plugin-vol
     requestid:
       moduleName: "github.com/mdklapwijk/traefik-plugin-request-id"
-      version: "v0.1.1"
+      mountPath: "/plugins-local/src/github.com/mdklapwijk/traefik-plugin-request-id"
+      type: localPath
+      volumeName: requestid-plugin-vol
 
 additionalArguments:
   - "--serversTransport.maxIdleConnsPerHost=50"
