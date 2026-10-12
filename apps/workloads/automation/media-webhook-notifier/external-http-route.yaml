@@ -1,0 +1,28 @@
+# Public route for Telegram's webhook deliveries only (inline-button clicks). Everything else on this
+# hostname has no route and gets a 404 at Traefik. The app checks Telegram's secret header itself; the
+# Cloudflare "Allow Webhooks" rule only admits Telegram's ASNs (62041, 44907) to this method and path.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: media-webhook-notifier-external-route
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: traefik
+  hostnames:
+    - "media-webhook-notifier.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /api/v1/telegram/webhook
+          method: POST
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: media-webhook-notifier-rate-limit
+      backendRefs:
+        - name: media-webhook-notifier
+          port: 8080

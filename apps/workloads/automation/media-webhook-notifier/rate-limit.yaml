@@ -1,0 +1,10 @@
+# Telegram delivers updates one at a time and clicks are human-paced; this only caps abuse.
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: media-webhook-notifier-rate-limit
+spec:
+  rateLimit:
+    average: 5
+    burst: 20
+    period: "1s"
