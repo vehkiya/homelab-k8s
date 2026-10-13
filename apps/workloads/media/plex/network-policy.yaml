@@ -55,6 +55,8 @@ spec:
             k8s:io.kubernetes.pod.namespace: iot
         - matchLabels:
             app: kometa
+        - matchLabels:
+            app: imagemaid
       toPorts:
         - ports:
             - port: web-ui

@@ -1,0 +1,94 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: imagemaid
+spec:
+  # Sunday 05:00 local: between Kometa's 4-hourly runs and before
+  # Posterizarr's 06:00 batch. ImageMaid deletes every upload missing from
+  # its DB snapshot, so it must not overlap artwork uploads.
+  schedule: "0 5 * * 0"
+  timeZone: Europe/Chisinau
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 3600
+      template:
+        metadata:
+          labels:
+            app: imagemaid
+        spec:
+          restartPolicy: Never
+          # plex-config-longhorn-pvc is RWO, so share the node Plex runs on
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: plex
+                  topologyKey: kubernetes.io/hostname
+          # No fsGroup: it would chown the whole Plex config volume
+          securityContext:
+            runAsUser: 1027
+            runAsGroup: 100
+            runAsNonRoot: true
+          containers:
+            - name: imagemaid
+              image: kometateam/imagemaid
+              env:
+                - name: TZ
+                  value: "Europe/Chisinau"
+                - name: PLEX_PATH
+                  value: /plex
+                - name: PLEX_URL
+                  value: http://plex-ui.media.svc.cluster.local:32400
+                - name: PLEX_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: imagemaid-secrets
+                      key: PLEX_TOKEN
+                # remove: unused uploads are deleted, not moved to a restore dir
+                - name: MODE
+                  value: remove
+                - name: PHOTO_TRANSCODER
+                  value: "True"
+                # Kometa already empties trash, cleans bundles and optimizes
+                - name: EMPTY_TRASH
+                  value: "False"
+                - name: CLEAN_BUNDLES
+                  value: "False"
+                - name: OPTIMIZE_DB
+                  value: "False"
+                - name: TIMEOUT
+                  value: "600"
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "1000m"
+                  memory: "1Gi"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+                - name: plex-config
+                  mountPath: /plex
+                  subPath: Library/Application Support/Plex Media Server
+          volumes:
+            # Logs and the downloaded DB snapshot; nothing worth keeping
+            - name: config
+              emptyDir:
+                sizeLimit: 4Gi
+            - name: plex-config
+              persistentVolumeClaim:
+                claimName: plex-config-longhorn-pvc

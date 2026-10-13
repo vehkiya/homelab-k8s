@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: imagemaid-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: imagemaid
+  # ----=== Egress ===----
+  egress:
+    # === Allow access to Plex (DB download, PhotoTranscoder) ===
+    - toEndpoints:
+        - matchLabels:
+            app: plex
+      toPorts:
+        - ports:
+            - port: "32400"
+              protocol: TCP
