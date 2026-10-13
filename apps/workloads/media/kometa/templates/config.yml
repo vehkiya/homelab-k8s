@@ -12,7 +12,7 @@ libraries:
     library_name: Movies
     collection_files:
       - file: config/movies.yaml
-    reapply_overlays: false
+    reapply_overlays: true
     remove_overlays: false
     overlay_files:
       - file: config/overlay.yaml
@@ -33,8 +33,8 @@ settings:
   cache_expiration: 60
   asset_directory: /assets
   asset_folders: true
-  asset_depth: 0
-  prioritize_assets: false
+  asset_depth: 1
+  prioritize_assets: true
   show_missing_episode_assets: false
   show_asset_not_needed: true
   item_refresh_delay: 0
@@ -133,17 +133,7 @@ mal:
     refresh_token: {{ .Env.MAL_REFRESH_TOKEN }}
   localhost_url: http://localhost/?code={{ .Env.MAL_LOCALHOST_URL_CODE }}
   cache_expiration: 60
-trakt:
-  client_id: {{ .Env.TRAKT_CLIENT_ID }}
-  client_secret: {{ .Env.TRAKT_CLIENT_SECRET }}
-  authorization:
-    access_token: {{ .Env.TRAKT_ACCESS_TOKEN }}
-    token_type: Bearer
-    expires_in: 7776000
-    refresh_token: {{ .Env.TRAKT_REFRESH_TOKEN }}
-    scope: public
-    created_at: 1758573962
-  pin: f4197d99
+
 ntfy:
   url: http://ntfy.automation.svc.cluster.local:80
   token: {{ .Env.NTFY_TOKEN }}

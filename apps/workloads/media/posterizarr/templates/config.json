@@ -89,7 +89,8 @@
     "JellyfinUrl": "http://192.168.1.93:8096",
     "UseJellyfin": "false",
     "UploadExistingAssets": "false",
-    "ReplaceThumbwithBackdrop": "false"
+    "ReplaceThumbwithBackdrop": "false",
+    "ReplaceThumbwithBackdropExclusively": "false"
   },
   "EmbyPart": {
     "LibstoExclude": [
@@ -101,7 +102,8 @@
     "EmbyUrl": "http://192.168.1.93:8096/emby",
     "UseEmby": "false",
     "UploadExistingAssets": "false",
-    "ReplaceThumbwithBackdrop": "false"
+    "ReplaceThumbwithBackdrop": "false",
+    "ReplaceThumbwithBackdropExclusively": "false"
   },
   "Notification": {
     "SendNotification": "true",
@@ -112,7 +114,8 @@
     "UptimeKumaUrl": "http://status.kerrlab.app/",
     "AgregarrTriggerEnabled": "false",
     "AgregarrUrl": "",
-    "AgregarrApiKey": ""
+    "AgregarrApiKey": "",
+    "AgregarrRetryTimeout": "60"
   },
   "PrerequisitePart": {
     "ParallelJobs": "5",
@@ -171,7 +174,41 @@
     "ConvertLogoColor": "false",
     "LogoFlatColor": "white",
     "PreserveMultiColorLogos": "true",
-    "FileTestOnTrigger": "true"
+    "FileTestOnTrigger": "true",
+    "SkipAddTextAndOverlay": "false",
+    "SkipAddTextAndBorder": "false",
+    "SkipLocalPosterTextAdd": "false",
+    "SkipLocalBackgroundTextAdd": "false",
+    "SkipLocalSeasonTextAdd": "false",
+    "SkipLocalTCTextAdd": "false",
+    "telemetry": "true",
+    "4KDoVi": "overlay-innerglow.png",
+    "4KHDR10": "overlay-innerglow.png",
+    "4KDoViHDR10": "overlay-innerglow.png",
+    "4KDoViBackground": "backgroundoverlay-innerglow.png",
+    "4KHDR10Background": "backgroundoverlay-innerglow.png",
+    "4KDoViHDR10Background": "backgroundoverlay-innerglow.png",
+    "4KDoViTC": "backgroundoverlay-innerglow.png",
+    "4KHDR10TC": "backgroundoverlay-innerglow.png",
+    "4KDoViHDR10TC": "backgroundoverlay-innerglow.png",
+    "NewLineOnSpecificWords": "false",
+    "NewLineWords": {
+      "WEIHNACHTSGESCHICHTE": "WEIHNACHTS-\nGESCHICHTE",
+      "SCHOKOLADENFABRIK": "SCHOKOLADEN-\nFABRIK",
+      "FEUERZANGENBOWLE": "FEUERZANGEN-\nBOWLE",
+      "AHNUNGSLOSIGKEIT": "AHNUNGS-\nLOSIGKEIT"
+    },
+    "SymbolsToKeepOnNewLine": [],
+    "DisableOnlineAssetFetch": "false",
+    "DisableOnlineTitleCardFetch": "false",
+    "DisableOnlinePosterFetch": "false",
+    "DisableOnlineBackgroundFetch": "false",
+    "DisableOnlineSeasonFetch": "false",
+    "AutoCreateSeasonTemplate": "false",
+    "AutoUpdateExistingSeasonPosters": "false",
+    "LogoExifCheck": "false",
+    "TextlessPosterBypass": "false",
+    "UseOriginalTitle": "false"
   },
   "OverlayPart": {
     "ImageProcessing": "true",
@@ -214,7 +251,10 @@
     "MaxHeight": "500",
     "text_offset": "+400",
     "lineSpacing": "0",
-    "TextGravity": "south"
+    "TextGravity": "south",
+    "OverrideSeasonName": "false",
+    "SeasonOverrideText": "Staffel",
+    "SpecialSeasonOverrideText": "Spezial"
   },
   "ShowTitleOnSeasonPosterPart": {
     "AddShowTitletoSeason": "true",
@@ -327,5 +367,10 @@
     "text_offset": "+150",
     "lineSpacing": "0",
     "TextGravity": "south"
+  },
+  "WebUI": {
+    "basicAuthEnabled": false,
+    "basicAuthUsername": "admin",
+    "basicAuthPassword": ""
   }
 }

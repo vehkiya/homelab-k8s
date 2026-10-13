@@ -1,12 +1,4 @@
 collections:
-  Trending TV Shows (Trakt):
-    trakt_chart:
-      chart: trending
-      limit: 30
-    summary: "TV shows currently trending, according to Trakt."
-    sort_title: "+01_Trending TV (Trakt)"
-    sync_mode: sync
-
   The Futurama Collection:
     # Use the TMDB ID for the TV Show
     tmdb_show: 615
@@ -15,7 +7,9 @@ collections:
     collection_order: release
 
   Star Wars Collection:
-    trakt_list: https://trakt.tv/users/docteur-dream/lists/star-wars-chronology?sort=rank,asc
+    smart_filter:
+      all:
+        title.startswith: "Star Wars"
     summary: "The epic space opera franchise created by George Lucas."
     sort_title: "+Franchise_Star Wars"
     sync_mode: sync
