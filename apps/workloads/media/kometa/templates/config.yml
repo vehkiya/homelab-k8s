@@ -3,6 +3,9 @@ libraries:
     library_name: Anime
     collection_files:
       - file: config/anime.yaml
+    operations:
+      assets_for_all: true
+      assets_for_all_collections: true
     sonarr:
       name: anime
       url: http://sonarr-anime-ui.media.svc.cluster.local:8989/anime
@@ -12,14 +15,20 @@ libraries:
     library_name: Movies
     collection_files:
       - file: config/movies.yaml
-    reapply_overlays: true
+    reapply_overlays: false
     remove_overlays: false
     overlay_files:
       - file: config/overlay.yaml
+    operations:
+      assets_for_all: true
+      assets_for_all_collections: true
   TV Shows:
     library_name: TV Shows
     collection_files:
       - file: config/tv.yaml
+    operations:
+      assets_for_all: true
+      assets_for_all_collections: true
     sonarr:
       name: tv
       url: http://sonarr-tv-ui.media.svc.cluster.local:8989/tv
@@ -36,7 +45,7 @@ settings:
   asset_depth: 1
   prioritize_assets: true
   show_missing_episode_assets: false
-  show_asset_not_needed: true
+  show_asset_not_needed: false
   item_refresh_delay: 0
   show_unconfigured: true
   show_unfiltered: false
@@ -56,7 +65,7 @@ settings:
   show_filtered: false
   show_options: false
   show_missing: true
-  show_missing_assets: true
+  show_missing_assets: false
   save_report: true
   tvdb_language: eng
   ignore_ids:

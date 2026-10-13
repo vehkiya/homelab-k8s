@@ -4,6 +4,9 @@ metadata:
   name: kometa
 spec:
   schedule: "0 */4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
   jobTemplate:
     spec:
       template:
