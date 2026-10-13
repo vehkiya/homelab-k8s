@@ -12,7 +12,7 @@ libraries:
     library_name: Movies
     collection_files:
       - file: config/movies.yaml
-    reapply_overlays: false
+    reapply_overlays: true
     remove_overlays: false
     overlay_files:
       - file: config/overlay.yaml
