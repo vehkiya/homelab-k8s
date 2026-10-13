@@ -133,17 +133,7 @@ mal:
     refresh_token: {{ .Env.MAL_REFRESH_TOKEN }}
   localhost_url: http://localhost/?code={{ .Env.MAL_LOCALHOST_URL_CODE }}
   cache_expiration: 60
-trakt:
-  client_id: {{ .Env.TRAKT_CLIENT_ID }}
-  client_secret: {{ .Env.TRAKT_CLIENT_SECRET }}
-  authorization:
-    access_token: {{ .Env.TRAKT_ACCESS_TOKEN }}
-    token_type: Bearer
-    expires_in: 7776000
-    refresh_token: {{ .Env.TRAKT_REFRESH_TOKEN }}
-    scope: public
-    created_at: 1758573962
-  pin: f4197d99
+
 ntfy:
   url: http://ntfy.automation.svc.cluster.local:80
   token: {{ .Env.NTFY_TOKEN }}

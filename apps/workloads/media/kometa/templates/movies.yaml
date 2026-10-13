@@ -1,19 +1,11 @@
 collections:
-  Trakt Popular:
-    trakt_chart:
-      chart: popular
-      limit: 200
-    collection_order: custom
-    sync_mode: sync
-    summary: The most popular movies for all time.
-
   Marvel Cinematic Universe:
-    trakt_list: https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe?sort=rank,asc
+    imdb_list: https://www.imdb.com/list/ls027376755/
     sort_title: "+01_Marvel Cinematic Universe"
-    summary: "All movies from the Marvel Cinematic Universe, in release order. https://trakt.tv/users/tetharion/lists/marvel-cinematic-universe"
+    summary: "All movies from the Marvel Cinematic Universe, in release order."
 
   Harry Potterverse:
-    trakt_list: https://trakt.tv/users/barsaky/lists/harry-potter-universe-chronological-order?sort=rank,asc
+    tmdb_collection: 1241 # Harry Potter Collection
     summary: "The magical adventures of Harry Potter and his friends at Hogwarts School of Witchcraft and Wizardry, and their fight against the dark wizard Lord Voldemort."
     sort_title: "+_Franchise_Harry Potter"
     sync_mode: sync
@@ -26,20 +18,13 @@ collections:
     summary: "A collection of movies from The Matrix franchise."
     sort_title: "+Franchise_Matrix"
 
-  Middle-earth Saga:
-    trakt_list: https://trakt.tv/users/drachenplatinum/lists/middle-earth-chronological-order?sort=rank,asc
-    summary: "The complete Middle-earth saga including The Lord of the Rings and The Hobbit."
-    sort_title: "+Franchise_Middle-earth Saga"
-    sync_mode: sync
-    collection_order: custom
-
   The Lord of the Rings Collection:
     tmdb_collection: 119 # The Lord of the Rings Collection
     summary: "The epic fantasy adventure based on J.R.R. Tolkien's novels."
     sort_title: "+Franchise_Lord of the Rings"
 
   Star Wars Collection:
-    trakt_list: https://trakt.tv/users/docteur-dream/lists/star-wars-chronology?sort=rank,asc
+    tmdb_collection: 10 # Star Wars Collection
     summary: "The epic space opera franchise created by George Lucas."
     sort_title: "+Franchise_Star Wars"
     sync_mode: sync
@@ -113,9 +98,7 @@ collections:
     sort_title: "+Franchise_Despicable Me & Minions"
 
   Christmas:
-    trakt_list:
-      - https://trakt.tv/users/movistapp/lists/christmas-movies
-      - https://trakt.tv/users/2borno2b/lists/christmas-movies-extravanganza
+    imdb_list: https://www.imdb.com/list/ls000096828/
     sync_mode: sync
 
   Documentaries:
