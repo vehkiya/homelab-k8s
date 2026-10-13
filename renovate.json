@@ -218,6 +218,13 @@
       "automerge": true
     },
     {
+      "description": "Keeper services and MCP images are released together from the same repo",
+      "groupName": "keeper",
+      "matchPackageNames": [
+        "/^ghcr\\.io/ridafkih/keeper-/"
+      ]
+    },
+    {
       "description": "Automerge Renovate bot maintenance updates once CI passes",
       "matchPackageNames": [
         "renovate/renovate",
