@@ -76,19 +76,54 @@
       font-weight: 600;
       font-size: 1.1rem;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
     }
 
-    .btn:hover {
+    .btn-label {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .key-hint {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.6rem;
+      height: 1.6rem;
+      padding: 0 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: inherit;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn:hover, .btn.pressed {
       transform: translateY(-2px);
       background: rgba(255, 255, 255, 0.07);
     }
 
-    .btn-tv:hover {
+    .btn:hover .key-hint, .btn.pressed .key-hint {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn:active, .btn.pressed {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-tv:hover, .btn-tv.pressed {
       border-color: var(--tv-color);
       box-shadow: 0 8px 24px rgba(0, 140, 212, 0.25);
     }
 
-    .btn-anime:hover {
+    .btn-anime:hover, .btn-anime.pressed {
       border-color: var(--anime-color);
       box-shadow: 0 8px 24px rgba(240, 101, 149, 0.25);
     }
@@ -104,6 +139,34 @@
 
     .btn-tv .badge { background: rgba(0, 140, 212, 0.15); color: #38bdf8; }
     .btn-anime .badge { background: rgba(240, 101, 149, 0.15); color: #f472b6; }
+
+    .shortcut-legend {
+      margin-top: 1.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .shortcut-legend kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.3rem;
+      height: 1.3rem;
+      padding: 0 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: #c9d1d9;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -112,16 +175,52 @@
     <div class="subtitle">Select your media management library</div>
 
     <div class="btn-grid">
-      <a href="/tv" class="btn btn-tv">
-        <span>Standard TV</span>
+      <a href="/tv" class="btn btn-tv" id="btn-tv">
+        <div class="btn-label">
+          <kbd class="key-hint" title="Press 1 or T">1</kbd>
+          <span>Standard TV</span>
+        </div>
         <span class="badge">Series</span>
       </a>
 
-      <a href="/anime" class="btn btn-anime">
-        <span>Anime</span>
+      <a href="/anime" class="btn btn-anime" id="btn-anime">
+        <div class="btn-label">
+          <kbd class="key-hint" title="Press 2 or A">2</kbd>
+          <span>Anime</span>
+        </div>
         <span class="badge">Animation</span>
       </a>
     </div>
+
+    <div class="shortcut-legend">
+      <span>Hotkeys:</span>
+      <kbd>1</kbd> <span>/</span> <kbd>T</kbd> <span>for TV</span>
+      <span>&middot;</span>
+      <kbd>2</kbd> <span>/</span> <kbd>A</kbd> <span>for Anime</span>
+    </div>
   </div>
+
+  <script>
+    function triggerNav(id) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.classList.add('pressed');
+      setTimeout(() => {
+        btn.click();
+      }, 70);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      const key = e.key.toLowerCase();
+      if (key === '1' || key === 't') {
+        e.preventDefault();
+        triggerNav('btn-tv');
+      } else if (key === '2' || key === 'a') {
+        e.preventDefault();
+        triggerNav('btn-anime');
+      }
+    });
+  </script>
 </body>
 </html>
