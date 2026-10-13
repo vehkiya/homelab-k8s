@@ -3,10 +3,12 @@ kind: Kustomization
 
 resources:
   - deployment.yaml
+  - deployment-anime.yaml
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
   - configmap.yaml
+  - configmap-anime.yaml
   - secret.yaml
 
 labels:

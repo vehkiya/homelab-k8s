@@ -4,6 +4,7 @@ namespace: media
 
 resources:
   - longhorn-config-pvc.yaml
+  - longhorn-config-anime-pvc.yaml
 
 labels:
   - pairs:
