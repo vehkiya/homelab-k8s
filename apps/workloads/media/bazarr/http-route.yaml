@@ -12,6 +12,19 @@ spec:
     - matches:
         - path:
             type: PathPrefix
+            value: /anime
+      backendRefs:
+        - name: bazarr-anime-ui
+          port: 6767
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: "traefik.io"
+            kind: "Middleware"
+            name: "authelia-forward-auth"
+    - matches:
+        - path:
+            type: PathPrefix
             value: /
       backendRefs:
         - name: bazarr-ui

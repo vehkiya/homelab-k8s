@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: bazarr
+        bazarr-type: general
         networking/expose-web-ui: "true"
     spec:
       containers:

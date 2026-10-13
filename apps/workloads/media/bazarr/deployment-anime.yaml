@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr-anime
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: bazarr
+      bazarr-type: anime
+  template:
+    metadata:
+      labels:
+        app: bazarr
+        bazarr-type: anime
+        networking/expose-web-ui: "true"
+    spec:
+      initContainers:
+        - name: init-config
+          image: ghcr.io/home-operations/bazarr
+          command:
+            - /bin/bash
+            - -c
+            - |
+              mkdir -p /config/config
+              if [ ! -f /config/config/config.yaml ]; then
+                printf "general:\n  base_url: '/anime'\n" > /config/config/config.yaml
+              fi
+          volumeMounts:
+            - name: bazarr-anime-config-pvc
+              mountPath: /config
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "50m"
+              memory: "64Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      containers:
+        - name: bazarr
+          image: ghcr.io/home-operations/bazarr
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          env:
+            - name: PGID
+              value: "100"
+            - name: PUID
+              value: "1027"
+            - name: TZ
+              value: "Europe/Chisinau"
+          envFrom:
+            - configMapRef:
+                name: bazarr-anime-config
+            - secretRef:
+                name: bazarr-secrets
+          ports:
+            - name: web-ui
+              containerPort: 6767
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /anime/api/system/ping
+              port: web-ui
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /anime/api/system/ping
+              port: web-ui
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /anime/api/system/ping
+              port: web-ui
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          volumeMounts:
+            - name: media
+              mountPath: /data
+            - name: bazarr-anime-config-pvc
+              mountPath: /config
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1027
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-pvc
+        - name: bazarr-anime-config-pvc
+          persistentVolumeClaim:
+            claimName: bazarr-anime-config-longhorn-pvc
