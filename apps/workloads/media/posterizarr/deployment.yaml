@@ -113,6 +113,43 @@ spec:
             capabilities:
               drop:
                 - ALL
+        # Arr/Tautulli trigger modes hard-code $Upload2Plex = 'true', bypassing
+        # PlexUpload=false. Patch a copy of the mode scripts so Posterizarr only
+        # writes to /assets and Kometa stays the sole uploader (LAB-20).
+        - name: patch-arrmode
+          image: ghcr.io/fscorrupt/posterizarr
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "🔧 Patching Posterizarr mode scripts to respect PrerequisitePart.PlexUpload..."
+              cp -r /app/modules/modes/* /patched-modes/
+              sed -i "s/\$Upload2Plex = ['\"]true['\"]/\$Upload2Plex = \$config.PrerequisitePart.PlexUpload/g" /patched-modes/*.ps1
+              # Fail loudly if an upstream change left a forced upload the sed missed
+              if grep -nE "Upload2Plex\s*=\s*['\"]?\\\$?true" /patched-modes/*.ps1; then
+                echo "❌ Forced Plex upload still present after patching; refusing to start."
+                exit 1
+              fi
+              grep -n "Upload2Plex = " /patched-modes/*.ps1 || true
+              echo "✅ Patched mode scripts successfully."
+          volumeMounts:
+            - name: patched-modes
+              mountPath: /patched-modes
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "50m"
+              memory: "64Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
       containers:
         - name: posterizarr
           image: ghcr.io/fscorrupt/posterizarr
@@ -130,6 +167,8 @@ spec:
               mountPath: /assets
             - name: config
               mountPath: /config
+            - name: patched-modes
+              mountPath: /app/modules/modes
           lifecycle:
             postStart:
               exec:
@@ -173,3 +212,5 @@ spec:
         - name: posterizarr-secret-volume
           secret:
             secretName: posterizarr-secret
+        - name: patched-modes
+          emptyDir: {}
