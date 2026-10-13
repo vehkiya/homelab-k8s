@@ -17,34 +17,6 @@ spec:
         bazarr-type: anime
         networking/expose-web-ui: "true"
     spec:
-      initContainers:
-        - name: init-config
-          image: ghcr.io/home-operations/bazarr
-          command:
-            - /bin/bash
-            - -c
-            - |
-              mkdir -p /config/config
-              if [ ! -f /config/config/config.yaml ]; then
-                printf "general:\n  base_url: '/anime'\n" > /config/config/config.yaml
-              fi
-          volumeMounts:
-            - name: bazarr-anime-config-pvc
-              mountPath: /config
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "32Mi"
-            limits:
-              cpu: "50m"
-              memory: "64Mi"
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
       containers:
         - name: bazarr
           image: ghcr.io/home-operations/bazarr
@@ -56,6 +28,8 @@ spec:
               cpu: "500m"
               memory: "1Gi"
           env:
+            - name: DYNACONF_GENERAL__BASE_URL
+              value: "/anime"
             - name: PGID
               value: "100"
             - name: PUID
