@@ -79,7 +79,7 @@ radarr:
 
 sonarr:
   tv:
-    base_url: http://sonarr-tv-ui.media.svc.cluster.local:8989
+    base_url: http://sonarr-tv-ui.media.svc.cluster.local:8989/tv
     api_key: !env_var SONARR_TV_API_KEY
 
     custom_formats:
@@ -138,7 +138,7 @@ sonarr:
           - 3bc5f395426614e155e585a2f056cdf1 # Season Packs
 
   anime:
-    base_url: http://sonarr-anime-ui.media.svc.cluster.local:8989
+    base_url: http://sonarr-anime-ui.media.svc.cluster.local:8989/anime
     api_key: !env_var SONARR_ANIME_API_KEY
 
     custom_formats:

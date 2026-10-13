@@ -1,18 +1,31 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: sonarr-tv-ui-route
+  name: sonarr-route
 spec:
   parentRefs:
     - name: internal-gateway
       namespace: traefik
   hostnames:
-    - "sonarr-tv.kerrlab.app"
+    - "sonarr.kerrlab.app"
   rules:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /anime
+      backendRefs:
+        - name: sonarr-anime-ui
+          port: 8989
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: "traefik.io"
+            kind: "Middleware"
+            name: "authelia-forward-auth"
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /tv
       backendRefs:
         - name: sonarr-tv-ui
           port: 8989
@@ -22,6 +35,40 @@ spec:
             group: "traefik.io"
             kind: "Middleware"
             name: "authelia-forward-auth"
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: sonarr-portal-ui
+          port: 8080
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: "traefik.io"
+            kind: "Middleware"
+            name: "authelia-forward-auth"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sonarr-tv-ui-route
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  hostnames:
+    - "sonarr-tv.kerrlab.app"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: sonarr.kerrlab.app
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /tv
+            statusCode: 301
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -34,34 +81,12 @@ spec:
   hostnames:
     - "sonarr-anime.kerrlab.app"
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: sonarr-anime-ui
-          port: 8989
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: "traefik.io"
-            kind: "Middleware"
-            name: "authelia-forward-auth"
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: sonarr-ui-redirect
-spec:
-  parentRefs:
-    - name: internal-gateway
-      namespace: traefik
-  hostnames:
-    - "sonarr.kerrlab.app"
-  rules:
     - filters:
         - type: RequestRedirect
           requestRedirect:
             scheme: https
-            hostname: sonarr-tv.kerrlab.app
+            hostname: sonarr.kerrlab.app
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /anime
             statusCode: 301

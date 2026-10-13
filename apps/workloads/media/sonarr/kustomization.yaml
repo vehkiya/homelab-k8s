@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - deployment-tv.yaml
   - deployment-anime.yaml
+  - deployment-portal.yaml
   - service.yaml
   - http-route.yaml
   - network-policy.yaml
@@ -19,8 +20,10 @@ images:
     newTag: 5.0.0@sha256:b699df6b4b10e71ce23fb6fd8944653171f49164f79020cb0ea09e46b51b0517
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
+  - name: nginxinc/nginx-unprivileged
+    newTag: 1.27.4-alpine@sha256:62a904036bfc0e4a4f2b556e34cbf17bc136b47fde8cdb4628762725f48c5782
 
-# Shared config for both instances
+# Shared config for instances
 configMapGenerator:
   - name: sonarr-tv-config-template
     files:
@@ -28,5 +31,8 @@ configMapGenerator:
   - name: sonarr-anime-config-template
     files:
       - config.xml=templates/anime-config.xml
+  - name: sonarr-portal-content
+    files:
+      - index.html=templates/portal.html
 generatorOptions:
   disableNameSuffixHash: true

@@ -5,7 +5,7 @@ libraries:
       - file: config/anime.yaml
     sonarr:
       name: anime
-      url: http://sonarr-anime-ui.media.svc.cluster.local:8989
+      url: http://sonarr-anime-ui.media.svc.cluster.local:8989/anime
       token: {{ .Env.SONARR_TOKEN }}
       root_folder_path: /data/media/anime
   Movies:
@@ -22,7 +22,7 @@ libraries:
       - file: config/tv.yaml
     sonarr:
       name: tv
-      url: http://sonarr-tv-ui.media.svc.cluster.local:8989
+      url: http://sonarr-tv-ui.media.svc.cluster.local:8989/tv
       token: {{ .Env.SONARR_TOKEN }}
       root_folder_path: /data/media/tv
 settings:

@@ -2,7 +2,7 @@
     <LogLevel>info</LogLevel>
     <InstanceName>Sonarr TV</InstanceName>
     <Port>8989</Port>
-    <UrlBase/>
+    <UrlBase>/tv</UrlBase>
     <BindAddress>*</BindAddress>
     <TrustedNetworks>10.244.0.0/16</TrustedNetworks>
     <SslPort>9898</SslPort>
