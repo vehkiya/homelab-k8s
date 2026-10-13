@@ -33,8 +33,8 @@ settings:
   cache_expiration: 60
   asset_directory: /assets
   asset_folders: true
-  asset_depth: 0
-  prioritize_assets: false
+  asset_depth: 1
+  prioritize_assets: true
   show_missing_episode_assets: false
   show_asset_not_needed: true
   item_refresh_delay: 0
