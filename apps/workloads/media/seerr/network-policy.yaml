@@ -16,6 +16,15 @@ spec:
         - ports:
             - port: "web-ui"
               protocol: "TCP"
+    # media-webhook-notifier calls the Seerr API when an admin approves, declines or resolves from Telegram
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: media-webhook-notifier
+            k8s:io.kubernetes.pod.namespace: automation
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: "TCP"
   # ----=== Egress ===----
   egress:
     # === Allow access to services ===
