@@ -103,3 +103,42 @@ overlays:
       name: "text(SD  •  <<runtimeH>>h <<runtimeM>>m)"
       <<: *pill_style
     plex_all: true
+
+  # Age rating badges (top right): US movie/TV ratings mapped to one age scale.
+  # Unrated items (NR, Not Rated, none) get no badge. Kometa rejects a regex
+  # that matches no rating in the library, so each one keeps a common rating.
+  age-0:
+    overlay:
+      name: "text(0+)"
+      <<: *pill_style
+      horizontal_align: right
+    plex_all: true
+    filters:
+      content_rating.regex: "^(G|TV-Y|TV-G)$"
+
+  age-7:
+    overlay:
+      name: "text(7+)"
+      <<: *pill_style
+      horizontal_align: right
+    plex_all: true
+    filters:
+      content_rating.regex: "^(PG|TV-Y7|TV-PG)$"
+
+  age-13:
+    overlay:
+      name: "text(13+)"
+      <<: *pill_style
+      horizontal_align: right
+    plex_all: true
+    filters:
+      content_rating.regex: "^(PG-13|TV-14)$"
+
+  age-17:
+    overlay:
+      name: "text(17+)"
+      <<: *pill_style
+      horizontal_align: right
+    plex_all: true
+    filters:
+      content_rating.regex: "^(R|TV-MA|NC-17)$"
