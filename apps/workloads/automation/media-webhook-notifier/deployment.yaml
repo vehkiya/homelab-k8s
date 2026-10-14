@@ -60,13 +60,17 @@ spec:
               value: "/config/templates.yaml"
             # Telegram inline-button handling (callback queries) via webhook; see
             # https://github.com/hononeko/media-webhook-notifier/blob/main/docs/TELEGRAM_INTERACTIONS.md
-            # TELEGRAM_WEBHOOK_SECRET and TELEGRAM_ALLOWED_USERS come from the ExternalSecret.
+            # TELEGRAM_WEBHOOK_SECRET, TELEGRAM_ALLOWED_USERS and TELEGRAM_ADMIN_USERS come from the ExternalSecret.
+            # Admins receive Seerr requests/issues and health issues privately (each must /start the bot once).
             - name: TELEGRAM_INTERACTIVE_ENABLED
               value: "true"
             - name: TELEGRAM_UPDATES_MODE
               value: "webhook"
             - name: TELEGRAM_WEBHOOK_URL
               value: "https://media-webhook-notifier.kerrlab.app"
+            # Seerr API for the admin-only Approve / Decline / Resolve buttons; SEERR_API_KEY comes from the ExternalSecret.
+            - name: SEERR_URL
+              value: "http://seerr-ui.media.svc.cluster.local:5055"
           envFrom:
             - secretRef:
                 name: media-webhook-notifier-secret
