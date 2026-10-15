@@ -19,6 +19,6 @@ data:
   RENOVATE_ONBOARDING_CONFIG: |-
     {
       "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-      "extends": ["config:recommended", ":semanticCommits", "mergeConfidence:all-badges"]
+      "extends": ["config:recommended", ":semanticCommits", ":semanticCommitTypeAll(chore)", "mergeConfidence:all-badges"]
     }
   RENOVATE_REPOSITORY_CACHE: "enabled"
