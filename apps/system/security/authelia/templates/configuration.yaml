@@ -15,8 +15,8 @@ session:
   # Secrets are read from mounted Secret files by Authelia's template filter (X_AUTHELIA_CONFIG_FILTERS=template)
   secret: {{ secret "/secrets/authelia/SESSION_SECRET" | quote }}
   same_site: "lax"
-  inactivity: "1h"
-  expiration: "8h"
+  inactivity: "1d"
+  expiration: "7d"
   remember_me: "1M"
   cookies:
     - domain: "kerrlab.app"
