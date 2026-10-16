@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: crowdsec-blocklist-mirror
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+  ports:
+    - name: http-api
+      port: 8080
+      targetPort: http-api
+      protocol: TCP

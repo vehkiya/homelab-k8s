@@ -137,3 +137,24 @@ spec:
   egress:
     - toEntities:
         - "kube-apiserver"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-blocklist-mirror-policy
+  namespace: security
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-blocklist-mirror
+  egress:
+    # 1. Allow egress to CrowdSec LAPI
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: "TCP"
+

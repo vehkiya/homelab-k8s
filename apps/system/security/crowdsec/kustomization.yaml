@@ -8,6 +8,9 @@ resources:
   - bouncer-unifi.yaml
   - cronjob-prune.yaml
   - pdb.yaml
+  - blocklist-mirror-deployment.yaml
+  - blocklist-mirror-service.yaml
+  - blocklist-mirror-http-route.yaml
 
 helmCharts:
   - name: crowdsec
@@ -41,3 +44,7 @@ images:
     newTag: v1.4.0@sha256:6d68590366ed57b38bc4c30b99849299b686023174e58847ccc94059ab9d5f2b
   - name: alpine/k8s
     newTag: 1.37.1@sha256:712dc5385d1c1a3f83b747fa9e40f64d433a97f72ff42f9755ff7dd1f62846e4
+  - name: ghcr.io/hononeko/cs-edl-bouncer
+    newTag: 0.1.2@sha256:6db8d8d624674c23345c0ff5261c749c7c87a8c9986d03e2f6d4e157316849bb
+
+
