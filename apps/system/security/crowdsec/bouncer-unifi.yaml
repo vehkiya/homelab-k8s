@@ -43,7 +43,7 @@ spec:
             - name: CROWDSEC_UPDATE_INTERVAL
               value: "1m"
             - name: CROWDSEC_ORIGINS
-              value: "crowdsec cscli"
+              value: "crowdsec,cscli"
             - name: CROWDSEC_BOUNCER_API_KEY
               valueFrom:
                 secretKeyRef:
