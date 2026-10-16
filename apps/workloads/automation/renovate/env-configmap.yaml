@@ -16,6 +16,10 @@ data:
   MEND_RNV_NODE_OPTIONS: "--dns-result-order=ipv4first"
   RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
   RENOVATE_PR_HOURLY_LIMIT: "4"
+  # Docker Hub returns 403 for anonymous tag pages past 10, and Renovate then drops every tag timestamp, so
+  # minimumReleaseAge holds images like golang pending forever. Stop before that page; remove once
+  # https://github.com/renovatebot/renovate/issues/46925 is fixed.
+  RENOVATE_DOCKER_MAX_PAGES: "10"
   RENOVATE_ONBOARDING_CONFIG: |-
     {
       "$schema": "https://docs.renovatebot.com/renovate-schema.json",
