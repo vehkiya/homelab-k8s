@@ -7,6 +7,19 @@ spec:
     matchLabels:
       app: authelia
 
+  # Ingress to 9091 (web-ui) and from the host is allowed by the global
+  # ccnp-allow-ingress-authelia policy (apps/bootstrap/cilium/global-network-policies.yaml)
+  ingress:
+    # Prometheus metrics scrape
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9959"
+              protocol: TCP
+
   # This defines the allowed outbound (egress) traffic
   egress:
     - toEndpoints:
@@ -23,27 +36,22 @@ spec:
         - ports:
             - port: "6360"
               protocol: TCP
-    # Connection to external PostgreSQL DB on Synology
+    # External PostgreSQL DB and NTP server (startup clock check) on Synology
     - toCIDR:
         - 10.10.1.218/32
       toPorts:
         - ports:
             - port: "15432"
               protocol: TCP
+            - port: "123"
+              protocol: UDP
     - toEntities:
         - "world"
       toPorts:
-        # For 2FA/TOTP time-sync and update checks
         - ports:
-            # for NTP
-            - port: "123"
-              protocol: UDP
+            # HTTPS (only used by WebAuthn MDS, which is currently disabled)
             - port: "443"
               protocol: TCP
-            - port: "443"
-              protocol: UDP
-            # For SMTP (e.g., Gmail)
+            # SMTP submission with STARTTLS (notifier: smtp.protonmail.ch:587)
             - port: "587"
-              protocol: TCP
-            - port: "465"
               protocol: TCP

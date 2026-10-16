@@ -14,8 +14,13 @@ spec:
       targetPort: web-ui
       protocol: TCP
       name: web-ui
-  # Only honored once Cilium service topology is enabled (loadBalancer.serviceTopology);
-  # today Cilium ignores the EndpointSlice node hints and spreads traffic across all nodes.
+    # Scraped per pod by the authelia ServiceMonitor; Cilium policy only admits Prometheus
+    - port: 9959
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+  # Keeps forward-auth calls on the node-local Authelia pod. Cilium honors the EndpointSlice
+  # node hints since service topology (loadBalancer.serviceTopology) was enabled on 2026-10-04.
   trafficDistribution: PreferSameNode
   selector:
     app: authelia

@@ -303,6 +303,15 @@ spec:
         - ports:
             - port: "10250"
               protocol: TCP
+    # 16. Allow scraping of Authelia in security namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            app: authelia
+      toPorts:
+        - ports:
+            - port: "9959"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2
