@@ -41,6 +41,29 @@ spec:
           ports:
             - containerPort: 8080
               name: web-ui
+          # z2m can stay running after losing its coordinator while its shutdown hangs
+          # with the frontend already closed (Traefik 503, MQTT still connected). The
+          # frontend answering is the cheapest end-to-end liveness signal it has.
+          startupProbe:
+            httpGet:
+              path: /
+              port: web-ui
+            periodSeconds: 5
+            failureThreshold: 36 # up to 3 minutes for the adapter to come up
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web-ui
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web-ui
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
             - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
               value: "mqtt://mosquitto-svc.iot.svc.cluster.local"
