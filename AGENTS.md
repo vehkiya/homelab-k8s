@@ -125,6 +125,7 @@ Certain system-wide connections are already enabled globally in `apps/bootstrap/
 3. **Traefik Ingress:**
    * Ingress from Traefik to any pod labeled with `networking/expose-web-ui: "true"` targeting a named port `"web-ui"` is automatically allowed.
    * Ingress from Traefik to any pod labeled with `networking/expose-http-api: "true"` targeting a named port `"http-api"` is automatically allowed.
+4. **OIDC Client Hairpin Egress:** Egress from any pod labeled with `networking/oidc-client: "true"` to Traefik (`10.10.1.16:443` and Traefik pods on `8443`/`9443`) for `https://auth.kerrlab.app` OIDC discovery and token exchange is automatically allowed.
 
 ### Choosing Egress Selectors
 

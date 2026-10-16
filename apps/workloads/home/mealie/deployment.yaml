@@ -17,6 +17,7 @@ spec:
       labels:
         app: mealie
         networking/expose-web-ui: "true"
+        networking/oidc-client: "true"
     spec:
       enableServiceLinks: false
       containers:

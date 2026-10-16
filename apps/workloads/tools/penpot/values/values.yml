@@ -60,6 +60,8 @@ backend:
   replicaCount: 1
   deploymentAnnotations:
     kube-linter.io/ignore-all: "true"
+  podLabels:
+    networking/oidc-client: "true"
   resources:
     requests:
       cpu: "100m"

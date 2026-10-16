@@ -13,6 +13,7 @@ spec:
       labels:
         app: nodecast-tv
         networking/expose-web-ui: "true"
+        networking/oidc-client: "true"
     spec:
       resourceClaims:
         - name: intel-gpu

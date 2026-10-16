@@ -8,6 +8,7 @@ spec:
     metadata:
       labels:
         networking/expose-web-ui: "true"
+        networking/oidc-client: "true"
     spec:
       containers:
         - name: headlamp
