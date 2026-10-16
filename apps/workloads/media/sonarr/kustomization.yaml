@@ -17,7 +17,7 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: ghcr.io/home-operations/sonarr
-    newTag: 5.0.0@sha256:b699df6b4b10e71ce23fb6fd8944653171f49164f79020cb0ea09e46b51b0517
+    newTag: 5.0.0@sha256:6c9d5f5e005ade94cdaa2a9e454f66a53e159c3b0950260484fd88c5ee4eea1a
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: nginxinc/nginx-unprivileged
