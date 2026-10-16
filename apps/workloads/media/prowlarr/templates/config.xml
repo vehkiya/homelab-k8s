@@ -4,6 +4,7 @@
     <Port>9696</Port>
     <UrlBase/>
     <BindAddress>*</BindAddress>
+    <TrustedNetworks>10.244.0.0/16</TrustedNetworks>
     <SslPort>6969</SslPort>
     <EnableSsl>False</EnableSsl>
     <LaunchBrowser>True</LaunchBrowser>

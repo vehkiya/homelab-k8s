@@ -98,12 +98,14 @@ access_control:
   default_policy: deny
   rules:
     # 1. Admin Only (Infrastructure dashboards via Forward Auth)
-    - domain: "proxy.kerrlab.app"
+    - domain: &admin_domains
+        - "proxy.kerrlab.app"
+        - "longhorn.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
     # Deny everyone else; without this, non-admins fall through to the *.kerrlab.app catch-all
-    - domain: "proxy.kerrlab.app"
+    - domain: *admin_domains
       policy: deny
 
     # 2. Privileged & Admin Only (Indexers, Downloaders via Forward Auth)
@@ -117,6 +119,10 @@ access_control:
         - "bazarr.kerrlab.app"
         - "posterizarr.kerrlab.app"
         - "download.kerrlab.app" # qBittorrent web UI
+        - "flaresolverr.kerrlab.app"
+        - "zigbee.kerrlab.app"
+        - "go2rtc.kerrlab.app"
+        - "matter.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]
