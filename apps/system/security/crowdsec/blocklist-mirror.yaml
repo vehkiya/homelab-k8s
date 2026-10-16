@@ -30,168 +30,242 @@ data:
     log_media: stdout
     log_level: info
     enable_access_logs: false
-  chunker.py: |
-    import http.server
-    import os
-    import pathlib
-    import threading
-    import time
-    import urllib.request
+  chunker.go: |
+    package main
 
-    CHUNK_SIZE = 9500
-    LISTS_DIR = pathlib.Path("/tmp/www/lists")
-    INITIAL_FILES = ["ipv4-0.txt", "ipv4-1.txt", "ipv4-2.txt", "ipv6-0.txt"]
+    import (
+    	"fmt"
+    	"io"
+    	"log"
+    	"net/http"
+    	"os"
+    	"path/filepath"
+    	"sort"
+    	"strings"
+    	"time"
+    )
 
+    const (
+    	chunkSize = 9500
+    	listsDir  = "/tmp/www/lists"
+    	v4URL     = "http://127.0.0.1:41412/security/blocklist.txt?ipv4only"
+    	v6URL     = "http://127.0.0.1:41412/security/blocklist.txt?ipv6only"
+    )
 
-    def init_files():
-        LISTS_DIR.mkdir(parents=True, exist_ok=True)
-        header = "# CrowdSec Blocklist Mirror\n"
-        for filename in INITIAL_FILES:
-            target_path = LISTS_DIR / filename
-            if not target_path.exists():
-                target_path.write_text(header, encoding="utf-8")
+    var httpClient = &http.Client{
+    	Timeout: 15 * time.Second,
+    }
 
+    func initFiles() {
+    	if err := os.MkdirAll(listsDir, 0755); err != nil {
+    		log.Printf("[chunker] Failed to create lists directory: %v", err)
+    	}
+    	initialFiles := []string{"ipv4-0.txt", "ipv4-1.txt", "ipv4-2.txt", "ipv6-0.txt"}
+    	header := []byte("# CrowdSec EDL shard (initializing)\n")
+    	for _, fn := range initialFiles {
+    		fp := filepath.Join(listsDir, fn)
+    		if _, err := os.Stat(fp); os.IsNotExist(err) {
+    			if err := os.WriteFile(fp, header, 0644); err != nil {
+    				log.Printf("[chunker] Failed to initialize %s: %v", fn, err)
+    			}
+    		}
+    	}
+    }
 
-    def fetch_ips(url):
-        req = urllib.request.Request(
-            url, headers={"User-Agent": "CrowdSec-EDL-Chunker/1.0"}
-        )
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            if resp.status != 200:
-                raise RuntimeError(f"Unexpected status {resp.status} from {url}")
-            content = resp.read().decode("utf-8")
-        entries = set()
-        for line in content.splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            entries.add(line)
-        return sorted(entries)
+    func fetchIPs(url string) ([]string, error) {
+    	req, err := http.NewRequest(http.MethodGet, url, nil)
+    	if err != nil {
+    		return nil, err
+    	}
+    	req.Header.Set("User-Agent", "CrowdSec-EDL-Chunker/1.0")
 
+    	resp, err := httpClient.Do(req)
+    	if err != nil {
+    		return nil, err
+    	}
+    	defer resp.Body.Close()
 
-    def update_shards(family, items, min_shards=1):
-        chunks = [items[i : i + CHUNK_SIZE] for i in range(0, len(items), CHUNK_SIZE)]
-        num_shards = max(len(chunks), min_shards)
-        for idx in range(num_shards):
-            shard_items = chunks[idx] if idx < len(chunks) else []
-            filename = f"{family}-{idx}.txt"
-            target_path = LISTS_DIR / filename
-            temp_path = LISTS_DIR / f".{filename}.tmp"
-            header = f"# CrowdSec EDL shard (count: {len(shard_items)})\n"
-            content = header + "".join(f"{ip}\n" for ip in shard_items)
-            temp_path.write_text(content, encoding="utf-8")
-            os.replace(temp_path, target_path)
+    	if resp.StatusCode != http.StatusOK {
+    		return nil, fmt.Errorf("unexpected status %d from %s", resp.StatusCode, url)
+    	}
 
+    	body, err := io.ReadAll(resp.Body)
+    	if err != nil {
+    		return nil, err
+    	}
 
-    def sync_lists():
-        ipv4_items = fetch_ips(
-            "http://127.0.0.1:41412/security/blocklist.txt?ipv4only"
-        )
-        ipv6_items = fetch_ips(
-            "http://127.0.0.1:41412/security/blocklist.txt?ipv6only"
-        )
-        update_shards("ipv4", ipv4_items, min_shards=3)
-        update_shards("ipv6", ipv6_items, min_shards=1)
-        return len(ipv4_items), len(ipv6_items)
+    	raw := string(body)
+    	seen := make(map[string]struct{})
+    	var entries []string
 
+    	lines := strings.Split(raw, "\n")
+    	for _, line := range lines {
+    		line = strings.TrimSpace(line)
+    		if line == "" || strings.HasPrefix(line, "#") {
+    			continue
+    		}
+    		if _, exists := seen[line]; !exists {
+    			seen[line] = struct{}{}
+    			entries = append(entries, line)
+    		}
+    	}
 
-    def sync_loop():
-        print("[chunker] Starting background sync thread...", flush=True)
-        initial_sync_done = False
-        while True:
-            try:
-                v4_count, v6_count = sync_lists()
-                if not initial_sync_done:
-                    print(
-                        f"[chunker] Initial sync succeeded: {v4_count} IPv4, {v6_count} IPv6",
-                        flush=True,
-                    )
-                    initial_sync_done = True
-                time.sleep(60)
-            except Exception as e:
-                if not initial_sync_done:
-                    print(
-                        f"[chunker] Waiting for mirror on 127.0.0.1:41412: {e}",
-                        flush=True,
-                    )
-                    time.sleep(2)
-                else:
-                    print(f"[chunker] Sync error: {e}", flush=True)
-                    time.sleep(60)
+    	sort.Strings(entries)
+    	return entries, nil
+    }
 
+    func updateShards(family string, items []string, minShards int) error {
+    	var chunks [][]string
+    	for i := 0; i < len(items); i += chunkSize {
+    		end := i + chunkSize
+    		if end > len(items) {
+    			end = len(items)
+    		}
+    		chunks = append(chunks, items[i:end])
+    	}
 
-    class EDLHandler(http.server.BaseHTTPRequestHandler):
-        server_version = "CrowdSecEDLChunker/1.0"
+    	numShards := len(chunks)
+    	if numShards < minShards {
+    		numShards = minShards
+    	}
 
-        def do_GET(self):
-            self._handle(include_body=True)
+    	for idx := 0; idx < numShards; idx++ {
+    		var shardItems []string
+    		if idx < len(chunks) {
+    			shardItems = chunks[idx]
+    		}
 
-        def do_HEAD(self):
-            self._handle(include_body=False)
+    		filename := fmt.Sprintf("%s-%d.txt", family, idx)
+    		targetPath := filepath.Join(listsDir, filename)
+    		tempPath := filepath.Join(listsDir, fmt.Sprintf(".%s.tmp", filename))
 
-        def _handle(self, include_body):
-            path = self.path.split("?")[0]
-            if path == "/healthz":
-                body = b"ok\n"
-                self.send_response(200)
-                self.send_header("Content-Type", "text/plain; charset=utf-8")
-                self.send_header("Content-Length", str(len(body)))
-                self.end_headers()
-                if include_body:
-                    self.wfile.write(body)
-                return
+    		var builder strings.Builder
+    		builder.WriteString(fmt.Sprintf("# CrowdSec EDL shard (count: %d)\n", len(shardItems)))
+    		for _, item := range shardItems {
+    			builder.WriteString(item)
+    			builder.WriteByte('\n')
+    		}
 
-            if path.startswith("/lists/"):
-                filename = path[len("/lists/") :].strip("/")
-                if (
-                    "/" in filename
-                    or "\\" in filename
-                    or ".." in filename
-                    or not filename
-                ):
-                    self.send_error(400, "Invalid filename")
-                    return
+    		if err := os.WriteFile(tempPath, []byte(builder.String()), 0644); err != nil {
+    			return fmt.Errorf("failed to write temp shard %s: %w", tempPath, err)
+    		}
 
-                filepath = LISTS_DIR / filename
-                if not filepath.is_file():
-                    self.send_error(404, "File Not Found")
-                    return
+    		if err := os.Rename(tempPath, targetPath); err != nil {
+    			return fmt.Errorf("failed to rename temp shard to %s: %w", targetPath, err)
+    		}
+    	}
 
-                try:
-                    data = filepath.read_bytes()
-                    self.send_response(200)
-                    self.send_header("Content-Type", "text/plain; charset=utf-8")
-                    self.send_header("Content-Length", str(len(data)))
-                    self.end_headers()
-                    if include_body:
-                        self.wfile.write(data)
-                except Exception as e:
-                    self.send_error(500, f"Error reading file: {e}")
-                return
+    	return nil
+    }
 
-            self.send_error(404, "Not Found")
+    func syncLists() error {
+    	v4Items, err := fetchIPs(v4URL)
+    	if err != nil {
+    		return fmt.Errorf("fetching IPv4: %w", err)
+    	}
 
-        def log_message(self, format, *args):
-            print(
-                f"[chunker] {self.address_string()} - {format % args}", flush=True
-            )
+    	v6Items, err := fetchIPs(v6URL)
+    	if err != nil {
+    		return fmt.Errorf("fetching IPv6: %w", err)
+    	}
 
+    	if err := updateShards("ipv4", v4Items, 3); err != nil {
+    		return fmt.Errorf("updating IPv4 shards: %w", err)
+    	}
 
-    def main():
-        init_files()
-        thread = threading.Thread(target=sync_loop, daemon=True)
-        thread.start()
-        server_address = ("0.0.0.0", 8080)
-        print(
-            f"[chunker] Serving EDL on {server_address[0]}:{server_address[1]}",
-            flush=True,
-        )
-        httpd = http.server.ThreadingHTTPServer(server_address, EDLHandler)
-        httpd.serve_forever()
+    	if err := updateShards("ipv6", v6Items, 1); err != nil {
+    		return fmt.Errorf("updating IPv6 shards: %w", err)
+    	}
 
+    	log.Printf("[chunker] Sync succeeded: %d IPv4 entries, %d IPv6 entries", len(v4Items), len(v6Items))
+    	return nil
+    }
 
-    if __name__ == "__main__":
-        main()
+    func backgroundSync() {
+    	log.Println("[chunker] Starting background sync goroutine...")
+    	initialSyncDone := false
+    	for {
+    		err := syncLists()
+    		if err != nil {
+    			if !initialSyncDone {
+    				log.Printf("[chunker] Waiting for mirror on 127.0.0.1:41412: %v", err)
+    				time.Sleep(2 * time.Second)
+    			} else {
+    				log.Printf("[chunker] Sync error: %v", err)
+    				time.Sleep(60 * time.Second)
+    			}
+    			continue
+    		}
+
+    		initialSyncDone = true
+    		time.Sleep(60 * time.Second)
+    	}
+    }
+
+    func handleLists(w http.ResponseWriter, r *http.Request) {
+    	if r.Method != http.MethodGet && r.Method != http.MethodHead {
+    		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+    		return
+    	}
+
+    	filename := strings.TrimPrefix(r.URL.Path, "/lists/")
+    	if filename == "" || strings.Contains(filename, "/") || strings.Contains(filename, "\\") || strings.Contains(filename, "..") {
+    		http.Error(w, "Invalid filename", http.StatusBadRequest)
+    		return
+    	}
+
+    	targetPath := filepath.Join(listsDir, filename)
+    	data, err := os.ReadFile(targetPath)
+    	if err != nil {
+    		if os.IsNotExist(err) {
+    			http.Error(w, "File Not Found", http.StatusNotFound)
+    		} else {
+    			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+    		}
+    		return
+    	}
+
+    	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+    	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(data)))
+    	w.WriteHeader(http.StatusOK)
+    	if r.Method != http.MethodHead {
+    		_, _ = w.Write(data)
+    	}
+    }
+
+    func handleHealthz(w http.ResponseWriter, r *http.Request) {
+    	if r.Method != http.MethodGet && r.Method != http.MethodHead {
+    		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+    		return
+    	}
+    	body := []byte("ok\n")
+    	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+    	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(body)))
+    	w.WriteHeader(http.StatusOK)
+    	if r.Method != http.MethodHead {
+    		_, _ = w.Write(body)
+    	}
+    }
+
+    func main() {
+    	initFiles()
+    	go backgroundSync()
+
+    	mux := http.NewServeMux()
+    	mux.HandleFunc("/healthz", handleHealthz)
+    	mux.HandleFunc("/lists/", handleLists)
+
+    	server := &http.Server{
+    		Addr:              ":8080",
+    		Handler:           mux,
+    		ReadHeaderTimeout: 5 * time.Second,
+    	}
+
+    	log.Printf("[chunker] Serving EDL on :8080")
+    	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+    		log.Fatalf("[chunker] Server error: %v", err)
+    	}
+    }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -224,6 +298,44 @@ spec:
         fsGroup: 65532
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: build-chunker
+          image: golang:1.24-alpine@sha256:8bee1901f1e530bfb4a7850aa7a479d17ae3a18beb6e09064ed54cfd245b7191
+          command:
+            - go
+            - build
+            - -ldflags=-s -w
+            - -o
+            - /bin-out/chunker
+            - /config/chunker.go
+          env:
+            - name: CGO_ENABLED
+              value: "0"
+            - name: GOCACHE
+              value: /tmp/go-cache
+            - name: GOPATH
+              value: /tmp/go
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: bin-out
+              mountPath: /bin-out
+            - name: tmp
+              mountPath: /tmp
       containers:
         - name: mirror
           image: crowdsecurity/blocklist-mirror:v0.0.6@sha256:41ded9bfba0fc914b1a7be061ef2217c14fe5c300d0cb663b332f6566144f0c2
@@ -254,11 +366,9 @@ spec:
             - name: tmp
               mountPath: /tmp
         - name: chunker
-          image: python:3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a
+          image: crowdsecurity/blocklist-mirror:v0.0.6@sha256:41ded9bfba0fc914b1a7be061ef2217c14fe5c300d0cb663b332f6566144f0c2
           command:
-            - python3
-            - -u
-            - /config/chunker.py
+            - /bin-out/chunker
           ports:
             - name: http-api
               containerPort: 8080
@@ -280,13 +390,13 @@ spec:
           resources:
             requests:
               cpu: 10m
-              memory: 32Mi
+              memory: 16Mi
             limits:
               cpu: 100m
-              memory: 128Mi
+              memory: 64Mi
           volumeMounts:
-            - name: config
-              mountPath: /config
+            - name: bin-out
+              mountPath: /bin-out
               readOnly: true
             - name: tmp
               mountPath: /tmp
@@ -294,6 +404,8 @@ spec:
         - name: config
           configMap:
             name: crowdsec-blocklist-mirror-config
+        - name: bin-out
+          emptyDir: {}
         - name: tmp
           emptyDir: {}
 ---

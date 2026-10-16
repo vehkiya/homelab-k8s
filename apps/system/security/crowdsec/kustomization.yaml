@@ -44,6 +44,6 @@ images:
     newTag: 1.37.1@sha256:712dc5385d1c1a3f83b747fa9e40f64d433a97f72ff42f9755ff7dd1f62846e4
   - name: crowdsecurity/blocklist-mirror
     newTag: v0.0.6@sha256:41ded9bfba0fc914b1a7be061ef2217c14fe5c300d0cb663b332f6566144f0c2
-  - name: python
-    newTag: 3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a
+  - name: golang
+    newTag: 1.24-alpine@sha256:8bee1901f1e530bfb4a7850aa7a479d17ae3a18beb6e09064ed54cfd245b7191
 
