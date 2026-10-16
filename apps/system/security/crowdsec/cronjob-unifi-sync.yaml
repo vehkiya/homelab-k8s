@@ -67,7 +67,7 @@ spec:
                 - name: EDL_RULE_STATES
                   value: "NEW,INVALID"
                 - name: PRUNE_LEGACY
-                  value: "true"
+                  value: "false"
               resources:
                 requests:
                   cpu: 10m
