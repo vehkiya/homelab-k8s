@@ -41,6 +41,10 @@ spec:
             - name: web-ui
               containerPort: 9091
               protocol: TCP
+            # Prometheus metrics (telemetry.metrics in configuration.yml)
+            - name: metrics
+              containerPort: 9959
+              protocol: TCP
           env:
             # Authelia renders /config/configuration.yml itself and reads secrets from the
             # mounted files via {{ secret "..." }}; nothing is written to disk.

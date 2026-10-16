@@ -9,6 +9,17 @@ server:
     read: 32768
     write: 32768
 
+# Prometheus metrics (scraped by the authelia ServiceMonitor on the "metrics" port)
+telemetry:
+  metrics:
+    enabled: true
+    address: "tcp://0.0.0.0:9959/metrics"
+
+# Talos keeps the node clocks in sync. Skip the startup NTP check so a WAN outage
+# (no route to the default time.cloudflare.com) can never block Authelia from starting.
+ntp:
+  disable_startup_check: true
+
 session:
   name: authelia_session
   # This should match the root domain you are protecting
@@ -126,41 +137,11 @@ access_control:
     - domain: *privileged_domains
       policy: deny
 
-    # 3. Selective Per-App Entitlements (Allowing global users + specific guest grants)
-    - domain: "recipes.kerrlab.app"
-      policy: two_factor
-      subject:
-        - ["group:administrators"]
-        - ["group:privileged-users"]
-        - ["group:users"]
-        - ["group:app-mealie-users"]
+    # OIDC-only apps (recipes, romm, bar, kaneo, ...) are gated by their OIDC
+    # authorization_policies below, not here: these rules only apply to forward-auth.
+    # An app that guests may reach through forward-auth needs its own rule above the catch-all.
 
-    - domain: "romm.kerrlab.app"
-      policy: two_factor
-      subject:
-        - ["group:administrators"]
-        - ["group:privileged-users"]
-        - ["group:users"]
-        - ["group:app-romm-users"]
-
-    - domain: "bar.kerrlab.app"
-      policy: two_factor
-      subject:
-        - ["group:administrators"]
-        - ["group:privileged-users"]
-        - ["group:users"]
-        - ["group:app-bar-assistant-users"]
-        - ["group:guests"]
-
-    - domain: "kaneo.kerrlab.app"
-      policy: two_factor
-      subject:
-        - ["group:administrators"]
-        - ["group:privileged-users"]
-        - ["group:users"]
-        - ["group:app-kaneo-users"]
-
-    # 4. Catch-all for standard services (*.kerrlab.app)
+    # 3. Catch-all for standard services (*.kerrlab.app)
     - domain: "*.kerrlab.app"
       policy: two_factor
       subject:
@@ -237,6 +218,10 @@ identity_providers:
           - "preferred_username"
           - "name"
           - "groups"
+    # Shared rules via YAML anchors. A sequence alias can't be extended with extra items, so
+    # per-app policies reuse the whole base rule and add a second rule for their own group(s).
+    # Rules are OR'ed (first match wins, then default_policy), so this is equivalent to one
+    # rule listing all subjects. Anchors must be defined before they're aliased.
     authorization_policies:
       admin_only_policy:
         default_policy: 'deny'
@@ -247,23 +232,26 @@ identity_providers:
       privileged_users_policy:
         default_policy: 'deny'
         rules:
-          - policy: 'two_factor'
+          # administrators + privileged-users
+          - &oidc_privileged_rule
+            policy: 'two_factor'
             subject:
               - ["group:administrators"]
               - ["group:privileged-users"]
       autobrr_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_privileged_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
               - ["group:app-autobrr-users"]
       general_policy:
         default_policy: 'deny'
         rules:
-          - policy: 'two_factor'
-            subject:
+          # administrators + privileged-users + users
+          - &oidc_standard_rule
+            policy: 'two_factor'
+            subject: &oidc_standard_subjects
               - ["group:administrators"]
               - ["group:privileged-users"]
               - ["group:users"]
@@ -271,82 +259,63 @@ identity_providers:
         default_policy: 'deny'
         rules:
           - policy: 'one_factor'
-            subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
+            subject: *oidc_standard_subjects
       mealie_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-mealie-users"]
       romm_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-romm-users"]
       kaneo_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-kaneo-users"]
       nodecast_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-nodecast-users"]
       fluxer_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-fluxer-users"]
       bar_assistant_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-bar-assistant-users"]
               - ["group:guests"]
       guest_allowed_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:guests"]
       penpot_policy:
         default_policy: 'deny'
         rules:
+          - *oidc_standard_rule
           - policy: 'two_factor'
             subject:
-              - ["group:administrators"]
-              - ["group:privileged-users"]
-              - ["group:users"]
               - ["group:app-penpot-users"]
     clients:
       # ---- === Bar Assistant === ----
