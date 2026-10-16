@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-blocklist-mirror
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-blocklist-mirror
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: crowdsec-blocklist-mirror
+        app.kubernetes.io/instance: crowdsec-blocklist-mirror
+        app.kubernetes.io/part-of: crowdsec
+        networking/expose-http-api: "true"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: build-chunker
+          image: golang:1.24-alpine@sha256:8bee1901f1e530bfb4a7850aa7a479d17ae3a18beb6e09064ed54cfd245b7191
+          command:
+            - go
+            - build
+            - -ldflags=-s -w
+            - -o
+            - /bin-out/chunker
+            - /config/chunker.go
+          env:
+            - name: CGO_ENABLED
+              value: "0"
+            - name: GOCACHE
+              value: /tmp/go-cache
+            - name: GOPATH
+              value: /tmp/go
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: bin-out
+              mountPath: /bin-out
+            - name: tmp
+              mountPath: /tmp
+      containers:
+        - name: mirror
+          image: crowdsecurity/blocklist-mirror:v0.0.6@sha256:41ded9bfba0fc914b1a7be061ef2217c14fe5c300d0cb663b332f6566144f0c2
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: BOUNCER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: LAPI_KEY
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/crowdsec/bouncers/crowdsec-blocklist-mirror.yaml
+              subPath: crowdsec-blocklist-mirror.yaml
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+        - name: chunker
+          image: crowdsecurity/blocklist-mirror:v0.0.6@sha256:41ded9bfba0fc914b1a7be061ef2217c14fe5c300d0cb663b332f6566144f0c2
+          command:
+            - /bin-out/chunker
+          ports:
+            - name: http-api
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http-api
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http-api
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - name: bin-out
+              mountPath: /bin-out
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          configMap:
+            name: crowdsec-blocklist-mirror-config
+        - name: bin-out
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}

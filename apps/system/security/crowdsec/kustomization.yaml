@@ -8,7 +8,9 @@ resources:
   - bouncer-unifi.yaml
   - cronjob-prune.yaml
   - pdb.yaml
-  - blocklist-mirror.yaml
+  - blocklist-mirror-deployment.yaml
+  - blocklist-mirror-service.yaml
+  - blocklist-mirror-http-route.yaml
 
 helmCharts:
   - name: crowdsec
@@ -25,6 +27,10 @@ configMapGenerator:
   - name: crowdsec-agent-config
     files:
       - config.yaml.local=templates/agent-config.yaml
+  - name: crowdsec-blocklist-mirror-config
+    files:
+      - crowdsec-blocklist-mirror.yaml=templates/crowdsec-blocklist-mirror.yaml
+      - chunker.go=templates/chunker.go
   - name: crowdsec-dashboards
     options:
       labels:
