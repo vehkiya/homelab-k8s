@@ -61,10 +61,9 @@ spec:
                 gomplate -f /templates/system.xml -o /config/config/system.xml
               fi
 
-              if [ ! -f /config/plugins/configurations/Jellyfin.Plugin.LDAP_Auth.xml ]; then
-                echo "Initializing LDAP-Auth plugin configuration template..."
-                gomplate -f /templates/ldap.xml -o /config/plugins/configurations/Jellyfin.Plugin.LDAP_Auth.xml
-              fi
+              echo "Applying LDAP-Auth plugin configuration template..."
+              gomplate -f /templates/ldap.xml -o /config/plugins/configurations/LDAP-Auth.xml
+              gomplate -f /templates/ldap.xml -o /config/plugins/configurations/Jellyfin.Plugin.LDAP_Auth.xml
           envFrom:
             - secretRef:
                 name: jellyfin-secrets
