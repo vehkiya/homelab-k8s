@@ -312,6 +312,15 @@ spec:
         - ports:
             - port: "9959"
               protocol: TCP
+    # 17. Allow scraping of the CrowdSec EDL blocklist mirror in security namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            app.kubernetes.io/name: crowdsec-blocklist-mirror
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2
