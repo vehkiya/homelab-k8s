@@ -168,7 +168,7 @@ spec:
         # source, so replies come back through it. Matter sessions are not bound
         # to IP. Shares the pod's network namespace, so it sees net1 and wpan0.
         - name: thread-udp-proxy
-          image: ghcr.io/hononeko/thread-udp-proxy:0.1.0@sha256:2d8ddaa89e1eac0f0a2d85a43ecb856d91203acb9e1445a099a3789ee07f9593
+          image: ghcr.io/hononeko/thread-udp-proxy:0.1.1@sha256:56a7da7dd059fdc3c8e98ff71e482be1052e3cdef84eaa4188af33d783e0361b
           env:
             - name: PROXY_INTERFACE
               value: "net1"
