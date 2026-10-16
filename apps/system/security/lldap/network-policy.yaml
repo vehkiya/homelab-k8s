@@ -8,16 +8,7 @@ spec:
     matchLabels:
       app: lldap
   ingress:
-    # 1. Allow HTTP access only from Traefik ingress controller (for Admin Web UI)
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: traefik
-            k8s:io.kubernetes.pod.namespace: traefik
-      toPorts:
-        - ports:
-            - port: "17170"
-              protocol: TCP
-    # 2. Allow LDAP query access from Authelia and Jellyfin
+    # Allow LDAPS query access from Authelia and Jellyfin
     - fromEndpoints:
         - matchLabels:
             app: authelia
@@ -27,8 +18,6 @@ spec:
             k8s:io.kubernetes.pod.namespace: media
       toPorts:
         - ports:
-            - port: "3890"
-              protocol: TCP
             - port: "636"
               protocol: TCP
             - port: "6360"

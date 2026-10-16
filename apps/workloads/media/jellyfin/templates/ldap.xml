@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LdapServer>lldap.security.svc.cluster.local</LdapServer>
-  <LdapPort>3890</LdapPort>
-  <UseSsl>false</UseSsl>
+  <LdapPort>636</LdapPort>
+  <UseSsl>true</UseSsl>
   <UseStartTls>false</UseStartTls>
-  <SkipSslVerify>false</SkipSslVerify>
+  <SkipSslVerify>true</SkipSslVerify>
   <LdapBindUser>{{ .Env.LDAP_BIND_DN | default "uid=authelia,ou=people,dc=ldap,dc=kerrlab,dc=app" }}</LdapBindUser>
   <LdapBindPassword>{{ .Env.LDAP_BIND_PASSWORD }}</LdapBindPassword>
   <LdapBaseDn>{{ .Env.LDAP_BASE_DN | default "dc=ldap,dc=kerrlab,dc=app" }}</LdapBaseDn>
