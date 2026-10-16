@@ -17,6 +17,7 @@ spec:
       labels:
         app: bar-assistant
         networking/expose-http-api: "true"
+        networking/oidc-client: "true"
     spec:
       securityContext:
         runAsUser: 33

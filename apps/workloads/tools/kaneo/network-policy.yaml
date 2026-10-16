@@ -16,30 +16,7 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
-    # 2. Connection to Reverse Proxy / Traefik
-    - toCIDR:
-        - "10.10.1.16/32"
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-            - port: "8443"
-              protocol: TCP
-            - port: "9443"
-              protocol: TCP
-    # 3. Outbound internet access (OIDC/S3/webhooks)
+    # 2. Outbound internet access (OIDC/S3/webhooks)
     - toEntities:
         - "world"
       toPorts:
@@ -48,7 +25,7 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
-    # 4. Connection to Valkey
+    # 3. Connection to Valkey
     - toEndpoints:
         - matchLabels:
             app: kaneo-valkey

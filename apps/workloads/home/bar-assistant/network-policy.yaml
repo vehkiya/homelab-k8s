@@ -44,22 +44,12 @@ spec:
         - ports:
             - port: "15432"
               protocol: TCP
-    # Allow access to Authelia (via Traefik or World) for OIDC validation
+    # Allow access to world (external APIs)
     - toEntities:
         - world
       toPorts:
         - ports:
             - port: "443"
-              protocol: TCP
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "9443"
-              protocol: TCP
-            - port: "8443"
               protocol: TCP
     # Allow loopback
     - toEndpoints:

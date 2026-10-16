@@ -19,6 +19,7 @@ spec:
       labels:
         app: kaneo
         networking/expose-web-ui: "true"
+        networking/oidc-client: "true"
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false

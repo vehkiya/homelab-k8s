@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: api
+        networking/oidc-client: "true"
     spec:
       containers:
         - name: api

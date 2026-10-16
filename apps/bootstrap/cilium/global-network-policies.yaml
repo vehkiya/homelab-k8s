@@ -79,44 +79,29 @@ spec:
             - port: "http-api"
               protocol: "TCP"
 ---
-apiVersion: "cilium.io/v2"
+# 5. Global OIDC Client Egress to Traefik (for https://auth.kerrlab.app Hairpin)
+apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: "ccnp-allow-egress-authelia"
+  name: ccnp-allow-oidc-client-egress
 spec:
-  description: "Allows all Cilium-managed endpoints to send egress traffic to Authelia."
-  endpointSelector: {}
+  endpointSelector:
+    matchLabels:
+      networking/oidc-client: "true"
   egress:
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: security
-            app: authelia
+            app.kubernetes.io/name: traefik
+            k8s:io.kubernetes.pod.namespace: traefik
       toPorts:
         - ports:
-            - port: "9091"
-              protocol: "TCP"
----
-apiVersion: "cilium.io/v2"
-kind: CiliumClusterwideNetworkPolicy
-metadata:
-  name: "ccnp-allow-ingress-authelia"
-spec:
-  description: "Allows ingress to Authelia from any endpoint"
-  endpointSelector:
-    matchLabels:
-      app: authelia
-      k8s:io.kubernetes.pod.namespace: security
-  ingress:
-    - fromEndpoints:
-        - {}
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    - toCIDR:
+        - 10.10.1.16/32
       toPorts:
         - ports:
-            - port: "9091"
-              protocol: "TCP"
-    - fromEntities:
-        - host
-        - remote-node
-      toPorts:
-        - ports:
-            - port: "9091"
-              protocol: "TCP"
+            - port: "443"
+              protocol: TCP
