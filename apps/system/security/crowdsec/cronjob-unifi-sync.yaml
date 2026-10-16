@@ -1,0 +1,77 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: crowdsec-unifi-sync
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-unifi-sync
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  schedule: "0 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: crowdsec-unifi-sync
+            app.kubernetes.io/part-of: crowdsec
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            fsGroup: 65532
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: reconciler
+              image: ghcr.io/hononeko/cs-edl-bouncer
+              args:
+                - unifi-sync
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+              env:
+                - name: UNIFI_HOST
+                  value: "https://10.10.1.1"
+                - name: UNIFI_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: crowdsec-secrets
+                      key: UNIFI_API_KEY
+                - name: UNIFI_SITE
+                  value: "default"
+                - name: UNIFI_SKIP_TLS_VERIFY
+                  value: "true"
+                - name: UNIFI_ZONE_SRC
+                  value: "External"
+                - name: UNIFI_ZONE_DST
+                  value: "Internal,Gateway,Vpn,Hotspot,Dmz,IoT,HomeLab"
+                - name: EDL_BASE_URL
+                  value: "https://blocklist.kerrlab.app/lists"
+                - name: EDL_IPV4_SHARDS
+                  value: "3"
+                - name: EDL_IPV6_SHARDS
+                  value: "1"
+                - name: EDL_UPDATE_INTERVAL_SECONDS
+                  value: "3600"
+                - name: EDL_RULE_ACTION
+                  value: "BLOCK"
+                - name: EDL_RULE_STATES
+                  value: "NEW,INVALID"
+                - name: PRUNE_LEGACY
+                  value: "true"
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
