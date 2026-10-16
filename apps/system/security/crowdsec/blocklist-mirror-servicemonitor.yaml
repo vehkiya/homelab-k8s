@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: crowdsec-blocklist-mirror
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-blocklist-mirror
+  endpoints:
+    - port: http-api
+      interval: 30s
+      path: /metrics

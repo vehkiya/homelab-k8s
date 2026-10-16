@@ -39,6 +39,11 @@ lapi:
         secretKeyRef:
           name: crowdsec-secrets
           key: UNIFI_BUN_KEY
+    - name: BOUNCER_KEY_blocklist_mirror
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: BLOCKLIST_MIRROR_BUN_KEY
     - name: ENROLL_KEY
       valueFrom:
         secretKeyRef:

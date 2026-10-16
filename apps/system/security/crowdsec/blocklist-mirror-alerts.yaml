@@ -1,0 +1,65 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: crowdsec-blocklist-mirror-alerts
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: crowdsec.blocklist-mirror.rules
+      rules:
+        # The UCG-Fiber only subscribes to a fixed set of shards (EDL_MAX_IPV*_SHARDS).
+        # Warn well before entries start being dropped so another shard can be subscribed.
+        - alert: CrowdSecEDLShardCapacityHigh
+          expr: max(cs_edl_entries_ipv4 / (cs_edl_shard_capacity_ipv4 > 0)) > 0.8
+          for: 1h
+          labels:
+            severity: warning
+            category: Security
+            family: ipv4
+          annotations:
+            summary: "CrowdSec EDL IPv4 shards are over 80% full"
+            description: "The blocklist mirror holds {{ $value | humanizePercentage }} of its IPv4 shard capacity. Subscribe another ipv4-N.txt External Network List on the UCG-Fiber and raise EDL_MAX_IPV4_SHARDS."
+        - alert: CrowdSecEDLShardCapacityHigh
+          expr: max(cs_edl_entries_ipv6 / (cs_edl_shard_capacity_ipv6 > 0)) > 0.8
+          for: 1h
+          labels:
+            severity: warning
+            category: Security
+            family: ipv6
+          annotations:
+            summary: "CrowdSec EDL IPv6 shards are over 80% full"
+            description: "The blocklist mirror holds {{ $value | humanizePercentage }} of its IPv6 shard capacity. Subscribe another ipv6-N.txt External Network List on the UCG-Fiber and raise EDL_MAX_IPV6_SHARDS."
+        - alert: CrowdSecEDLShardOverflow
+          expr: max(cs_edl_overflow_entries_ipv4) > 0
+          for: 15m
+          labels:
+            severity: critical
+            category: Security
+            family: ipv4
+          annotations:
+            summary: "CrowdSec EDL is dropping IPv4 entries"
+            description: "{{ $value }} lowest-priority IPv4 entries do not fit in the subscribed shards and are not blocked at the UCG-Fiber."
+        - alert: CrowdSecEDLShardOverflow
+          expr: max(cs_edl_overflow_entries_ipv6) > 0
+          for: 15m
+          labels:
+            severity: critical
+            category: Security
+            family: ipv6
+          annotations:
+            summary: "CrowdSec EDL is dropping IPv6 entries"
+            description: "{{ $value }} lowest-priority IPv6 entries do not fit in the subscribed shards and are not blocked at the UCG-Fiber."
+        # The UCG-Fiber keeps polling stale lists if the mirror stops syncing from LAPI.
+        - alert: CrowdSecEDLSyncStale
+          expr: time() - max(cs_edl_last_sync_timestamp_seconds) > 600
+          for: 5m
+          labels:
+            severity: warning
+            category: Security
+          annotations:
+            summary: "CrowdSec EDL blocklist mirror is not syncing"
+            description: "The blocklist mirror has not synced decisions from CrowdSec LAPI for {{ $value | humanizeDuration }}."
