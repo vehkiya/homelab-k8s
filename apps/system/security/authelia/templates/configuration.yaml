@@ -15,10 +15,11 @@ telemetry:
     enabled: true
     address: "tcp://0.0.0.0:9959/metrics"
 
-# Talos keeps the node clocks in sync. Skip the startup NTP check so a WAN outage
-# (no route to the default time.cloudflare.com) can never block Authelia from starting.
+# Startup clock-skew check against the NAS NTP server instead of the default
+# time.cloudflare.com, so a WAN outage can't break Authelia startup.
+# The UCG gateway (10.10.1.1) does not serve NTP itself.
 ntp:
-  disable_startup_check: true
+  address: "udp://10.10.1.218:123"
 
 session:
   name: authelia_session

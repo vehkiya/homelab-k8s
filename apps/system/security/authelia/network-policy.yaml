@@ -36,14 +36,15 @@ spec:
         - ports:
             - port: "6360"
               protocol: TCP
-    # Connection to external PostgreSQL DB on Synology
+    # External PostgreSQL DB and NTP server (startup clock check) on Synology
     - toCIDR:
         - 10.10.1.218/32
       toPorts:
         - ports:
             - port: "15432"
               protocol: TCP
-    # No NTP egress: the startup NTP check is disabled (ntp.disable_startup_check)
+            - port: "123"
+              protocol: UDP
     - toEntities:
         - "world"
       toPorts:
