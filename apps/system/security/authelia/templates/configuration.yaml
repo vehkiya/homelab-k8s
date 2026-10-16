@@ -198,8 +198,8 @@ webauthn:
     prohibit_backup_eligibility: false
   selection_criteria:
     attachment: ""
-    discoverability: "preferred"
-    user_verification: "preferred"
+    discoverability: "required"
+    user_verification: "required"
   metadata:
     enabled: false
     validate_trust_anchor: true
@@ -355,11 +355,10 @@ identity_providers:
         client_secret: {{ secret "/secrets/oidc-clients/BAR_ASSISTANT_SECRET" | quote }}
         public: false
         authorization_policy: "bar_assistant_policy"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://bar.kerrlab.app/oauth/callback"
-        claims_policy: "with_email"
+        claims_policy: "with_groups"
         scopes:
           - "openid"
           - "email"
@@ -380,8 +379,7 @@ identity_providers:
         authorization_policy: "mealie_policy"
         require_pkce: true
         pkce_challenge_method: "S256"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://recipes.kerrlab.app/login"
           - "https://recipes.kerrlab.app/login?direct=1"
@@ -407,8 +405,7 @@ identity_providers:
         authorization_policy: "autobrr_policy"
         require_pkce: false
         pkce_challenge_method: ""
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://autobrr.kerrlab.app/api/auth/oidc/callback"
         scopes:
@@ -436,8 +433,7 @@ identity_providers:
           - "authorization_code"
         response_types:
           - "code"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://cluster.kerrlab.app/oidc-callback"
         claims_policy: "with_groups"
@@ -459,8 +455,7 @@ identity_providers:
           - "authorization_code"
         response_types:
           - "code"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://romm.kerrlab.app/api/oauth/openid"
         claims_policy: "with_groups"
@@ -482,8 +477,7 @@ identity_providers:
           - "authorization_code"
         response_types:
           - "code"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://nodecast.kerrlab.app/api/auth/oidc/callback"
         claims_policy: "with_groups"
@@ -505,11 +499,10 @@ identity_providers:
           - "authorization_code"
         response_types:
           - "code"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://fluxer.kerrlab.app/auth/sso/callback"
-        claims_policy: "with_email"
+        claims_policy: "with_groups"
         scopes:
           - "openid"
           - "email"
@@ -526,8 +519,7 @@ identity_providers:
         authorization_policy: "admin_only_policy"
         require_pkce: true
         pkce_challenge_method: "S256"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://bao.kerrlab.app/ui/vault/auth/oidc/oidc/callback"
           - "http://localhost:8250/oidc/callback"
@@ -552,12 +544,11 @@ identity_providers:
         authorization_policy: "kaneo_policy"
         require_pkce: true
         pkce_challenge_method: "S256"
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://kaneo.kerrlab.app/api/auth/oauth2/callback/custom"
           - "https://kaneo.kerrlab.app/auth/oauth2/callback/custom"
-        claims_policy: "with_email"
+        claims_policy: "with_groups"
         scopes:
           - "openid"
           - "email"
@@ -578,8 +569,7 @@ identity_providers:
         authorization_policy: "penpot_policy"
         require_pkce: false
         pkce_challenge_method: ""
-        consent_mode: "pre-configured"
-        pre_configured_consent_duration: "30 days"
+        consent_mode: "implicit"
         redirect_uris:
           - "https://penpot.kerrlab.app/api/auth/oauth2/oidc/callback"
           - "https://penpot.kerrlab.app/api/auth/oidc/callback"
