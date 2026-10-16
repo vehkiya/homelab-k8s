@@ -15,7 +15,7 @@ images:
   - name: alpine
     newTag: 3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
   - name: ghcr.io/itzg/minecraft-server
-    newTag: java25@sha256:395d6032d28220d91ebe966a32372372f2f21d5615a324faa932ffdfd2ee3127
+    newTag: java25@sha256:06afe09b335733b5094f752c5f78dec6936fc96efd77d3dbbb334124ab457fbb
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
 
