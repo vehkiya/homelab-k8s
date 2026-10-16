@@ -15,7 +15,7 @@ spec:
         app: go2rtc
         networking/expose-web-ui: "true"
       annotations:
-        k8s.v1.cni.cncf.io/networks: macvlan-iot
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:40:00", "ips": ["192.168.4.224/24", "fd00:2:244::224/64"] }]'
     spec:
       dnsPolicy: None
       dnsConfig:

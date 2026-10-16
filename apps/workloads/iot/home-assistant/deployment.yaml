@@ -15,7 +15,7 @@ spec:
         app: home-assistant
         networking/expose-web-ui: "true"
       annotations:
-        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:30:00" }]'
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:30:00", "ips": ["192.168.4.223/24", "fd00:2:244::223/64"] }]'
     spec:
       dnsPolicy: None
       dnsConfig:
