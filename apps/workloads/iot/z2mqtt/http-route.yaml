@@ -16,3 +16,9 @@ spec:
       backendRefs:
         - name: zigbee2mqtt-svc
           port: 8080
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia-forward-auth

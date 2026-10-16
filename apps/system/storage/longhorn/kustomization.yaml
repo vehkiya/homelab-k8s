@@ -17,6 +17,8 @@ resources:
   - s3-backup-secret.yaml
   - backup-job.yaml
   - volume-trimmer.yaml
+components:
+  - ../../../common/forward-auth
 
 images:
   - name: ghcr.io/hononeko/k8s-config-tools
