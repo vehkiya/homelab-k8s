@@ -269,8 +269,7 @@ extraObjects:
     spec:
       errors:
         status:
-          - "403-404"
-          - "500-599"
+          - "502-504"
         service:
           name: error-pages-svc
           port: 8080
