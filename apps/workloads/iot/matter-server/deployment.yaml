@@ -15,7 +15,7 @@ spec:
         app: matter-server
         networking/expose-web-ui: "true"
       annotations:
-        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:20:00" }]'
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:20:00", "ips": ["192.168.4.222/24", "fd00:2:244::222/64"] }]'
     spec:
       hostNetwork: false
       initContainers:

@@ -14,7 +14,7 @@ spec:
       labels:
         app: otbr-agent
       annotations:
-        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:10:00" }]'
+        k8s.v1.cni.cncf.io/networks: '[{ "name": "macvlan-iot", "mac": "02:00:00:00:10:00", "ips": ["192.168.4.221/24", "fd00:2:244::221/64"] }]'
         otbr.reconnect-loop: "enabled"
     spec:
       volumes:
@@ -101,7 +101,9 @@ spec:
 
               trap 'cleanup; exit 143' TERM INT HUP
 
-              # Start user-space NAT proxy (Go binary)
+              # Start user-space NAT proxy (Go binary). It relays matter-server's
+              # UDP/5540 traffic into the Thread mesh with this pod as the source,
+              # so replies come back through it. Matter sessions are not bound to IP.
               /shared/proxy &
               PROXY_PID=$!
 
@@ -125,6 +127,14 @@ spec:
                     ot-ctl thread start || true
                     sleep 5
                   fi
+                  # INTENTIONAL: advertise the Thread prefix with HIGH preference so
+                  # matter-server prefers this OTBR over the Google Nest Hub and Aqara
+                  # Hub M3, which advertise the same prefix at MEDIUM. Routing via the
+                  # Google border routers was inconsistent. This replaces a static
+                  # route in matter-server's init container (removed in #2022).
+                  # Only applied once attached, so it is not a rogue route. If the
+                  # SLZB radio link is down, the route lingers until its RA lifetime
+                  # expires: fix the radio link, don't drop the preference.
                   if ot-ctl -I wpan0 state 2>/dev/null | grep -qE "child|router|leader"; then
                     ot-ctl br rioprf high || true
                     ot-ctl br routeprf high || true
