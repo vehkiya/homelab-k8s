@@ -9,8 +9,12 @@ db_config:
   flush:
     max_items: 5000
     max_age: 7d
+    # Every pod IP that uses a bouncer key gets its own <name>@<ip> entry, so each
+    # Traefik/bouncer rollout leaves stale ones behind. Live bouncers pull every
+    # 30-60s; parent entries (no last_pull) are never matched. A live entry deleted
+    # after a long LAPI outage is recreated on its next pull with a full resync.
     bouncers_autodelete:
-      api_key: 72h
+      api_key: 1h
       cert: 72h
     agents_autodelete:
       cert: 12h
