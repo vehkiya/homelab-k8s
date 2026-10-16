@@ -22,7 +22,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: lldap
-          image: ghcr.io/lldap/lldap:stable-alpine-rootless
+          image: ghcr.io/lldap/lldap:v0.6.3-alpine-rootless
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -31,15 +31,26 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           ports:
-            - name: ldap
-              containerPort: 3890
-              protocol: TCP
             - name: ldaps
               containerPort: 6360
               protocol: TCP
-            - name: http
+            - name: web-ui
               containerPort: 17170
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: web-ui
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: web-ui
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
           envFrom:
             - secretRef:
                 name: lldap-secrets

@@ -6,17 +6,13 @@ metadata:
     app: lldap
 spec:
   ports:
-    - name: ldap
-      port: 3890
-      targetPort: ldap
-      protocol: TCP
     - name: ldaps
       port: 636
       targetPort: ldaps
       protocol: TCP
-    - name: http
+    - name: web-ui
       port: 17170
-      targetPort: http
+      targetPort: web-ui
       protocol: TCP
   selector:
     app: lldap

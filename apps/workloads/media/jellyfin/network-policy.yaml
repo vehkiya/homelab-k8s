@@ -31,8 +31,6 @@ spec:
             k8s:io.kubernetes.pod.namespace: security
       toPorts:
         - ports:
-            - port: "3890"
-              protocol: TCP
             - port: "636"
               protocol: TCP
             - port: "6360"

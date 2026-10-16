@@ -12,4 +12,4 @@ resources:
 
 images:
   - name: ghcr.io/lldap/lldap
-    newTag: stable-alpine-rootless@sha256:ba2c50930ea998eefd5454aa678a7977448019248b1827da87d330df0b71c284
+    newTag: v0.6.3-alpine-rootless@sha256:ba2c50930ea998eefd5454aa678a7977448019248b1827da87d330df0b71c284
