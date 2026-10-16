@@ -35,3 +35,5 @@ data:
       log_level: info
       log_output:
         - console
+        # Also under /app/data/log on the PVC, so logs survive the pod (rotated, last 10 runs)
+        - file
