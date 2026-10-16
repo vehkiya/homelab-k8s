@@ -31,32 +31,7 @@ spec:
         - name: otbr-data
           persistentVolumeClaim:
             claimName: otbr-data-pvc
-        - name: proxy-script
-          configMap:
-            name: otbr-proxy
-            defaultMode: 0755
 
-      initContainers:
-        - name: compile-proxy
-          image: golang:1.22-alpine@sha256:1699c10032ca2582ec89a24a1312d986a3f094aed3d5c1147b19880afe40e052
-          command:
-            - sh
-            - -c
-            - |
-              go build -ldflags="-s -w" -o /shared/proxy /app/proxy.go
-          volumeMounts:
-            - name: proxy-script
-              mountPath: /app/proxy.go
-              subPath: proxy.go
-            - name: shared-tty
-              mountPath: /shared
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
       containers:
         # 1. Socat Network-to-Serial bridge
         - name: socat-tunnel
@@ -94,18 +69,11 @@ spec:
             - |
               cleanup() {
                 echo "[Supervisor] Cleaning up child processes..."
-                [ -n "$PROXY_PID" ] && kill -TERM "$PROXY_PID" 2>/dev/null || true
                 [ -n "$ENTRYPOINT_PID" ] && kill -TERM "$ENTRYPOINT_PID" 2>/dev/null || true
                 [ -n "$MONITOR_PID" ] && kill -TERM "$MONITOR_PID" 2>/dev/null || true
               }
 
               trap 'cleanup; exit 143' TERM INT HUP
-
-              # Start user-space NAT proxy (Go binary). It relays matter-server's
-              # UDP/5540 traffic into the Thread mesh with this pod as the source,
-              # so replies come back through it. Matter sessions are not bound to IP.
-              /shared/proxy &
-              PROXY_PID=$!
 
               # Start official border router entrypoint
               /app/etc/docker/test/docker_entrypoint.sh spinel+hdlc+uart:///shared/ttyOTBR &
@@ -145,16 +113,8 @@ spec:
               ) &
               MONITOR_PID=$!
 
-              # Supervise processes: wait for either critical process to exit
+              # Supervise the entrypoint: exit with it so the container restarts
               while true; do
-                if ! kill -0 "$PROXY_PID" 2>/dev/null; then
-                  wait "$PROXY_PID"
-                  EXIT_CODE=$?
-                  echo "[Supervisor] Proxy process ($PROXY_PID) exited with status $EXIT_CODE"
-                  cleanup
-                  exit "$EXIT_CODE"
-                fi
-
                 if ! kill -0 "$ENTRYPOINT_PID" 2>/dev/null; then
                   wait "$ENTRYPOINT_PID"
                   EXIT_CODE=$?
@@ -201,3 +161,48 @@ spec:
             limits:
               cpu: "250m"
               memory: "128Mi"
+
+        # 3. User-space NAT proxy (github.com/hononeko/thread-udp-proxy). It relays
+        # matter-server's UDP/5540 traffic, which reaches this pod through the
+        # high-preference route above, into the Thread mesh with this pod as the
+        # source, so replies come back through it. Matter sessions are not bound
+        # to IP. Shares the pod's network namespace, so it sees net1 and wpan0.
+        - name: thread-udp-proxy
+          image: ghcr.io/hononeko/thread-udp-proxy:0.1.1@sha256:56a7da7dd059fdc3c8e98ff71e482be1052e3cdef84eaa4188af33d783e0361b
+          env:
+            - name: PROXY_INTERFACE
+              value: "net1"
+            - name: PROXY_PORT
+              value: "5540"
+            - name: PROXY_PREFIXES
+              value: "fd2f:741e:f59b:1::/64"
+          ports:
+            - name: health
+              containerPort: 9090
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health
+          securityContext:
+            runAsNonRoot: true
+            # distroless "nonroot"; numeric so the kubelet can verify runAsNonRoot
+            runAsUser: 65532
+            runAsGroup: 65532
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+              # Raw packet socket on net1; without it the binary can't execute.
+              add: ["NET_RAW"]
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "100m"
+              memory: "32Mi"
