@@ -131,7 +131,6 @@ access_control:
         - "bazarr.kerrlab.app"
         - "posterizarr.kerrlab.app"
         - "download.kerrlab.app" # qBittorrent web UI
-        - "flaresolverr.kerrlab.app"
         - "zigbee.kerrlab.app"
         - "go2rtc.kerrlab.app"
         - "matter.kerrlab.app"

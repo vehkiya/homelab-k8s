@@ -10,7 +10,6 @@ spec:
     metadata:
       labels:
         app: flaresolverr
-        networking/expose-http-api: "true"
     spec:
       containers:
         - name: flaresolverr
