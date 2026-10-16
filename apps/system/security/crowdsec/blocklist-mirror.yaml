@@ -1,0 +1,341 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crowdsec-blocklist-mirror-config
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+data:
+  crowdsec-blocklist-mirror.yaml: |
+    config_version: v1.0
+    crowdsec_config:
+      lapi_url: http://crowdsec-service:8080/
+      lapi_key: ${BOUNCER_API_KEY}
+      update_frequency: 30s
+      insecure_skip_verify: false
+      supported_decisions_types:
+        - ban
+    blocklists:
+      - format: plain_text
+        endpoint: /security/blocklist.txt
+        aggregate: true
+        authentication:
+          type: none
+    listen_uri: 127.0.0.1:41412
+    metrics:
+      enabled: true
+      endpoint: /metrics
+    log_media: stdout
+    log_level: info
+    enable_access_logs: false
+  chunker.py: |
+    import http.server
+    import os
+    import pathlib
+    import threading
+    import time
+    import urllib.request
+
+    CHUNK_SIZE = 9500
+    LISTS_DIR = pathlib.Path("/tmp/www/lists")
+    INITIAL_FILES = ["ipv4-0.txt", "ipv4-1.txt", "ipv4-2.txt", "ipv6-0.txt"]
+
+
+    def init_files():
+        LISTS_DIR.mkdir(parents=True, exist_ok=True)
+        header = "# CrowdSec Blocklist Mirror\n"
+        for filename in INITIAL_FILES:
+            target_path = LISTS_DIR / filename
+            if not target_path.exists():
+                target_path.write_text(header, encoding="utf-8")
+
+
+    def fetch_ips(url):
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "CrowdSec-EDL-Chunker/1.0"}
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            if resp.status != 200:
+                raise RuntimeError(f"Unexpected status {resp.status} from {url}")
+            content = resp.read().decode("utf-8")
+        entries = set()
+        for line in content.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            entries.add(line)
+        return sorted(entries)
+
+
+    def update_shards(family, items, min_shards=1):
+        chunks = [items[i : i + CHUNK_SIZE] for i in range(0, len(items), CHUNK_SIZE)]
+        num_shards = max(len(chunks), min_shards)
+        for idx in range(num_shards):
+            shard_items = chunks[idx] if idx < len(chunks) else []
+            filename = f"{family}-{idx}.txt"
+            target_path = LISTS_DIR / filename
+            temp_path = LISTS_DIR / f".{filename}.tmp"
+            header = f"# CrowdSec EDL shard (count: {len(shard_items)})\n"
+            content = header + "".join(f"{ip}\n" for ip in shard_items)
+            temp_path.write_text(content, encoding="utf-8")
+            os.replace(temp_path, target_path)
+
+
+    def sync_lists():
+        ipv4_items = fetch_ips(
+            "http://127.0.0.1:41412/security/blocklist.txt?ipv4only"
+        )
+        ipv6_items = fetch_ips(
+            "http://127.0.0.1:41412/security/blocklist.txt?ipv6only"
+        )
+        update_shards("ipv4", ipv4_items, min_shards=3)
+        update_shards("ipv6", ipv6_items, min_shards=1)
+        return len(ipv4_items), len(ipv6_items)
+
+
+    def sync_loop():
+        print("[chunker] Starting background sync thread...", flush=True)
+        initial_sync_done = False
+        while True:
+            try:
+                v4_count, v6_count = sync_lists()
+                if not initial_sync_done:
+                    print(
+                        f"[chunker] Initial sync succeeded: {v4_count} IPv4, {v6_count} IPv6",
+                        flush=True,
+                    )
+                    initial_sync_done = True
+                time.sleep(60)
+            except Exception as e:
+                if not initial_sync_done:
+                    print(
+                        f"[chunker] Waiting for mirror on 127.0.0.1:41412: {e}",
+                        flush=True,
+                    )
+                    time.sleep(2)
+                else:
+                    print(f"[chunker] Sync error: {e}", flush=True)
+                    time.sleep(60)
+
+
+    class EDLHandler(http.server.BaseHTTPRequestHandler):
+        server_version = "CrowdSecEDLChunker/1.0"
+
+        def do_GET(self):
+            self._handle(include_body=True)
+
+        def do_HEAD(self):
+            self._handle(include_body=False)
+
+        def _handle(self, include_body):
+            path = self.path.split("?")[0]
+            if path == "/healthz":
+                body = b"ok\n"
+                self.send_response(200)
+                self.send_header("Content-Type", "text/plain; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                if include_body:
+                    self.wfile.write(body)
+                return
+
+            if path.startswith("/lists/"):
+                filename = path[len("/lists/") :].strip("/")
+                if (
+                    "/" in filename
+                    or "\\" in filename
+                    or ".." in filename
+                    or not filename
+                ):
+                    self.send_error(400, "Invalid filename")
+                    return
+
+                filepath = LISTS_DIR / filename
+                if not filepath.is_file():
+                    self.send_error(404, "File Not Found")
+                    return
+
+                try:
+                    data = filepath.read_bytes()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/plain; charset=utf-8")
+                    self.send_header("Content-Length", str(len(data)))
+                    self.end_headers()
+                    if include_body:
+                        self.wfile.write(data)
+                except Exception as e:
+                    self.send_error(500, f"Error reading file: {e}")
+                return
+
+            self.send_error(404, "Not Found")
+
+        def log_message(self, format, *args):
+            print(
+                f"[chunker] {self.address_string()} - {format % args}", flush=True
+            )
+
+
+    def main():
+        init_files()
+        thread = threading.Thread(target=sync_loop, daemon=True)
+        thread.start()
+        server_address = ("0.0.0.0", 8080)
+        print(
+            f"[chunker] Serving EDL on {server_address[0]}:{server_address[1]}",
+            flush=True,
+        )
+        httpd = http.server.ThreadingHTTPServer(server_address, EDLHandler)
+        httpd.serve_forever()
+
+
+    if __name__ == "__main__":
+        main()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-blocklist-mirror
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-blocklist-mirror
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: crowdsec-blocklist-mirror
+        app.kubernetes.io/instance: crowdsec-blocklist-mirror
+        app.kubernetes.io/part-of: crowdsec
+        networking/expose-http-api: "true"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: mirror
+          image: crowdsecurity/blocklist-mirror:v0.0.6@sha256:41ded9bfba0fc914b1a7be061ef2217c14fe5c300d0cb663b332f6566144f0c2
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: BOUNCER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: LAPI_KEY
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/crowdsec/bouncers/crowdsec-blocklist-mirror.yaml
+              subPath: crowdsec-blocklist-mirror.yaml
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+        - name: chunker
+          image: python:3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a
+          command:
+            - python3
+            - -u
+            - /config/chunker.py
+          ports:
+            - name: http-api
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http-api
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http-api
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          configMap:
+            name: crowdsec-blocklist-mirror-config
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crowdsec-blocklist-mirror
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+  ports:
+    - name: http-api
+      port: 8080
+      targetPort: http-api
+      protocol: TCP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: crowdsec-blocklist-mirror-route
+  namespace: security
+  labels:
+    app.kubernetes.io/name: crowdsec-blocklist-mirror
+    app.kubernetes.io/instance: crowdsec-blocklist-mirror
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  hostnames:
+    - blocklist.kerrlab.app
+  parentRefs:
+    - name: internal-gateway
+      namespace: traefik
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: crowdsec-blocklist-mirror
+          port: 8080
