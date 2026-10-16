@@ -20,8 +20,14 @@ metadata:
     app: authelia-dragonfly
 spec:
   replicas: 1
+  # In-memory only (no volume): surge a new pod and retire the old one only once
+  # the new one passes readiness, so Authelia always has a reachable session
+  # store. Sessions held by the old pod are still dropped on rollout.
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: authelia-dragonfly
@@ -34,10 +40,12 @@ spec:
         - name: dragonfly
           image: ghcr.io/dragonflydb/dragonfly
           args:
-            - "--dbfilename=dump"
-            - "--dir=/data"
+            # Empty dbfilename disables snapshot load on start and save on shutdown;
+            # there is no persistent volume, so snapshots would be discarded anyway.
+            - "--dbfilename="
             - "--proactor_threads=1"
-            - "--snapshot_cron=*/15 * * * *"
+            # Stay below the 512Mi container limit to leave headroom for overhead.
+            - "--maxmemory=384mb"
             - "--force_epoll"
             - "--version_check=false"
           env:
@@ -74,15 +82,9 @@ spec:
                 - ALL
             seccompProfile:
               type: RuntimeDefault
-          volumeMounts:
-            - name: data
-              mountPath: /data
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-      volumes:
-        - name: data
-          emptyDir: {}
