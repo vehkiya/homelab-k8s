@@ -18,8 +18,8 @@ resources:
   - valkey.yaml
   - network-policy.yaml
 
-components:
-  - ../../../common/forward-auth
+# authelia-forward-auth in `tools` is provided by whoami's forward-auth component:
+# one app per namespace owns it, the others only reference it (see media/*)
 
 images:
   - name: ghcr.io/hononeko/homelab-launchpad
