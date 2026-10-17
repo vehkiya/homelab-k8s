@@ -34,5 +34,4 @@ configMapGenerator:
   - name: sonarr-portal-content
     files:
       - index.html=templates/portal.html
-generatorOptions:
-  disableNameSuffixHash: true
+

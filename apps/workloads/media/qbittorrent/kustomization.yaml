@@ -15,9 +15,6 @@ configMapGenerator:
   - name: qbittorrent-scripts
     files:
       - notify-n8n.sh=templates/notify-n8n.sh
-generatorOptions:
-  disableNameSuffixHash: true
-
 labels:
   - pairs:
       app.kubernetes.io/name: qbittorrent

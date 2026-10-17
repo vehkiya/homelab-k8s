@@ -13,6 +13,7 @@ spec:
         app: renovate-server
         networking/expose-http-api: "true"
     spec:
+      terminationGracePeriodSeconds: 120
       securityContext:
         runAsUser: 12021
         runAsGroup: 0
@@ -74,6 +75,18 @@ spec:
           volumeMounts:
             - name: cache-volume
               mountPath: "/tmp/renovate/cache"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http-api
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http-api
+            initialDelaySeconds: 15
+            periodSeconds: 20
           resources:
             requests:
               cpu: "25m"

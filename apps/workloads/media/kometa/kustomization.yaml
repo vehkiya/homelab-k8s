@@ -24,9 +24,6 @@ configMapGenerator:
     files:
       - tv.yaml=templates/tv.yaml
 
-generatorOptions:
-  disableNameSuffixHash: true
-
 labels:
   - pairs:
       app.kubernetes.io/name: kometa

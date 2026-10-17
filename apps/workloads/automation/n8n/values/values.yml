@@ -90,6 +90,9 @@ taskRunners:
 # ----- Main replicas (when multi-main is disabled) -----
 replicaCount: 1
 
+strategy:
+  type: Recreate
+
 # ----- Service -----
 service:
   type: ClusterIP

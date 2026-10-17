@@ -16,8 +16,6 @@ configMapGenerator:
       - network.xml=templates/network.xml
       - system.xml=templates/system.xml
       - ldap.xml=templates/ldap.xml
-generatorOptions:
-  disableNameSuffixHash: true
 
 labels:
   - pairs:
