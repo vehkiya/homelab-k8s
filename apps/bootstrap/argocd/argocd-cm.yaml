@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
 data:
   url: "https://argo.kerrlab.app"
+  admin.enabled: "false"
   oidc.config: |
     name: Authelia
     issuer: https://auth.kerrlab.app
