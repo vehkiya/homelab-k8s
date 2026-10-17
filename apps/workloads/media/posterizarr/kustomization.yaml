@@ -12,9 +12,6 @@ configMapGenerator:
   - name: posterizarr-configmap
     files:
       - config.json.template=templates/config.json
-generatorOptions:
-  disableNameSuffixHash: true
-
 labels:
   - pairs:
       app.kubernetes.io/name: posterizarr

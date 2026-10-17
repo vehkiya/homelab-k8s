@@ -66,6 +66,7 @@
       "groupName": "argocd",
       "matchPackageNames": [
         "quay.io/argoproj/argocd",
+        "dhi.io/argocd",
         "argoproj/argo-cd"
       ]
     },
@@ -158,6 +159,7 @@
       ],
       "matchPackageNames": [
         "renovate/renovate",
+        "ghcr.io/mend/renovate-ce",
         "kube-prometheus-stack"
       ],
       "description": "Daily maintenance window for core GitOps and monitoring components",

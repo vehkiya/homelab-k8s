@@ -20,9 +20,6 @@ configMapGenerator:
       - configuration.yaml.template=template/configuration.yaml
       - pill_separator.yaml=template/pill_separator.yaml
 
-generatorOptions:
-  disableNameSuffixHash: true
-
 images:
   - name: ghcr.io/home-operations/home-assistant
     newTag: 2026.10.2@sha256:0d289f21951f9ecf0bf8888089c6d43f379611c47fe84f13d3302e83daa3c8fa

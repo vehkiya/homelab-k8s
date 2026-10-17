@@ -22,5 +22,3 @@ configMapGenerator:
   - name: prowlarr-config-template
     files:
       - config.xml=templates/config.xml
-generatorOptions:
-  disableNameSuffixHash: true
