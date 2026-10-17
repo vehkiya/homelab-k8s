@@ -5,7 +5,7 @@ data "talos_machine_configuration" "config" {
   cluster_endpoint   = var.cluster_endpoint
   machine_type       = each.value.role
   machine_secrets    = local.machine_secrets
-  talos_version      = "v1.7"
+  talos_version      = var.talos_version
   kubernetes_version = var.kubernetes_version
 
   config_patches = [

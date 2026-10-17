@@ -8,6 +8,13 @@ spec:
       labels:
         networking/oidc-client: "true"
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: argocd-server
       containers:
         - name: argocd-server
           resources:

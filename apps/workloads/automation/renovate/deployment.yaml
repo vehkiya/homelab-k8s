@@ -14,6 +14,16 @@ spec:
         networking/expose-http-api: "true"
     spec:
       terminationGracePeriodSeconds: 120
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - performance
       securityContext:
         runAsUser: 12021
         runAsGroup: 0
