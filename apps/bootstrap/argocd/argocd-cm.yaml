@@ -10,6 +10,20 @@ metadata:
     app.kubernetes.io/part-of: argocd
 data:
   url: "https://argo.kerrlab.app"
+  oidc.config: |
+    name: Authelia
+    issuer: https://auth.kerrlab.app
+    clientID: argocd
+    clientSecret: $oidc.authelia.clientSecret
+    enablePKCEAuthentication: true
+    requestedScopes:
+      - openid
+      - profile
+      - email
+      - groups
+    requestedIDTokenClaims:
+      groups:
+        essential: true
   # Specifies the label key used by Argo CD Application controller
   # to identify the Application resource (optional, default is shown)
   application.instanceLabelKey: "argocd.argoproj.io/instance"
