@@ -3,6 +3,7 @@ locals {
 
   cilium_dir           = "${local.root_dir}/apps/bootstrap/cilium"
   coredns_dir          = "${local.root_dir}/apps/bootstrap/coredns"
+  namespaces_dir       = "${local.root_dir}/apps/bootstrap/namespaces"
   external_secrets_dir = "${local.root_dir}/apps/bootstrap/external-secrets"
   argocd_dir           = "${local.root_dir}/apps/bootstrap/argocd"
   app_of_apps_file     = "${local.root_dir}/apps/gitops/app-of-apps/bootstrap.yaml"
@@ -12,6 +13,9 @@ locals {
 
   coredns_files = [for f in fileset(local.coredns_dir, "**") : "${local.coredns_dir}/${f}"]
   coredns_hash  = sha256(join("", [for f in local.coredns_files : filesha256(f)]))
+
+  namespaces_files = [for f in fileset(local.namespaces_dir, "**") : "${local.namespaces_dir}/${f}"]
+  namespaces_hash  = sha256(join("", [for f in local.namespaces_files : filesha256(f)]))
 
   external_secrets_files = [for f in fileset(local.external_secrets_dir, "**") : "${local.external_secrets_dir}/${f}"]
   external_secrets_hash  = sha256(join("", [for f in local.external_secrets_files : filesha256(f)]))
@@ -64,10 +68,32 @@ resource "terraform_data" "coredns" {
   }
 }
 
-# 3. Deploy External Secrets Operator
+# 3. Deploy Namespaces
+resource "terraform_data" "namespaces" {
+  depends_on = [terraform_data.coredns]
+
+  input = local.namespaces_hash
+
+  triggers_replace = [
+    local.namespaces_hash
+  ]
+
+  provisioner "local-exec" {
+    environment = {
+      KUBECONFIG = local.kubeconfig_path
+    }
+    command = <<-EOT
+      echo "[*] Applying Namespaces from ${local.namespaces_dir}..."
+      kustomize build --enable-helm "${local.namespaces_dir}" | kubectl apply --server-side --force-conflicts -f -
+    EOT
+  }
+}
+
+# 4. Deploy External Secrets Operator
 resource "terraform_data" "external_secrets" {
   depends_on = [
     terraform_data.coredns,
+    terraform_data.namespaces,
     kubernetes_secret.vaultwarden_credentials
   ]
 
@@ -90,9 +116,12 @@ resource "terraform_data" "external_secrets" {
   }
 }
 
-# 4. Deploy ArgoCD
+# 5. Deploy ArgoCD
 resource "terraform_data" "argocd" {
-  depends_on = [terraform_data.external_secrets]
+  depends_on = [
+    terraform_data.external_secrets,
+    terraform_data.namespaces
+  ]
 
   input = local.argocd_hash
 
@@ -113,7 +142,7 @@ resource "terraform_data" "argocd" {
   }
 }
 
-# 5. Connect ArgoCD Root Bootstrap ApplicationSet
+# 6. Connect ArgoCD Root Bootstrap ApplicationSet
 resource "terraform_data" "bootstrap_app_of_apps" {
   depends_on = [terraform_data.argocd]
 

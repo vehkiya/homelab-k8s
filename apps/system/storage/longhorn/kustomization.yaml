@@ -10,7 +10,6 @@ helmCharts:
     valuesFile: values/values.yaml
     includeCRDs: true
 resources:
-  - longhorn-namespace.yaml
   - longhorn-http-route.yaml
   - network-policy.yaml
   - storageclass-retain.yaml

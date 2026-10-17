@@ -43,6 +43,11 @@ machine:
       - iommu=pt
       - cpufreq.default_governor=performance
       - nvme_core.io_timeout=60
+  nodeLabels:
+    intel.feature.node.kubernetes.io/gpu: "true"
+    node-type: "performance"
+    node.longhorn.io/create-default-disk: "true"
+    networkSpeed: "2.5G"
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
