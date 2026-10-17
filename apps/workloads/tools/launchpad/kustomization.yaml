@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# No top-level `namespace:`: it would also rewrite the Roles in argocd and
+# longhorn-system (rbac.yaml). Everything without an explicit namespace lands in
+# `tools`, the workloads-tools ApplicationSet's destination.
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: launchpad
+
+resources:
+  - configmap.yaml
+  - rbac.yaml
+  - deployment.yaml
+  - service.yaml
+  - http-route.yaml
+  - rate-limit.yaml
+  - valkey.yaml
+  - network-policy.yaml
+
+components:
+  - ../../../common/forward-auth
+
+images:
+  - name: ghcr.io/hononeko/homelab-launchpad
+    newTag: 0.1.0@sha256:70190b64e15425a783e421b54e6eef2beb7b507c0bf0c2135fc7abb96106ba6a
+  - name: docker.io/valkey/valkey
+    newTag: 9.2-alpine@sha256:cdcb7b1c7b6f1c9cb9442c71ac6275e78184657448407b2c1fdde7ee8024f4fb

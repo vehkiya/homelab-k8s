@@ -1,0 +1,70 @@
+# Ingress from Traefik to the `web-ui` port is allowed by the global policy
+# (networking/expose-web-ui). The launchpad trusts Authelia's Remote-* headers
+# from any peer (AUTH_TRUSTED_PROXIES="*") because nothing else can reach it.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: launchpad-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: launchpad
+  egress:
+    # 1. Kubernetes API: route discovery, ArgoCD applications, cluster telemetry
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+    # 2. Preferences store
+    - toEndpoints:
+        - matchLabels:
+            app: launchpad-valkey
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    # 3. Service health probes of *.kerrlab.app, which resolve to Traefik
+    #    (the load balancer IP, and the Traefik pods behind it)
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: traefik
+            k8s:io.kubernetes.pod.namespace: traefik
+      toPorts:
+        - ports:
+            - port: "8443"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    - toCIDR:
+        - 10.10.1.16/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    # 4. Health probes of NAS-hosted services (fortress.kerrlab.app CNAMEs)
+    - toCIDR:
+        - 10.10.1.218/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: launchpad-valkey-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: launchpad-valkey
+  ingress:
+    # Only the launchpad may use its preferences store
+    - fromEndpoints:
+        - matchLabels:
+            app: launchpad
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP

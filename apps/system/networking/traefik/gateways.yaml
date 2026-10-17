@@ -18,6 +18,22 @@ spec:
       allowedRoutes:
         namespaces:
           from: All # Or "Same" if all internal routes are in 'traefik' ns
+    # The apex (the "*.kerrlab.app" listener never matches it): the launchpad in tools
+    - name: websecure-apex
+      protocol: HTTPS
+      port: 9443
+      hostname: "kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: tools
 ---
 # external-gateway.yaml
 apiVersion: gateway.networking.k8s.io/v1

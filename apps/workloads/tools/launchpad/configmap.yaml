@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: launchpad-config
+  labels:
+    app: launchpad
+data:
+  PORT: "3000"
+  # Authelia forward-auth (authelia-forward-auth middleware)
+  AUTH_MODE: "forward-auth"
+  AUTH_ADMIN_GROUPS: "administrators"
+  # Identity headers are trusted from any peer only because the Cilium policies
+  # admit nothing but Traefik to this pod (and kubelet probes from the host)
+  AUTH_TRUSTED_PROXIES: "*"
+  # Per-user preferences and launch counters
+  VALKEY_URL: "redis://launchpad-valkey:6379"
+  # Service health probes may target any *.kerrlab.app host
+  HEALTH_PROBE_ALLOWED_DOMAINS: "kerrlab.app"
