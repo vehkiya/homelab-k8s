@@ -30,7 +30,6 @@ spec:
         namespace: "games"
       syncPolicy:
         syncOptions:
-          - CreateNamespace=true
           - ServerSideApply=true
   syncPolicy:
     preserveResourcesOnDeletion: true

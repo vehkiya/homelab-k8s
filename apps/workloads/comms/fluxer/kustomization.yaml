@@ -7,7 +7,6 @@ labels:
       app.kubernetes.io/name: fluxer
 
 resources:
-  - namespace.yaml
   - configmap.yaml
   - external-secrets.yaml
   - redis.yaml

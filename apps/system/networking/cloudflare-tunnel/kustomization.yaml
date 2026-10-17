@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: cloudflare-tunnel
 
 resources:
-  - namespace.yaml
   - external-secret.yaml
   - deployment.yaml
   - network-policy.yaml
