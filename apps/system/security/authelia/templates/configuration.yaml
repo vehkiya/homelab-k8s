@@ -147,7 +147,17 @@ access_control:
     # authorization_policies below, not here: these rules only apply to forward-auth.
     # An app that guests may reach through forward-auth needs its own rule above the catch-all.
 
-    # 3. Catch-all for standard services (*.kerrlab.app)
+    # 3. Apex: the launchpad (forward-auth). "*.kerrlab.app" doesn't match the apex, so
+    #    without this rule it falls to default_policy: deny. Same audience as the catch-all;
+    #    the launchpad maps administrators to its admin role itself.
+    - domain: "kerrlab.app"
+      policy: two_factor
+      subject:
+        - ["group:administrators"]
+        - ["group:privileged-users"]
+        - ["group:users"]
+
+    # 4. Catch-all for standard services (*.kerrlab.app)
     - domain: "*.kerrlab.app"
       policy: two_factor
       subject:

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: launchpad
+  labels:
+    app: launchpad
+spec:
+  # One replica: route, ArgoCD and health-probe state and the SSE clients live in memory
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: launchpad
+  template:
+    metadata:
+      labels:
+        app: launchpad
+        networking/expose-web-ui: "true"
+    spec:
+      serviceAccountName: launchpad
+      # Needed for in-cluster Kubernetes API access (rbac.yaml)
+      automountServiceAccountToken: true
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: launchpad
+          image: ghcr.io/hononeko/homelab-launchpad
+          ports:
+            - name: web-ui
+              containerPort: 3000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: launchpad-config
+          resources:
+            # About 29 MiB after startup (CI smoke test, Bun 1.4.3)
+            requests:
+              cpu: "20m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: web-ui
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: web-ui
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

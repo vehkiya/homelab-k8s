@@ -1,0 +1,116 @@
+# Per-user launchpad preferences and launch counters. Unlike the cache-only
+# Valkey instances of other apps, this one persists (AOF on a PVC) and never
+# evicts keys.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: launchpad-valkey-data
+  labels:
+    app: launchpad-valkey
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-retain
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: launchpad-valkey
+  labels:
+    app: launchpad-valkey
+spec:
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+  selector:
+    app: launchpad-valkey
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: launchpad-valkey
+  labels:
+    app: launchpad-valkey
+spec:
+  replicas: 1
+  # ReadWriteOnce volume: the old pod must release it before the new one starts
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: launchpad-valkey
+  template:
+    metadata:
+      labels:
+        app: launchpad-valkey
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: valkey
+          image: docker.io/valkey/valkey
+          command:
+            - valkey-server
+            - --protected-mode
+            - "no"
+            - --dir
+            - /data
+            # Durability: append-only file, fsynced every second; no RDB snapshots
+            - --appendonly
+            - "yes"
+            - --appendfsync
+            - everysec
+            - --save
+            - ""
+            # Preferences must never be evicted; at the cap, writes fail instead
+            - --maxmemory
+            - 96mb
+            - --maxmemory-policy
+            - noeviction
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "250m"
+              memory: "128Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: launchpad-valkey-data

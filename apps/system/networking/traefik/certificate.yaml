@@ -11,6 +11,8 @@ spec:
     group: cert-manager.io
   dnsNames:
     - "*.kerrlab.app"
+    # The apex isn't covered by the wildcard; served by the launchpad (internal-gateway)
+    - "kerrlab.app"
   privateKey:
     algorithm: ECDSA
     size: 384
