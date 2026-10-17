@@ -42,3 +42,4 @@ patches:
     target:
       kind: Deployment
       name: argocd-server
+  - path: controllers-affinity-patch.yaml
