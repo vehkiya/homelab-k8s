@@ -7,6 +7,8 @@ data:
   BASE_URL: "https://recipes.kerrlab.app"
   ALLOW_SIGNUP: "false"
   ALLOW_PASSWORD_LOGIN: "false"
+  DEFAULT_GROUP: "Home"
+  DEFAULT_HOUSEHOLD: "Friends"
   DB_ENGINE: "postgres"
   PUID: "1026"
   PGID: "100"
