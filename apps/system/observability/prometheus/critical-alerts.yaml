@@ -56,7 +56,13 @@ spec:
 
         # 5. Networking: Traefik Ingress High 5xx Error Rate
         - alert: TraefikHigh5xxErrorRate
-          expr: (sum(rate(traefik_entrypoint_requests_total{code=~"5.."}[5m])) by (entrypoint) / sum(rate(traefik_entrypoint_requests_total[5m])) by (entrypoint)) * 100 > 10
+          expr: |
+            (
+              (sum(rate(traefik_entrypoint_requests_total{code=~"5.."}[5m])) by (entrypoint)
+                / sum(rate(traefik_entrypoint_requests_total[5m])) by (entrypoint)) * 100 > 10
+            ) and (
+              sum(rate(traefik_entrypoint_requests_total[5m])) by (entrypoint) > 0.1
+            )
           for: 5m
           labels:
             severity: critical
