@@ -5,7 +5,7 @@ metadata:
   name: mealie-config
 data:
   BASE_URL: "https://recipes.kerrlab.app"
-  ALLOW_SIGNUP: "true"
+  ALLOW_SIGNUP: "false"
   ALLOW_PASSWORD_LOGIN: "false"
   DB_ENGINE: "postgres"
   PUID: "1026"
@@ -26,4 +26,4 @@ data:
   OPENAI_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/openai/"
   OPENAI_MODEL: "gemini-flash-lite-latest"
   UVICORN_WORKERS: "1"
-  HTTP_ALLOW_LIST: "10.0.0.0/8,192.168.0.0/16"
+  HTTP_ALLOW_LIST: "10.10.1.16/32"

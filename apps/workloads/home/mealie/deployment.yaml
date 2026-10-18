@@ -19,6 +19,7 @@ spec:
         networking/expose-web-ui: "true"
         networking/oidc-client: "true"
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
         - name: mealie

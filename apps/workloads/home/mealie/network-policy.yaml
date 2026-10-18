@@ -8,33 +8,7 @@ spec:
       app: mealie
   egress:
     # ------------------------------------------------------------------
-    # 2. INTERNAL SERVICES
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-            - port: "80"
-              protocol: TCP
-            - port: "9443"
-              protocol: TCP
-            - port: "8443"
-              protocol: TCP
-    - toCIDR:
-        - "10.10.1.16/32"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-            - port: "80"
-              protocol: TCP
-
-
-    # ------------------------------------------------------------------
-    # 4. EXTERNAL HOSTS
+    # 1. EXTERNAL HOSTS (PostgreSQL on NAS)
     - toCIDR:
         - "10.10.1.218/32"
       toPorts:
@@ -43,7 +17,7 @@ spec:
               protocol: TCP
 
     # ------------------------------------------------------------------
-    # 5. PUBLIC INTERNET
+    # 2. PUBLIC INTERNET (Recipe scraping & OpenAI API)
     - toEntities:
         - "world"
       toPorts:
