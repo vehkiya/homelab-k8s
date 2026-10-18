@@ -23,6 +23,6 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/homelab-launchpad
-    newTag: 0.1.0@sha256:70190b64e15425a783e421b54e6eef2beb7b507c0bf0c2135fc7abb96106ba6a
+    newTag: 0.3.0@sha256:1fa3717821aea2bad7eddc52016d4f407cd331741aeffafd7cf6cae12d4d8bd6
   - name: docker.io/valkey/valkey
     newTag: 9.2-alpine@sha256:cdcb7b1c7b6f1c9cb9442c71ac6275e78184657448407b2c1fdde7ee8024f4fb
