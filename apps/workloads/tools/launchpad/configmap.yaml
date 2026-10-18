@@ -16,3 +16,6 @@ data:
   VALKEY_URL: "redis://launchpad-valkey:6379"
   # Service health probes may target any *.kerrlab.app host
   HEALTH_PROBE_ALLOWED_DOMAINS: "kerrlab.app"
+  # Namespaces whose opted-in workloads administrators can sleep (0) and wake (1),
+  # see the launchpad-workload-scaler Role in rbac.yaml
+  SCALE_NAMESPACES: "games"

@@ -5,9 +5,13 @@ metadata:
   namespace: games
   labels:
     app: satisfactory
+  annotations:
+    # Administrators can stop and start it from the launchpad (0 <-> 1 replicas)
+    launchpad.kerrlab.app/scalable: "true"
 spec:
   serviceName: satisfactory
-  replicas: 1
+  # No `replicas`: it defaults to 1, and leaving it out keeps ArgoCD from owning
+  # the field, so a server stopped from the launchpad isn't OutOfSync
   updateStrategy:
     type: RollingUpdate
   selector:
