@@ -289,7 +289,7 @@ The cluster operates on a hybrid two-layer RBAC model consisting of **Global Lif
 3. **`users` (Standard Homelab Citizens):**
    * Default access to all general consumer workloads across `*.kerrlab.app` (recipes, media playback, Kaneo, etc.).
 4. **`guests` (Default Unprivileged Tier):**
-   * Default baseline group assigned upon new account creation. Denied access everywhere by default (`default_policy: deny`), except explicitly designated public/guest services (e.g., Bar Assistant).
+   * Default baseline group assigned upon new account creation. Denied access everywhere by default (`default_policy: deny`), except explicitly designated public/guest services if any.
 5. **`app-<service>-users` (Scoped Per-App Guest Entitlements):**
    * Grants a `guest` user access to a single specific application (e.g., `app-mealie-users`, `app-kaneo-users`, `app-romm-users`) without promoting them to global `users`.
 
