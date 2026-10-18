@@ -8,3 +8,7 @@ resources:
 labels:
   - pairs:
       app.kubernetes.io/name: mealie
+
+# Never prune or cascade-delete volumes from Argo; removal is manual
+commonAnnotations:
+  argocd.argoproj.io/sync-options: Prune=false,Delete=false

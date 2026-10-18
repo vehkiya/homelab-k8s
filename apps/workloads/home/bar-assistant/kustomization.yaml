@@ -18,6 +18,7 @@ resources:
   - secret.yaml
   - redis.yaml
   - redis-network-policy.yaml
+  - persistence
 
 images:
   - name: busybox

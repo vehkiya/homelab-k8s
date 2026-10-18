@@ -5,3 +5,7 @@ namespace: iot
 
 resources:
   - storage.yaml
+
+# Never prune or cascade-delete volumes from Argo; removal is manual
+commonAnnotations:
+  argocd.argoproj.io/sync-options: Prune=false,Delete=false

@@ -8,7 +8,7 @@ metadata:
   name: plex-config-longhorn-pvc
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 30Gi
