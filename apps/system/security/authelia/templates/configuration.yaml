@@ -318,7 +318,6 @@ identity_providers:
           - policy: 'two_factor'
             subject:
               - ["group:app-bar-assistant-users"]
-              - ["group:guests"]
       guest_allowed_policy:
         default_policy: 'deny'
         rules:
