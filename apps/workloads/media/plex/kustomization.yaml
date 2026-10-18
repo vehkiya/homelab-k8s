@@ -9,6 +9,7 @@ resources:
   - rate-limit.yaml
   - network-policy.yaml
   - restore-job.yaml
+  - persistence
 
 configMapGenerator:
   - name: plex-backup-script

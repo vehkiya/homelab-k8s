@@ -8,3 +8,7 @@ labels:
 
 resources:
   - longhorn-config-pvc.yaml
+
+# Never prune or cascade-delete volumes from Argo; removal is manual
+commonAnnotations:
+  argocd.argoproj.io/sync-options: Prune=false,Delete=false

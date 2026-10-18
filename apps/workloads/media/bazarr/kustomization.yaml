@@ -10,6 +10,7 @@ resources:
   - configmap.yaml
   - configmap-anime.yaml
   - secret.yaml
+  - persistence
 
 labels:
   - pairs:

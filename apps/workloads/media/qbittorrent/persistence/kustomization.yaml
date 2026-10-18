@@ -9,3 +9,7 @@ labels:
   - pairs:
       app.kubernetes.io/name: qbittorrent
       app.kubernetes.io/part-of: media-services
+
+# Never prune or cascade-delete volumes from Argo; removal is manual
+commonAnnotations:
+  argocd.argoproj.io/sync-options: Prune=false,Delete=false

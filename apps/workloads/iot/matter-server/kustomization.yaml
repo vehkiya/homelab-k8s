@@ -12,6 +12,7 @@ resources:
   - service.yaml
   - network-policy.yaml
   - http-route.yaml
+  - persistence
 images:
   - name: ghcr.io/matter-js/matterjs-server
     newTag: 1.4.0@sha256:54232d0d3e7dff5a54759469d2753399270412b4c30c55b31750a4595e4cb236

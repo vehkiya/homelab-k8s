@@ -17,6 +17,7 @@ resources:
   - external-http-route.yaml
   - rate-limit.yaml
   - network-policy.yaml
+  - persistence
 
 images:
   - name: ghcr.io/mealie-recipes/mealie

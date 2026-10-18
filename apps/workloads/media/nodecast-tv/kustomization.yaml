@@ -9,6 +9,7 @@ resources:
   - http-route.yaml
   - httpscaledobject.yaml
   - network-policy.yaml
+  - persistence
 
 labels:
   - pairs:

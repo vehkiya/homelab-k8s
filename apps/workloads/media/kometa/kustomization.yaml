@@ -6,6 +6,7 @@ resources:
   - secret.yaml
   - network-policies.yaml
   - cronjob.yaml
+  - persistence
 
 configMapGenerator:
   - name: kometa-config

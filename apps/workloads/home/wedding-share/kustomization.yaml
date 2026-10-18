@@ -14,6 +14,7 @@ resources:
   - http-route.yaml
   - httpscaledobject.yaml
   - network-policy.yaml
+  - persistence
 images:
   - name: cirx08/wedding_share
     newTag: 1.8.2@sha256:2dc94c0510b3b47c8b7b76535270bfffa898b688c890d8199496dcf38dacf063

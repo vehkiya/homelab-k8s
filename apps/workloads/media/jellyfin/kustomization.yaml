@@ -8,6 +8,7 @@ resources:
   - rate-limit.yaml
   - network-policy.yaml
   - secret.yaml
+  - persistence
 
 configMapGenerator:
   - name: jellyfin-config-template
