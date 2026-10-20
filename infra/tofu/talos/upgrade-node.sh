@@ -20,6 +20,12 @@ LONGHORN_WAIT_SECONDS="${LONGHORN_WAIT_SECONDS:-1800}"
 IP="$(kubectl get node "$NODE" -o jsonpath='{.status.addresses[?(@.type=="InternalIP")].address}')"
 ROLE=worker
 kubectl get node -l node-role.kubernetes.io/control-plane -o name | grep -x "node/$NODE" >/dev/null && ROLE=controlplane
+# `talosctl health` only runs against a control plane node; use one that isn't
+# the node being upgraded so the postflight check doesn't depend on it.
+HEALTH_IP="$(kubectl get node -l node-role.kubernetes.io/control-plane \
+  -o jsonpath='{range .items[*]}{.metadata.name} {.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}' \
+  | awk -v n="$NODE" '$1 != n {print $2; exit}')"
+[ -n "$HEALTH_IP" ] || { echo "no other control plane node for health checks"; exit 1; }
 
 log() { printf '\n[%s] %s\n' "$(date +%T)" "$*"; }
 die() { log "ABORT: $*"; log "node $NODE is left cordoned; run 'kubectl uncordon $NODE' to back out"; exit 1; }
@@ -61,7 +67,7 @@ done
 echo "all attached Longhorn volumes healthy"
 
 log "preflight: talosctl health (etcd quorum and members, control plane, nodes)"
-talosctl -n "$IP" health --wait-timeout 3m || { echo "cluster not healthy, not touching $NODE"; exit 1; }
+talosctl -n "$HEALTH_IP" health --wait-timeout 3m || { echo "cluster not healthy, not touching $NODE"; exit 1; }
 
 log "cordon"
 kubectl cordon "$NODE"
@@ -118,6 +124,6 @@ log "uncordon"
 kubectl uncordon "$NODE"
 
 log "postflight: talosctl health"
-talosctl -n "$IP" health --wait-timeout 10m
+talosctl -n "$HEALTH_IP" health --wait-timeout 10m
 
 log "done"
