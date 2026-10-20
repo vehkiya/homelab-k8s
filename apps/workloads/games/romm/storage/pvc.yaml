@@ -8,6 +8,12 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - softerr
+    - timeo=150
+    - retrans=3
+    - nfsvers=4.1
+    - noatime
   nfs:
     server: fortress.kerrlab.app
     path: /volume1/cluster/romm

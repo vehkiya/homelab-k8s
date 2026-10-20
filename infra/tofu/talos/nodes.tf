@@ -96,9 +96,11 @@ kind: EtcFileConfig
 name: nfsmount.conf
 mode: 0644
 contents: |
+  # No hard/soft here: a global hard=True is appended after the per-mount
+  # options and overrides soft/softerr on the PVs and Longhorn RWX mounts.
+  # A hard mount whose server is gone hangs Talos' shutdown unmount forever.
   [ NFSMount_Global_Options ]
   nfsvers=4.1
-  hard=True
   nconnect=16
   nodiratime=True
   noatime=True
