@@ -33,3 +33,9 @@ variable "vaultwarden_password" {
   description = "Vaultwarden Master Password"
   sensitive   = true
 }
+
+variable "skip_component_apply" {
+  type        = bool
+  description = "Record bootstrap component hashes in state without re-applying them (use when Argo CD already runs the same revision)"
+  default     = false
+}

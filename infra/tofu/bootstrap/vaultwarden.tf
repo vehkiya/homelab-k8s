@@ -5,6 +5,11 @@ resource "kubernetes_namespace" "external_secrets" {
       "kubernetes.io/metadata.name" = "external-secrets"
     }
   }
+
+  # Argo CD's namespaces app also manages this namespace and sets its own annotations.
+  lifecycle {
+    ignore_changes = [metadata[0].annotations]
+  }
 }
 
 resource "kubernetes_secret" "vaultwarden_credentials" {
