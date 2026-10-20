@@ -13,6 +13,6 @@ resources:
 
 images:
   - name: ghcr.io/mend/renovate-ce
-    newTag: 15.7.0@sha256:51389df0a838af5aa5540f5c1c138f8077c7b0b1c8ede1169d0b778e9093dbfb
+    newTag: 15.8.0@sha256:f974b5b7bc85cc97de0c1fe1e3c1bb52c0b454d692f8a89e1f7d6a53a85cb946
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v2.0.2@sha256:061f00b201b58e12f974e4e96c761a881ee1c05e9d8ee967466a604b7299753b
