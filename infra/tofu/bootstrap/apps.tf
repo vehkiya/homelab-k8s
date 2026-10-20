@@ -38,9 +38,10 @@ resource "terraform_data" "cilium" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
-      SKIP_APPLY = var.skip_component_apply
+      SKIP_APPLY = tostring(var.skip_component_apply)
     }
     command = <<-EOT
+      set -eo pipefail
       if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying Cilium CNI from ${local.cilium_dir}..."
       kustomize build --enable-helm "${local.cilium_dir}" | kubectl apply --server-side --force-conflicts -f -
@@ -63,9 +64,10 @@ resource "terraform_data" "coredns" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
-      SKIP_APPLY = var.skip_component_apply
+      SKIP_APPLY = tostring(var.skip_component_apply)
     }
     command = <<-EOT
+      set -eo pipefail
       if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying CoreDNS from ${local.coredns_dir}..."
       kustomize build --enable-helm "${local.coredns_dir}" | kubectl apply --server-side --force-conflicts -f -
@@ -88,9 +90,10 @@ resource "terraform_data" "namespaces" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
-      SKIP_APPLY = var.skip_component_apply
+      SKIP_APPLY = tostring(var.skip_component_apply)
     }
     command = <<-EOT
+      set -eo pipefail
       if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying Namespaces from ${local.namespaces_dir}..."
       kustomize build --enable-helm "${local.namespaces_dir}" | kubectl apply --server-side --force-conflicts -f -
@@ -115,9 +118,10 @@ resource "terraform_data" "external_secrets" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
-      SKIP_APPLY = var.skip_component_apply
+      SKIP_APPLY = tostring(var.skip_component_apply)
     }
     command = <<-EOT
+      set -eo pipefail
       if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying External Secrets Operator from ${local.external_secrets_dir}..."
       kustomize build --enable-helm "${local.external_secrets_dir}" | kubectl apply --server-side --force-conflicts -f -
@@ -143,9 +147,10 @@ resource "terraform_data" "argocd" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
-      SKIP_APPLY = var.skip_component_apply
+      SKIP_APPLY = tostring(var.skip_component_apply)
     }
     command = <<-EOT
+      set -eo pipefail
       if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying ArgoCD from ${local.argocd_dir}..."
       kustomize build --enable-helm "${local.argocd_dir}" | kubectl apply --server-side --force-conflicts -f -
@@ -166,9 +171,10 @@ resource "terraform_data" "bootstrap_app_of_apps" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
-      SKIP_APPLY = var.skip_component_apply
+      SKIP_APPLY = tostring(var.skip_component_apply)
     }
     command = <<-EOT
+      set -eo pipefail
       if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying Bootstrap ApplicationSet to ArgoCD..."
       kubectl apply -f "${local.app_of_apps_file}"
