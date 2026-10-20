@@ -25,7 +25,7 @@ variable "talos_version" {
 variable "kubernetes_version" {
   description = "Kubernetes version"
   type        = string
-  default     = "v1.37.0"
+  default     = "v1.37.1"
 }
 
 variable "max_pods" {
