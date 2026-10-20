@@ -36,9 +36,9 @@ spec:
     - noatime
     - rsize=1048576
     - wsize=1048576
-    - soft
-    - timeo=30
-    - retrans=2
+    - softerr
+    - timeo=150
+    - retrans=3
   nfs:
     server: fortress.kerrlab.app
     path: /volume1/cluster/satisfactory
