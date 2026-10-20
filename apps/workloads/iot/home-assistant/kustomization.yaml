@@ -13,6 +13,7 @@ resources:
   - http-route.yaml
   - nad.yaml
   - network-policy.yaml
+  - external-secret.yaml
   - persistence
 
 configMapGenerator:
