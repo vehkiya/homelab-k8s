@@ -15,6 +15,7 @@ NODE="${1:?usage: $0 <node-name> [installer-image]}"
 IMAGE="${2:-$(tofu -chdir="$(dirname "$0")" output -raw installer_image)}"
 DRAIN_TIMEOUT="${DRAIN_TIMEOUT:-10m}"
 NFS_WAIT_SECONDS="${NFS_WAIT_SECONDS:-300}"
+LONGHORN_WAIT_SECONDS="${LONGHORN_WAIT_SECONDS:-1800}"
 
 IP="$(kubectl get node "$NODE" -o jsonpath='{.status.addresses[?(@.type=="InternalIP")].address}')"
 ROLE=worker
@@ -40,6 +41,24 @@ log "node=$NODE ($ROLE) ip=$IP running=$(server_version) image=$IMAGE"
 log "preflight: all nodes Ready, none cordoned"
 kubectl get nodes --no-headers | awk '$2 != "Ready" {bad=1; print} END {exit bad}' \
   || { echo "some node is not Ready (or already cordoned)"; exit 1; }
+
+# After the previous node's reboot its Longhorn replicas rebuild; taking the
+# next node down before that finishes leaves volumes on a single replica.
+log "preflight: waiting up to ${LONGHORN_WAIT_SECONDS}s for all attached Longhorn volumes to be healthy"
+deadline=$((SECONDS + LONGHORN_WAIT_SECONDS))
+while :; do
+  degraded="$(kubectl -n longhorn-system get volumes.longhorn.io -o json \
+    | jq -r '.items[] | select(.status.state == "attached" and .status.robustness != "healthy") | "\(.metadata.name) \(.status.robustness)"')" \
+    || { echo "could not list Longhorn volumes"; exit 1; }
+  [ -z "$degraded" ] && break
+  if [ "$SECONDS" -ge "$deadline" ]; then
+    echo "$degraded"
+    echo "Longhorn volumes not healthy, not touching $NODE"
+    exit 1
+  fi
+  sleep 30
+done
+echo "all attached Longhorn volumes healthy"
 
 log "preflight: talosctl health (etcd quorum and members, control plane, nodes)"
 talosctl -n "$IP" health --wait-timeout 3m || { echo "cluster not healthy, not touching $NODE"; exit 1; }
