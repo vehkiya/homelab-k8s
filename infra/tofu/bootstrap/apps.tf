@@ -8,35 +8,40 @@ locals {
   argocd_dir           = "${local.root_dir}/apps/bootstrap/argocd"
   app_of_apps_file     = "${local.root_dir}/apps/gitops/app-of-apps/bootstrap.yaml"
 
-  cilium_files = [for f in fileset(local.cilium_dir, "**") : "${local.cilium_dir}/${f}"]
-  cilium_hash  = sha256(join("", [for f in local.cilium_files : filesha256(f)]))
+  # Hash only git-tracked inputs. Helm chart caches (charts/) and the git-ignored
+  # vaultwarden-credentials.yaml differ per checkout and must not trigger re-applies.
+  hash_exclude_regex = "^(charts/|vaultwarden-credentials\\.yaml$)"
 
-  coredns_files = [for f in fileset(local.coredns_dir, "**") : "${local.coredns_dir}/${f}"]
-  coredns_hash  = sha256(join("", [for f in local.coredns_files : filesha256(f)]))
+  component_dirs = {
+    cilium           = local.cilium_dir
+    coredns          = local.coredns_dir
+    namespaces       = local.namespaces_dir
+    external_secrets = local.external_secrets_dir
+    argocd           = local.argocd_dir
+  }
 
-  namespaces_files = [for f in fileset(local.namespaces_dir, "**") : "${local.namespaces_dir}/${f}"]
-  namespaces_hash  = sha256(join("", [for f in local.namespaces_files : filesha256(f)]))
-
-  external_secrets_files = [for f in fileset(local.external_secrets_dir, "**") : "${local.external_secrets_dir}/${f}"]
-  external_secrets_hash  = sha256(join("", [for f in local.external_secrets_files : filesha256(f)]))
-
-  argocd_files = [for f in fileset(local.argocd_dir, "**") : "${local.argocd_dir}/${f}"]
-  argocd_hash  = sha256(join("", [for f in local.argocd_files : filesha256(f)]))
+  component_hashes = {
+    for name, dir in local.component_dirs : name => sha256(join("", [
+      for f in fileset(dir, "**") : filesha256("${dir}/${f}") if !can(regex(local.hash_exclude_regex, f))
+    ]))
+  }
 }
 
 # 1. Deploy Cilium CNI
 resource "terraform_data" "cilium" {
-  input = local.cilium_hash
+  input = local.component_hashes.cilium
 
   triggers_replace = [
-    local.cilium_hash
+    local.component_hashes.cilium
   ]
 
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
+      SKIP_APPLY = var.skip_component_apply
     }
     command = <<-EOT
+      if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying Cilium CNI from ${local.cilium_dir}..."
       kustomize build --enable-helm "${local.cilium_dir}" | kubectl apply --server-side --force-conflicts -f -
       echo "[*] Waiting for Cilium DaemonSet rollout..."
@@ -49,17 +54,19 @@ resource "terraform_data" "cilium" {
 resource "terraform_data" "coredns" {
   depends_on = [terraform_data.cilium]
 
-  input = local.coredns_hash
+  input = local.component_hashes.coredns
 
   triggers_replace = [
-    local.coredns_hash
+    local.component_hashes.coredns
   ]
 
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
+      SKIP_APPLY = var.skip_component_apply
     }
     command = <<-EOT
+      if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying CoreDNS from ${local.coredns_dir}..."
       kustomize build --enable-helm "${local.coredns_dir}" | kubectl apply --server-side --force-conflicts -f -
       echo "[*] Waiting for CoreDNS DaemonSet rollout..."
@@ -72,17 +79,19 @@ resource "terraform_data" "coredns" {
 resource "terraform_data" "namespaces" {
   depends_on = [terraform_data.coredns]
 
-  input = local.namespaces_hash
+  input = local.component_hashes.namespaces
 
   triggers_replace = [
-    local.namespaces_hash
+    local.component_hashes.namespaces
   ]
 
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
+      SKIP_APPLY = var.skip_component_apply
     }
     command = <<-EOT
+      if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying Namespaces from ${local.namespaces_dir}..."
       kustomize build --enable-helm "${local.namespaces_dir}" | kubectl apply --server-side --force-conflicts -f -
     EOT
@@ -97,17 +106,19 @@ resource "terraform_data" "external_secrets" {
     kubernetes_secret.vaultwarden_credentials
   ]
 
-  input = local.external_secrets_hash
+  input = local.component_hashes.external_secrets
 
   triggers_replace = [
-    local.external_secrets_hash
+    local.component_hashes.external_secrets
   ]
 
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
+      SKIP_APPLY = var.skip_component_apply
     }
     command = <<-EOT
+      if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying External Secrets Operator from ${local.external_secrets_dir}..."
       kustomize build --enable-helm "${local.external_secrets_dir}" | kubectl apply --server-side --force-conflicts -f -
       echo "[*] Waiting for External Secrets deployment rollout..."
@@ -123,17 +134,19 @@ resource "terraform_data" "argocd" {
     terraform_data.namespaces
   ]
 
-  input = local.argocd_hash
+  input = local.component_hashes.argocd
 
   triggers_replace = [
-    local.argocd_hash
+    local.component_hashes.argocd
   ]
 
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
+      SKIP_APPLY = var.skip_component_apply
     }
     command = <<-EOT
+      if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying ArgoCD from ${local.argocd_dir}..."
       kustomize build --enable-helm "${local.argocd_dir}" | kubectl apply --server-side --force-conflicts -f -
       echo "[*] Waiting for ArgoCD server rollout..."
@@ -153,8 +166,10 @@ resource "terraform_data" "bootstrap_app_of_apps" {
   provisioner "local-exec" {
     environment = {
       KUBECONFIG = local.kubeconfig_path
+      SKIP_APPLY = var.skip_component_apply
     }
     command = <<-EOT
+      if [ "$SKIP_APPLY" = "true" ]; then echo "[*] skip_component_apply=true, recording state only"; exit 0; fi
       echo "[*] Applying Bootstrap ApplicationSet to ArgoCD..."
       kubectl apply -f "${local.app_of_apps_file}"
     EOT

@@ -8,3 +8,7 @@ vaultwarden_client_id     = "user.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 vaultwarden_client_secret = "your-vaultwarden-api-client-secret"
 vaultwarden_host          = "https://vaultwarden.kerrlab.app"
 vaultwarden_password      = "your-vaultwarden-master-password"
+
+# Record bootstrap component hashes in state without re-applying them.
+# Pass -var=skip_component_apply=true for a one-off state sync instead of setting it here.
+# skip_component_apply = false
