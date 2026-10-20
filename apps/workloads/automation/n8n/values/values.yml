@@ -109,9 +109,13 @@ ingress:
 # ----- Persistence -----
 persistence:
   enabled: true
-  accessModes: ["ReadWriteMany"]
+  # Only n8n-main mounts it (single replica, Recreate); RWX would add a
+  # Longhorn share-manager NFS hop.
+  accessModes: ["ReadWriteOnce"]
   size: 10Gi
   storageClassName: "longhorn"
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false,Delete=false
 
 # ----- External Volumes -----
 extraVolumes: []
