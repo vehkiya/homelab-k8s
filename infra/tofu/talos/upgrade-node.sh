@@ -87,8 +87,12 @@ while :; do
 done
 echo "no NFS mounts, no VolumeAttachments"
 
+# --drain=false: the node is already drained above. talosctl's own drain would
+# also try to evict the Longhorn instance-manager, whose PDB blocks while the
+# node holds the last replica of any volume (even a detached one), failing the
+# upgrade after the install was already staged.
 log "talosctl upgrade"
-talosctl -n "$IP" upgrade --image "$IMAGE" --wait --timeout 30m
+talosctl -n "$IP" upgrade --image "$IMAGE" --drain=false --wait --timeout 30m
 
 log "waiting for $NODE Ready"
 kubectl wait --for=condition=Ready "node/$NODE" --timeout=15m
