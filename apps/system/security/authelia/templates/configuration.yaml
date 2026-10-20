@@ -598,4 +598,27 @@ identity_providers:
           - "authorization_code"
         userinfo_signed_response_alg: "none"
         token_endpoint_auth_method: "client_secret_basic"
+      # ---- === Arcane (Docker manager on fortress) === ----
+      - client_id: "arcane"
+        client_name: "Arcane"
+        client_secret: {{ secret "/secrets/oidc-clients/ARCANE_SECRET" | quote }}
+        public: false
+        authorization_policy: "admin_only_policy"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        consent_mode: "implicit"
+        redirect_uris:
+          - "https://arcane.kerrlab.app/auth/oidc/callback"
+        claims_policy: "with_groups"
+        scopes:
+          - "openid"
+          - "profile"
+          - "email"
+          - "groups"
+        response_types:
+          - "code"
+        grant_types:
+          - "authorization_code"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_basic"
 
