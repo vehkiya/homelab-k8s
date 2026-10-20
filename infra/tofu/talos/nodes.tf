@@ -1,3 +1,12 @@
+locals {
+  # Machine config contract, NOT the running Talos version (that is the
+  # installer tag, var.talos_version). The cluster was built on v1.7; a newer
+  # contract makes the provider emit multi-doc defaults (ResolverConfig with
+  # hostDNS on, KubeCoreDNSConfig, KubeFlannelCNIConfig, UnattendedInstallConfig)
+  # that contradict the patches below.
+  config_contract = "v1.7"
+}
+
 data "talos_machine_configuration" "config" {
   for_each = var.nodes
 
@@ -5,7 +14,7 @@ data "talos_machine_configuration" "config" {
   cluster_endpoint   = var.cluster_endpoint
   machine_type       = each.value.role
   machine_secrets    = local.machine_secrets
-  talos_version      = var.talos_version
+  talos_version      = local.config_contract
   kubernetes_version = var.kubernetes_version
 
   config_patches = [
