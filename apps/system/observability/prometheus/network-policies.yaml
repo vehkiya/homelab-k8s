@@ -321,6 +321,15 @@ spec:
         - ports:
             - port: "8080"
               protocol: TCP
+    # 18. Allow scraping of thread-udp-proxy in the OTBR pod in iot namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: iot
+            app: otbr-agent
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2

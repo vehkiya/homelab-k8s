@@ -30,6 +30,16 @@ spec:
             - port: "8081"
               protocol: TCP
 
+    # Allow Prometheus to scrape thread-udp-proxy's metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+
   # ----=== Egress ===----
   egress:
     # Egress to Serial-over-IP Coordinator (SLZB-06M)

@@ -12,4 +12,5 @@ resources:
   - service.yaml
   - secret.yaml
   - network-policy.yaml
+  - podmonitor.yaml
   - persistence
