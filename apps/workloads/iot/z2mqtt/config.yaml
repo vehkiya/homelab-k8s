@@ -29,6 +29,16 @@ data:
       discovery_topic: 'homeassistant'
       status_topic: 'homeassistant/status'
 
+    # Publishes <device>/availability (online/offline), which Home Assistant and the IoT Communication dashboard use.
+    # Mains-powered devices are pinged after 10 minutes of silence and marked offline if they don't answer; battery
+    # devices, which sleep, are marked offline after 25 hours without a message. Timeouts are in minutes.
+    availability:
+      enabled: true
+      active:
+        timeout: 10
+      passive:
+        timeout: 1500
+
     # Advanced settings for running inside Kubernetes
     advanced:
       transmit_power: 20
