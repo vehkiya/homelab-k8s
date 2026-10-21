@@ -1,0 +1,42 @@
+permit_join: false
+
+mqtt:
+  base_topic: zigbee2mqtt
+  # This points to the k8s service for Mosquitto
+  server: 'mqtt://mosquitto-svc.iot.svc.cluster.local'
+  # The user/password will be passed via environment variables from a secret
+
+# This points to your Ethernet coordinator
+serial:
+  port: tcp://192.168.4.36:6638
+  baudrate: 115200
+  adapter: ember
+  rtscts: false
+
+frontend:
+  port: 8080
+  enabled: true
+  url: 'https://zigbee.kerrlab.app'
+homeassistant:
+  enabled: true
+  discovery_topic: 'homeassistant'
+  status_topic: 'homeassistant/status'
+
+# Publishes <device>/availability (online/offline), which Home Assistant and the IoT Communication dashboard use.
+# Mains-powered devices are pinged after 10 minutes of silence and marked offline if they don't answer; battery
+# devices, which sleep, are marked offline after 25 hours without a message. Timeouts are in minutes.
+availability:
+  enabled: true
+  active:
+    timeout: 10
+  passive:
+    timeout: 1500
+
+# Advanced settings for running inside Kubernetes
+advanced:
+  transmit_power: 20
+  log_level: info
+  log_output:
+    - console
+    # Also under /app/data/log on the PVC, so logs survive the pod (rotated, last 10 runs)
+    - file

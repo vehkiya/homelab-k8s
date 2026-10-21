@@ -9,11 +9,16 @@ labels:
 
 resources:
   - network-policy.yaml
-  - config.yaml
   - deployment.yaml
   - service.yaml
   - http-route.yaml
   - persistence
+# The name gets a hash of the content, so a config change rolls the Deployment (an init container copies the file into
+# the PVC at start, where Zigbee2MQTT may also write to it).
+configMapGenerator:
+  - name: zigbee2mqtt-config
+    files:
+      - configuration.yaml=config/configuration.yaml
 components:
   - ../../../common/forward-auth
 images:
