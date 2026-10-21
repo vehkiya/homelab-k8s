@@ -13,9 +13,12 @@ resources:
   - deployment.yaml
   - service.yaml
   - network-policy.yaml
+  - exporter.yaml
   - persistence
 images:
   - name: busybox
     newTag: 1.38@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
   - name: eclipse-mosquitto
     newTag: 2.0.22@sha256:199ea8ef2e35ec2b1b37e59cfd1dbae538ed4dfa4a2251a121a52215a6248a21
+  - name: kpetrem/mqtt-exporter
+    newTag: 1.12.1@sha256:dca3255f35310f6ceb80ed1de94eebd1fe9def7aacaec4107fe37cdaa9eb3be0

@@ -16,9 +16,41 @@ spec:
         - matchLabels:
             app: zigbee2mqtt
             k8s:io.kubernetes.pod.namespace: iot
+        - matchLabels:
+            app: mqtt-exporter
+            k8s:io.kubernetes.pod.namespace: iot
       toPorts:
         - ports:
             - port: "mqtt"
               protocol: TCP
-
-
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mqtt-exporter-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: mqtt-exporter
+  # ----=== Ingress ===----
+  ingress:
+    # === Allow Prometheus to scrape the metrics ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP
+  # ----=== Egress ===----
+  egress:
+    # === Allow subscribing to the broker ===
+    - toEndpoints:
+        - matchLabels:
+            app: mosquitto
+            k8s:io.kubernetes.pod.namespace: iot
+      toPorts:
+        - ports:
+            - port: "1883"
+              protocol: TCP

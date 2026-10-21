@@ -20,3 +20,13 @@ resources:
 patches:
   - path: patch-grafana-deployment.yaml
   - path: patch-grafana-service.yaml
+
+configMapGenerator:
+  - name: iot-communication-dashboard
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - iot-communication.json=dashboards/iot-communication.json
+generatorOptions:
+  disableNameSuffixHash: true
