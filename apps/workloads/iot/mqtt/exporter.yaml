@@ -1,0 +1,113 @@
+# Turns Zigbee2MQTT's messages into Prometheus metrics: per-device link quality, battery, availability and message
+# counts, plus the bridge's state and health. Read-only on the broker, with its own MQTT user (mqtt-exporter-credentials).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-exporter
+  labels:
+    app: mqtt-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-exporter
+  template:
+    metadata:
+      labels:
+        app: mqtt-exporter
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: mqtt-exporter
+          image: kpetrem/mqtt-exporter
+          env:
+            - name: MQTT_ADDRESS
+              value: mosquitto-svc.iot.svc.cluster.local
+            - name: MQTT_PORT
+              value: "1883"
+            - name: MQTT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-exporter-credentials
+                  key: user
+            - name: MQTT_PASSWORD_FILE
+              value: /secrets/password
+            - name: MQTT_TOPIC
+              value: "zigbee2mqtt/#"
+            # Device lists, logs and request/response traffic are large JSON documents, not telemetry.
+            - name: MQTT_IGNORED_TOPICS
+              value: "zigbee2mqtt/bridge/logging,zigbee2mqtt/bridge/devices,zigbee2mqtt/bridge/groups,zigbee2mqtt/bridge/definitions,zigbee2mqtt/bridge/extensions,zigbee2mqtt/bridge/info,zigbee2mqtt/bridge/converters,zigbee2mqtt/bridge/request/*,zigbee2mqtt/bridge/response/*"
+            # <device>/availability becomes mqtt_zigbee_availability{device="<device>"}.
+            - name: ZIGBEE2MQTT_AVAILABILITY
+              value: "True"
+            - name: TOPIC_LABEL
+              value: device
+            - name: PROMETHEUS_PORT
+              value: "9000"
+          ports:
+            - name: metrics
+              containerPort: 9000
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            periodSeconds: 30
+          livenessProbe:
+            tcpSocket:
+              port: metrics
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: "5m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: credentials
+              mountPath: /secrets
+              readOnly: true
+      volumes:
+        - name: credentials
+          secret:
+            secretName: mqtt-exporter-credentials
+            items:
+              - key: password
+                path: password
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: mqtt-exporter
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: mqtt-exporter
+  podMetricsEndpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      metricRelabelings:
+        # prometheus_client adds a <counter>_created timestamp per series; nothing here uses it.
+        - sourceLabels: [__name__]
+          regex: ".+_created"
+          action: drop
+        # zigbee2mqtt_kitchen_sensor -> kitchen_sensor
+        - sourceLabels: [device]
+          regex: "zigbee2mqtt_(.+)"
+          targetLabel: device
+          replacement: "$1"

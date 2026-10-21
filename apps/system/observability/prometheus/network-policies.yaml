@@ -330,6 +330,15 @@ spec:
         - ports:
             - port: "9090"
               protocol: TCP
+    # 19. Allow scraping of the Zigbee2MQTT metrics exporter in iot namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: iot
+            app: mqtt-exporter
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2
