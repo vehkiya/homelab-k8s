@@ -9,11 +9,15 @@ labels:
 
 resources:
   - network-policy.yaml
-  - config.yaml
   - deployment.yaml
   - service.yaml
   - http-route.yaml
   - persistence
+# Hashed name: a config change rolls the Deployment
+configMapGenerator:
+  - name: zigbee2mqtt-config
+    files:
+      - configuration.yaml=config/configuration.yaml
 components:
   - ../../../common/forward-auth
 images:
