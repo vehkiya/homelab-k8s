@@ -38,4 +38,4 @@ images:
   - name: ghcr.io/tarampampam/error-pages
     newTag: 4.2.7@sha256:f59453fef7ca963c2239cbb021896c71e6f375d85e5ef3f9c6495c1367a7de4e
   - name: dhi.io/traefik
-    newTag: 3.7.15@sha256:e4a8980654bc0d7bf683d9c495c4e94313d282ac7eeac51da6713e6fd9aa8b6e
+    newTag: 3.7.15@sha256:a26043bd487dafcca0665ed0717af9ea863bbde2266fa286e8e1ac4ab2ba2078
