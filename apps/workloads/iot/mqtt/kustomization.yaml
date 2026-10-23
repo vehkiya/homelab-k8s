@@ -19,6 +19,6 @@ images:
   - name: busybox
     newTag: 1.38@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
   - name: eclipse-mosquitto
-    newTag: 2.0.22@sha256:adc7caf1ca9fb4cd5a0a222d60a63951db593fb055d69a2d17369510a7955983
+    newTag: 2.0.22@sha256:3ce196dd1ec2c38618efe03edc85c5eb4f1d6095e4ab5bd41003ac4b4b014bf9
   - name: kpetrem/mqtt-exporter
     newTag: 1.12.1@sha256:dca3255f35310f6ceb80ed1de94eebd1fe9def7aacaec4107fe37cdaa9eb3be0
