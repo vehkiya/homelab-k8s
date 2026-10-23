@@ -27,4 +27,4 @@ images:
   - name: plexinc/pms-docker
     newTag: 1.43.5.11029-6bf8af3f0@sha256:01bdf0ad6d53198da4331540c1e73ab65db7a72e961fff97ecb0847d46055c5f
   - name: alpine
-    newTag: latest@sha256:71e9b7bae160ba167fa17414401b94cbcdaf3c32feeab9298bd794a2a0614c35
+    newTag: latest@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
