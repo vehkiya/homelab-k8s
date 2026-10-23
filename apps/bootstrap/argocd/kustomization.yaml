@@ -13,7 +13,7 @@ resources:
 images:
   - name: quay.io/argoproj/argocd
     newName: dhi.io/argocd
-    newTag: 3.5.5@sha256:e78c806681c61d6b6b6dbc6f46dc34b117c0cac64b5fbba11f520d26fbb9050d
+    newTag: 3.5.6@sha256:d27d82447e2b046498424ad7d4b6b8f52b8850b71c3e06c8581bffb28af19d1d
   - name: ghcr.io/dexidp/dex
     newName: dhi.io/dex
     newTag: 2.46.0@sha256:5ae97bb4219fde95eb0652a02b00b302d479b0ffa3d23eea62df5236859f4c1d
