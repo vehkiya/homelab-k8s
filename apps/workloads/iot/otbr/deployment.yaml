@@ -171,7 +171,7 @@ spec:
         # whatever the Thread prefix is: don't pin one, the OMR prefix changes
         # whenever the border routers elect a new one.
         - name: thread-udp-proxy
-          image: ghcr.io/hononeko/thread-udp-proxy:1.0.0-rc.3@sha256:ec8ec1c529f3bf68883a53526153c314b421d3fe8216f9a5b68657de66d67ee7
+          image: ghcr.io/hononeko/thread-udp-proxy:1.0.0@sha256:ec8ec1c529f3bf68883a53526153c314b421d3fe8216f9a5b68657de66d67ee7
           env:
             - name: PROXY_INTERFACE
               value: "net1"
