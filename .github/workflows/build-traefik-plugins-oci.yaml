@@ -28,6 +28,10 @@ jobs:
             repo: mdklapwijk/traefik-plugin-request-id
             # renovate: datasource=github-releases depName=mdklapwijk/traefik-plugin-request-id
             version: v0.1.1
+          - image_name: traefik-plugin-cloudflare-realip
+            repo: hononeko/traefik-plugin-cloudflare-realip
+            # renovate: datasource=github-releases depName=hononeko/traefik-plugin-cloudflare-realip
+            version: v0.1.0
 
     steps:
       - name: Checkout repository

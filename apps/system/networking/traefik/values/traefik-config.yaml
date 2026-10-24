@@ -27,6 +27,10 @@ deployment:
       image:
         # renovate: datasource=github-releases depName=mdklapwijk/traefik-plugin-request-id
         reference: ghcr.io/vehkiya/traefik-plugin-request-id:v0.1.1
+    - name: realip-plugin-vol
+      image:
+        # renovate: datasource=github-releases depName=hononeko/traefik-plugin-cloudflare-realip
+        reference: ghcr.io/vehkiya/traefik-plugin-cloudflare-realip:v0.1.0
     - name: crowdsec-bouncer-key-vol
       secret:
         secretName: crowdsec-bouncer-key
@@ -117,6 +121,8 @@ ports:
     http:
       aliasHeadersStrategy: delete
       middlewares:
+        # First, so every later middleware and backend sees the real client IP
+        - traefik_cloudflare-realip@kubernetescrd
         - traefik_crowdsec-bouncer@kubernetescrd
         - traefik_request-id@kubernetescrd
         - traefik_error-pages@kubernetescrd
@@ -135,11 +141,9 @@ ports:
       enabled: true
       advertisedPort: 443
     forwardedHeaders:
-      # Pod CIDRs plus the Cloudflare proxy ranges. Anchored so the crowdsec
-      # middleware below reuses the same list; update it here only.
+      # Cloudflare proxy ranges. Anchored so the crowdsec and cloudflare-realip
+      # middlewares below reuse the same list; update it here only.
       trustedIPs: &trustedProxyIPs
-        - 10.244.0.0/16
-        - fdf0:10:244::/48
         - 173.245.48.0/20
         - 103.21.244.0/22
         - 103.22.200.0/22
@@ -200,6 +204,15 @@ tlsStore:
 service:
   enabled: false # Created manually in services.yaml
 extraObjects:
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: cloudflare-realip
+      namespace: traefik
+    spec:
+      plugin:
+        cloudflarerealip:
+          trustedCIDRs: *trustedProxyIPs
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
@@ -297,6 +310,11 @@ experimental:
       mountPath: "/plugins-local/src/github.com/mdklapwijk/traefik-plugin-request-id"
       type: localPath
       volumeName: requestid-plugin-vol
+    cloudflarerealip:
+      moduleName: "github.com/hononeko/traefik-plugin-cloudflare-realip"
+      mountPath: "/plugins-local/src/github.com/hononeko/traefik-plugin-cloudflare-realip"
+      type: localPath
+      volumeName: realip-plugin-vol
 
 additionalArguments:
   - "--serversTransport.maxIdleConnsPerHost=50"
