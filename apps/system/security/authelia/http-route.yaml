@@ -6,8 +6,6 @@ spec:
   parentRefs:
     - name: internal-gateway
       namespace: traefik
-    - name: external-gateway
-      namespace: traefik
   hostnames:
     - "auth.kerrlab.app"
   rules:
@@ -18,9 +16,3 @@ spec:
       backendRefs:
         - name: authelia
           port: 9091
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: "traefik.io"
-            kind: "Middleware"
-            name: "authelia-rate-limit"
