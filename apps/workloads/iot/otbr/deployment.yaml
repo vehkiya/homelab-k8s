@@ -167,15 +167,18 @@ spec:
         # high-preference route above, into the Thread mesh with this pod as the
         # source, so replies come back through it. Matter sessions are not bound
         # to IP. Shares the pod's network namespace, so it sees net1 and wpan0.
+        # Its client sockets are bound to wpan0, so it only relays into the mesh,
+        # whatever the Thread prefix is: don't pin one, the OMR prefix changes
+        # whenever the border routers elect a new one.
         - name: thread-udp-proxy
-          image: ghcr.io/hononeko/thread-udp-proxy:0.2.0@sha256:5f9e35361da9d22772426022b8cae3561929a5d882aa6bf057cc6d486964febf
+          image: ghcr.io/hononeko/thread-udp-proxy:1.0.0-rc.3@sha256:ec8ec1c529f3bf68883a53526153c314b421d3fe8216f9a5b68657de66d67ee7
           env:
             - name: PROXY_INTERFACE
               value: "net1"
+            - name: PROXY_THREAD_INTERFACE
+              value: "wpan0"
             - name: PROXY_PORT
               value: "5540"
-            - name: PROXY_PREFIXES
-              value: "fd2f:741e:f59b:1::/64"
           ports:
             - name: health
               containerPort: 9090
