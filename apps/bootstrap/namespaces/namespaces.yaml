@@ -22,15 +22,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cloudflare-tunnel
-  annotations:
-    argocd.argoproj.io/sync-options: Prune=false,Delete=false
-  labels:
-    pod-security.kubernetes.io/enforce: baseline
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: comms
   annotations:
     argocd.argoproj.io/sync-options: Prune=false,Delete=false
