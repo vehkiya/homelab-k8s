@@ -6,8 +6,6 @@ spec:
   parentRefs:
     - name: internal-gateway
       namespace: traefik
-    - name: external-gateway
-      namespace: traefik
   hostnames:
     - "jellyfin.kerrlab.app"
   rules:
@@ -15,12 +13,6 @@ spec:
         - path:
             type: PathPrefix
             value: /
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: jellyfin-rate-limit
       backendRefs:
         - name: jellyfin-ui
           port: 8096

@@ -6,6 +6,7 @@ resources:
   - oidc-secrets.yaml
   - daemonset.yaml
   - http-route.yaml
+  - external-http-route.yaml
   - rate-limit.yaml
   - service.yaml
   - servicemonitor.yaml

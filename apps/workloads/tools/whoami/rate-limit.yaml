@@ -7,3 +7,7 @@ spec:
     average: 10
     burst: 30
     period: "1s"
+    # Client IP: rightmost X-Forwarded-For hop, appended by Cloudflare
+    sourceCriterion:
+      ipStrategy:
+        depth: 1

@@ -6,8 +6,6 @@ spec:
   parentRefs:
     - name: internal-gateway
       namespace: traefik
-    - name: external-gateway
-      namespace: traefik
   hostnames:
     - "ntfy.kerrlab.app"
   rules:
@@ -15,12 +13,6 @@ spec:
         - path:
             type: PathPrefix
             value: /
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: ntfy-rate-limit
       backendRefs:
         - name: ntfy
           port: 80
