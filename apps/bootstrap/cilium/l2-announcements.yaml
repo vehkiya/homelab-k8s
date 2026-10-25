@@ -1,0 +1,17 @@
+# ARP for LoadBalancer IPs in the LAN subnet (internal pools)
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: internal-lb-l2
+spec:
+  serviceSelector:
+    matchExpressions:
+      - key: pool
+        operator: NotIn
+        values:
+          - traefik-dmz-pool
+          - dmz-lb-pool
+  interfaces:
+    - ^bond0$
+  loadBalancerIPs: true
+  externalIPs: false

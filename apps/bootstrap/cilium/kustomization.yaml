@@ -14,6 +14,7 @@ helmCharts:
 
 resources:
   - bgp.yaml
+  - l2-announcements.yaml
   - ip-pools.yaml
   - global-network-policies.yaml
 

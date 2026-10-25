@@ -127,6 +127,15 @@ operator:
 bgpControlPlane:
   enabled: true
 
+# ARP for LAN-subnet LoadBalancer IPs, so 10.10.1.0/24 hosts reach them
+l2announcements:
+  enabled: true
+
+# L2 announcement leases renew through the agent's API client
+k8sClientRateLimit:
+  qps: 20
+  burst: 40
+
 # Used r8169 driver does not support XDP
 loadBalancer:
   acceleration: disabled
