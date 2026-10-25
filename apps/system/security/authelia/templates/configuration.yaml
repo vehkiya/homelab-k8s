@@ -423,6 +423,7 @@ identity_providers:
         authorization_policy: "admin_only_policy"
         grant_types:
           - "authorization_code"
+          - "refresh_token"
         response_types:
           - "code"
         consent_mode: "implicit"

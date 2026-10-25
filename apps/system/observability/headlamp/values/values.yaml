@@ -17,7 +17,7 @@ config:
     externalSecret:
       enabled: true
       name: headlamp-oidc-credentials
-    scopes: "openid profile email groups"
+      hasScopes: true
     useAccessToken: false
     usePKCE: true
     useCookie: true

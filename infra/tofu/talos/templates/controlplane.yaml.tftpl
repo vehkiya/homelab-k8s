@@ -66,6 +66,13 @@ cluster:
     image: registry.k8s.io/kube-apiserver:${kubernetes_version}
     extraArgs:
       feature-gates: DynamicResourceAllocation=true
+      # Authelia ID tokens issued to the Headlamp client
+      oidc-issuer-url: https://auth.kerrlab.app
+      oidc-client-id: headlamp
+      oidc-username-claim: email
+      oidc-username-prefix: "oidc:"
+      oidc-groups-claim: groups
+      oidc-groups-prefix: "oidc:"
     certSANs:
       - ${cluster_vip}
       - kube.kerrlab.app
