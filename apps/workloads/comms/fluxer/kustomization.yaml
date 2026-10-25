@@ -28,7 +28,7 @@ resources:
 
 images:
   - name: ghcr.io/fluxerapp/fluxer-api
-    newTag: 2026.1025.2523@sha256:9c7bf346998515bed3e5b2e3a29bab359db7ac94235bdb2bcb1ac5e43a3fab63
+    newTag: 2026.1025.15201@sha256:9ba26a4dfee72d245bb8b3d5da1488678313362ed023ad0176cae5d6ca55d8bc
   - name: ghcr.io/fluxerapp/fluxer-gateway
     newTag: 2026.1024.190323@sha256:baeed0aa65e7d7595ddb3aa0699d1f44d98cd4df90c1c560e4db41822b9cc9b7
   - name: ghcr.io/fluxerapp/fluxer-media-proxy
@@ -36,7 +36,7 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-static
     newTag: 2026.1024.190319@sha256:064bf7f0846fd38f4df27c4f036e001879414a252360f6fa6b6c2dd4940c3740
   - name: ghcr.io/fluxerapp/fluxer-app-proxy-self-hosted
-    newTag: 2026.1025.3815@sha256:e3b8eebfa1f3d5bf9abc55465a33fc31a89a01f7230252d045af82bf5c9e5fcd
+    newTag: 2026.1025.12515@sha256:747d04e1ebb18ab76f3a5ae816f146fdb10428d5d17d0c613d6c641c31e6c6db
   - name: ghcr.io/fluxerapp/fluxer-snowflakes
     newTag: 2026.1024.225357@sha256:0feb67fc681e9cc5ee39ccefb12022c800808ba17078d227006abdebf9900546
   - name: ghcr.io/fluxerapp/fluxer-users
@@ -46,6 +46,6 @@ images:
   - name: ghcr.io/fluxerapp/fluxer-unfurl
     newTag: 2026.1024.225553@sha256:4477501e71db4e81944e4ff1843aca623e9ae676007595a9fd467fb820cdc24a
   - name: ghcr.io/fluxerapp/fluxer-admin
-    newTag: 2026.1024.190317@sha256:3cf39edda134da7ae29cfc5d7e49ccb09f9119bb249b012a98882e15e92555fd
+    newTag: 2026.1025.12523@sha256:ccf7e1330d39fa8c933a2a1a06465386c595f016bf00f6a2f517da09e6b1c9cb
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v2.0.2@sha256:061f00b201b58e12f974e4e96c761a881ee1c05e9d8ee967466a604b7299753b
