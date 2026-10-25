@@ -22,10 +22,10 @@ spec:
     - fromEntities:
         - "kube-apiserver"
 
-    # === Allow Prometheus monitoring (from monitoring namespace) ===
+    # === Allow Prometheus monitoring (from observability namespace) ===
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
+            k8s:io.kubernetes.pod.namespace: observability
 
     # === Allow HTTP Interceptor to receive traffic from Traefik ===
     - fromEndpoints:

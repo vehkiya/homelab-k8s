@@ -13,10 +13,13 @@ rules:
   - apiGroups: ["apps"]
     resources:
       - statefulsets
-      - statefulsets/scale
       - deployments
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources:
+      - statefulsets/scale
       - deployments/scale
-    verbs: ["get", "list", "watch", "update", "patch"]
+    verbs: ["get", "update", "patch"]
   - apiGroups: [""]
     resources: ["services", "pods"]
     verbs: ["get", "list", "watch"]

@@ -28,9 +28,11 @@ spec:
     - fromEntities:
         - "host"
         - "health"
-    # 3. Allow all pods in security namespace (e.g. helm test pods) to reach LAPI / Agent / AppSec
+    # 3. Allow CrowdSec bouncers/components in security namespace to reach LAPI / Agent / AppSec
     - fromEndpoints:
-        - {}
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            app.kubernetes.io/part-of: crowdsec
       toPorts:
         - ports:
             - port: "8080"
@@ -62,7 +64,16 @@ spec:
     # 3. Allow egress to CAPI (public internet) and K8s API server
     - toEntities:
         - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: "TCP"
+    - toEntities:
         - "kube-apiserver"
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: "TCP"
 
     # 4. Allow LAPI/Agent pods to talk to each other on LAPI port 8080
     - toEndpoints:
@@ -142,19 +153,6 @@ spec:
         - ports:
             - port: "443"
               protocol: "TCP"
----
-apiVersion: "cilium.io/v2"
-kind: CiliumNetworkPolicy
-metadata:
-  name: crowdsec-prune-policy
-  namespace: security
-spec:
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/name: crowdsec-prune
-  egress:
-    - toEntities:
-        - "kube-apiserver"
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy

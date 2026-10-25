@@ -28,3 +28,6 @@ images:
     newTag: 1.43.5.11029-6bf8af3f0@sha256:01bdf0ad6d53198da4331540c1e73ab65db7a72e961fff97ecb0847d46055c5f
   - name: alpine
     newTag: latest@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
+  - name: ghcr.io/hononeko/k8s-backup-tools
+    newTag: 0.1.1@sha256:40266da88413e2850417dc67d6d15e9d42249588248735f7ad1ef21a977e5bf0
+

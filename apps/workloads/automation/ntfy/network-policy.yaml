@@ -23,7 +23,7 @@ spec:
             k8s:io.kubernetes.pod.namespace: media
             app: seerr
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: notifications
+            k8s:io.kubernetes.pod.namespace: observability
             app: uptime-kuma
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
@@ -51,9 +51,11 @@ spec:
             - port: "80"
               protocol: TCP
 
-  # Allow all Egress for ntfy to function (upstream, email, push servers)
-  # Restricting this might break notifications if IP ranges change.
+  # Allow HTTPS egress for ntfy upstream push servers (FCM, APNs, WebPush)
   egress:
     - toEntities:
         - world
-        - cluster
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
