@@ -12,6 +12,9 @@ resources:
   - bar-assistant-deployment.yaml
   - bar-assistant-service.yaml
   - http-route.yaml
+  - external-http-route.yaml
+  - middlewares.yaml
+  - rate-limit.yaml
   - salt-rim-deployment.yaml
   - salt-rim-service.yaml
   - network-policy.yaml
