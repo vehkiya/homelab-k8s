@@ -11,7 +11,9 @@ providers:
   kubernetesGateway:
     enabled: true
     nativeLBByDefault: true
-    experimentalChannel: true
+    # Gateway API v1.6 serves TCPRoute/UDPRoute only as v1; 3.7 still watches
+    # v1alpha2 when this is on, which stalls the Gateway provider.
+    experimentalChannel: false
   kubernetesIngress:
     enabled: false
 # Allow the Gateway to expose HTTPRoute from all namespaces
