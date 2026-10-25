@@ -63,6 +63,11 @@ identity_validation:
 
 # Regulation settings
 regulation:
+  # Authelia takes the left-most X-Forwarded-For as the client IP; on dmz the
+  # cloudflare-realip Traefik plugin guarantees that entry is the real visitor.
+  modes:
+    - user
+    - ip
   max_retries: 3
   find_time: "2m"
   ban_time: "15m"
