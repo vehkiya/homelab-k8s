@@ -51,6 +51,15 @@ spec:
             - port: "32443"
               protocol: "TCP"
 
+    # Rule 1c: Allow the NAS to DMZ entrypoint (8443)
+    # NAS containers pin auth.kerrlab.app to the DMZ VIP for OIDC
+    - fromCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "8443"
+              protocol: "TCP"
+
     # Rule 2: Allow cluster, host, and remote-node to internal web (8000), DMZ (8443), and websecure (9443)
     - fromEntities:
         - "cluster"
