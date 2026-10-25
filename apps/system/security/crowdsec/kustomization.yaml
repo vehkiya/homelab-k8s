@@ -7,7 +7,6 @@ resources:
   - network-policy.yaml
   - bouncer-unifi.yaml
   - cronjob-unifi-sync.yaml
-  - cronjob-prune.yaml
   - pdb.yaml
   - blocklist-mirror-deployment.yaml
   - blocklist-mirror-service.yaml

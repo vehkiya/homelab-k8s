@@ -60,9 +60,7 @@ spec:
                 -e "s|\$NTFY_AUTH_USERS_FORMATTED|$NTFY_AUTH_USERS_FORMATTED|g")
               
               printf "$CONFIG" > /etc/ntfy/server.yml
-
-              echo "Config generated:"
-              cat /etc/ntfy/server.yml
+              echo "Config generated."
           envFrom:
             - secretRef:
                 name: ntfy-secret

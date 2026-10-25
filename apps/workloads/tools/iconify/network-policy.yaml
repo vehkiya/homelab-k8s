@@ -21,7 +21,7 @@ spec:
     # Allow Prometheus / Monitoring (Optional)
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
+            k8s:io.kubernetes.pod.namespace: observability
       toPorts:
         - ports:
             - port: "3000"

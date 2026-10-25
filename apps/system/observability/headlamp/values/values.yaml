@@ -1,3 +1,14 @@
+clusterRoleBinding:
+  create: false
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi
+
 config:
   sessionTTL: null
   oidc:

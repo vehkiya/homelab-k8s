@@ -7,22 +7,11 @@ spec:
     matchLabels:
       app.kubernetes.io/name: headlamp
   egress:
-    # 1. Allow API Access (Critical)
+    # 1. Allow Kubernetes API Access (OIDC Hairpin is handled by ccnp-allow-oidc-client-egress)
     - toEntities:
         - kube-apiserver
-        - host
-        - remote-node
-    - toCIDR:
-        - 10.96.0.1/32
       toPorts:
         - ports:
-            - port: "443"
+            - port: "6443"
               protocol: "TCP"
 
-    # 2. Allow OIDC Provider (If you use Google/Dex/etc for login)
-    - toEntities:
-        - world
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: "TCP"
