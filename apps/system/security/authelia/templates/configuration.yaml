@@ -140,6 +140,7 @@ access_control:
         - "zigbee.kerrlab.app"
         - "go2rtc.kerrlab.app"
         - "matter.kerrlab.app"
+        - "unpackerr.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]

@@ -4,6 +4,8 @@ metadata:
   name: unpackerr
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: unpackerr
@@ -11,6 +13,7 @@ spec:
     metadata:
       labels:
         app: unpackerr
+        networking/expose-web-ui: "true"
     spec:
       containers:
         - name: unpackerr
@@ -19,15 +22,43 @@ spec:
             - configMapRef:
                 name: unpackerr-config
           env:
-            - name: UN_RADARR_0_API_KEY
+            - name: UN_RADARR_movies_API_KEY
               valueFrom:
                 secretKeyRef: { name: unpackerr-app-secrets, key: radarr_key }
-            - name: UN_SONARR_0_API_KEY
+            - name: UN_SONARR_tv_API_KEY
               valueFrom:
                 secretKeyRef: { name: unpackerr-app-secrets, key: sonarr_tv_key }
-            - name: UN_SONARR_1_API_KEY
+            - name: UN_SONARR_anime_API_KEY
               valueFrom:
                 secretKeyRef: { name: unpackerr-app-secrets, key: sonarr_anime_key }
+          ports:
+            - name: web-ui
+              containerPort: 5656
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: web-ui
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web-ui
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web-ui
+            initialDelaySeconds: 0
+            periodSeconds: 20
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
           resources:
             requests:
               cpu: "10m"

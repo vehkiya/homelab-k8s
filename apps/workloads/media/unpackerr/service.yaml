@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: unpackerr-ui
+spec:
+  selector:
+    app: unpackerr
+  ports:
+    - name: web-ui
+      port: 5656
+      targetPort: web-ui
