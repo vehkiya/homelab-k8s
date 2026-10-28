@@ -23,7 +23,7 @@ resources:
   - redis-network-policy.yaml
 images:
   - name: busybox
-    newTag: 1.38@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
+    newTag: 1.38@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
   - name: ghcr.io/n8n-io/n8n
     newTag: 3.0.1@sha256:4ebd866ae91d222ffa6dd3731eade80ba71b4d13f7470172a7e66a81fe31faa0
   - name: docker.io/valkey/valkey

@@ -17,7 +17,7 @@ resources:
   - persistence
 images:
   - name: busybox
-    newTag: 1.38@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
+    newTag: 1.38@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
   - name: eclipse-mosquitto
     newTag: 2.0.22@sha256:09b62ff32c2e7b64d4b431b9a89236073289b68db273de2b089edeb9b0d92b5c
   - name: kpetrem/mqtt-exporter
