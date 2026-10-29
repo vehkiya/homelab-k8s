@@ -91,6 +91,9 @@ spec:
                     service otbr-agent start || true
                     sleep 3
                   fi
+                  # Tune CCA threshold to -60 dBm so radio transmissions succeed despite
+                  # ambient 2.4 GHz RF energy on Channel 15 (-65 dBm) exceeding OpenThread's -75 dBm default.
+                  ot-ctl -I wpan0 ccathreshold -60 >/dev/null 2>&1 || true
                   if ot-ctl -I wpan0 state 2>/dev/null | grep -qE "disabled|detached"; then
                     echo "[Monitor] Thread is disabled/detached. Configuring dataset and starting..."
                     ot-ctl dataset set active "$THREAD_DATASET" || true
