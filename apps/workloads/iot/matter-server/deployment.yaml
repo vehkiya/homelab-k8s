@@ -27,8 +27,6 @@ spec:
             - |
               sysctl -w net.ipv6.conf.net1.accept_ra=2
               sysctl -w net.ipv6.conf.net1.accept_ra_rt_info_max_plen=64
-              ip route add 224.0.0.0/4 dev net1 || true
-              ip -6 route add ff00::/8 dev net1 || true
           securityContext:
             privileged: true
           resources:
@@ -50,6 +48,8 @@ spec:
               value: "net1"
             - name: STORAGE_PATH
               value: "/data"
+            - name: LISTEN_ADDRESS
+              value: "eth0,lo"
           volumeMounts:
             - name: data
               mountPath: /data
