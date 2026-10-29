@@ -207,6 +207,16 @@
       "description": "Group all GitHub Actions updates and schedule them weekly (manual review)"
     },
     {
+      "description": "Tool versions passed as action inputs (e.g. tofu_version) cannot be pinned to a digest",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "uses-with"
+      ],
+      "pinDigests": false
+    },
+    {
       "matchPackageNames": ["ghcr.io/matter-js/matterjs-server"],
       "changelogUrl": "https://github.com/matter-js/matterjs-server/blob/main/CHANGELOG.md"
     },
