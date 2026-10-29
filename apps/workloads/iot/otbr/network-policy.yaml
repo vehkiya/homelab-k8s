@@ -18,18 +18,6 @@ spec:
         - 224.0.0.0/4
         - ff00::/8
 
-    # Allow Ingress from Home Assistant
-    - fromEndpoints:
-        - matchLabels:
-            app: home-assistant
-            k8s:io.kubernetes.pod.namespace: iot
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "8081"
-              protocol: TCP
-
     # Allow Prometheus to scrape thread-udp-proxy's metrics
     - fromEndpoints:
         - matchLabels:
@@ -50,24 +38,11 @@ spec:
             - port: "6638"
               protocol: TCP
 
-    # Egress to IoT VLAN, HomeLab VLAN, Thread Subnets & Multicast
+    # Egress to IoT VLAN, Thread Subnets & Multicast
     - toCIDR:
         - 192.168.4.0/24
-        - 10.10.1.0/24
         - fd00::/8
         - fc00::/7
         - fe80::/10
         - 224.0.0.0/4
         - ff00::/8
-
-    # Egress to Internet (World)
-    - toEntities:
-        - "world"
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "443"
-              protocol: TCP
-            - port: "123"
-              protocol: UDP
