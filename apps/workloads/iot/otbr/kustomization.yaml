@@ -20,4 +20,4 @@ images:
   - name: openthread/otbr
     newTag: latest@sha256:7df0d04939e26dec848ec4cefad347dbb51ad5918edf3a6d0d2304e1df6c600d
   - name: ghcr.io/hononeko/thread-udp-proxy
-    newTag: 1.0.0@sha256:ec8ec1c529f3bf68883a53526153c314b421d3fe8216f9a5b68657de66d67ee7
+    newTag: 1.0.1@sha256:1dafd1c4def45a15a3becec155db90c7a67795f58c922a1560d4ace727619e1d
