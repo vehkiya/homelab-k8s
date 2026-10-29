@@ -18,6 +18,6 @@ images:
   - name: alpine/socat
     newTag: 1.8.1.3@sha256:603174b77eebaba25ba8f8ebb15e1234d6600409554e95d6fb203fd106150287
   - name: openthread/otbr
-    newTag: latest@sha256:db799aed61f61a87d0cd8ae69546a973455f18b40f2cc8e6ae6dea803e5f6d35
+    newTag: latest@sha256:7df0d04939e26dec848ec4cefad347dbb51ad5918edf3a6d0d2304e1df6c600d
   - name: ghcr.io/hononeko/thread-udp-proxy
     newTag: 1.0.0@sha256:ec8ec1c529f3bf68883a53526153c314b421d3fe8216f9a5b68657de66d67ee7
