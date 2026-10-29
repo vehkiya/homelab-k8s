@@ -300,7 +300,7 @@ spec:
         - name: vuetorrent-webui
           image:
             # renovate: datasource=docker depName=ghcr.io/vehkiya/vuetorrent
-            reference: ghcr.io/vehkiya/vuetorrent:v2.28.2
+            reference: ghcr.io/vehkiya/vuetorrent:v2.36.1
         - name: gluetun-port-data
           emptyDir: {}
         - name: scripts-volume
