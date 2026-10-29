@@ -31,6 +31,17 @@
     },
     {
       "customType": "regex",
+      "description": "Values annotated with a '# renovate:' comment on the line above",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/.+\\.ya?ml$/",
+        "/^apps/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z\\-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?\\s+[\\w-]+:\\s*[\"']?(?:[^\\s\"':]+:)?(?<currentValue>[^\\s\"'@]+)"
+      ]
+    },
+    {
+      "customType": "regex",
       "description": "Traefik experimental plugins",
       "managerFilePatterns": [
         "/(^|/)apps/system/networking/traefik/.*\\.ya?ml$/"

@@ -299,7 +299,7 @@ spec:
             claimName: qbittorrent-config-longhorn-pvc
         - name: vuetorrent-webui
           image:
-            # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+            # renovate: datasource=docker depName=ghcr.io/vehkiya/vuetorrent
             reference: ghcr.io/vehkiya/vuetorrent:v2.28.2
         - name: gluetun-port-data
           emptyDir: {}

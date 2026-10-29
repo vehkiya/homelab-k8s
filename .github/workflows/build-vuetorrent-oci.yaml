@@ -4,10 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'VueTorrent version to build (e.g., v2.28.2)'
-        required: true
-        # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-        default: 'v2.28.2'
+        description: 'VueTorrent version to build (defaults to VUETORRENT_VERSION)'
+        required: false
   push:
     branches:
       - master
@@ -17,6 +15,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/vuetorrent
+  # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+  VUETORRENT_VERSION: v2.28.2
 
 jobs:
   build-and-push:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Download and prepare VueTorrent
         run: |
-          VERSION="${{ github.event.inputs.version || 'v2.28.2' }}"
+          VERSION="${{ github.event.inputs.version || env.VUETORRENT_VERSION }}"
           echo "Building VueTorrent version $VERSION"
           
           mkdir -p workspace
@@ -70,4 +70,4 @@ jobs:
         with:
           context: workspace
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version || 'v2.28.2' }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version || env.VUETORRENT_VERSION }}
