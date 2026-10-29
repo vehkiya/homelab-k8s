@@ -12,6 +12,9 @@ data:
   MEND_RNV_ACCEPT_TOS: "y"
   MEND_RNV_ACCEPT_PLUGINS: "true"
   MEND_RNV_GITHUB_APP_ID: "2668553"
+  # ID of kerrlab-renovator[bot]. Without it, startup looks the bot up with an anonymous GitHub API call
+  # that fails once the 60/h per-IP anonymous quota is used up.
+  MEND_RNV_GITHUB_BOT_USER_ID: "255314313"
   NODE_OPTIONS: "--dns-result-order=ipv4first"
   MEND_RNV_NODE_OPTIONS: "--dns-result-order=ipv4first"
   RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
