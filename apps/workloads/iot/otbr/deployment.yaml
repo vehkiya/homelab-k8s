@@ -34,7 +34,7 @@ spec:
       containers:
         # 1. Socat Network-to-Serial bridge
         - name: socat-tunnel
-          image: alpine/socat:1.8.1.3@sha256:d85531a29ef5ba99dfb4717485c239307e2902d522a1bc010992a2728c92cfad
+          image: alpine/socat
           command:
             - sh
             - -c
@@ -64,7 +64,7 @@ spec:
 
         # 2. Official OpenThread Border Router Agent
         - name: otbr-agent
-          image: openthread/otbr:latest@sha256:db799aed61f61a87d0cd8ae69546a973455f18b40f2cc8e6ae6dea803e5f6d35
+          image: openthread/otbr
           command:
             - sh
             - -c
@@ -177,7 +177,7 @@ spec:
         # whatever the Thread prefix is: don't pin one, the OMR prefix changes
         # whenever the border routers elect a new one.
         - name: thread-udp-proxy
-          image: ghcr.io/hononeko/thread-udp-proxy:1.0.0@sha256:ec8ec1c529f3bf68883a53526153c314b421d3fe8216f9a5b68657de66d67ee7
+          image: ghcr.io/hononeko/thread-udp-proxy
           env:
             - name: TZ
               value: "Europe/Chisinau"
