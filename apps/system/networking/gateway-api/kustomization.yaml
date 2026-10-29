@@ -5,7 +5,7 @@ kind: Kustomization
 # The Traefik chart stopped shipping them in 40.2.0.
 resources:
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.3/standard-install.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.7.0/standard-install.yaml
 
 # Deleting a CRD deletes every object of its kind (all HTTPRoutes and Gateways),
 # so never let Argo prune or delete them.
