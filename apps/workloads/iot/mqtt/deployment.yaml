@@ -78,6 +78,9 @@ spec:
               port: 1883
             initialDelaySeconds: 15
             periodSeconds: 20
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
 
       volumes:
         # Read-only volume for the original ConfigMap

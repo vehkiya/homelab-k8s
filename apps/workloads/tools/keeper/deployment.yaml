@@ -62,6 +62,9 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 5
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
         - name: mcp
           image: ghcr.io/ridafkih/keeper-mcp:2.24.1
           ports:
@@ -69,6 +72,8 @@ spec:
               containerPort: 3002
               protocol: TCP
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: MCP_PORT
               value: "3002"
             - name: MCP_PUBLIC_URL

@@ -30,6 +30,9 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /var/opt/thelounge
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
       volumes:
         - name: config
           persistentVolumeClaim:

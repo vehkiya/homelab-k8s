@@ -49,6 +49,8 @@ spec:
               drop:
                 - ALL
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: MICRONAUT_CONFIG_FILES
               value: /app/conf/application.yml
           envFrom:
