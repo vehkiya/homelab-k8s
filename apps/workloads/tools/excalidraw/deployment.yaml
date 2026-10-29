@@ -26,3 +26,6 @@ spec:
           ports:
             - name: web-ui
               containerPort: 80
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"

@@ -51,6 +51,8 @@ config:
       roles: ""
 
   extraEnvs:
+    - name: TZ
+      value: "Europe/Chisinau"
     - name: PENPOT_SSRF_ALLOWED_HOSTS
       value: "auth.kerrlab.app fortress.kerrlab.app s3.kerrlab.app"
     - name: PENPOT_OIDC_NAME

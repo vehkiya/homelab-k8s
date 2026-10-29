@@ -58,6 +58,8 @@ spec:
             - containerPort: 8123
               name: web-ui
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: RECORDER_DB_URL
               valueFrom:
                 secretKeyRef:

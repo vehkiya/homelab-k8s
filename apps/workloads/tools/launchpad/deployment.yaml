@@ -73,6 +73,9 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
       volumes:
         - name: tmp
           emptyDir: {}

@@ -46,6 +46,9 @@ spec:
               mountPath: /etc/nginx/tmp
             - name: tmp
               mountPath: /tmp
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
       volumes:
         - name: nginx-cache
           emptyDir: { }

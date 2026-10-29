@@ -19,6 +19,8 @@ spec:
             - name: web-ui
               containerPort: 8080
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: PUID
               value: "1000"
             - name: PGID

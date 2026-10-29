@@ -65,6 +65,8 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
               value: "mqtt://mosquitto-svc.iot.svc.cluster.local"
             - name: ZIGBEE2MQTT_CONFIG_MQTT_USER

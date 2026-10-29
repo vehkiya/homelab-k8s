@@ -27,6 +27,8 @@ spec:
         - name: mqtt-exporter
           image: kpetrem/mqtt-exporter
           env:
+            - name: TZ
+              value: "Europe/Chisinau"
             - name: MQTT_ADDRESS
               value: mosquitto-svc.iot.svc.cluster.local
             - name: MQTT_PORT

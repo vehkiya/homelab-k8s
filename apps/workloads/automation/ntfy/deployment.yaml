@@ -107,6 +107,9 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          env:
+            - name: TZ
+              value: "Europe/Chisinau"
       volumes:
         - name: config-template
           configMap:
