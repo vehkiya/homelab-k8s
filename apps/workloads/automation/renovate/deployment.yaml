@@ -102,10 +102,10 @@ spec:
           resources:
             requests:
               cpu: "25m"
-              memory: "128Mi"
+              memory: "1Gi"
             limits:
               cpu: "500m"
-              memory: "1Gi"
+              memory: "2Gi"
       volumes:
         - name: cache-volume
           emptyDir: {}
