@@ -1,5 +1,9 @@
 container_runtime: containerd
 
+secrets:
+  externalSecret:
+    name: crowdsec-secrets
+
 config:
   config.yaml.local: ""
 
