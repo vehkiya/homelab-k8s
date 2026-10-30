@@ -7,7 +7,7 @@ on:
 
 env:
   # renovate: datasource=npm depName=renovate
-  RENOVATE_VERSION: 44.198.1
+  RENOVATE_VERSION: 44.198.3
 
 jobs:
   validate:
