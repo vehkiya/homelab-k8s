@@ -43,7 +43,7 @@ images:
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
   - name: ghcr.io/teifun2/cs-unifi-bouncer
-    newTag: v1.4.0@sha256:6d68590366ed57b38bc4c30b99849299b686023174e58847ccc94059ab9d5f2b
+    newTag: v1.5.0@sha256:543f732286daf2262f2adea7f7bf3aada57e7ec75f8b1c2baf00e96e0a9649c5
   - name: alpine/k8s
     newTag: 1.37.2@sha256:dcb7185e112a453aa72f426754849a97357727ef8f40168fb208c8cf59952042
   - name: ghcr.io/hononeko/cs-edl-bouncer
