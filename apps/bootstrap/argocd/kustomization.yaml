@@ -19,7 +19,7 @@ images:
     newTag: 2.46.1@sha256:d195ec48877cae8ad2ccb095577f0392531bc3bbe80e1f8addfb948564933ff7
   - name: public.ecr.aws/docker/library/redis
     newName: dhi.io/redis
-    newTag: 8.10.3-compat@sha256:d35954a515d05207df7cd39a43798d6f26af155af285b89e5ff9caefdcfc346b
+    newTag: 8.10.3-compat@sha256:747a033b5ac9f8b1a9c3644c58c68668c6fa184c9d8ab156f825ac5be4b83ba5
 
 patches:
   - path: argocd-cm.yaml
