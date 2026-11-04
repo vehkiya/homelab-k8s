@@ -5,7 +5,7 @@ namespace: argocd
 resources:
   - argocd-secret.yaml
   # renovate: datasource=github-tags depName=argoproj/argo-cd
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.7/manifests/ha/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.6.0/manifests/ha/install.yaml
   - argocd-repositories-external-secret.yaml
   - ingress-route.yaml
   - network-policy.yaml
@@ -13,7 +13,7 @@ resources:
 images:
   - name: quay.io/argoproj/argocd
     newName: dhi.io/argocd
-    newTag: 3.5.7@sha256:090bdc0865f1efbf8e1871029a9fba1b00d1fd48ab0b807a880fd12c5a0d604c
+    newTag: 3.5.7@sha256:1379e07ee1622db86212bf9d7761ff136edca3aa012a1e5926a4767d73651daa
   - name: ghcr.io/dexidp/dex
     newName: dhi.io/dex
     newTag: 2.46.1@sha256:96d5e0c5c48b7ce5b9bf5ea5d7f2d58bee6ab5ae2d4bdf35a6050ffbea8b185a
