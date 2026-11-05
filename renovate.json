@@ -14,6 +14,9 @@
     "renovate",
     "dependencies"
   ],
+  "reviewers": [
+    "vehkiya"
+  ],
   "automergeType": "pr",
   "platformAutomerge": true,
   "ignoreTests": false,
