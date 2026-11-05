@@ -67,7 +67,7 @@ worker:
       value: >-
         {"$schema": "https://docs.renovatebot.com/renovate-schema.json",
         "extends": ["config:recommended", ":semanticCommits", ":semanticCommitTypeAll(chore)",
-        "mergeConfidence:all-badges"]}
+        "mergeConfidence:all-badges"], "reviewersFromCodeOwners": true}
     - name: RENOVATE_HOST_RULES
       valueFrom:
         secretKeyRef:
