@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   name: renovate-server
 spec:
-  replicas: 1
+  # Scaled down while koshin runs Renovate as the same kerrlab-renovator App: never run both at once
+  replicas: 0
   selector:
     matchLabels:
       app: renovate-server
