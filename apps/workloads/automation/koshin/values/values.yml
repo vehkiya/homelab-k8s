@@ -73,11 +73,6 @@ worker:
         secretKeyRef:
           name: koshin-renovate
           key: RENOVATE_HOST_RULES
-    - name: RENOVATE_REVIEWERS
-      valueFrom:
-        secretKeyRef:
-          name: koshin-renovate
-          key: RENOVATE_REVIEWERS
   resources:
     requests:
       cpu: 50m
