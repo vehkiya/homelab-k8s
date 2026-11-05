@@ -179,7 +179,8 @@
       "description": "Daily maintenance window for core GitOps and monitoring components",
       "schedule": [
         "before 4am"
-      ]
+      ],
+      "updateNotScheduled": false
     },
     {
       "matchManagers": [
