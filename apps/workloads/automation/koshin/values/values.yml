@@ -56,6 +56,10 @@ worker:
       value: "true"
     - name: RENOVATE_PR_HOURLY_LIMIT
       value: "10"
+    # Also see kerrlab-renovator's PRs (koneko-bot replaced it), so updates closed there stay ignored and its open PRs
+    # aren't duplicated
+    - name: RENOVATE_IGNORE_PR_AUTHOR
+      value: "true"
     # Docker Hub returns 403 for anonymous tag pages past 10; see renovate-ce's env-configmap.yaml
     - name: RENOVATE_DOCKER_MAX_PAGES
       value: "10"
