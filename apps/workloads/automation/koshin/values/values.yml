@@ -1,0 +1,183 @@
+# koshin (https://github.com/hononeko/koshin): distributed Renovate, running as the koneko-bot GitHub App while
+# renovate-ce is scaled down for the test. Layered on the ha profile (values-ha.yml): 3 proxies, a 3-node NATS cluster on
+# PVCs, coordination Valkey primary + 2 replicas with 3 Sentinels, and one package-cache Valkey.
+platforms:
+  - github
+
+github:
+  app:
+    # koneko-bot (https://github.com/apps/koneko-bot), owned by hononeko. Public so all 4 accounts below can install it
+    id: "5634219"
+    existingSecret: koshin-github-app
+    privateKeyKey: private-key.pem
+    # vehkiya, hononeko, Test-Forge, neeppy: the accounts renovate-ce's autodiscover filter covers
+    allowedAccounts:
+      - 17964397
+      - 206545357
+      - 158061806
+      - 22986246
+    # Leave other accounts' installations alone; they get nothing either way
+    disallowedAction: ignore
+
+proxy:
+  # Webhook secret and trigger token (external-secret.yaml)
+  existingSecret: koshin-proxy
+  resources:
+    requests:
+      cpu: 25m
+      memory: 192Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+worker:
+  # No PAT: GitHub runs authenticate as the App
+  existingSecret: ""
+  config:
+    # renovate-ce's CRON_JOB_SCHEDULER_ALL is hourly; a run gets 45 minutes (the GitHub App needs < 55)
+    cliTimeoutMinutes: 45
+  rateLimits:
+    # Runs at once per GitHub App installation (credential scope), and across all of them
+    maxConcurrentRunsPerCredential: 4
+    maxConcurrentRunsGlobal: 8
+  autoscaling:
+    # One warm worker Deployment pod; the proxy starts burst worker Jobs for more concurrent runs, up to 4 workers
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 4
+  repoCache:
+    provider: nats
+  extraEnv:
+    - name: TZ
+      value: Europe/Chisinau
+    - name: NODE_OPTIONS
+      value: --dns-result-order=ipv4first
+    - name: RENOVATE_OPTIMIZE_FOR_DISABLED
+      value: "true"
+    - name: RENOVATE_PR_HOURLY_LIMIT
+      value: "10"
+    # Also see kerrlab-renovator's PRs (koneko-bot replaced it), so updates closed there stay ignored and its open PRs
+    # aren't duplicated
+    - name: RENOVATE_IGNORE_PR_AUTHOR
+      value: "true"
+    # Docker Hub returns 403 for anonymous tag pages past 10; see renovate-ce's env-configmap.yaml
+    - name: RENOVATE_DOCKER_MAX_PAGES
+      value: "10"
+    - name: RENOVATE_ONBOARDING_CONFIG
+      value: >-
+        {"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+        "extends": ["config:recommended", ":semanticCommits", ":semanticCommitTypeAll(chore)",
+        "mergeConfidence:all-badges"], "reviewersFromCodeOwners": true}
+    - name: RENOVATE_HOST_RULES
+      valueFrom:
+        secretKeyRef:
+          name: koshin-renovate
+          key: RENOVATE_HOST_RULES
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
+  renovate:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+  # The init container copying the Renovate runner; the chart's defaults set no CPU limit
+  runnerInit:
+    resources:
+      limits:
+        cpu: 250m
+  workspaceSizeLimit: 10Gi
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                  - performance
+
+sweeper:
+  # Every repository of every allowed installation, hourly like renovate-ce
+  schedule: "0 * * * *"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+valkeySettings:
+  # Wait for a replica to acknowledge each lock (WAIT 1), narrowing what a Sentinel failover can lose
+  lockReplicaAckTimeoutMs: 50
+
+tests:
+  jobProcessing:
+    enabled: false
+
+# Cilium policies in network-policy.yaml instead
+networkPolicy:
+  enabled: false
+
+nats:
+  container:
+    merge:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+  reloader:
+    merge:
+      resources:
+        requests:
+          cpu: 5m
+          memory: 16Mi
+        limits:
+          cpu: 50m
+          memory: 32Mi
+
+valkey:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+  initResources: &valkey-init
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+  sentinel:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
+
+valkey-cache:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  initResources: *valkey-init

@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: automation
+helmCharts:
+  - name: koshin
+    repo: oci://ghcr.io/hononeko/charts
+    version: 0.21.0
+    releaseName: koshin
+    namespace: automation
+    # The ha profile, with this install's settings layered on top
+    valuesFile: values/values-ha.yml
+    additionalValuesFiles:
+      - values/values.yml
+    skipTests: true
+
+resources:
+  - external-secret.yaml
+  - network-policy.yaml
+  - http-route.yaml
+
+images:
+  - name: ghcr.io/hononeko/koshin-proxy
+    newTag: 0.21.0@sha256:7b24e1ead214fd8813b902745d705d9fcc15d199e134be8540fd235eef1cb38e
+  - name: ghcr.io/hononeko/koshin-worker
+    newTag: 0.21.0@sha256:21e39dd97470e090c2b3caaac34b1f26310a1008638e3caf9d708f9ee9add23f
+  - name: ghcr.io/renovatebot/renovate
+    newTag: 44.178.3-full@sha256:54db50cb21dd8de417ddf609cf7ef92c039f74438e393012469662b041c0b9eb
+  - name: nats
+    newTag: 2.15.2-alpine@sha256:823e7f1d6d8ffe3b30dbd73d4a06bbb939acf94929f7fdf224404da7a05bafb5
+  - name: natsio/nats-server-config-reloader
+    newTag: 0.24.0@sha256:d758a82a9c20337e46c2f7356a413faa52cf4d6b02497c3ad81f72f1ba106464
+  - name: docker.io/valkey/valkey
+    newTag: 9.1.3@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
+  - name: docker.io/curlimages/curl
+    newTag: 8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93

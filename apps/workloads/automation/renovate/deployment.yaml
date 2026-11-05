@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   name: renovate-server
 spec:
-  replicas: 1
+  # Scaled down while koshin runs Renovate (as koneko-bot) on the same repositories: both would open the same PRs
+  replicas: 0
   selector:
     matchLabels:
       app: renovate-server

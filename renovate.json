@@ -14,6 +14,9 @@
     "renovate",
     "dependencies"
   ],
+  "reviewers": [
+    "vehkiya"
+  ],
   "automergeType": "pr",
   "platformAutomerge": true,
   "ignoreTests": false,
@@ -182,12 +185,15 @@
       "matchPackageNames": [
         "renovate/renovate",
         "ghcr.io/mend/renovate-ce",
+        "ghcr.io/renovatebot/renovate",
+        "renovate",
         "kube-prometheus-stack"
       ],
       "description": "Daily maintenance window for core GitOps and monitoring components",
       "schedule": [
         "before 4am"
-      ]
+      ],
+      "updateNotScheduled": false
     },
     {
       "matchManagers": [
@@ -199,7 +205,9 @@
         "ghcr.io/intel/intel-resource-drivers-for-kubernetes/intel-gpu-resource-driver-chart",
         "spegel",
         "n8n",
-        "intel-gpu-resource-driver-chart"
+        "intel-gpu-resource-driver-chart",
+        "ghcr.io/hononeko/charts/koshin",
+        "koshin"
       ],
       "pinDigests": false,
       "description": "Disable pinning for OCI charts as Kustomize helmCharts doesn't support digests"
@@ -259,10 +267,23 @@
       ]
     },
     {
+      "description": "Koshin chart and images are released together from the same repo",
+      "groupName": "koshin",
+      "matchPackageNames": [
+        "ghcr.io/hononeko/charts/koshin",
+        "koshin",
+        "ghcr.io/hononeko/koshin-proxy",
+        "ghcr.io/hononeko/koshin-worker"
+      ]
+    },
+    {
       "description": "Automerge Renovate bot maintenance updates once CI passes",
+      "groupName": "renovate",
       "matchPackageNames": [
         "renovate/renovate",
-        "ghcr.io/mend/renovate-ce"
+        "ghcr.io/mend/renovate-ce",
+        "ghcr.io/renovatebot/renovate",
+        "renovate"
       ],
       "matchUpdateTypes": [
         "minor",
