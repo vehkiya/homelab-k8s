@@ -91,6 +91,11 @@ worker:
       limits:
         cpu: "2"
         memory: 4Gi
+  # The init container copying the Renovate runner; the chart's defaults set no CPU limit
+  runnerInit:
+    resources:
+      limits:
+        cpu: 250m
   workspaceSizeLimit: 10Gi
   affinity:
     nodeAffinity:

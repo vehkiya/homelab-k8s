@@ -5,7 +5,7 @@ namespace: automation
 helmCharts:
   - name: koshin
     repo: oci://ghcr.io/hononeko/charts
-    version: 0.20.1
+    version: 0.21.0
     releaseName: koshin
     namespace: automation
     valuesFile: values/values.yml
@@ -18,9 +18,9 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/koshin-proxy
-    newTag: 0.20.1@sha256:70eaf9df4c89c7e55d92edfa84501647068bcacc3aad2800118770c2c8e427f8
+    newTag: 0.21.0
   - name: ghcr.io/hononeko/koshin-worker
-    newTag: 0.20.1@sha256:4bb18e946d017285713b551f09f111be3c8798363cb53c4b6d589fe3c0bf1e77
+    newTag: 0.21.0
   - name: ghcr.io/renovatebot/renovate
     newTag: 44.178.3-full@sha256:54db50cb21dd8de417ddf609cf7ef92c039f74438e393012469662b041c0b9eb
   - name: nats
@@ -31,27 +31,3 @@ images:
     newTag: 9.1.3@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
   - name: docker.io/curlimages/curl
     newTag: 8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
-
-patches:
-  # The chart sets no CPU limit on its runner init container (not configurable in 0.20.1): the warm worker...
-  - target:
-      kind: Deployment
-      name: koshin-worker
-    patch: |-
-      - op: test
-        path: /spec/template/spec/initContainers/0/name
-        value: koshin-runner-init
-      - op: add
-        path: /spec/template/spec/initContainers/0/resources/limits/cpu
-        value: 250m
-  # ...and the burst workers the proxy starts as Jobs from this PodTemplate
-  - target:
-      kind: PodTemplate
-      name: koshin-worker
-    patch: |-
-      - op: test
-        path: /template/spec/initContainers/0/name
-        value: koshin-runner-init
-      - op: add
-        path: /template/spec/initContainers/0/resources/limits/cpu
-        value: 250m
