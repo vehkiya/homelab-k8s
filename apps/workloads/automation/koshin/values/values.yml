@@ -1,5 +1,6 @@
 # koshin (https://github.com/hononeko/koshin): distributed Renovate, running as the kerrlab-renovator GitHub App while
-# renovate-ce is scaled down for the test. Minimal profile: one NATS, one coordination Valkey, one package-cache Valkey.
+# renovate-ce is scaled down for the test. Layered on the ha profile (values-ha.yml): 3 proxies, a 3-node NATS cluster on
+# PVCs, coordination Valkey primary + 2 replicas with 3 Sentinels, and one package-cache Valkey.
 platforms:
   - github
 
@@ -21,9 +22,6 @@ github:
 proxy:
   # Webhook secret and trigger token (external-secret.yaml)
   existingSecret: koshin-proxy
-  replicas: 1
-  podDisruptionBudget:
-    enabled: false
   resources:
     requests:
       cpu: 25m
@@ -119,6 +117,10 @@ sweeper:
       cpu: 100m
       memory: 64Mi
 
+valkeySettings:
+  # Wait for a replica to acknowledge each lock (WAIT 1), narrowing what a Sentinel failover can lose
+  lockReplicaAckTimeoutMs: 50
+
 tests:
   jobProcessing:
     enabled: false
@@ -162,6 +164,14 @@ valkey:
     limits:
       cpu: 100m
       memory: 64Mi
+  sentinel:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
 
 valkey-cache:
   resources:

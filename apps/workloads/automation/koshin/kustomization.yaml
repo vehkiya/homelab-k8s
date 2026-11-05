@@ -8,7 +8,10 @@ helmCharts:
     version: 0.21.0
     releaseName: koshin
     namespace: automation
-    valuesFile: values/values.yml
+    # The ha profile, with this install's settings layered on top
+    valuesFile: values/values-ha.yml
+    additionalValuesFiles:
+      - values/values.yml
     skipTests: true
 
 resources:

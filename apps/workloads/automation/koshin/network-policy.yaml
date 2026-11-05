@@ -1,6 +1,6 @@
-# koshin under the cluster's default deny: proxy and workers reach NATS, Valkey and GitHub; the proxy also reaches the
-# API server (it starts burst worker Jobs), workers (and Renovate in their `renovate` sidecar, same pod) registries.
-# NATS and Valkey accept only them.
+# koshin under the cluster's default deny: proxy and workers reach NATS, Valkey (through Sentinel) and GitHub; the proxy
+# also reaches the API server (it starts burst worker Jobs), workers (and Renovate in their `renovate` sidecar, same pod)
+# registries. NATS, Valkey and Sentinel accept only them, plus their own cluster, replication and Sentinel traffic.
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -47,6 +47,15 @@ spec:
         - ports:
             - port: "6379"
               protocol: TCP
+    # Sentinel, which tells clients the coordination Valkey's current primary
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey-sentinel
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "26379"
+              protocol: TCP
     # The Job dispatcher: reads the worker PodTemplate, lists and creates burst worker Jobs
     - toEntities:
         - "kube-apiserver"
@@ -90,6 +99,15 @@ spec:
       toPorts:
         - ports:
             - port: "6379"
+              protocol: TCP
+    # Sentinel, which tells clients the coordination Valkey's current primary
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey-sentinel
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "26379"
               protocol: TCP
     # GitHub and package registries, for koshin and Renovate (as renovate-ce's policy)
     - toEntities:
@@ -145,6 +163,24 @@ spec:
         - ports:
             - port: "4222"
               protocol: TCP
+    # Cluster routes between the 3 NATS nodes (JetStream replication and leader elections)
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: nats
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "6222"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: nats
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "6222"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -190,4 +226,90 @@ spec:
       toPorts:
         - ports:
             - port: "6379"
+              protocol: TCP
+---
+# Coordination Valkey replication: replicas sync from the primary, Sentinels monitor every node, and a starting node asks
+# the Sentinels for the current primary
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: koshin-valkey-replication-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: valkey
+      app.kubernetes.io/instance: koshin
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey
+            app.kubernetes.io/instance: koshin
+        - matchLabels:
+            app.kubernetes.io/name: valkey-sentinel
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey-sentinel
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "26379"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: koshin-valkey-sentinel-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: valkey-sentinel
+      app.kubernetes.io/instance: koshin
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: koshin
+            app.kubernetes.io/component: proxy
+        - matchLabels:
+            app.kubernetes.io/name: koshin
+            app.kubernetes.io/component: worker
+        - matchLabels:
+            app.kubernetes.io/name: valkey
+            app.kubernetes.io/instance: koshin
+        - matchLabels:
+            app.kubernetes.io/name: valkey-sentinel
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "26379"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: valkey-sentinel
+            app.kubernetes.io/instance: koshin
+      toPorts:
+        - ports:
+            - port: "26379"
               protocol: TCP
