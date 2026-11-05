@@ -163,6 +163,16 @@
       "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-[0-9a-f]+$/"
     },
     {
+      "description": "Open and update Plex PRs only between 03:00 and 12:00 so platform automerge lands outside playback hours",
+      "matchFileNames": [
+        "apps/workloads/media/plex/**"
+      ],
+      "schedule": [
+        "* 3-11 * * *"
+      ],
+      "updateNotScheduled": false
+    },
+    {
       "matchUpdateTypes": [
         "minor",
         "patch",
