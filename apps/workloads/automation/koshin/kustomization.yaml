@@ -29,7 +29,7 @@ images:
   - name: nats
     newTag: 2.15.2-alpine@sha256:823e7f1d6d8ffe3b30dbd73d4a06bbb939acf94929f7fdf224404da7a05bafb5
   - name: natsio/nats-server-config-reloader
-    newTag: 0.24.0@sha256:d758a82a9c20337e46c2f7356a413faa52cf4d6b02497c3ad81f72f1ba106464
+    newTag: 0.25.0@sha256:24bacde6b844f8875f93424ed153d33b3d9e9367fcccc14b683eb71fab3a4d8c
   - name: docker.io/valkey/valkey
     newTag: 9.1.3@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
   - name: docker.io/curlimages/curl
