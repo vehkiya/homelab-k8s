@@ -27,7 +27,7 @@ images:
   - name: ghcr.io/renovatebot/renovate
     newTag: 44.178.3-full@sha256:54db50cb21dd8de417ddf609cf7ef92c039f74438e393012469662b041c0b9eb
   - name: nats
-    newTag: 2.15.2-alpine@sha256:823e7f1d6d8ffe3b30dbd73d4a06bbb939acf94929f7fdf224404da7a05bafb5
+    newTag: 2.15.2-alpine@sha256:afae2fdbe2e326c65e1246cb83b9d05d319188734f3bd577ac8072daae78a10f
   - name: natsio/nats-server-config-reloader
     newTag: 0.24.0@sha256:d758a82a9c20337e46c2f7356a413faa52cf4d6b02497c3ad81f72f1ba106464
   - name: docker.io/valkey/valkey
