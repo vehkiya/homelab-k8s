@@ -18,9 +18,9 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/koshin-proxy
-    newTag: 0.21.0
+    newTag: 0.21.0@sha256:7b24e1ead214fd8813b902745d705d9fcc15d199e134be8540fd235eef1cb38e
   - name: ghcr.io/hononeko/koshin-worker
-    newTag: 0.21.0
+    newTag: 0.21.0@sha256:21e39dd97470e090c2b3caaac34b1f26310a1008638e3caf9d708f9ee9add23f
   - name: ghcr.io/renovatebot/renovate
     newTag: 44.178.3-full@sha256:54db50cb21dd8de417ddf609cf7ef92c039f74438e393012469662b041c0b9eb
   - name: nats
