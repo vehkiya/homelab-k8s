@@ -20,8 +20,8 @@ resources:
 
 images:
   - name: ghcr.io/ridafkih/keeper-services
-    newTag: 2.29.1@sha256:11eda4b7a85921646ca64c9d76c45f3e78430cc1987bc1e8927c5c0e0c5fd0a5
+    newTag: 2.29.2@sha256:a1258cb14f5d0aa2b7514b90bad73a2d645efaac5775497ec5deae5006fe25de
   - name: ghcr.io/ridafkih/keeper-mcp
-    newTag: 2.29.1@sha256:e0472c0d262cee3ed954256c3e1557bd5b86014f3aa654641febd23c3c18b272
+    newTag: 2.29.2@sha256:c86533648ad4037191f38e506e7f75cb62c80d26657e51b29fb6749a7b3ec265
   - name: docker.io/valkey/valkey
     newTag: 9.1.3@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
