@@ -1,4 +1,4 @@
-# koshin (https://github.com/hononeko/koshin): distributed Renovate, running as the kerrlab-renovator GitHub App while
+# koshin (https://github.com/hononeko/koshin): distributed Renovate, running as the koneko-bot GitHub App while
 # renovate-ce is scaled down for the test. Layered on the ha profile (values-ha.yml): 3 proxies, a 3-node NATS cluster on
 # PVCs, coordination Valkey primary + 2 replicas with 3 Sentinels, and one package-cache Valkey.
 platforms:
@@ -6,8 +6,8 @@ platforms:
 
 github:
   app:
-    # kerrlab-renovator, shared with renovate-ce: never run both at once, they'd push as the same bot
-    id: "2668553"
+    # koneko-bot (https://github.com/apps/koneko-bot), owned by hononeko. Public so all 4 accounts below can install it
+    id: "5634219"
     existingSecret: koshin-github-app
     privateKeyKey: private-key.pem
     # vehkiya, hononeko, Test-Forge, neeppy: the accounts renovate-ce's autodiscover filter covers
@@ -16,7 +16,7 @@ github:
       - 206545357
       - 158061806
       - 22986246
-    # Never suspend or uninstall the shared App's installations from here
+    # Leave other accounts' installations alone; they get nothing either way
     disallowedAction: ignore
 
 proxy:

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: renovate-server
 spec:
-  # Scaled down while koshin runs Renovate as the same kerrlab-renovator App: never run both at once
+  # Scaled down while koshin runs Renovate (as koneko-bot) on the same repositories: both would open the same PRs
   replicas: 0
   selector:
     matchLabels:
