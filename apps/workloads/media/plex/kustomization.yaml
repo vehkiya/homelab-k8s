@@ -27,7 +27,7 @@ images:
   - name: plexinc/pms-docker
     newTag: 1.43.7.11114-4b588ea35@sha256:531ad94c469748dcaa9d6f3d6c6160ad3598617a55319d389e7d08216bc680a7
   - name: alpine
-    newTag: latest@sha256:ce9e1e6d23f04a0b7593445a062a9fc73ed52f8260b9396f77a958295ad18ee7
+    newTag: latest@sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a
   - name: ghcr.io/hononeko/k8s-backup-tools
     newTag: 0.1.1@sha256:40266da88413e2850417dc67d6d15e9d42249588248735f7ad1ef21a977e5bf0
 
