@@ -8,6 +8,13 @@ server:
   buffers:
     read: 32768
     write: 32768
+  # Replaces the default endpoint set (ext-authz, auth-request, legacy)
+  endpoints:
+    authz:
+      forward-auth:
+        implementation: "ForwardAuth"
+        authn_strategies:
+          - name: "CookieSession"
 
 # Prometheus metrics (scraped by the authelia ServiceMonitor on the "metrics" port)
 telemetry:
