@@ -166,10 +166,11 @@
       "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-[0-9a-f]+$/"
     },
     {
-      "description": "Open and update Plex PRs only between 03:00 and 12:00 so platform automerge lands outside playback hours",
+      "description": "Open and update Plex PRs only between 03:00 and 12:00 so platform automerge lands outside playback hours; own branches so images shared with other apps (k8s-backup-tools) don't bypass the window",
       "matchFileNames": [
         "apps/workloads/media/plex/**"
       ],
+      "additionalBranchPrefix": "plex-",
       "schedule": [
         "* 3-11 * * *"
       ],
