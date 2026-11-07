@@ -299,8 +299,6 @@ extraObjects:
         requestid:
           headerName: "X-Request-Id"
 experimental:
-  fastProxy:
-    enabled: true
   localPlugins:
     crowdsec:
       moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
