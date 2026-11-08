@@ -26,6 +26,11 @@ spec:
         - Remote-Groups
         - Remote-Name
         - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
   path:
     escapedSlashesAction: RejectRequest
   tls:
@@ -58,6 +63,11 @@ spec:
         - Remote-Groups
         - Remote-Name
         - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
   path:
     escapedSlashesAction: RejectRequest
   tls:
@@ -122,6 +132,11 @@ spec:
         - Remote-Groups
         - Remote-Name
         - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
   path:
     escapedSlashesAction: RejectRequest
   tls:
@@ -155,6 +170,11 @@ spec:
         - Remote-Groups
         - Remote-Name
         - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
   path:
     escapedSlashesAction: RejectRequest
   tls:
