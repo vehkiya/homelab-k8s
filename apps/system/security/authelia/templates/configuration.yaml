@@ -11,8 +11,14 @@ server:
   # Replaces the default endpoint set (ext-authz, auth-request, legacy)
   endpoints:
     authz:
+      # Traefik forwardAuth
       forward-auth:
         implementation: "ForwardAuth"
+        authn_strategies:
+          - name: "CookieSession"
+      # Envoy Gateway extAuth (apps/common/forward-auth/security-policy.yaml)
+      ext-authz:
+        implementation: "ExtAuthz"
         authn_strategies:
           - name: "CookieSession"
 

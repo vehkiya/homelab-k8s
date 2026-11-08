@@ -3,3 +3,4 @@ kind: Component
 
 resources:
   - forward-auth-middleware.yaml
+  - security-policy.yaml

@@ -12,6 +12,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - persistence
 # Hashed name: a config change rolls the Deployment
 configMapGenerator:

@@ -32,6 +32,17 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
 
+    # === Allow HTTP Interceptor to receive traffic from the internal Envoy fleet ===
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+
   # ----=== Egress ===----
   egress:
     # === Allow intra-namespace communication ===

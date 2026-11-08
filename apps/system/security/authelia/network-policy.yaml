@@ -7,8 +7,8 @@ spec:
     matchLabels:
       app: authelia
 
-  # Ingress to 9091 (web-ui) and from the host is allowed by the global
-  # ccnp-allow-ingress-authelia policy (apps/bootstrap/cilium/global-network-policies.yaml)
+  # Ingress to 9091 (web-ui) from the proxies is allowed by the global
+  # ccnp-allow-web-ui-ingress-* policies (apps/bootstrap/cilium/global-network-policies.yaml)
   ingress:
     # Prometheus metrics scrape
     - fromEndpoints:
