@@ -1,0 +1,57 @@
+# Controller, certgen and the proxies' shutdown-manager sidecar
+global:
+  images:
+    envoyGateway:
+      # renovate: datasource=docker depName=dhi.io/envoy-gateway
+      image: dhi.io/envoy-gateway:1.10.0
+
+# Bundled Gateway API CRDs (experimental channel); the cluster's come from apps/system/networking/gateway-api
+crds:
+  enabled: false
+
+topologyInjector:
+  enabled: false
+
+config:
+  envoyGateway:
+    provider:
+      type: Kubernetes
+      kubernetes:
+        deploy:
+          type: ControllerNamespace
+    logging:
+      level:
+        default: info
+
+deployment:
+  replicas: 2
+  envoyGateway:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 192Mi
+      limits:
+        cpu: 500m
+        memory: 768Mi
+  pod:
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                control-plane: envoy-gateway
+            topologyKey: kubernetes.io/hostname
+
+podDisruptionBudget:
+  minAvailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
+
+certgen:
+  job:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi

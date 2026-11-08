@@ -84,7 +84,7 @@ spec:
 
         # 7. Workloads: Critical Core Pod CrashLooping
         - alert: CriticalNamespacePodCrashLooping
-          expr: rate(kube_pod_container_status_restarts_total{namespace=~"kube-system|security|traefik|observability"}[15m]) * 60 * 5 > 0
+          expr: rate(kube_pod_container_status_restarts_total{namespace=~"kube-system|security|traefik|envoy-gateway-system|observability"}[15m]) * 60 * 5 > 0
           for: 10m
           labels:
             severity: critical

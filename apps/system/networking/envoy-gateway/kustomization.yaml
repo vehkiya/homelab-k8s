@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: envoy-gateway-system
+helmCharts:
+  # Envoy Gateway CRDs only; the Gateway API CRDs come from apps/system/networking/gateway-api
+  - name: gateway-crds-helm
+    repo: oci://docker.io/envoyproxy
+    version: v1.10.0
+    releaseName: envoy-gateway-crds
+    namespace: envoy-gateway-system
+    valuesInline:
+      crds:
+        gatewayAPI:
+          enabled: false
+        envoyGateway:
+          enabled: true
+  - name: gateway-helm
+    repo: oci://docker.io/envoyproxy
+    version: v1.10.0
+    releaseName: envoy-gateway
+    namespace: envoy-gateway-system
+    valuesFile: values/envoy-gateway.yaml
+
+resources:
+  - network-policy.yaml
+  - servicemonitor.yaml
+
+images:
+  - name: dhi.io/envoy-gateway
+    newTag: 1.10.0@sha256:c9d14a8fd8563cbdc4e403d18965fcb8446ebd33fc5751463d6a027fcc948688
+
+# Deleting a CRD deletes every object of its kind
+patches:
+  - target:
+      kind: CustomResourceDefinition
+    patch: |-
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1sync-options
+        value: Prune=false,Delete=false

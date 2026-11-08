@@ -126,6 +126,13 @@
       ]
     },
     {
+      "groupName": "envoy-gateway-group",
+      "matchPackageNames": [
+        "/envoy-gateway/",
+        "/gateway(-crds)?-helm$/"
+      ]
+    },
+    {
       "groupName": "synology-csi-drivers",
       "matchFileNames": [
         "apps/system/storage/synology-csi/**"
