@@ -1,0 +1,50 @@
+# Route-level EG policies must merge into the Gateway-level ones; a replacing
+# policy would silently drop CrowdSec, error pages and timeouts for that route.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: envoy-gateway-route-policy-merge
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["gateway.envoyproxy.io"]
+        apiVersions: ["*"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["backendtrafficpolicies", "securitypolicies"]
+  variables:
+    - name: targetKinds
+      expression: >-
+        (has(object.spec.targetRef) ? [object.spec.targetRef.kind] : []) +
+        (has(object.spec.targetRefs) ? object.spec.targetRefs.map(t, t.kind) : []) +
+        (has(object.spec.targetSelectors) ? object.spec.targetSelectors.map(t, t.kind) : [])
+    - name: routeLevel
+      expression: variables.targetKinds.exists(k, k != 'Gateway' && k != 'ListenerSet')
+    - name: extAuthBackends
+      expression: >-
+        !has(object.spec.extAuth) ? [] :
+        (has(object.spec.extAuth.grpc) && has(object.spec.extAuth.grpc.backendRefs) ? object.spec.extAuth.grpc.backendRefs : []) +
+        (has(object.spec.extAuth.http) && has(object.spec.extAuth.http.backendRefs) ? object.spec.extAuth.http.backendRefs : []) +
+        (has(object.spec.extAuth.grpc) && has(object.spec.extAuth.grpc.backendRef) ? [object.spec.extAuth.grpc.backendRef] : []) +
+        (has(object.spec.extAuth.http) && has(object.spec.extAuth.http.backendRef) ? [object.spec.extAuth.http.backendRef] : [])
+    # Replace mode is allowed only for policies that restate the bouncer
+    # (upload exceptions) or Authelia (forward-auth)
+    - name: replaceAllowed
+      expression: >-
+        request.kind.kind == 'SecurityPolicy' && size(variables.extAuthBackends) > 0 &&
+        variables.extAuthBackends.all(b, has(b.namespace) && b.namespace == 'security' &&
+        (b.name == 'crowdsec-envoy-bouncer' || b.name == 'authelia'))
+  validations:
+    - expression: "!variables.routeLevel || has(object.spec.mergeType) || variables.replaceAllowed"
+      message: >-
+        Route-level BackendTrafficPolicy and SecurityPolicy must set mergeType: StrategicMerge.
+        Only SecurityPolicies whose extAuth targets security/crowdsec-envoy-bouncer or
+        security/authelia may replace the Gateway policy.
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: envoy-gateway-route-policy-merge
+spec:
+  policyName: envoy-gateway-route-policy-merge
+  validationActions: ["Deny"]

@@ -1,0 +1,97 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal-gateway
+spec:
+  gatewayClassName: envoy
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: internal
+  listeners:
+    # Plaintext only for the HTTPS redirect in http-redirect.yaml
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: websecure
+      protocol: HTTPS
+      port: 443
+      hostname: "*.kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-wildcard-tls
+      allowedRoutes:
+        namespaces:
+          from: All
+    # The apex (the "*.kerrlab.app" listener never matches it): the launchpad in tools
+    - name: websecure-apex
+      protocol: HTTPS
+      port: 443
+      hostname: "kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-apex-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: tools
+    - name: plex
+      protocol: HTTPS
+      port: 32400
+      hostname: "plex.kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-wildcard-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: media
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: external-gateway
+spec:
+  gatewayClassName: envoy
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: dmz
+  listeners:
+    - name: dmz
+      protocol: HTTPS
+      port: 443
+      hostname: "*.kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-wildcard-tls
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: plex
+      protocol: HTTPS
+      port: 32400
+      hostname: "plex.kerrlab.app"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: kerrlab-app-wildcard-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: media

@@ -24,7 +24,23 @@ helmCharts:
 
 resources:
   - network-policy.yaml
+  - proxy-network-policy.yaml
   - servicemonitor.yaml
+  - podmonitor.yaml
+
+# From the gateway-addons-helm chart (v1.10.0)
+configMapGenerator:
+  - name: envoy-gateway-dashboards
+    options:
+      labels:
+        grafana_dashboard: "1"
+    files:
+      - envoy-proxy-global.json=dashboards/envoy-proxy-global.json
+      - envoy-clusters.json=dashboards/envoy-clusters.json
+      - envoy-gateway-global.json=dashboards/envoy-gateway-global.json
+      - envoy-gateway-resources.json=dashboards/envoy-gateway-resources.json
+generatorOptions:
+  disableNameSuffixHash: true
 
 images:
   - name: dhi.io/envoy-gateway
