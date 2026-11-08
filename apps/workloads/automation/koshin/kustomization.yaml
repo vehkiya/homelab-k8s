@@ -25,7 +25,7 @@ images:
   - name: ghcr.io/hononeko/koshin-worker
     newTag: 0.22.0@sha256:6868abf77e552a4c5cf4d6ad8ad554fcf66b298ec95465afa85d845ad912ca6f
   - name: ghcr.io/renovatebot/renovate
-    newTag: 44.222.2-full@sha256:881677290b4f1397e8ada5e7c8162d2c9ea4193804461642ffb321412b673b68
+    newTag: 44.222.4-full@sha256:c268a6169a7558e83c302ddf2ffc0a039e8cc3e9885c4c2516f882a9c849abd4
   - name: nats
     newTag: 2.15.2-alpine@sha256:afae2fdbe2e326c65e1246cb83b9d05d319188734f3bd577ac8072daae78a10f
   - name: natsio/nats-server-config-reloader
