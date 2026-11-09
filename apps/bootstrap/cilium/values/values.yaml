@@ -99,6 +99,10 @@ resources:
 
 # resources configuration for cilium-envoy daemonset
 envoy:
+  # With l7Proxy off no embedded Envoy runs; without this the agent claims hostPort 9964,
+  # which cilium-envoy holds until it is deleted
+  prometheus:
+    enabled: false
   resources:
     requests:
       cpu: 10m
