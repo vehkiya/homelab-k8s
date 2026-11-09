@@ -1,0 +1,39 @@
+# Envoy Gateway forward-auth: applies to every HTTPRoute in the namespace labeled
+# edge.kerrlab.app/forward-auth: authelia.
+# Replace mode (no mergeType): on DMZ routes it supersedes the gateway's CrowdSec
+# policy, since a SecurityPolicy holds a single extAuth.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: authelia-forward-auth
+spec:
+  targetSelectors:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      matchLabels:
+        edge.kerrlab.app/forward-auth: authelia
+  extAuth:
+    timeout: 10s
+    failOpen: false
+    http:
+      backendRefs:
+        - name: authelia
+          namespace: security
+          port: 9091
+      path: /api/authz/ext-authz/
+      headersToBackend:
+        - Remote-User
+        - Remote-Groups
+        - Remote-Name
+        - Remote-Email
+    # Without this list the check carries only Host, Method, Path,
+    # Content-Length and Authorization: no session cookie
+    headersToExtAuth:
+      - cookie
+      - x-forwarded-proto
+      - x-forwarded-for
+      - accept
+      - sec-fetch-mode
+      - sec-fetch-dest
+      - x-requested-with
+      - proxy-authorization

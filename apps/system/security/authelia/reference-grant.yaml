@@ -1,0 +1,23 @@
+# Forward-auth SecurityPolicies (apps/common/forward-auth) call Authelia across namespaces
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: forward-auth-to-authelia
+spec:
+  from:
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: iot
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: longhorn-system
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: media
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: tools
+  to:
+    - group: ""
+      kind: Service
+      name: authelia
