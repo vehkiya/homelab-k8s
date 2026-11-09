@@ -52,6 +52,10 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
       toPorts:
         - ports:
             - port: "8080"

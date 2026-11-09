@@ -27,6 +27,18 @@ spec:
 
   # ----=== Egress ===----
   egress:
+    # === Allow Egress to the internal Envoy fleet for Hairpinning (for OIDC) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+      toPorts:
+        - ports:
+            - port: "10080"
+              protocol: TCP
+            - port: "10443"
+              protocol: TCP
     # === Allow Egress to Traefik for Hairpinning (for OIDC) ===
     - toEndpoints:
         - matchLabels:

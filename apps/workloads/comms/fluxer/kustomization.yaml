@@ -22,6 +22,7 @@ resources:
   - admin.yaml
   - microservices.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - external-http-route.yaml
   - rate-limit.yaml
   - network-policy.yaml

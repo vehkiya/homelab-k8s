@@ -11,6 +11,7 @@ helmCharts:
     includeCRDs: true
 resources:
   - longhorn-http-route.yaml
+  - longhorn-http-route-eg.yaml
   - network-policy.yaml
   - storageclass-retain.yaml
   - s3-backup-secret.yaml

@@ -29,10 +29,14 @@ spec:
         - ports:
             - port: "7700"
               protocol: TCP
-    # === Allow access from Traefik (external route) ===
+    # === Allow access from Traefik and the internal Envoy fleet ===
     - fromEndpoints:
         - matchLabels:
             "k8s:io.kubernetes.pod.namespace": traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
       toPorts:
         - ports:
             - port: "7700"

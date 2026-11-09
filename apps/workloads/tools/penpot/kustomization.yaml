@@ -16,6 +16,7 @@ resources:
   - external-secrets.yaml
   - valkey.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - network-policy.yaml
 
 patches:

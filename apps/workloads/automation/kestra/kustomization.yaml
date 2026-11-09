@@ -10,6 +10,7 @@ resources:
   - controller.yaml
   - hpa.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - network-policy.yaml
 
 configMapGenerator:

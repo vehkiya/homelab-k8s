@@ -11,6 +11,7 @@ resources:
   - blocklist-mirror-deployment.yaml
   - blocklist-mirror-service.yaml
   - blocklist-mirror-http-route.yaml
+  - blocklist-mirror-http-route-eg.yaml
   - blocklist-mirror-servicemonitor.yaml
   - blocklist-mirror-alerts.yaml
 

@@ -12,6 +12,7 @@ resources:
   - bar-assistant-deployment.yaml
   - bar-assistant-service.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - external-http-route.yaml
   - middlewares.yaml
   - rate-limit.yaml

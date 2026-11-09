@@ -139,6 +139,16 @@ spec:
               protocol: TCP
             - port: "9443"
               protocol: TCP
+    # Internal Envoy fleet (container port 10443)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+      toPorts:
+        - ports:
+            - port: "10443"
+              protocol: TCP
     - toCIDR:
         - 10.10.1.16/32
       toPorts:
