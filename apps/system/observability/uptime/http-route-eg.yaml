@@ -1,0 +1,20 @@
+# Envoy Gateway copy of uptime-kuma-route (migration); the Traefik route stays until cutover
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: uptime-kuma-route-eg
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: edge
+      sectionName: websecure
+  hostnames:
+    - "status.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: uptime-kuma-ui
+          port: 3001

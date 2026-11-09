@@ -6,6 +6,7 @@ resources:
   - statefulset.yaml
   - service.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - network-policy.yaml
   - ntfy-credentials-secret.yaml
   - vpn-secret.yaml

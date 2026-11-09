@@ -5,6 +5,11 @@ metadata:
   name: internal
 spec:
   concurrency: 2
+  # Rate limits before ext_authz, as Traefik ran them before forward-auth:
+  # floods get 429s instead of reaching Authelia or the bouncer
+  filterOrder:
+    - name: envoy.filters.http.local_ratelimit
+      before: envoy.filters.http.ext_authz
   logging:
     level:
       default: warn
@@ -88,6 +93,11 @@ metadata:
   name: dmz
 spec:
   concurrency: 2
+  # Rate limits before ext_authz, as Traefik ran them before forward-auth:
+  # floods get 429s instead of reaching Authelia or the bouncer
+  filterOrder:
+    - name: envoy.filters.http.local_ratelimit
+      before: envoy.filters.http.ext_authz
   logging:
     level:
       default: warn

@@ -11,11 +11,15 @@ spec:
           - n8n
           - n8n-worker
   ingress:
-    # === Allow access from Traefik ===
+    # === Allow access from Traefik and the internal Envoy fleet ===
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
       toPorts:
         - ports:
             - port: "http"
@@ -46,6 +50,16 @@ spec:
             - port: "websecure"
               protocol: TCP
             - port: "dmz"
+              protocol: TCP
+    # === Allow egress to the internal Envoy fleet (Hairpinning) ===
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+      toPorts:
+        - ports:
+            - port: "10443"
               protocol: TCP
 
     # === Allow egress to NAS PostgreSQL ===

@@ -4,6 +4,7 @@ namespace: observability
 resources:
   - deployment.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - service.yaml
   - network-policy.yaml
 images:

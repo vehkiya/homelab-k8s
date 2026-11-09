@@ -5,6 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - http-route-eg.yaml
   - network-policy.yaml
   - secret.yaml
   - configmap.yaml

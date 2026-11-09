@@ -1,0 +1,80 @@
+# Envoy Gateway copy of sonarr-route sonarr-tv-ui-route sonarr-anime-ui-route (migration); the Traefik route stays until cutover
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sonarr-route-eg
+  labels:
+    edge.kerrlab.app/forward-auth: authelia
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: edge
+      sectionName: websecure
+  hostnames:
+    - "sonarr.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /anime
+      backendRefs:
+        - name: sonarr-anime-ui
+          port: 8989
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /tv
+      backendRefs:
+        - name: sonarr-tv-ui
+          port: 8989
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: sonarr-portal-ui
+          port: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sonarr-tv-ui-route-eg
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: edge
+      sectionName: websecure
+  hostnames:
+    - "sonarr-tv.kerrlab.app"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: sonarr.kerrlab.app
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /tv
+            statusCode: 301
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sonarr-anime-ui-route-eg
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: edge
+      sectionName: websecure
+  hostnames:
+    - "sonarr-anime.kerrlab.app"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: sonarr.kerrlab.app
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /anime
+            statusCode: 301

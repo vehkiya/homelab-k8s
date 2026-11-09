@@ -25,8 +25,17 @@ spec:
         - ports:
             - port: "6379"
               protocol: TCP
-    # 3. Service health probes of *.kerrlab.app, which resolve to Traefik
-    #    (the load balancer IP, and the Traefik pods behind it)
+    # 3. Service health probes of *.kerrlab.app, which resolve to the proxy
+    #    VIP (the load balancer IP, and the Traefik or Envoy pods behind it)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+      toPorts:
+        - ports:
+            - port: "10443"
+              protocol: TCP
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: traefik

@@ -95,7 +95,8 @@ kubeProxy:
   enabled: false
 
 # Expose Cilium policy validity and Argo CD tracking as metrics, for the alerts in cilium-alerts.yaml,
-# and Argo CD Application health and sync results, for the alerts in argocd-alerts.yaml
+# Argo CD Application health and sync results, for the alerts in argocd-alerts.yaml,
+# and forward-auth coverage of HTTPRoutes, for envoy-gateway-alerts.yaml
 kube-state-metrics:
   rbac:
     extraRules:
@@ -104,6 +105,12 @@ kube-state-metrics:
         verbs: ["list", "watch"]
       - apiGroups: ["argoproj.io"]
         resources: ["applications"]
+        verbs: ["list", "watch"]
+      - apiGroups: ["gateway.networking.k8s.io"]
+        resources: ["httproutes"]
+        verbs: ["list", "watch"]
+      - apiGroups: ["gateway.envoyproxy.io"]
+        resources: ["securitypolicies"]
         verbs: ["list", "watch"]
   customResourceState:
     enabled: true
@@ -202,3 +209,36 @@ kube-state-metrics:
                     labelName: phase
                     path: [status, operationState, phase]
                     list: [Running, Terminating, Succeeded, Failed, Error]
+          - groupVersionKind:
+              group: gateway.networking.k8s.io
+              version: v1
+              kind: HTTPRoute
+            metricNamePrefix: kube_httproute
+            labelsFromPath:
+              name: [metadata, name]
+              namespace: [metadata, namespace]
+            metrics:
+              # Only emitted for routes carrying the label (kube-state-metrics skips the series otherwise)
+              - name: forward_auth
+                help: "HTTPRoute opted into Envoy Gateway forward-auth via edge.kerrlab.app/forward-auth"
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      forward_auth: [metadata, labels, "edge.kerrlab.app/forward-auth"]
+          - groupVersionKind:
+              group: gateway.envoyproxy.io
+              version: v1alpha1
+              kind: SecurityPolicy
+            metricNamePrefix: kube_envoy_securitypolicy
+            labelsFromPath:
+              name: [metadata, name]
+              namespace: [metadata, namespace]
+            metrics:
+              - name: info
+                help: "One series per Envoy Gateway SecurityPolicy"
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      uid: [metadata, uid]

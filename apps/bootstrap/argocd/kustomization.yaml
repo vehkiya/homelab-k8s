@@ -8,6 +8,7 @@ resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/v3.6.1/manifests/ha/install.yaml
   - argocd-repositories-external-secret.yaml
   - ingress-route.yaml
+  - ingress-route-eg.yaml
   - network-policy.yaml
 
 images:

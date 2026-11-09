@@ -1,0 +1,40 @@
+# Envoy Gateway copy of plex-ui-route (migration); the Traefik route stays until cutover
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: plex-ui-route-eg
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: edge
+      sectionName: websecure
+    - name: internal-gateway
+      namespace: edge
+      sectionName: plex
+  hostnames:
+    - "plex.kerrlab.app"
+  rules:
+    # 1. Direct media streaming paths (transcoded video and direct file chunks)
+    - name: media
+      matches:
+        - path:
+            type: PathPrefix
+            value: /video
+        - path:
+            type: PathPrefix
+            value: /library/parts
+        - path:
+            type: PathPrefix
+            value: /media
+      backendRefs:
+        - name: plex-ui
+          port: 32400
+    # 2. General Web UI, API, and metadata (rate-limited in rate-limit-eg.yaml)
+    - name: ui
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: plex-ui
+          port: 32400

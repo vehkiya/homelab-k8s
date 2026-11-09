@@ -1,0 +1,20 @@
+# Envoy Gateway copy of grafana-route (migration); the Traefik route stays until cutover
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-route-eg
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: edge
+      sectionName: websecure
+  hostnames:
+    - "grafana.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: kube-prometheus-stack-grafana
+          port: 80
