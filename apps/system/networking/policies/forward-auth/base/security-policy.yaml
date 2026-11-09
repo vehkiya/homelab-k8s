@@ -1,5 +1,5 @@
 # Envoy Gateway forward-auth: applies to every HTTPRoute in the namespace labeled
-# edge.kerrlab.app/forward-auth: authelia.
+# edge.kerrlab.app/forward-auth: authelia (namespace set by the overlay).
 # Replace mode (no mergeType): on DMZ routes it supersedes the gateway's CrowdSec
 # policy, since a SecurityPolicy holds a single extAuth.
 apiVersion: gateway.envoyproxy.io/v1alpha1

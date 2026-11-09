@@ -73,7 +73,7 @@ spec:
             severity: critical
           annotations:
             summary: "Forward-auth routes in {{ $labels.namespace }} are served without authentication"
-            description: "{{ $value }} HTTPRoute(s) in {{ $labels.namespace }} carry edge.kerrlab.app/forward-auth=authelia, but the namespace has no authelia-forward-auth SecurityPolicy. Include apps/common/forward-auth in one app of that namespace."
+            description: "{{ $value }} HTTPRoute(s) in {{ $labels.namespace }} carry edge.kerrlab.app/forward-auth=authelia, but the namespace has no authelia-forward-auth SecurityPolicy. Add the namespace to apps/system/networking/policies/forward-auth."
 
         # 6. DMZ bouncer below 2 replicas (the CrowdSec policy fails open without it)
         - alert: CrowdSecEnvoyBouncerDegraded
