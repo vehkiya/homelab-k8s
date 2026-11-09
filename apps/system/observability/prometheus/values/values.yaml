@@ -110,7 +110,7 @@ kube-state-metrics:
         resources: ["httproutes"]
         verbs: ["list", "watch"]
       - apiGroups: ["gateway.envoyproxy.io"]
-        resources: ["securitypolicies"]
+        resources: ["securitypolicies", "backendtrafficpolicies", "clienttrafficpolicies"]
         verbs: ["list", "watch"]
   customResourceState:
     enabled: true
@@ -242,3 +242,48 @@ kube-state-metrics:
                   info:
                     labelsFromPath:
                       uid: [metadata, uid]
+              # One series per ancestor (Gateway listener); absent until the controller sets the condition
+              - &envoy-policy-accepted
+                name: accepted
+                help: "Accepted condition of an Envoy Gateway policy, per ancestor"
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, ancestors]
+                    labelsFromPath:
+                      ancestor: [ancestorRef, name]
+                      section: [ancestorRef, sectionName]
+                    valueFrom: [conditions, "[type=Accepted]", status]
+              - &envoy-policy-overridden
+                name: overridden
+                help: "Overridden condition of an Envoy Gateway policy, per ancestor"
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, ancestors]
+                    labelsFromPath:
+                      ancestor: [ancestorRef, name]
+                      section: [ancestorRef, sectionName]
+                    valueFrom: [conditions, "[type=Overridden]", status]
+          - groupVersionKind:
+              group: gateway.envoyproxy.io
+              version: v1alpha1
+              kind: BackendTrafficPolicy
+            metricNamePrefix: kube_envoy_backendtrafficpolicy
+            labelsFromPath:
+              name: [metadata, name]
+              namespace: [metadata, namespace]
+            metrics:
+              - *envoy-policy-accepted
+              - *envoy-policy-overridden
+          - groupVersionKind:
+              group: gateway.envoyproxy.io
+              version: v1alpha1
+              kind: ClientTrafficPolicy
+            metricNamePrefix: kube_envoy_clienttrafficpolicy
+            labelsFromPath:
+              name: [metadata, name]
+              namespace: [metadata, namespace]
+            metrics:
+              - *envoy-policy-accepted
+              - *envoy-policy-overridden

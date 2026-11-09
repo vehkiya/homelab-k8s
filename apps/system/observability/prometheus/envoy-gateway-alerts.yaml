@@ -105,3 +105,90 @@ spec:
             summary: "CrowdSec Envoy bouncer is not pulling decisions"
             description: "CrowdSec LAPI has received no decision stream polls from the Envoy bouncer for more than 10 minutes. Check the bouncer key (BOUNCER_KEY_envoy) and the bouncer logs."
 
+        # 8. 5xx ratio per fleet and listener (replaces TraefikHigh5xxErrorRate)
+        - alert: EnvoyHigh5xxRate
+          expr: |
+            (
+              sum by (fleet, envoy_http_conn_manager_prefix) (label_replace(rate(envoy_http_downstream_rq_xx{namespace="envoy-gateway-system", envoy_response_code_class="5", envoy_http_conn_manager_prefix=~"https?-[0-9]+"}[5m]), "fleet", "$1", "pod", "envoy-(dmz|internal)-.*"))
+                / sum by (fleet, envoy_http_conn_manager_prefix) (label_replace(rate(envoy_http_downstream_rq_xx{namespace="envoy-gateway-system", envoy_http_conn_manager_prefix=~"https?-[0-9]+"}[5m]), "fleet", "$1", "pod", "envoy-(dmz|internal)-.*"))
+            ) * 100 > 10
+            and
+            sum by (fleet, envoy_http_conn_manager_prefix) (label_replace(rate(envoy_http_downstream_rq_xx{namespace="envoy-gateway-system", envoy_http_conn_manager_prefix=~"https?-[0-9]+"}[5m]), "fleet", "$1", "pod", "envoy-(dmz|internal)-.*")) > 0.1
+          for: 5m
+          labels:
+            severity: critical
+            category: Networking
+          annotations:
+            summary: "{{ $value | humanize }}% of {{ $labels.fleet }} responses on {{ $labels.envoy_http_conn_manager_prefix }} are 5xx"
+            description: "More than 10% of responses on the {{ $labels.fleet }} fleet's {{ $labels.envoy_http_conn_manager_prefix }} listener were 5xx for 5 minutes. The access logs' response_code_details show whether upstreams or Envoy produced them."
+
+        # 9. Envoy Gateway drops a rejected policy: CrowdSec fails open, forward-auth answers 500,
+        # a ClientTrafficPolicy loses its client-IP rewrite and header stripping
+        - alert: EnvoyPolicyNotAccepted
+          expr: min by (namespace, name, customresource_kind) ({__name__=~"kube_envoy_(securitypolicy|clienttrafficpolicy)_accepted"}) == 0
+          for: 5m
+          labels:
+            severity: critical
+            category: Security
+          annotations:
+            summary: "{{ $labels.customresource_kind }} {{ $labels.namespace }}/{{ $labels.name }} is not accepted"
+            description: "Envoy Gateway rejected the policy for at least one Gateway and serves its targets without it. The reason is in status.ancestors of the {{ $labels.customresource_kind }}."
+
+        - alert: EnvoyBackendTrafficPolicyNotAccepted
+          expr: min by (namespace, name) (kube_envoy_backendtrafficpolicy_accepted) == 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "BackendTrafficPolicy {{ $labels.namespace }}/{{ $labels.name }} is not accepted"
+            description: "Its rate limits, timeouts, load balancing or error pages are not applied to the targeted routes. The reason is in status.ancestors."
+
+        # 10. A policy replaced by a more specific one (rule 1). edge/crowdsec is replaced by design:
+        # upload exceptions and forward-auth take its place on their routes
+        - alert: EnvoyPolicyOverridden
+          expr: |
+            max by (namespace, name, customresource_kind) ({__name__=~"kube_envoy_(securitypolicy|backendtrafficpolicy|clienttrafficpolicy)_overridden"}) == 1
+              unless on (namespace, name, customresource_kind) kube_envoy_securitypolicy_overridden{namespace="edge", name="crowdsec"}
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.customresource_kind }} {{ $labels.namespace }}/{{ $labels.name }} is overridden"
+            description: "Another policy replaces it on some targets, which can drop gateway defaults such as CrowdSec, timeouts or error pages. The overriding policies are listed in status.ancestors."
+
+        # 11. Bouncer calls failing while the bouncer has endpoints (hung, unreachable, timing out).
+        # At 0 endpoints the policy is rejected instead (alert 9 and CrowdSecEnvoyBouncerDown)
+        - alert: CrowdSecEnvoyChecksFailingOpen
+          expr: sum(rate(envoy_http_ext_authz_failure_mode_allowed{namespace="envoy-gateway-system", pod=~"envoy-dmz-.*"}[5m])) > 0
+          for: 5m
+          labels:
+            severity: critical
+            category: Security
+          annotations:
+            summary: "DMZ requests pass without CrowdSec checks"
+            description: "Envoy let {{ $value | humanize }} req/s through on failOpen because the bouncer call failed. Bans and AppSec are not enforced, and each request waits up to the 2 s ext_authz timeout. Check the bouncer pods and the DMZ fleet's egress to security/crowdsec-envoy-bouncer:8080."
+
+        # 12. Forward-auth calls failing: with failOpen false Envoy answers 403
+        # (error counts both policies; only CrowdSec calls fail open)
+        - alert: EnvoyForwardAuthErrors
+          expr: |
+            (
+              sum by (fleet) (label_replace(increase(envoy_http_ext_authz_error{namespace="envoy-gateway-system"}[10m]), "fleet", "$1", "pod", "envoy-(dmz|internal)-.*"))
+                - sum by (fleet) (label_replace(increase(envoy_http_ext_authz_failure_mode_allowed{namespace="envoy-gateway-system"}[10m]), "fleet", "$1", "pod", "envoy-(dmz|internal)-.*"))
+            ) > 5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Forward-auth checks fail on the {{ $labels.fleet }} fleet"
+            description: "{{ $value | humanize }} Authelia ext_authz calls failed in 10 minutes, and forward-auth routes answer 403 until Authelia responds. Check the Authelia pods and the fleet's egress to security/authelia:9091."
+
+        # 13. No controller replica holds the leader lease
+        - alert: EnvoyGatewayControllerNoLeader
+          expr: (sum(leader_election_master_status{namespace="envoy-gateway-system"}) or on() vector(0)) < 1
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Envoy Gateway controller has no leader"
+            description: "No controller replica holds the leader lease, so policy and route statuses and the proxy DaemonSets and Services are not reconciled."

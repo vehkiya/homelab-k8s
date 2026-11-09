@@ -54,23 +54,6 @@ spec:
             summary: "PersistentVolumeClaim unbound"
             description: "PVC {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} has been in phase {{ $labels.phase }} for more than 15 minutes."
 
-        # 5. Networking: Traefik Ingress High 5xx Error Rate
-        - alert: TraefikHigh5xxErrorRate
-          expr: |
-            (
-              (sum(rate(traefik_entrypoint_requests_total{code=~"5.."}[5m])) by (entrypoint)
-                / sum(rate(traefik_entrypoint_requests_total[5m])) by (entrypoint)) * 100 > 10
-            ) and (
-              sum(rate(traefik_entrypoint_requests_total[5m])) by (entrypoint) > 0.1
-            )
-          for: 5m
-          labels:
-            severity: critical
-            category: Networking
-          annotations:
-            summary: "Traefik ingress high 5xx error rate"
-            description: "Traefik entrypoint {{ $labels.entrypoint }} is experiencing {{ $value | printf \"%.1f\" }}% HTTP 5xx errors over the last 5 minutes."
-
         # 6. Infrastructure: Node Under Hardware Pressure
         - alert: NodeHardwarePressure
           expr: kube_node_status_condition{condition=~"MemoryPressure|DiskPressure|PIDPressure", status="true"} == 1
@@ -104,13 +87,3 @@ spec:
             summary: "CrowdSec service has no ready endpoints"
             description: "Deployment {{ $labels.deployment }} in namespace {{ $labels.namespace }} has 0 ready replicas for more than 1 minute."
 
-        # 9. Security: Traefik CrowdSec Bouncer Not Pulling Decisions
-        - alert: CrowdSecTraefikBouncerNotPulling
-          expr: sum(rate(cs_lapi_bouncer_requests_total{bouncer=~"traefik.*", route="/v1/decisions/stream"}[10m])) == 0
-          for: 10m
-          labels:
-            severity: critical
-            category: Security
-          annotations:
-            summary: "Traefik CrowdSec bouncer is not pulling decisions"
-            description: "CrowdSec LAPI has not received decision stream polls from Traefik for more than 10 minutes."
