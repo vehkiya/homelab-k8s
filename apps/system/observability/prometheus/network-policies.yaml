@@ -339,6 +339,15 @@ spec:
         - ports:
             - port: "9000"
               protocol: TCP
+    # 20. Allow scraping of the Envoy Gateway controller in envoy-gateway-system namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            control-plane: envoy-gateway
+      toPorts:
+        - ports:
+            - port: "19001"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2

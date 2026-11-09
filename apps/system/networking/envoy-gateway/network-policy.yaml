@@ -1,0 +1,51 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cnp-envoy-gateway-controller
+spec:
+  description: "Envoy Gateway controller: xDS from the proxy fleets, metrics to Prometheus, egress to the Kubernetes API."
+  endpointSelector:
+    matchLabels:
+      control-plane: envoy-gateway
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            app.kubernetes.io/managed-by: envoy-gateway
+            app.kubernetes.io/component: proxy
+      toPorts:
+        - ports:
+            - port: "18000"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "19001"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cnp-envoy-gateway-certgen
+spec:
+  description: "Envoy Gateway certgen job: writes the xDS TLS secrets through the Kubernetes API."
+  endpointSelector:
+    matchLabels:
+      app: certgen
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
