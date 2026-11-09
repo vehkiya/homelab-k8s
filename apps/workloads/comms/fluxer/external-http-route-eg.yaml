@@ -39,7 +39,9 @@ spec:
       backendRefs:
         - name: gateway
           port: 8080
-    - matches:
+    # Upload relay (plan D3): no CrowdSec body inspection, see upload-exceptions-eg.yaml
+    - name: media
+      matches:
         - path:
             type: PathPrefix
             value: /media

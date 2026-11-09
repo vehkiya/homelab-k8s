@@ -1,4 +1,5 @@
-# The gateway-level CrowdSec SecurityPolicy (edge/crowdsec) calls the bouncer across namespaces
+# CrowdSec SecurityPolicies call the bouncer across namespaces: the gateway-level edge/crowdsec
+# and the per-app upload exceptions (plan D3)
 apiVersion: gateway.networking.k8s.io/v1
 kind: ReferenceGrant
 metadata:
@@ -8,6 +9,21 @@ spec:
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
       namespace: edge
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: automation
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: comms
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: games
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: home
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: media
   to:
     - group: ""
       kind: Service
