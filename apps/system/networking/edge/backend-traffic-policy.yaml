@@ -1,0 +1,55 @@
+# Defaults for every route on both Gateways. Route-level policies merge into
+# this one (mergeType) instead of replacing it.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: gateway-defaults
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external-gateway
+  # No upstream response timeout (Envoy's 15s default breaks SSE, streams and uploads)
+  timeout:
+    http:
+      requestTimeout: 0s
+  responseOverride:
+    - match:
+        statusCodes:
+          - type: Value
+            value: 502
+      response:
+        contentType: text/html; charset=utf-8
+        body:
+          type: ValueRef
+          valueRef:
+            group: ""
+            kind: ConfigMap
+            name: error-page-502
+    - match:
+        statusCodes:
+          - type: Value
+            value: 503
+      response:
+        contentType: text/html; charset=utf-8
+        body:
+          type: ValueRef
+          valueRef:
+            group: ""
+            kind: ConfigMap
+            name: error-page-503
+    - match:
+        statusCodes:
+          - type: Value
+            value: 504
+      response:
+        contentType: text/html; charset=utf-8
+        body:
+          type: ValueRef
+          valueRef:
+            group: ""
+            kind: ConfigMap
+            name: error-page-504

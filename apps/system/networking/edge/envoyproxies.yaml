@@ -1,0 +1,171 @@
+# Proxy fleets. The image is EG's digest-pinned default for its Envoy minor.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: internal
+spec:
+  concurrency: 2
+  logging:
+    level:
+      default: warn
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDaemonSet:
+        name: envoy-internal
+        strategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxUnavailable: 0
+            maxSurge: 1
+        container:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: shutdown-manager
+                      resources:
+                        requests:
+                          cpu: 10m
+                          memory: 32Mi
+                        limits:
+                          cpu: 100m
+                          memory: 64Mi
+      envoyService:
+        name: envoy-internal
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              trafficDistribution: PreferSameNode
+  telemetry:
+    accessLog:
+      settings:
+        - format:
+            type: JSON
+            json:
+              start_time: "%START_TIME%"
+              method: "%REQ(:METHOD)%"
+              x-envoy-origin-path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+              protocol: "%PROTOCOL%"
+              response_code: "%RESPONSE_CODE%"
+              response_flags: "%RESPONSE_FLAGS%"
+              response_code_details: "%RESPONSE_CODE_DETAILS%"
+              bytes_received: "%BYTES_RECEIVED%"
+              bytes_sent: "%BYTES_SENT%"
+              duration: "%DURATION%"
+              x-envoy-upstream-service-time: "%RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)%"
+              x-forwarded-for: "%REQ(X-FORWARDED-FOR)%"
+              cf-connecting-ip: "%REQ(CF-CONNECTING-IP)%"
+              user-agent: "%REQ(USER-AGENT)%"
+              referer: "%REQ(REFERER)%"
+              x-request-id: "%REQ(X-REQUEST-ID)%"
+              ":authority": "%REQ(:AUTHORITY)%"
+              upstream_host: "%UPSTREAM_HOST%"
+              upstream_cluster: "%UPSTREAM_CLUSTER%"
+              downstream_remote_address: "%DOWNSTREAM_REMOTE_ADDRESS%"
+              route_name: "%ROUTE_NAME%"
+          sinks:
+            - type: File
+              file:
+                path: /dev/stdout
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: dmz
+spec:
+  concurrency: 2
+  logging:
+    level:
+      default: warn
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDaemonSet:
+        name: envoy-dmz
+        strategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxUnavailable: 0
+            maxSurge: 1
+        container:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: shutdown-manager
+                      resources:
+                        requests:
+                          cpu: 10m
+                          memory: 32Mi
+                        limits:
+                          cpu: 100m
+                          memory: 64Mi
+      envoyService:
+        name: envoy-dmz
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        labels:
+          pool: dmz-lb-pool
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              trafficDistribution: PreferSameNode
+              ipFamilyPolicy: SingleStack
+              ipFamilies:
+                - IPv4
+  telemetry:
+    accessLog:
+      settings:
+        - format:
+            type: JSON
+            json:
+              start_time: "%START_TIME%"
+              method: "%REQ(:METHOD)%"
+              x-envoy-origin-path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+              protocol: "%PROTOCOL%"
+              response_code: "%RESPONSE_CODE%"
+              response_flags: "%RESPONSE_FLAGS%"
+              response_code_details: "%RESPONSE_CODE_DETAILS%"
+              bytes_received: "%BYTES_RECEIVED%"
+              bytes_sent: "%BYTES_SENT%"
+              duration: "%DURATION%"
+              x-envoy-upstream-service-time: "%RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)%"
+              x-forwarded-for: "%REQ(X-FORWARDED-FOR)%"
+              cf-connecting-ip: "%REQ(CF-CONNECTING-IP)%"
+              user-agent: "%REQ(USER-AGENT)%"
+              referer: "%REQ(REFERER)%"
+              x-request-id: "%REQ(X-REQUEST-ID)%"
+              ":authority": "%REQ(:AUTHORITY)%"
+              upstream_host: "%UPSTREAM_HOST%"
+              upstream_cluster: "%UPSTREAM_CLUSTER%"
+              downstream_remote_address: "%DOWNSTREAM_REMOTE_ADDRESS%"
+              route_name: "%ROUTE_NAME%"
+          sinks:
+            - type: File
+              file:
+                path: /dev/stdout

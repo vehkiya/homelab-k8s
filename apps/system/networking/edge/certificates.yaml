@@ -1,0 +1,35 @@
+# Separate wildcard and apex certificates: no listener's SANs cover another
+# :443 listener's hostname, so EG keeps h2 in ALPN (GEP-3567)
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kerrlab-app-wildcard-tls
+spec:
+  secretName: kerrlab-app-wildcard-tls
+  issuerRef:
+    name: zerossl-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - "*.kerrlab.app"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kerrlab-app-apex-tls
+spec:
+  secretName: kerrlab-app-apex-tls
+  issuerRef:
+    name: zerossl-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - "kerrlab.app"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always

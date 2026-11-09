@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: edge
+resources:
+  - gatewayclass.yaml
+  - envoyproxies.yaml
+  - certificates.yaml
+  - gateways.yaml
+  - http-redirect.yaml
+  - client-traffic-policies.yaml
+  - backend-traffic-policy.yaml
+  - admission-policy.yaml
+
+# Bodies for the 502-504 response overrides, referenced by name
+configMapGenerator:
+  - name: error-page-502
+    files:
+      - response.body=error-pages/502.html
+  - name: error-page-503
+    files:
+      - response.body=error-pages/503.html
+  - name: error-page-504
+    files:
+      - response.body=error-pages/504.html
+generatorOptions:
+  disableNameSuffixHash: true

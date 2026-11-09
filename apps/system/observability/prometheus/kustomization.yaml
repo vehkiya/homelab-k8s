@@ -16,6 +16,7 @@ resources:
   - critical-alerts.yaml
   - cilium-alerts.yaml
   - argocd-alerts.yaml
+  - envoy-gateway-alerts.yaml
 
 patches:
   - path: patch-grafana-deployment.yaml

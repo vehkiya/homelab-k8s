@@ -1,0 +1,185 @@
+# Per-listener client settings. Section-level policies don't merge, so each
+# one carries the full set.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: internal-websecure
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal-gateway
+      sectionName: websecure
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal-gateway
+      sectionName: websecure-apex
+  headers:
+    requestID: PreserveOrGenerate
+    withUnderscoresAction: DropHeader
+    earlyRequestHeaders:
+      remove:
+        - X-Forwarded-For
+        - X-Real-Ip
+        - X-Envoy-External-Address
+        - Remote-User
+        - Remote-Groups
+        - Remote-Name
+        - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
+  path:
+    escapedSlashesAction: RejectRequest
+  tls:
+    minVersion: "1.3"
+  http3: {}
+  timeout:
+    http:
+      requestReceivedTimeout: 60s
+      streamIdleTimeout: 1h
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: internal-plex
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal-gateway
+      sectionName: plex
+  headers:
+    requestID: PreserveOrGenerate
+    withUnderscoresAction: DropHeader
+    earlyRequestHeaders:
+      remove:
+        - X-Forwarded-For
+        - X-Real-Ip
+        - X-Envoy-External-Address
+        - Remote-User
+        - Remote-Groups
+        - Remote-Name
+        - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
+  path:
+    escapedSlashesAction: RejectRequest
+  tls:
+    minVersion: "1.3"
+  timeout:
+    http:
+      requestReceivedTimeout: 60s
+      streamIdleTimeout: 1h
+---
+# Reachable only from Cloudflare (CNP), so CF-Connecting-IP is the visitor
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: external-dmz
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external-gateway
+      sectionName: dmz
+  clientIPDetection:
+    xForwardedFor:
+      trustedCIDRs:
+        - 173.245.48.0/20
+        - 103.21.244.0/22
+        - 103.22.200.0/22
+        - 103.31.4.0/22
+        - 141.101.64.0/18
+        - 108.162.192.0/18
+        - 190.93.240.0/20
+        - 188.114.96.0/20
+        - 197.234.240.0/22
+        - 198.41.128.0/17
+        - 162.158.0.0/15
+        - 104.16.0.0/13
+        - 104.24.0.0/14
+        - 172.64.0.0/13
+        - 131.0.72.0/22
+        - 2400:cb00::/32
+        - 2606:4700::/32
+        - 2803:f800::/32
+        - 2405:b500::/32
+        - 2405:8100::/32
+        - 2a06:98c0::/29
+        - 2c0f:f248::/32
+  headers:
+    requestID: Generate
+    withUnderscoresAction: DropHeader
+    earlyRequestHeaders:
+      mutations:
+        # Remove first: a write whose value resolves empty is skipped
+        - remove: X-Forwarded-For
+        - write:
+            header:
+              name: X-Forwarded-For
+              value: "%REQ(cf-connecting-ip)%"
+            action: Set
+      remove:
+        - X-Real-Ip
+        - X-Envoy-External-Address
+        - Remote-User
+        - Remote-Groups
+        - Remote-Name
+        - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
+  path:
+    escapedSlashesAction: RejectRequest
+  tls:
+    minVersion: "1.3"
+  http3: {}
+  timeout:
+    http:
+      requestReceivedTimeout: 60s
+      streamIdleTimeout: 1h
+---
+# Direct from the internet (UniFi port forward), no proxy in front
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: external-plex
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external-gateway
+      sectionName: plex
+  headers:
+    requestID: Generate
+    withUnderscoresAction: DropHeader
+    earlyRequestHeaders:
+      remove:
+        - X-Forwarded-For
+        - X-Real-Ip
+        - X-Envoy-External-Address
+        - Remote-User
+        - Remote-Groups
+        - Remote-Name
+        - Remote-Email
+    # Returned to the client, as Traefik's request-id plugin does
+    lateResponseHeaders:
+      set:
+        - name: X-Request-Id
+          value: "%REQ(x-request-id)%"
+  path:
+    escapedSlashesAction: RejectRequest
+  tls:
+    minVersion: "1.3"
+  timeout:
+    http:
+      requestReceivedTimeout: 60s
+      streamIdleTimeout: 1h
