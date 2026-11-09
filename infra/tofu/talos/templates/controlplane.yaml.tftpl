@@ -54,6 +54,8 @@ machine:
       allowedKubernetesNamespaces:
         - talos-backup
   nodeLabels:
+    # One zone per node: zone-aware routing prefers same-node backends
+    topology.kubernetes.io/zone: ${hostname}
     intel.feature.node.kubernetes.io/gpu: "true"
     node.kubernetes.io/exclude-from-external-load-balancers: ""
 

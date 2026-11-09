@@ -16,6 +16,12 @@ spec:
   timeout:
     http:
       requestTimeout: 0s
+  # Prefer a backend replica on the proxy's own node (each node is its own zone)
+  loadBalancer:
+    type: LeastRequest
+    zoneAware:
+      preferLocal:
+        minEndpointsThreshold: 1
   responseOverride:
     - match:
         statusCodes:

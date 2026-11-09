@@ -9,8 +9,10 @@ global:
 crds:
   enabled: false
 
+# Annotates proxy pods with their node's zone (one zone per node, Talos nodeLabels)
+# for zone-aware routing to same-node backends (edge/gateway-defaults)
 topologyInjector:
-  enabled: false
+  enabled: true
 
 config:
   envoyGateway:

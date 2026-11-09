@@ -21,6 +21,13 @@ spec:
           namespace: security
           port: 9091
       path: /api/authz/ext-authz/
+      # Prefer the replica on the proxy's own node (each node is its own zone)
+      backendSettings:
+        loadBalancer:
+          type: LeastRequest
+          zoneAware:
+            preferLocal:
+              minEndpointsThreshold: 1
       headersToBackend:
         - Remote-User
         - Remote-Groups

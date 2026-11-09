@@ -3,7 +3,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: cnp-envoy-gateway-controller
 spec:
-  description: "Envoy Gateway controller: xDS from the proxy fleets, metrics to Prometheus, egress to the Kubernetes API."
+  description: "Envoy Gateway controller: xDS from the proxy fleets, metrics to Prometheus, topology injector webhook, egress to the Kubernetes API."
   endpointSelector:
     matchLabels:
       control-plane: envoy-gateway
@@ -24,6 +24,13 @@ spec:
       toPorts:
         - ports:
             - port: "19001"
+              protocol: TCP
+    # Topology injector (pods/binding webhook): zone annotation on the proxy pods
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "9443"
               protocol: TCP
   egress:
     - toEntities:
