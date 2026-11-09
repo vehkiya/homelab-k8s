@@ -1,0 +1,13 @@
+# Envoy Gateway copy of the bar-assistant-block-post-bars Middleware (an
+# ipAllowList of 127.0.0.1 only): POST /api/bars is refused on the DMZ
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: bar-assistant-block-post-bars
+spec:
+  directResponse:
+    statusCode: 403
+    contentType: text/plain
+    body:
+      type: Inline
+      inline: "Forbidden"

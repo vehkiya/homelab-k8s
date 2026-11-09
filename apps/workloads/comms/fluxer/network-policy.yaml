@@ -6,10 +6,14 @@ spec:
   endpointSelector: {}
 
   ingress:
-    # Allow all traffic from Traefik and the internal Envoy fleet
+    # Allow all traffic from Traefik and both Envoy fleets
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: external-gateway
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway-system
             gateway.envoyproxy.io/owning-gateway-namespace: edge

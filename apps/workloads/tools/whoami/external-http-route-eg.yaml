@@ -1,0 +1,23 @@
+# Envoy Gateway copy of whoami-external-route (migration); the Traefik route stays until cutover
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-external-route-eg
+  labels:
+    edge.kerrlab.app/forward-auth: authelia
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: edge
+      sectionName: dmz
+  hostnames:
+    - "whoami.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080

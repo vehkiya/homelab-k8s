@@ -13,6 +13,7 @@ spec:
       labels:
         app: renovate-server
         networking/expose-http-api: "true"
+        networking/expose-dmz: "true"
     spec:
       terminationGracePeriodSeconds: 120
       affinity:

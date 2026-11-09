@@ -48,6 +48,11 @@ lapi:
         secretKeyRef:
           name: crowdsec-secrets
           key: BLOCKLIST_MIRROR_BUN_KEY
+    - name: BOUNCER_KEY_envoy
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: ENVOY_BUN_KEY
     - name: ENROLL_KEY
       valueFrom:
         secretKeyRef:
@@ -136,6 +141,11 @@ agent:
       podName: traefik-*
       program: traefik
       poll_without_inotify: true
+    # DMZ Envoy fleet (JSON access log, parsed by yanis-kouidri/envoy-logs)
+    - namespace: envoy-gateway-system
+      podName: envoy-dmz-*
+      program: envoy
+      poll_without_inotify: true
     - namespace: security
       podName: authelia-[a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9]
       program: authelia
@@ -152,6 +162,7 @@ agent:
     - name: COLLECTIONS
       value: >-
         crowdsecurity/traefik
+        yanis-kouidri/envoy
         crowdsecurity/http-cve
         crowdsecurity/whitelist-good-actors
         crowdsecurity/base-http-scenarios

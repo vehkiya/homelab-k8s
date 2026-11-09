@@ -1,0 +1,117 @@
+# CrowdSec ext_authz (gRPC) bouncer for the DMZ Envoy fleet: LAPI bans in stream mode plus AppSec
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-envoy-bouncer
+  labels:
+    app.kubernetes.io/name: crowdsec-envoy-bouncer
+    app.kubernetes.io/instance: crowdsec-envoy-bouncer
+    app.kubernetes.io/part-of: crowdsec
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-envoy-bouncer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: crowdsec-envoy-bouncer
+        app.kubernetes.io/instance: crowdsec-envoy-bouncer
+        # Admitted to LAPI and AppSec by crowdsec-policy (security components rule)
+        app.kubernetes.io/part-of: crowdsec
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: crowdsec-envoy-bouncer
+              topologyKey: kubernetes.io/hostname
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: bouncer
+          image: ghcr.io/kdwils/envoy-proxy-bouncer:v0.8.3
+          args: ["serve"]
+          env:
+            - name: ENVOY_BOUNCER_SERVER_GRPCPORT
+              value: "8080"
+            - name: ENVOY_BOUNCER_SERVER_LOGLEVEL
+              value: "info"
+            - name: ENVOY_BOUNCER_BOUNCER_NAME
+              value: "envoy"
+            - name: ENVOY_BOUNCER_BOUNCER_LAPIURL
+              value: "http://crowdsec-service:8080"
+            - name: ENVOY_BOUNCER_BOUNCER_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: ENVOY_BUN_KEY
+            - name: ENVOY_BOUNCER_BOUNCER_TICKERINTERVAL
+              value: "10s"
+            - name: ENVOY_BOUNCER_BOUNCER_METRICS
+              value: "true"
+            - name: ENVOY_BOUNCER_WAF_ENABLED
+              value: "true"
+            - name: ENVOY_BOUNCER_WAF_APPSECURL
+              value: "http://crowdsec-appsec-service:7422"
+            - name: ENVOY_BOUNCER_WAF_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: ENVOY_BUN_KEY
+            # Below the gateway's 2s ext_authz timeout
+            - name: ENVOY_BOUNCER_WAF_HTTPTIMEOUT
+              value: "1s"
+            # AppSec down or erroring: allow, LAPI bans still apply (Traefik: crowdsecAppsecUnreachableBlock false)
+            - name: ENVOY_BOUNCER_WAF_FAILOPEN
+              value: "true"
+            # Client IP from X-Forwarded-For only behind Cloudflare. Never set
+            # trustedIPHeader: Envoy doesn't strip a client's X-Envoy-External-Address on dmz.
+            - name: ENVOY_BOUNCER_TRUSTEDPROXIES
+              value: "173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22,2400:cb00::/32,2606:4700::/32,2803:f800::/32,2405:b500::/32,2405:8100::/32,2a06:98c0::/29,2c0f:f248::/32"
+            # Traefik's clientTrustedIPs
+            - name: ENVOY_BOUNCER_EXEMPTIPS
+              value: "127.0.0.1/32,10.0.0.0/8,100.64.0.0/10,192.168.1.0/24,192.168.11.0/24,192.168.29.0/24"
+            - name: ENVOY_BOUNCER_PROMETHEUS_ENABLED
+              value: "true"
+            - name: ENVOY_BOUNCER_PROMETHEUS_PORT
+              value: "9090"
+          ports:
+            - name: grpc
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          # NOT_SERVING until the first LAPI decision sync
+          readinessProbe:
+            grpc:
+              port: 8080
+              service: readiness
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            grpc:
+              port: 8080
+              service: liveness
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi

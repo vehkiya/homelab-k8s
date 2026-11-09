@@ -10,6 +10,7 @@ resources:
   - http-redirect.yaml
   - client-traffic-policies.yaml
   - backend-traffic-policy.yaml
+  - crowdsec-security-policy.yaml
   - admission-policy.yaml
 
 # Bodies for the 502-504 response overrides, referenced by name

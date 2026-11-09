@@ -183,3 +183,45 @@ spec:
         - ports:
             - port: "8080"
               protocol: "TCP"
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-envoy-bouncer-policy
+  namespace: security
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec-envoy-bouncer
+  ingress:
+    # 1. ext_authz from the DMZ Envoy fleet
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: external-gateway
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    # 2. Prometheus scraping /metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    # 1. LAPI decision stream and AppSec inspection
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            k8s-app: crowdsec
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "7422"
+              protocol: TCP

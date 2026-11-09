@@ -11,6 +11,9 @@ spec:
     - name: internal-gateway
       namespace: edge
       sectionName: plex
+    - name: external-gateway
+      namespace: edge
+      sectionName: plex
   hostnames:
     - "plex.kerrlab.app"
   rules:

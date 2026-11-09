@@ -361,6 +361,15 @@ spec:
         - ports:
             - port: "19001"
               protocol: TCP
+    # 22. Allow scraping of the CrowdSec Envoy bouncer in security namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            app.kubernetes.io/name: crowdsec-envoy-bouncer
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
 
 ---
 apiVersion: cilium.io/v2
