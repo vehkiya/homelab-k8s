@@ -77,6 +77,9 @@ hostPort:
 hubble:
   enabled: false
 
+# L7 and DNS proxy off: no policy has L7 or DNS rules (the chart then skips cilium-envoy)
+l7Proxy: false
+
 rollOutCiliumPods: true
 
 # Restart one agent at a time, so a bad agent version or config only affects a single node
