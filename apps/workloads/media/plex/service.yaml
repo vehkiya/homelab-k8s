@@ -4,10 +4,15 @@ metadata:
   name: plex-ui
   labels:
     pool: internal-lb-pool
+    # LAN (L2) announcement only from the node-type=performance node the pod is pinned to
+    # (cilium/l2-announcements.yaml); Cilium's L2 lease ignores externalTrafficPolicy
+    l2.kerrlab.app/node-type: performance
   annotations:
     lbipam.cilium.io/ips: "10.10.1.131"
 spec:
   type: LoadBalancer
+  # BGP advertises the IP only from the pod's node, and the client IP is preserved
+  externalTrafficPolicy: Local
   selector:
     app: plex
   ports:
