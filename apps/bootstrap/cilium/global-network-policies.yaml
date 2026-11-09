@@ -25,6 +25,20 @@ spec:
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
 metadata:
+  name: "ccnp-allow-cilium-health"
+spec:
+  description: "Lets the agents on other nodes probe this node's Cilium health endpoint (TCP 4240, ICMP). Probes come from node IPs: remote-node, or kube-apiserver on control-plane nodes."
+  endpointSelector:
+    matchLabels:
+      "reserved:health": ""
+  ingress:
+    - fromEntities:
+        - "remote-node"
+        - "kube-apiserver"
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
   name: "ccnp-allow-egress-dns"
 spec:
   description: "Allows all Cilium-managed endpoints to send DNS queries to CoreDNS."
