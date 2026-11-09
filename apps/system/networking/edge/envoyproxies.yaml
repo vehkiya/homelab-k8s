@@ -50,6 +50,8 @@ spec:
         name: envoy-internal
         type: LoadBalancer
         externalTrafficPolicy: Local
+        labels:
+          pool: edge-internal-pool
         patch:
           type: StrategicMerge
           value:
@@ -139,7 +141,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
         labels:
-          pool: dmz-lb-pool
+          pool: edge-dmz-pool
         patch:
           type: StrategicMerge
           value:

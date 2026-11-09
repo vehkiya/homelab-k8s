@@ -96,7 +96,7 @@ zoneFiles:
     contents: |
       $TTL 60
       @   IN  SOA ns.kerrlab.app. hostmaster.kerrlab.app. (
-              2026101701  ; Serial (YYYYMMDDNN format)
+              2026110901  ; Serial (YYYYMMDDNN format)
               7200        ; Refresh
               3600        ; Retry
               1209600     ; Expire
@@ -117,12 +117,12 @@ zoneFiles:
       ;
       ; A Records for endpoint services
       kube    IN  A   10.10.1.250
-      ; A Record for the Reverse Proxy
-      proxy       IN  A   10.10.1.16
-      ; Apex (the launchpad, behind Traefik); the * wildcard below never matches it
-      @           IN  A   10.10.1.16
+      ; A Record for the Reverse Proxy (Envoy Gateway internal-gateway)
+      proxy       IN  A   10.10.1.17
+      ; Apex (the launchpad); the * wildcard below never matches it
+      @           IN  A   10.10.1.17
       ; A Records for other services in domain
       mc       IN  A   185.206.149.82
       ;
       ; Wildcard for all other services in the cluster
-      * IN  A   10.10.1.16
+      * IN  A   10.10.1.17

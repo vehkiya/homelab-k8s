@@ -84,6 +84,20 @@ spec:
       selector:
         matchLabels:
           pool: dmz-lb-pool
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          pool: edge-internal-pool
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          pool: edge-dmz-pool
     # === Rule for all services NOT IN specific pools ===
     - advertisementType: Service
       service:
@@ -91,4 +105,4 @@ spec:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: pool, operator: NotIn, values: ["internal-traefik-lb-pool", "traefik-dmz-pool", "dmz-lb-pool"] }
+          - { key: pool, operator: NotIn, values: ["internal-traefik-lb-pool", "traefik-dmz-pool", "dmz-lb-pool", "edge-internal-pool", "edge-dmz-pool"] }
