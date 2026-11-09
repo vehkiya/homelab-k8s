@@ -28,4 +28,4 @@ data:
   OPENAI_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/openai/"
   OPENAI_MODEL: "gemini-flash-lite-latest"
   UVICORN_WORKERS: "1"
-  HTTP_ALLOW_LIST: "10.10.1.16/32"
+  HTTP_ALLOW_LIST: "10.10.1.16/32,10.10.1.17/32"

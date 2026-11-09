@@ -59,9 +59,10 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
-    # Allow egress to local reverse proxy (10.10.1.16) for loopback HTTP/HTTPS resolution
+    # Allow egress to local reverse proxies (Traefik 10.10.1.16, Envoy 10.10.1.17) for loopback HTTP/HTTPS resolution
     - toCIDR:
         - "10.10.1.16/32"
+        - "10.10.1.17/32"
       toPorts:
         - ports:
             - port: "80"

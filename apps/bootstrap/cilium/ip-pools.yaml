@@ -8,7 +8,7 @@ spec:
     - cidr: "10.10.1.128/26"
   serviceSelector:
     matchExpressions:
-      - { key: pool, operator: NotIn, values: ["internal-traefik-lb-pool", "traefik-dmz-pool", "dmz-lb-pool"] }
+      - { key: pool, operator: NotIn, values: ["internal-traefik-lb-pool", "traefik-dmz-pool", "dmz-lb-pool", "edge-internal-pool", "edge-dmz-pool"] }
 --- # === Interal Traefik Pool ===
 apiVersion: "cilium.io/v2"
 kind: CiliumLoadBalancerIPPool
@@ -44,3 +44,25 @@ spec:
   serviceSelector:
     matchLabels:
       pool: dmz-lb-pool
+--- # === Internal Envoy Gateway Pool ===
+apiVersion: "cilium.io/v2"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "edge-internal-pool"
+spec:
+  blocks:
+    - cidr: "10.10.1.17/32"
+  serviceSelector:
+    matchLabels:
+      pool: edge-internal-pool
+--- # === DMZ Envoy Gateway Pool ===
+apiVersion: "cilium.io/v2"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "edge-dmz-pool"
+spec:
+  blocks:
+    - cidr: "10.20.1.17/32"
+  serviceSelector:
+    matchLabels:
+      pool: edge-dmz-pool
