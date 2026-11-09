@@ -12,6 +12,26 @@ spec:
           - traefik-dmz-pool
           - dmz-lb-pool
           - edge-dmz-pool
+      - key: l2.kerrlab.app/node-type
+        operator: DoesNotExist
+  interfaces:
+    - ^bond0$
+  loadBalancerIPs: true
+  externalIPs: false
+---
+# Services pinned to the performance node (externalTrafficPolicy: Local): the L2 lease
+# doesn't follow endpoints, so only nodes that can host the pod may announce
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: performance-lb-l2
+spec:
+  serviceSelector:
+    matchLabels:
+      l2.kerrlab.app/node-type: performance
+  nodeSelector:
+    matchLabels:
+      node-type: performance
   interfaces:
     - ^bond0$
   loadBalancerIPs: true
