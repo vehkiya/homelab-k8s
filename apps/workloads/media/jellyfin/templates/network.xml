@@ -14,8 +14,7 @@
   <AutoDiscovery>true</AutoDiscovery>
   <EnableUPnP>false</EnableUPnP>
   <KnownProxies>
-    <string>10.42.0.0/16</string>
-    <string>10.43.0.0/16</string>
+    <string>10.244.0.0/16</string>
     <string>10.10.1.0/24</string>
     <string>10.20.1.0/24</string>
     <string>127.0.0.1</string>
