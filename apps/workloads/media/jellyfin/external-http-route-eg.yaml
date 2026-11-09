@@ -11,6 +11,36 @@ spec:
   hostnames:
     - "jellyfin.kerrlab.app"
   rules:
+    # Upload paths (plan D3): no CrowdSec body inspection, see upload-exceptions-eg.yaml
+    - name: uploads
+      matches:
+        - method: POST
+          path:
+            type: Exact
+            value: /UserImage
+        - method: POST
+          path:
+            type: RegularExpression
+            value: /Items/[^/]+/Images/[^/]+(/[0-9]+)?
+        - method: POST
+          path:
+            type: RegularExpression
+            value: /Videos/[^/]+/Subtitles
+        - method: POST
+          path:
+            type: RegularExpression
+            value: /Audio/[^/]+/Lyrics
+        - method: POST
+          path:
+            type: Exact
+            value: /Branding/Splashscreen
+        - method: POST
+          path:
+            type: Exact
+            value: /ClientLog/Document
+      backendRefs:
+        - name: jellyfin-ui
+          port: 8096
     - matches:
         - path:
             type: PathPrefix

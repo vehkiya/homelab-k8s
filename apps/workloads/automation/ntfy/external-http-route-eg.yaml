@@ -11,6 +11,83 @@ spec:
   hostnames:
     - "ntfy.kerrlab.app"
   rules:
+    # Attachments (plan D3): a filename header or query parameter marks the body as a file;
+    # no CrowdSec body inspection, see upload-exceptions-eg.yaml
+    - name: attachments
+      matches:
+        - method: PUT
+          headers:
+            - name: X-Filename
+              type: RegularExpression
+              value: .+
+        - method: PUT
+          headers:
+            - name: Filename
+              type: RegularExpression
+              value: .+
+        - method: PUT
+          headers:
+            - name: File
+              type: RegularExpression
+              value: .+
+        - method: PUT
+          headers:
+            - name: F
+              type: RegularExpression
+              value: .+
+        - method: PUT
+          queryParams:
+            - name: filename
+              type: RegularExpression
+              value: .+
+        - method: PUT
+          queryParams:
+            - name: file
+              type: RegularExpression
+              value: .+
+        - method: PUT
+          queryParams:
+            - name: f
+              type: RegularExpression
+              value: .+
+        - method: POST
+          headers:
+            - name: X-Filename
+              type: RegularExpression
+              value: .+
+        - method: POST
+          headers:
+            - name: Filename
+              type: RegularExpression
+              value: .+
+        - method: POST
+          headers:
+            - name: File
+              type: RegularExpression
+              value: .+
+        - method: POST
+          headers:
+            - name: F
+              type: RegularExpression
+              value: .+
+        - method: POST
+          queryParams:
+            - name: filename
+              type: RegularExpression
+              value: .+
+        - method: POST
+          queryParams:
+            - name: file
+              type: RegularExpression
+              value: .+
+        - method: POST
+          queryParams:
+            - name: f
+              type: RegularExpression
+              value: .+
+      backendRefs:
+        - name: ntfy
+          port: 80
     - matches:
         - path:
             type: PathPrefix

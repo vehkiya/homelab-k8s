@@ -11,6 +11,81 @@ spec:
   hostnames:
     - "romm.kerrlab.app"
   rules:
+    # Upload paths (plan D3): no CrowdSec body inspection, see upload-exceptions-eg.yaml
+    - name: uploads
+      matches:
+        - method: PUT
+          path:
+            type: RegularExpression
+            value: /api/users/[0-9]+
+        - method: PUT
+          path:
+            type: RegularExpression
+            value: /api/roms/[0-9]+
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /api/roms/upload
+        - method: PUT
+          path:
+            type: PathPrefix
+            value: /api/roms/upload
+        - method: POST
+          path:
+            type: RegularExpression
+            value: /api/roms/[0-9]+/(manuals|manuals/files|walkthroughs/files|patch)
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /api/saves
+        - method: PUT
+          path:
+            type: PathPrefix
+            value: /api/saves
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /api/states
+        - method: PUT
+          path:
+            type: PathPrefix
+            value: /api/states
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /api/screenshots
+        - method: PUT
+          path:
+            type: PathPrefix
+            value: /api/screenshots
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /api/memory-cards
+        - method: PUT
+          path:
+            type: PathPrefix
+            value: /api/memory-cards
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /api/firmware
+        - method: POST
+          path:
+            type: Exact
+            value: /api/collections
+        - method: PUT
+          path:
+            type: RegularExpression
+            value: /api/collections/[0-9]+
+        - method: PUT
+          path:
+            type: PathPrefix
+            value: /api/sync/retroarch
+      backendRefs:
+        - name: keda-add-ons-http-interceptor-proxy
+          namespace: networking
+          port: 8080
     - matches:
         - path:
             type: PathPrefix

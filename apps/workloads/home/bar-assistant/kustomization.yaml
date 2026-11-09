@@ -15,6 +15,7 @@ resources:
   - http-route-eg.yaml
   - external-http-route.yaml
   - external-http-route-eg.yaml
+  - upload-exceptions-eg.yaml
   - block-post-bars-eg.yaml
   - rate-limit-eg.yaml
   - middlewares.yaml

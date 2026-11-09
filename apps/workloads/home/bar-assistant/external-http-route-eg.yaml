@@ -25,6 +25,28 @@ spec:
       backendRefs:
         - name: bar-assistant
           port: 8080
+    # Upload paths (plan D3): no CrowdSec body inspection, see upload-exceptions-eg.yaml
+    - name: uploads
+      matches:
+        - method: POST
+          path:
+            type: Exact
+            value: /api/images
+        - method: POST
+          path:
+            type: Exact
+            value: /api/import/file
+        - method: POST
+          path:
+            type: Exact
+            value: /api/import/cocktail
+        - method: POST
+          path:
+            type: Exact
+            value: /api/generate/shelf-from-photo
+      backendRefs:
+        - name: bar-assistant
+          port: 8080
     - matches:
         - path:
             type: PathPrefix

@@ -1,0 +1,21 @@
+# Upload exception (plan D3): replaces the gateway CrowdSec policy (edge/crowdsec) on the
+# attachments rule without bodyToExtAuth, so bodies over 1 MiB pass instead of getting 413.
+# Bans, URI and header rules still apply.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: ntfy-attachments-crowdsec
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ntfy-external-route-eg
+      sectionName: attachments
+  extAuth:
+    grpc:
+      backendRefs:
+        - name: crowdsec-envoy-bouncer
+          namespace: security
+          port: 8080
+    timeout: 2s
+    failOpen: true
