@@ -20,6 +20,7 @@ spec:
       labels:
         app: keeper
         networking/expose-web-ui: "true"
+        networking/expose-dmz: "true"
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false

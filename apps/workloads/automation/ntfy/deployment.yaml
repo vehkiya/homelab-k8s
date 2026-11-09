@@ -16,6 +16,7 @@ spec:
       labels:
         app.kubernetes.io/name: ntfy
         networking/expose-web-ui: "true"
+        networking/expose-dmz: "true"
     spec:
       securityContext:
         runAsUser: 1000

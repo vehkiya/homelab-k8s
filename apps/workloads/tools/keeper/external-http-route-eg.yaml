@@ -1,0 +1,30 @@
+# Envoy Gateway copy of keeper-external-route (migration); the Traefik route stays until cutover
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: keeper-external-route-eg
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: edge
+      sectionName: dmz
+  hostnames:
+    - "keeper.kerrlab.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/webhook
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: X-Content-Type-Options
+                value: nosniff
+              - name: X-Frame-Options
+                value: SAMEORIGIN
+              - name: Referrer-Policy
+                value: strict-origin-when-cross-origin
+      backendRefs:
+        - name: keeper
+          port: 3000

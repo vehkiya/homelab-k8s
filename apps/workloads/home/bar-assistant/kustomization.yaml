@@ -14,6 +14,9 @@ resources:
   - http-route.yaml
   - http-route-eg.yaml
   - external-http-route.yaml
+  - external-http-route-eg.yaml
+  - block-post-bars-eg.yaml
+  - rate-limit-eg.yaml
   - middlewares.yaml
   - rate-limit.yaml
   - salt-rim-deployment.yaml

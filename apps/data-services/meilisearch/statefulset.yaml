@@ -25,6 +25,7 @@ spec:
         app.kubernetes.io/instance: meilisearch-kubernetes
         app.kubernetes.io/name: meilisearch
         networking/expose-http-api: "true"
+        networking/expose-dmz: "true"
     spec:
       containers:
         - envFrom:

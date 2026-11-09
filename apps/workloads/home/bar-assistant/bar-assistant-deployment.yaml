@@ -17,6 +17,7 @@ spec:
       labels:
         app: bar-assistant
         networking/expose-http-api: "true"
+        networking/expose-dmz: "true"
         networking/oidc-client: "true"
     spec:
       securityContext:

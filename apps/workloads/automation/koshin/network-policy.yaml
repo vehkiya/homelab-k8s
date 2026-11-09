@@ -11,11 +11,15 @@ spec:
       app.kubernetes.io/name: koshin
       app.kubernetes.io/component: proxy
   ingress:
-    # GitHub webhooks through Traefik (the proxy's port is `http`, so the global `http-api` rule doesn't cover it)
+    # GitHub webhooks through Traefik and the DMZ Envoy fleet (the proxy's port is `http`, so the global `http-api` rules don't cover it)
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: traefik
             io.kubernetes.pod.namespace: traefik
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: external-gateway
       toPorts:
         - ports:
             - port: "8080"

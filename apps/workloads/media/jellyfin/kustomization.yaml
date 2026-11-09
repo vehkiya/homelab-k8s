@@ -7,6 +7,8 @@ resources:
   - http-route.yaml
   - http-route-eg.yaml
   - external-http-route.yaml
+  - external-http-route-eg.yaml
+  - rate-limit-eg.yaml
   - rate-limit.yaml
   - network-policy.yaml
   - secret.yaml

@@ -70,7 +70,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: cnp-envoy-dmz
 spec:
-  description: "DMZ proxy fleet: Cloudflare and Plex clients in; xDS out (backends are added with the DMZ routes)."
+  description: "DMZ proxy fleet: Cloudflare and Plex clients in; xDS, the CrowdSec bouncer and the DMZ backends out."
   endpointSelector:
     matchLabels:
       app.kubernetes.io/component: proxy
@@ -128,4 +128,67 @@ spec:
       toPorts:
         - ports:
             - port: "18000"
+              protocol: TCP
+    # CrowdSec ext_authz
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: security
+            app.kubernetes.io/name: crowdsec-envoy-bouncer
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    # Backends that opt in with networking/expose-dmz (Authelia included: auth route and F1 ext-authz).
+    # The namespace expression is required: without it a CNP selects its own namespace only.
+    - toEndpoints:
+        - matchLabels:
+            networking/expose-dmz: "true"
+          matchExpressions:
+            - key: k8s:io.kubernetes.pod.namespace
+              operator: Exists
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+            - port: "http-api"
+              protocol: TCP
+    # Scale-to-zero DMZ routes (romm, bentopdf, mermaid, whoami)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: networking
+            app.kubernetes.io/component: interceptor
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    # Helm-rendered or multi-component DMZ backends, selected explicitly
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: koshin
+            app.kubernetes.io/component: proxy
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: n8n
+      toPorts:
+        - ports:
+            - port: "5678"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: comms
+          matchExpressions:
+            - key: app
+              operator: In
+              values: [api, app-proxy, gateway, livekit, media-proxy, static-proxy]
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "7880"
               protocol: TCP

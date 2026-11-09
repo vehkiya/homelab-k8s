@@ -18,6 +18,8 @@ resources:
   - external-secret.yaml
   - network-policy.yaml
   - http-route.yaml
+  - http-route-eg.yaml
+  - rate-limit-eg.yaml
 
 images:
   - name: ghcr.io/hononeko/koshin-proxy

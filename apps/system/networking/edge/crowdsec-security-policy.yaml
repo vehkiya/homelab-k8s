@@ -1,0 +1,23 @@
+# CrowdSec on both DMZ listeners (dmz and plex): LAPI bans plus AppSec on the
+# request body. Bodies over 1 MiB get 413 unless a route rule has an upload
+# exception (plan D3). Forward-auth routes replace this policy (plan D4 F1).
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: crowdsec
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external-gateway
+  extAuth:
+    grpc:
+      backendRefs:
+        - name: crowdsec-envoy-bouncer
+          namespace: security
+          port: 8080
+    bodyToExtAuth:
+      maxRequestBytes: 1048576
+    timeout: 2s
+    # D2: bouncer unreachable -> serve without bans or WAF (alerted below 2 replicas)
+    failOpen: true

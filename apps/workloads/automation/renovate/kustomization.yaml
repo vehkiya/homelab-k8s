@@ -9,6 +9,8 @@ resources:
   - deployment.yaml
   - service.yaml
   - http-route.yaml
+  - http-route-eg.yaml
+  - rate-limit-eg.yaml
   - rate-limit.yaml
 
 images:

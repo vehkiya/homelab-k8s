@@ -1,0 +1,14 @@
+# The gateway-level CrowdSec SecurityPolicy (edge/crowdsec) calls the bouncer across namespaces
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: edge-to-crowdsec-envoy-bouncer
+spec:
+  from:
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: edge
+  to:
+    - group: ""
+      kind: Service
+      name: crowdsec-envoy-bouncer

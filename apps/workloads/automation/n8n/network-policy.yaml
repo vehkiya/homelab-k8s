@@ -11,7 +11,7 @@ spec:
           - n8n
           - n8n-worker
   ingress:
-    # === Allow access from Traefik and the internal Envoy fleet ===
+    # === Allow access from Traefik and both Envoy fleets ===
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
@@ -20,6 +20,10 @@ spec:
             k8s:io.kubernetes.pod.namespace: envoy-gateway-system
             gateway.envoyproxy.io/owning-gateway-namespace: edge
             gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-namespace: edge
+            gateway.envoyproxy.io/owning-gateway-name: external-gateway
       toPorts:
         - ports:
             - port: "http"
