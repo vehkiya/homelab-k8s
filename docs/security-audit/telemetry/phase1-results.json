@@ -1,0 +1,156 @@
+[
+{
+  "test_id": "TEST_1.1_ALLOW_POSTGRES",
+  "status": "PASS",
+  "description": "n8n to NAS PostgreSQL",
+  "details": "Connected successfully to 10.10.1.218:15432",
+  "timestamp": "2026-11-10T11:41:27Z"
+},
+{
+  "test_id": "TEST_1.1_ALLOW_INTERNET",
+  "status": "PASS",
+  "description": "n8n to Outbound Internet (Cloudflare DNS over HTTPS)",
+  "details": "Connected successfully to 1.1.1.1:443",
+  "timestamp": "2026-11-10T11:41:28Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_NAS_NFS",
+  "status": "PASS",
+  "description": "n8n to NAS NFS Storage",
+  "details": "Connection to 10.10.1.218:2049 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:30Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_NAS_SMB",
+  "status": "PASS",
+  "description": "n8n to NAS SMB File Sharing",
+  "details": "Connection to 10.10.1.218:445 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:32Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_NAS_S3",
+  "status": "PASS",
+  "description": "n8n to NAS S3 Object Storage",
+  "details": "Connection to 10.10.1.218:9000 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:34Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_K8S_VIP",
+  "status": "PASS",
+  "description": "n8n to Kubernetes API VIP",
+  "details": "Connection to 10.10.1.250:6443 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:36Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_TALOS_API",
+  "status": "PASS",
+  "description": "n8n to Talos Linux OS API",
+  "details": "Connection to 10.10.1.250:50000 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:38Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_ETCD",
+  "status": "PASS",
+  "description": "n8n to etcd Key-Value Store",
+  "details": "Connection to 10.10.1.250:2379 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:40Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_K8S_DEFAULT_SVC",
+  "status": "PASS",
+  "description": "n8n to in-cluster kubernetes.default.svc",
+  "details": "Connection to 10.96.0.1:443 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:43Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_LAN_GATEWAY",
+  "status": "PASS",
+  "description": "n8n to Private Gateway (10.10.1.1)",
+  "details": "Connection to 10.10.1.1:80 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:45Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_MGMT_GATEWAY",
+  "status": "PASS",
+  "description": "n8n to Management Gateway (192.168.1.1)",
+  "details": "Connection to 192.168.1.1:80 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:47Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_OPENBAO",
+  "status": "PASS",
+  "description": "n8n to OpenBao Secret Store",
+  "details": "Connection to openbao.security.svc.cluster.local:8200 timed out or dropped: nc: getaddrinfo for host \"openbao.security.svc.cluster.local\" port 8200: Name does not resolve\ncommand terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:47Z"
+},
+{
+  "test_id": "TEST_1.1_DROP_LLDAP",
+  "status": "PASS",
+  "description": "n8n to LLDAP Directory",
+  "details": "Connection to lldap.security.svc.cluster.local:3890 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:49Z"
+},
+{
+  "test_id": "TEST_1.2_ALLOW_INTERNET",
+  "status": "PASS",
+  "description": "Plex to Outbound Internet (HTTPS)",
+  "details": "Connected successfully to 1.1.1.1:443",
+  "timestamp": "2026-11-10T11:41:49Z"
+},
+{
+  "test_id": "TEST_1.2_DROP_K8S_VIP",
+  "status": "PASS",
+  "description": "Plex to Kubernetes API VIP",
+  "details": "Connection to 10.10.1.250:6443 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:52Z"
+},
+{
+  "test_id": "TEST_1.2_DROP_TALOS_API",
+  "status": "PASS",
+  "description": "Plex to Talos Linux OS API",
+  "details": "Connection to 10.10.1.250:50000 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:54Z"
+},
+{
+  "test_id": "TEST_1.2_DROP_NAS_NFS",
+  "status": "PASS",
+  "description": "Plex to NAS NFS Storage",
+  "details": "Connection to 10.10.1.218:2049 timed out or dropped: command terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:56Z"
+},
+{
+  "test_id": "TEST_1.2_DROP_LAN_GATEWAY",
+  "status": "FAIL",
+  "description": "Plex to LAN Gateway",
+  "details": "Unexpectedly connected to 10.10.1.1:80",
+  "timestamp": "2026-11-10T11:41:56Z"
+},
+{
+  "test_id": "TEST_1.2_DROP_MGMT_GATEWAY",
+  "status": "FAIL",
+  "description": "Plex to Management Gateway",
+  "details": "Unexpectedly connected to 192.168.1.1:80",
+  "timestamp": "2026-11-10T11:41:56Z"
+},
+{
+  "test_id": "TEST_1.2_DROP_OPENBAO",
+  "status": "PASS",
+  "description": "Plex to OpenBao Secret Store",
+  "details": "Connection to openbao.security.svc.cluster.local:8200 timed out or dropped: nc: getaddrinfo for host \"openbao.security.svc.cluster.local\" port 8200: Name does not resolve\ncommand terminated with exit code 1",
+  "timestamp": "2026-11-10T11:41:56Z"
+},
+{
+  "test_id": "TEST_1.3_SSDP_BROADCAST",
+  "status": "PASS",
+  "description": "SSDP Multicast Transmit",
+  "details": "Sent SSDP datagram without crash",
+  "timestamp": "2026-11-10T11:41:57Z"
+},
+{
+  "test_id": "TEST_1.4_NON_ROOT",
+  "status": "PASS",
+  "description": "Non-root container user",
+  "details": "Running as UID 1000",
+  "timestamp": "2026-11-10T11:41:57Z"
+}
+]

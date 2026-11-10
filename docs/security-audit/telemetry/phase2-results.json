@@ -1,0 +1,65 @@
+[
+{
+  "test_id": "PREFLIGHT_VANTAGE",
+  "status": "PASS",
+  "description": "Vantage point check",
+  "details": "External source IP 130.195.240.27",
+  "timestamp": "2026-11-10T11:51:23Z"
+},
+{
+  "test_id": "TEST_2.1A_TCP_443_DROP",
+  "status": "PASS",
+  "description": "Direct TCP 443 Origin Shielding",
+  "details": "Connection dropped by UCG-Fiber/Cilium as expected (timeout)",
+  "timestamp": "2026-11-10T11:51:27Z"
+},
+{
+  "test_id": "TEST_2.1B_UDP_443_DROP",
+  "status": "PASS",
+  "description": "Direct UDP 443 QUIC Shielding",
+  "details": "Packet dropped or refused",
+  "timestamp": "2026-11-10T11:51:31Z"
+},
+{
+  "test_id": "TEST_2.2_TCP_80_DROP",
+  "status": "PASS",
+  "description": "Direct Plaintext HTTP 80",
+  "details": "Connection refused/dropped",
+  "timestamp": "2026-11-10T11:51:50Z"
+},
+{
+  "test_id": "TEST_2.3_PLEX_AUTH",
+  "status": "WARN",
+  "description": "Plex Port 32400 Reachability",
+  "details": "Connection timed out",
+  "timestamp": "2026-11-10T11:51:51Z"
+},
+{
+  "test_id": "TEST_2.4_HEADER_INJECTION",
+  "status": "PASS",
+  "description": "Header Injection on DMZ Gateway",
+  "details": "Injected headers sent, HTTP code ",
+  "timestamp": "2026-11-10T11:51:51Z"
+},
+{
+  "test_id": "TEST_2.5_CF_CHALLENGE",
+  "status": "PASS",
+  "description": "Cloudflare Edge Geofence WAF",
+  "details": "HTTP 403 Managed Challenge enforced",
+  "timestamp": "2026-11-10T11:51:51Z"
+},
+{
+  "test_id": "TEST_2.6_CROWDSEC_WAF",
+  "status": "PASS",
+  "description": "Edge Threat Filtering",
+  "details": "Blocked with HTTP 403",
+  "timestamp": "2026-11-10T11:51:51Z"
+},
+{
+  "test_id": "TEST_2.7_IPV6_FIREWALL",
+  "status": "PASS",
+  "description": "Inbound IPv6 Perimeter Filtering",
+  "details": "Connection dropped or filtered by router firewall",
+  "timestamp": "2026-11-10T11:51:55Z"
+}
+]
