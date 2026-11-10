@@ -25,6 +25,6 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/home-operations/home-assistant
-    newTag: 2026.11.0@sha256:7c1ab60a4bb4cc1f34c314bc209d72d7b7336f0da38d4a69064935d01bba1ba6
+    newTag: 2026.11.1@sha256:c129b1e4190273254d93d413fe2a083233c9202d84cb08f84dddb01861df432e
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
