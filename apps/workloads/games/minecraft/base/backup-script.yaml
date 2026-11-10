@@ -57,7 +57,14 @@ data:
     done
 
     mkdir -p "$BACKUP_PATH"
-    rsync -a --no-o --no-g --delete --info=progress2 --stats $EXCLUDE_FLAGS /data/ "$BACKUP_PATH/"
+    # Exit 24 = source files vanished mid-transfer (live server)
+    RSYNC_RC=0
+    rsync -a --no-o --no-g --delete --info=progress2 --stats $EXCLUDE_FLAGS /data/ "$BACKUP_PATH/" || RSYNC_RC=$?
+    if [ "$RSYNC_RC" -ne 0 ] && [ "$RSYNC_RC" -ne 24 ]; then
+      echo "❌ rsync failed (exit $RSYNC_RC). Removing incomplete backup."
+      rm -rf "$BACKUP_PATH"
+      exit "$RSYNC_RC"
+    fi
 
     rcon-cli --password "$RCON_PASSWORD" "say §6[Backup] §fServer backup completed!"
     echo "✅ Backup Complete: $BACKUP_PATH"
