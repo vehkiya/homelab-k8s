@@ -12,9 +12,10 @@ spec:
     - "bar.kerrlab.app"
   rules:
     - matches:
+        # Full-match regex: Laravel routes /api/bars/ like /api/bars
         - path:
-            type: Exact
-            value: /api/bars
+            type: RegularExpression
+            value: /api/bars/?
           method: POST
       filters:
         - type: ExtensionRef
