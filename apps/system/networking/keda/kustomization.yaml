@@ -79,6 +79,10 @@ patches:
         ipFamilies:
         - IPv4
         - IPv6
+        ports:
+        - name: proxy
+          port: 8080
+          appProtocol: kubernetes.io/h2c
     target:
       kind: Service
       name: keda-add-ons-http-interceptor-proxy
