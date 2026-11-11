@@ -47,7 +47,6 @@ Group taxonomy and the registration procedure are in AGENTS.md section 9. Edit p
 | Forward-auth, admin only | longhorn UI, Traefik dashboard |
 | Forward-auth, catch-all `users` tier | whoami, launchpad (apex domain) |
 | LDAP bind directly against LLDAP | jellyfin |
-| No Authelia (own auth or public) | plex, seerr, tautulli, home-assistant, ntfy, miniflux, n8n, keeper, grafana, wedding-share, stateless tools |
 
 ## Secret provider consumers
 
