@@ -4,6 +4,32 @@ This document outlines strict operational rules for AI coding assistants working
 
 ---
 
+## Context Graph & Fast Routing
+
+`.context/` is a pointer index of this repo: where each app lives and which contracts it holds.
+It never stores versions, tags, replicas or limits; read those from the YAML it points to.
+
+1. **No blind grepping.** Before searching `apps/`, read the matching file below to get the
+   path and contracts in one hop, then open the target manifests directly.
+2. **Keep it in sync.** When an app is added, removed, renamed or re-wired (namespace, auth,
+   storage, dependencies), update its row in `.context/domains/*.md` in the same change and run
+   `go run .context/sync-inventory.go --check` until it prints `OK`. Without `--check` the
+   script prints the inventory derived from the ApplicationSets.
+
+| Read | When |
+|---|---|
+| `.context/domains/core-and-gitops.md` | Cilium, CoreDNS, ArgoCD/ApplicationSets, gateways, cert-manager, KEDA, Talos/OpenTofu, Renovate, CI |
+| `.context/domains/addons-and-security.md` | Authelia, LLDAP, CrowdSec, forward-auth overlays, hardware drivers, who consumes which auth or secret path |
+| `.context/domains/storage-and-databases.md` | Longhorn, Synology CSI, StorageClasses, shared volumes, NAS databases and their consumers |
+| `.context/domains/monitoring.md` | Prometheus, Grafana dashboards, alert rules, scrape targets |
+| `.context/domains/applications.md` | Any workload under `apps/workloads/` and its links to other apps |
+| `.context/flows/cilium-network-policies.md` | Writing or debugging a `CiliumNetworkPolicy`; label contracts and selectors per traffic flow |
+| `.context/flows/ingress-and-auth.md` | Routes, gateway listeners, TLS, forward-auth or OIDC, DMZ exposure |
+| `.context/flows/storage-and-secrets.md` | Choosing a StorageClass, backup labels, wiring an `ExternalSecret` |
+| `.context/flows/scaffold-new-app.md` | Adding an app: file checklist, golden templates, legacy patterns to avoid |
+
+---
+
 ## 1. Zero-Credential Leakage Policy (CRITICAL)
 
 Before executing any `git commit` or `git push` operations, the agent **MUST** audit all staged changes to prevent the accidental leakage of sensitive credentials, keys, or configuration tokens.
