@@ -1,6 +1,6 @@
 # koshin (https://github.com/hononeko/koshin): distributed Renovate, running as the koneko-bot GitHub App while
 # renovate-ce is scaled down for the test. Layered on the ha profile (values-ha.yml): 3 proxies, a 3-node NATS cluster on
-# PVCs, coordination Valkey primary + 2 replicas with 3 Sentinels, and one package-cache Valkey.
+# emptyDirs, coordination Valkey primary + 2 replicas with 3 Sentinels, and one package-cache Valkey.
 platforms:
   - github
 
@@ -129,6 +129,14 @@ networkPolicy:
   enabled: false
 
 nats:
+  config:
+    jetstream:
+      fileStore:
+        # JetStream on an emptyDir (js-data below): streams and the repo cache bucket keep 3 replicas, a wiped node
+        # catches up from the other two, and after losing all three the sweeper re-enqueues every repository
+        pvc:
+          enabled: false
+        maxSize: 1Gi
   container:
     merge:
       resources:
@@ -138,6 +146,20 @@ nats:
         limits:
           cpu: 500m
           memory: 256Mi
+    patch:
+      - op: add
+        path: /volumeMounts/-
+        value:
+          name: js-data
+          mountPath: /data
+  podTemplate:
+    patch:
+      - op: add
+        path: /spec/volumes/-
+        value:
+          name: js-data
+          emptyDir:
+            sizeLimit: 2Gi
   reloader:
     merge:
       resources:
@@ -149,6 +171,9 @@ nats:
           memory: 32Mi
 
 valkey:
+  # The chart requires PVCs for replication; the 3 pods are the replicas, so one Longhorn replica each
+  persistence:
+    storageClass: longhorn-single-replica
   resources:
     requests:
       cpu: 50m

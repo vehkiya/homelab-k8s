@@ -11,6 +11,7 @@ Inventory of classes, shared volumes and NAS databases: domains/storage-and-data
 | Bulk data, shared between pods or readable from the NAS | `synostorage-nfs` | RWX | Static `PersistentVolume` (NFS export path) + PVC bound by `pv-name` selector | `apps/workloads/home/mealie/persistence/nfs-storage.yaml` |
 | The media library or fonts | existing `media-pvc` / `fonts-pvc` | RWX | Mount the shared claim (namespace `media` only) | `apps/system/storage/shared-resources/volumes` |
 | Volume templated by a Helm chart | `longhorn` | RWO | Chart values | `apps/system/observability/prometheus/values/values.yaml` |
+| Volume of an app that replicates its own data across pods | `longhorn-single-replica` | RWO | Chart values | `apps/workloads/automation/koshin/values/values.yml` |
 | Relational database | PostgreSQL on the NAS | - | No PVC; `ExternalSecret` + `toCIDR` egress | `apps/workloads/home/miniflux` |
 | Cache / queue | Per-app Redis, Valkey or Dragonfly | - | Sidecar Deployment in the app directory, usually no volume | `apps/workloads/tools/kaneo/valkey.yaml` |
 

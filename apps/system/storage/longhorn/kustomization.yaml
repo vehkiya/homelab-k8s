@@ -14,6 +14,7 @@ resources:
   - longhorn-http-route-eg.yaml
   - network-policy.yaml
   - storageclass-retain.yaml
+  - storageclass-single-replica.yaml
   - s3-backup-secret.yaml
   - backup-job.yaml
   - volume-trimmer.yaml

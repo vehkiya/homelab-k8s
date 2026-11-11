@@ -29,6 +29,7 @@ Synology iSCSI volumes, and the worker label `node.longhorn.io/create-default-di
 |---|---|---|---|---|---|
 | `longhorn-retain` | Longhorn | RWO | Retain | `apps/system/storage/longhorn/storageclass-retain.yaml` | Default choice for app config/state: *arr stack, plex, jellyfin, meilisearch, ntfy, mqtt, otbr, game data |
 | `longhorn` | Longhorn | RWO | chart default | chart default (`apps/system/storage/longhorn/values`) | Helm-templated volumes: prometheus stack, n8n, fluxer |
+| `longhorn-single-replica` | Longhorn | RWO | Delete | `apps/system/storage/longhorn/storageclass-single-replica.yaml` | One replica, no S3 backup, for data the app replicates itself: koshin Valkey |
 | `synostorage-nfs` | Synology CSI | RWX | Retain | `apps/system/storage/synology-csi/nfs-storage-class.yml` | Static PV/PVC pairs on NAS exports: media library, backups, home-assistant, mealie, z2mqtt, matter-server, wedding-share, romm |
 | `synology-iscsi` | Synology CSI | RWO | class default | `apps/system/storage/synology-csi/synology-iscsi.yaml` | Cluster default class; no workload in git requests it by name |
 | `synology-iscsi-persistent` | Synology CSI | RWO | Retain | `apps/system/storage/synology-csi/synology-iscsi-persistent.yaml` | Only the undeployed uptime app |
@@ -56,5 +57,5 @@ Each lives in its owner's directory and has its own network policy; do not share
 | media-webhook-notifier | Dragonfly |
 | n8n, renovate, bar-assistant | Redis |
 | kaneo, keeper, launchpad, penpot | Valkey |
-| koshin | Valkey (sentinel) + NATS, from its Helm chart |
+| koshin | Valkey (sentinel, `longhorn-single-replica`) + NATS (emptyDir), from its Helm chart |
 | mqtt | Mosquitto broker for the IoT stack (see applications.md) |
