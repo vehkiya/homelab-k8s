@@ -1,8 +1,9 @@
-# Domain: Security, Auth & Cluster Add-ons
+# Domain: Security & Auth
 
-Scope: `apps/system/security/`, `apps/system/hardware/`, `apps/common/`, the forward-auth
-overlays in `apps/system/networking/policies`. The secret provider (External Secrets) lives in
-`apps/bootstrap/external-secrets` and is indexed in core-and-gitops.md.
+Scope: `apps/system/security/`, `apps/common/`, the forward-auth overlays in
+`apps/system/networking/policies`. The secret provider (External Secrets) lives in
+`apps/bootstrap/external-secrets` and is indexed in core-and-gitops.md; gateways and the
+CrowdSec gateway policy are in networking.md.
 
 ## Apps
 
@@ -13,8 +14,6 @@ overlays in `apps/system/networking/policies`. The secret provider (External Sec
 | crowdsec | `apps/system/security/crowdsec` | security | - | Helm, HTTPRoute, CNP, ExtSecret, SvcMon, PromRule, CronJob | LAPI + agents, Envoy bouncer (`envoy-bouncer-*.yaml`, ext-auth backend of the DMZ gateway), blocklist mirror, UniFi bouncer/sync. Needs Postgres on the NAS. Consumers: `apps/system/networking/edge` (gateway policy), Traefik bouncer plugin |
 | policies | `apps/system/networking/policies` | iot, longhorn-system, media, tools | - | SecPol | One `authelia-forward-auth` `SecurityPolicy` per namespace (`forward-auth/base`), plus `forward-auth/reference-grant.yaml` letting those namespaces call the `authelia` Service |
 | forward-auth | `apps/common/forward-auth` | consumer's | - | Middleware | Shared kustomize Component, no Application. Legacy Traefik `Middleware` `authelia-forward-auth`; pulled in once per namespace: `apps/workloads/media/common` for media, `apps/workloads/tools/whoami` for tools |
-| nfd | `apps/system/hardware/nfd` | node-feature-discovery | - | Helm, CNP | Node labels consumed by the GPU driver and scheduling rules |
-| intel-gpu-resource-driver | `apps/system/hardware/intel-gpu-resource-driver` | intel-gpu-resource-driver | - | Helm, CNP | DRA driver for Intel GPUs. Consumers request it through `ResourceClaimTemplate` from `resource-claims.yaml` (plex, jellyfin, nodecast-tv) |
 
 ## Auth consumers
 

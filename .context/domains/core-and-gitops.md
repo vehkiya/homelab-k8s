@@ -1,6 +1,7 @@
-# Domain: Core, Networking & GitOps
+# Domain: Core & GitOps
 
-Scope: `apps/bootstrap/`, `apps/gitops/`, `apps/system/networking/`, `infra/tofu/`.
+Scope: `apps/bootstrap/`, `apps/gitops/`, `apps/system/hardware/`, `infra/tofu/`.
+Gateways, cert-manager and the other networking apps: networking.md.
 Versions, tags and chart pins live in each `kustomization.yaml`; read them there.
 
 ## Bootstrap order (Day-0, OpenTofu)
@@ -46,19 +47,12 @@ All use `ServerSideApply=true` and `preserveResourcesOnDeletion`. A `namespace:`
 | argocd | `apps/bootstrap/argocd` | argocd | - | HTTPRoute, CNP, ExtSecret | Config in `argocd-cm.yaml`, `argocd-rbac-cm.yaml`; OIDC client `argocd` in Authelia; repo creds via ExternalSecret |
 | runtime | `apps/bootstrap/runtime` | cluster-scoped | - | - | `RuntimeClass` objects (crun, WasmEdge); no kustomization, plain manifests |
 
-## Networking apps (`apps/system/networking`)
+## Hardware add-ons (`apps/system/hardware`)
 
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
 |---|---|---|---|---|---|
-| gateway-api | `apps/system/networking/gateway-api` | cluster-scoped | - | - | Gateway API CRDs (remote resource). CRD provider for every `HTTPRoute`/`Gateway` |
-| envoy-gateway | `apps/system/networking/envoy-gateway` | envoy-gateway-system | - | Helm, CNP, SvcMon, PodMon | Controller + Envoy CRDs (`SecurityPolicy`, `BackendTrafficPolicy`, `ClientTrafficPolicy`, `EnvoyProxy`). `proxy-network-policy.yaml` is the proxy fleets' own allow-list: backends not covered by the global `web-ui`/`http-api` policies must be added there |
-| edge | `apps/system/networking/edge` | edge | - | HTTPRoute, Gateway, SecPol, BTP | `GatewayClass` `envoy`, Gateways `internal-gateway` and `external-gateway` (`gateways.yaml`), wildcard + apex certs (`certificates.yaml`), CrowdSec on the DMZ gateway, gateway defaults, admission policy. Needs cert-manager, envoy-gateway, crowdsec |
-| policies | `apps/system/networking/policies` | per overlay | - | SecPol | Per-namespace `authelia-forward-auth` `SecurityPolicy` overlays + `ReferenceGrant` into `security`. See flows/ingress-and-auth.md |
-| traefik | `apps/system/networking/traefik` | traefik | 1 | Helm, HTTPRoute, Gateway, CNP, ExtSecret, SvcMon | Legacy edge: GatewayClass `traefik`, its own `internal-gateway`/`external-gateway`/`plex-gateway`, Traefik CRDs (`Middleware`). Routes named `*-eg` have replaced it; do not add new Traefik routes |
-| cert-manager | `apps/system/networking/cert-manager` | cert-manager | - | Helm, CNP, ExtSecret | `ClusterIssuer`s with Cloudflare DNS-01 (`zerossl-issuer-cf-solver.yaml`, `acme-issuer-cf-solver.yaml`). Secrets from OpenBao `platform/cloudflare`, `platform/zerossl` |
-| keda | `apps/system/networking/keda` | networking | - | Helm, CNP | KEDA + HTTP add-on. Scale-to-zero apps route to Service `keda-add-ons-http-interceptor-proxy` in `networking`; `reference-grant.yaml` permits it |
-| multus | `apps/system/networking/multus` | kube-system | - | - | Secondary pod networks (remote manifest + patches); the only `NetworkAttachmentDefinition` is `apps/workloads/iot/home-assistant/nad.yaml`, attached by home-assistant, go2rtc, matter-server, otbr |
-| tailscale | `apps/system/networking/tailscale` | tailscale | - | Helm | Excluded from the ApplicationSet: not deployed |
+| nfd | `apps/system/hardware/nfd` | node-feature-discovery | - | Helm, CNP | Node labels consumed by the GPU driver and scheduling rules |
+| intel-gpu-resource-driver | `apps/system/hardware/intel-gpu-resource-driver` | intel-gpu-resource-driver | - | Helm, CNP | DRA driver for Intel GPUs. Consumers request it through `ResourceClaimTemplate` from `resource-claims.yaml` (plex, jellyfin, nodecast-tv) |
 
 ## Talos & OpenTofu
 
