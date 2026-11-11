@@ -146,14 +146,16 @@ The cluster operates on a **default-deny network policy** baseline. To allow wor
 
 ### Pre-configured Global Clusterwide Policies
 
-Certain system-wide connections are already enabled globally in `apps/bootstrap/cilium/global-network-policies.yaml`. You do **not** need to redefine rules for these in local workload policies:
+`apps/bootstrap/cilium/global-network-policies.yaml` already allows the following cluster-wide. Do **not** redefine these in workload policies:
 
-1. **DNS Resolution:** Egress to CoreDNS (port `53` UDP/TCP in `kube-system`) is allowed for all endpoints cluster-wide.
-2. **Health Probes:** Ingress communication from the `host` and `health` entities is allowed for kubelet liveness/readiness probes.
-3. **Traefik Ingress:**
-   * Ingress from Traefik to any pod labeled with `networking/expose-web-ui: "true"` targeting a named port `"web-ui"` is automatically allowed.
-   * Ingress from Traefik to any pod labeled with `networking/expose-http-api: "true"` targeting a named port `"http-api"` is automatically allowed.
-4. **OIDC Client Hairpin Egress:** Egress from any pod labeled with `networking/oidc-client: "true"` to Traefik (`10.10.1.16:443` and Traefik pods on `8443`/`9443`) for `https://auth.kerrlab.app` OIDC discovery and token exchange is automatically allowed.
+1. **DNS Resolution:** Egress to CoreDNS (port `53` UDP/TCP in `kube-system`) for all endpoints.
+2. **Health Probes:** Ingress from the `host` and `health` entities for kubelet liveness/readiness probes.
+3. **Proxy Ingress (label + named port on the pod):**
+   * `networking/expose-web-ui: "true"` with a container port named `"web-ui"`, or `networking/expose-http-api: "true"` with a port named `"http-api"`: ingress from the internal Envoy Gateway fleet and from Traefik.
+   * Adding `networking/expose-dmz: "true"` to either of the above: also ingress from the DMZ Envoy Gateway fleet. Without it a public route is blocked.
+4. **OIDC Client Hairpin Egress:** `networking/oidc-client: "true"`: egress to the internal proxies for `https://auth.kerrlab.app` OIDC discovery and token exchange.
+
+The Service and `HTTPRoute` must target the same named port. Selectors, ports and reference policies for every standard flow: `.context/flows/cilium-network-policies.md`.
 
 ### Choosing Egress Selectors
 
@@ -173,46 +175,6 @@ Rules to keep in mind:
 * **Webhooks:** allow `fromEntities: kube-apiserver` on the pod's **real** container port (for example External Secrets uses `10250`, not `9443`).
 * A policy whose only section is `ingress: []` (or `egress: []`) is rejected as invalid (it needs at least one non-empty `ingress`, `ingressDeny`, `egress` or `egressDeny`). Under default-deny, delete such a policy instead.
 * After applying, check `kubectl get cnp,ccnp -A` for `Valid=False`. The `CiliumPolicyInvalid` alert fires on rejected policies.
-
-### Named Port Ingress Mapping Example
-
-For a workload to utilize the global Traefik ingress policies:
-
-1. The **Pod template labels** must include `networking/expose-web-ui: "true"` (or `networking/expose-http-api: "true"`).
-2. The **Pod container ports** must have a named port `"web-ui"` (or `"http-api"`).
-3. The corresponding **Service** and **HTTPRoute** must target this `"web-ui"` (or `"http-api"`) named port.
-
-Example configuration flow:
-
-```yaml
-# 1. Pod Spec (deployment.yaml)
-spec:
-  template:
-    metadata:
-      labels:
-        networking/expose-web-ui: "true" # Matches the global policy
-    spec:
-      containers:
-        - name: app
-          ports:
-            - name: web-ui # Named port allowed by global policy
-              containerPort: 8080
-              protocol: TCP
-
-# 2. Service Spec (service.yaml)
-spec:
-  ports:
-    - name: web-ui
-      port: 80
-      targetPort: web-ui # References the container's named port
-
-# 3. Gateway Route Spec (http-route.yaml)
-spec:
-  rules:
-    - backendRefs:
-        - name: app-service
-          port: 80 # Routes through the service to targetPort
-```
 
 ---
 
@@ -257,7 +219,7 @@ Bare-metal node configurations and foundational Day-0 cluster bootstrapping are 
 
 ### State & Secret Hygiene in Infrastructure
 
-* **Client-Side State Encryption:** Both layers use remote S3 backend storage on NAS SeaweedFS with client-side AES-GCM encryption (`tofu_encryption_passphrase`).
+* **Client-Side State Encryption:** Both layers use a remote S3 backend on Cloudflare R2 with client-side AES-GCM encryption (`tofu_encryption_passphrase`). `apps/system/storage/tofu-sync` mirrors the state bucket to SeaweedFS on the NAS.
 * **Never Commit State or Credentials:** `terraform.tfvars`, `*.tfvars.json`, `*.tfstate`, and `_output/` must remain git-ignored. Never stage or commit unencrypted state, credentials, or passphrases.
 * **Variable Hygiene:** When adding or modifying input variables in `variables.tf`, always update the corresponding `terraform.tfvars.example` with safe, placeholder defaults.
 
@@ -344,7 +306,8 @@ When integrating a workload via native OIDC in `apps/system/security/authelia/te
 
 ### Forward-Auth Configuration Standards
 
-* Forward-auth services utilize the Traefik middleware `authelia-forward-auth`.
+* Enable forward-auth by labeling the `HTTPRoute` with `edge.kerrlab.app/forward-auth: authelia`. The namespace must have the `authelia-forward-auth` `SecurityPolicy` overlay in `apps/system/networking/policies/forward-auth`. Route and overlay blueprints: `.context/flows/ingress-and-auth.md`.
+* The Traefik middleware `authelia-forward-auth` is legacy; do not add it to new routes.
 * In Authelia's `access_control.rules`:
   * Specific domain rules **MUST** be placed before the catch-all `*.kerrlab.app`.
   * Administrative, torrent, and media management tools (`prowlarr`, `qbittorrent`, `sonarr`, `radarr`, `bazarr`, `posterizarr`) **MUST** be restricted to `administrators` and `privileged-users`.
