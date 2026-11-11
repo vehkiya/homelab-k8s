@@ -44,7 +44,7 @@ generatorOptions:
 
 images:
   - name: dhi.io/envoy-gateway
-    newTag: 1.10.0@sha256:c9d14a8fd8563cbdc4e403d18965fcb8446ebd33fc5751463d6a027fcc948688
+    newTag: 1.10.0@sha256:229708b8baa31a31a1a83ffaaa84aacb16c29d2e7aa06d290cdb66bfa088c757
 
 # Deleting a CRD deletes every object of its kind
 patches:
