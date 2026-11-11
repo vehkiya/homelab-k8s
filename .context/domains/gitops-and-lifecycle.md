@@ -1,15 +1,26 @@
-# Domain: Platform & GitOps
+# Domain: GitOps & Lifecycle
 
-Scope: `apps/gitops/`, `infra/tofu/`, and the lifecycle apps in `apps/bootstrap/` and
-`apps/system/hardware/`. Cilium, CoreDNS and gateways: networking.md. External Secrets and
-the policy baseline: security.md. Versions and chart pins live in each `kustomization.yaml`.
+Scope: `apps/gitops/`, ArgoCD and namespaces in `apps/bootstrap/`, dependency automation.
+Nodes, Talos and hardware drivers: nodes-and-hardware.md. Cilium and CoreDNS: networking.md.
+External Secrets: security.md. Versions and chart pins live in each `kustomization.yaml`.
 
-## Bootstrap order (Day-0, OpenTofu)
+## Bootstrap ordering contract (Day-0, OpenTofu)
 
 `infra/tofu/bootstrap/apps.tf` applies, in order: cilium -> coredns -> namespaces ->
 external-secrets -> argocd -> `apps/gitops/app-of-apps/bootstrap.yaml`. After that ArgoCD owns
 everything. The other ApplicationSets in `apps/gitops/app-of-apps` are applied with `kubectl apply -f`
 (see AGENTS.md section 7). Sync-waves are not used for ordering, except inside Traefik and Fluxer.
+
+## App-of-Apps hierarchy
+
+```
+OpenTofu (infra/tofu/bootstrap) --applies--> ApplicationSet "bootstrap" --generates--> Application per apps/bootstrap/*
+human kubectl apply -----------------------> the other ApplicationSets --generate---> Application per app directory
+```
+
+There is no root `Application` that owns the ApplicationSets: a new or changed ApplicationSet
+file takes effect only after `kubectl apply -f`. No hand-written `Application` manifests exist;
+every Application is generated, named after its directory (or list element), in project `default`.
 
 ## ApplicationSets (`apps/gitops/app-of-apps`)
 
@@ -36,40 +47,27 @@ Git-directory generators: a new directory under the glob becomes an Application 
 All use `ServerSideApply=true` and `preserveResourcesOnDeletion`. A `namespace:` in the app's
 `kustomization.yaml` wins over the destination namespace.
 
-## Platform apps (`apps/bootstrap`)
-
-The other three bootstrap apps are indexed elsewhere: `apps/bootstrap/cilium` and
-`apps/bootstrap/coredns` in networking.md, `apps/bootstrap/external-secrets` in security.md.
+## Lifecycle apps
 
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
 |---|---|---|---|---|---|
-| namespaces | `apps/bootstrap/namespaces` | cluster-scoped | - | - | Every namespace and its Pod Security level: `namespaces.yaml`. New namespace = edit here |
 | argocd | `apps/bootstrap/argocd` | argocd | - | HTTPRoute, CNP, ExtSecret | Config in `argocd-cm.yaml`, `argocd-rbac-cm.yaml`; OIDC client `argocd` in Authelia; repo creds via ExternalSecret |
-| runtime | `apps/bootstrap/runtime` | cluster-scoped | - | - | `RuntimeClass` objects (crun, WasmEdge); no kustomization, plain manifests |
+| namespaces | `apps/bootstrap/namespaces` | cluster-scoped | - | - | Every namespace and its Pod Security level: `namespaces.yaml`. New namespace = edit here |
 
-## Hardware add-ons (`apps/system/hardware`)
-
-| App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
-|---|---|---|---|---|---|
-| nfd | `apps/system/hardware/nfd` | node-feature-discovery | - | Helm, CNP | Node labels consumed by the GPU driver and scheduling rules |
-| intel-gpu-resource-driver | `apps/system/hardware/intel-gpu-resource-driver` | intel-gpu-resource-driver | - | Helm, CNP | DRA driver for Intel GPUs. Consumers request it through `ResourceClaimTemplate` from `resource-claims.yaml` (plex, jellyfin, nodecast-tv) |
-
-## Talos & OpenTofu
+## Dependency automation
 
 | What | Pointer |
 |---|---|
-| Node list, per-node patches | `infra/tofu/talos/nodes.tf` |
-| Machine config templates | `infra/tofu/talos/templates` (`common`, `controlplane`, `worker`) |
-| System extensions / schematic | `infra/tofu/talos/image-factory-parameters.yaml`, `infra/tofu/talos/schematic.tf` |
-| Node upgrade procedure | `infra/tofu/talos/upgrade-node.sh` |
-| Day-0 components + Vaultwarden secret | `infra/tofu/bootstrap/apps.tf`, `infra/tofu/bootstrap/vaultwarden.tf` |
-| Rules for both layers | AGENTS.md section 8 |
-
-## Renovate & CI
-
-| What | Pointer |
-|---|---|
-| Renovate rules (automerge, schedules, custom managers) | `renovate.json` at the repo root |
-| Self-hosted Renovate runner | `apps/workloads/automation/renovate`, `apps/workloads/automation/koshin` (see applications.md) |
+| Renovate rules (automerge, schedules, grouping, custom managers) | `renovate.json` at the repo root |
+| What Renovate can see | Images listed under `images:` in a `kustomization.yaml`, `helmCharts` versions, and values preceded by a `# renovate:` comment |
+| Self-hosted Renovate server | `apps/workloads/automation/renovate` (see applications.md) |
+| Koshin (runs alongside Renovate on the same host) | `apps/workloads/automation/koshin` |
 | CI validation pipeline | `.github/workflows/ci.yaml` (mirrors AGENTS.md section 3) |
 | Tofu CI | `.github/workflows/tofu.yaml` |
+| Pausing autosync for a debugging session | AGENTS.md section 7 |
+
+## Config reloading
+
+No ConfigMap/Secret reloader controller is deployed. Config changes roll pods through
+kustomize `configMapGenerator` name hashes; generators that set `disableNameSuffixHash`
+(for example dashboards and error pages) and Secrets refreshed by External Secrets do not restart pods.

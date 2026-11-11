@@ -18,7 +18,8 @@ It never stores versions, tags, replicas or limits; read those from the YAML it 
 
 | Read | When |
 |---|---|
-| `.context/domains/platform-and-gitops.md` | ArgoCD/ApplicationSets, bootstrap order, namespaces, hardware drivers, Talos/OpenTofu, Renovate, CI |
+| `.context/domains/gitops-and-lifecycle.md` | ArgoCD/ApplicationSets, App-of-Apps hierarchy, bootstrap order, namespaces, Renovate, CI |
+| `.context/domains/nodes-and-hardware.md` | Talos nodes, labels, schematic extensions, kernel modules, GPU claims (DRA), NFD, runtime classes |
 | `.context/domains/networking.md` | Cilium (BGP, LB pools), CoreDNS, Envoy Gateway, gateway listeners, cert-manager, KEDA, Multus, legacy Traefik |
 | `.context/domains/security.md` | Authelia, LLDAP, CrowdSec, External Secrets, zero-trust baselines, who consumes which auth or secret path |
 | `.context/domains/storage-and-databases.md` | Longhorn, Synology CSI, StorageClasses, shared volumes, NAS databases and their consumers |

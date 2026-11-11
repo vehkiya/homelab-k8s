@@ -13,6 +13,9 @@ on the NAS (`fortress`, 10.10.1.218). Decision rules: flows/storage-and-secrets.
 | talos-backup | `apps/system/storage/talos-backup` | talos-backup | - | CNP, PVC, PV, CronJob | etcd snapshots from the control-plane nodes to an NFS export |
 | tofu-sync | `apps/system/storage/tofu-sync` | tofu-sync | - | CNP, ExtSecret, CronJob | rclone mirror of the OpenTofu state bucket from Cloudflare R2 to S3 on the NAS. OpenBao `tofu-sync/tofu-sync`, `platform/s3/backup-filers` |
 
+Node prerequisites (nodes-and-hardware.md): the `iscsi-tools` Talos extension for Longhorn and
+Synology iSCSI volumes, and the worker label `node.longhorn.io/create-default-disk`.
+
 ## Data services (in-cluster, shared)
 
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |

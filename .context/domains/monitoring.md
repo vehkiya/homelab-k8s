@@ -13,6 +13,17 @@ unless the app's `kustomization.yaml` overrides it.
 | spegel | `apps/system/observability/spegel` | spegel | - | Helm, CNP | Node-local registry mirror (P2P image cache) |
 | uptime | `apps/system/observability/uptime` | observability | - | HTTPRoute, CNP, PVC, PV | Uptime Kuma. Excluded from the ApplicationSet: not deployed |
 
+## Hardware telemetry
+
+| Exporter | Where |
+|---|---|
+| node-exporter (CPU, memory, disk, NIC per node) | Part of the kube-prometheus-stack chart in `apps/system/observability/prometheus` |
+| kube-state-metrics (plus custom-resource metrics for edge alerts) | Same chart; configured in `values/values.yaml` |
+| Intel GPU driver health monitoring | Enabled in `apps/system/hardware/intel-gpu-resource-driver/kustomization.yaml` |
+
+No `smartctl-exporter` or other disk-health exporter is deployed. Node inventory and
+extensions: nodes-and-hardware.md.
+
 ## Alert rules (`PrometheusRule`)
 
 | File | Covers |

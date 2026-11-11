@@ -1,7 +1,7 @@
 # Domain: Applications (`apps/workloads/`)
 
 One directory per app; ApplicationSets map `apps/workloads/<group>/*` to namespace `<group>`
-(see platform-and-gitops.md). "PG" = PostgreSQL on the NAS, "FA" = Authelia forward-auth, "OIDC" =
+(see gitops-and-lifecycle.md). "PG" = PostgreSQL on the NAS, "FA" = Authelia forward-auth, "OIDC" =
 native Authelia client, "DMZ" = also routed on `external-gateway`. Shared infrastructure names
 resolve in storage-and-databases.md, security.md and networking.md.
 
@@ -10,6 +10,10 @@ resolve in storage-and-databases.md, security.md and networking.md.
 Shared mounts: `media-pvc` (library + downloads, RWX NFS) and `fonts-pvc`, both defined in
 `apps/system/storage/shared-resources`. Config volumes are per-app `longhorn-retain` PVCs in
 a `persistence` subdirectory.
+
+Hardware transcoding uses DRA GPU claims (nodes-and-hardware.md): plex and jellyfin share
+`shared-intel-gpu-claim` and are pinned to the `node-type: performance` node; nodecast-tv gets
+its own claim from `intel-gpu-claim-template`.
 
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
 |---|---|---|---|---|---|
