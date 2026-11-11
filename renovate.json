@@ -17,6 +17,7 @@
   "reviewers": [
     "vehkiya"
   ],
+  "minimumReleaseAge": "12 hours",
   "automergeType": "pr",
   "platformAutomerge": true,
   "ignoreTests": false,
