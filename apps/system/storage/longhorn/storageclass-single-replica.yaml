@@ -1,0 +1,21 @@
+# One Longhorn replica, kept on the pod's node, and no S3 backup: for data the application replicates itself
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn-single-replica
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  backupTargetName: default
+  dataEngine: v1
+  dataLocality: best-effort
+  disableRevisionCounter: "true"
+  fromBackup: ""
+  fsType: ext4
+  numberOfReplicas: "1"
+  # Naming a job takes the volume out of the default group, and with it out of daily-s3-backup
+  recurringJobSelector: '[{"name":"daily-snapshot-cleanup","isGroup":false}]'
+  staleReplicaTimeout: "30"
+  unmapMarkSnapChainRemoved: ignored
