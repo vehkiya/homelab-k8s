@@ -1,7 +1,7 @@
 # Domain: Applications (`apps/workloads/`)
 
 One directory per app; ApplicationSets map `apps/workloads/<group>/*` to namespace `<group>`
-(see core-and-gitops.md). "PG" = PostgreSQL on the NAS, "FA" = Authelia forward-auth, "OIDC" =
+(see platform-and-gitops.md). "PG" = PostgreSQL on the NAS, "FA" = Authelia forward-auth, "OIDC" =
 native Authelia client, "DMZ" = also routed on `external-gateway`. Shared infrastructure names
 resolve in storage-and-databases.md, security.md and networking.md.
 

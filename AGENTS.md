@@ -18,9 +18,9 @@ It never stores versions, tags, replicas or limits; read those from the YAML it 
 
 | Read | When |
 |---|---|
-| `.context/domains/core-and-gitops.md` | Cilium, CoreDNS, ArgoCD/ApplicationSets, namespaces, External Secrets, hardware drivers, Talos/OpenTofu, Renovate, CI |
-| `.context/domains/networking.md` | Envoy Gateway, gateways and listeners, cert-manager, KEDA, Multus, legacy Traefik |
-| `.context/domains/security.md` | Authelia, LLDAP, CrowdSec, forward-auth overlays, who consumes which auth or secret path |
+| `.context/domains/platform-and-gitops.md` | ArgoCD/ApplicationSets, bootstrap order, namespaces, hardware drivers, Talos/OpenTofu, Renovate, CI |
+| `.context/domains/networking.md` | Cilium (BGP, LB pools), CoreDNS, Envoy Gateway, gateway listeners, cert-manager, KEDA, Multus, legacy Traefik |
+| `.context/domains/security.md` | Authelia, LLDAP, CrowdSec, External Secrets, zero-trust baselines, who consumes which auth or secret path |
 | `.context/domains/storage-and-databases.md` | Longhorn, Synology CSI, StorageClasses, shared volumes, NAS databases and their consumers |
 | `.context/domains/monitoring.md` | Prometheus, Grafana dashboards, alert rules, scrape targets |
 | `.context/domains/applications.md` | Any workload under `apps/workloads/` and its links to other apps |

@@ -1,9 +1,9 @@
-# Domain: Security & Auth
+# Domain: Security & Identity
 
-Scope: `apps/system/security/`, `apps/common/`, the forward-auth overlays in
-`apps/system/networking/policies`. The secret provider (External Secrets) lives in
-`apps/bootstrap/external-secrets` and is indexed in core-and-gitops.md; gateways and the
-CrowdSec gateway policy are in networking.md.
+Scope: `apps/system/security/`, the secret provider in `apps/bootstrap/external-secrets`,
+`apps/common/`, the forward-auth overlays in `apps/system/networking/policies`, and the
+cluster-wide policy baselines. There is no OAuth2-Proxy: Authelia covers both OIDC and
+forward-auth. Gateways and the CrowdSec gateway policy are in networking.md.
 
 ## Apps
 
@@ -14,6 +14,20 @@ CrowdSec gateway policy are in networking.md.
 | crowdsec | `apps/system/security/crowdsec` | security | - | Helm, HTTPRoute, CNP, ExtSecret, SvcMon, PromRule, CronJob | LAPI + agents, Envoy bouncer (`envoy-bouncer-*.yaml`, ext-auth backend of the DMZ gateway), blocklist mirror, UniFi bouncer/sync. Needs Postgres on the NAS. Consumers: `apps/system/networking/edge` (gateway policy), Traefik bouncer plugin |
 | policies | `apps/system/networking/policies` | iot, longhorn-system, media, tools | - | SecPol | One `authelia-forward-auth` `SecurityPolicy` per namespace (`forward-auth/base`), plus `forward-auth/reference-grant.yaml` letting those namespaces call the `authelia` Service |
 | forward-auth | `apps/common/forward-auth` | consumer's | - | Middleware | Shared kustomize Component, no Application. Legacy Traefik `Middleware` `authelia-forward-auth`; pulled in once per namespace: `apps/workloads/media/common` for media, `apps/workloads/tools/whoami` for tools |
+| external-secrets | `apps/bootstrap/external-secrets` | external-secrets | - | Helm, CNP, SecretStore | Operator + `ClusterSecretStore` `openbao-store` (`openbao-cluster-secret-store.yaml`): OpenBao on the NAS, Kubernetes auth. Day-0 install by OpenTofu, then Argo. Every `ExternalSecret` in the repo depends on it |
+
+## Zero-trust baselines
+
+| Baseline | File |
+|---|---|
+| Network default-deny + label-driven allows (`networking/expose-*`, `networking/oidc-client`) | `apps/bootstrap/cilium/global-network-policies.yaml` |
+| Pod Security level per namespace | `apps/bootstrap/namespaces/namespaces.yaml` |
+| Envoy route policies must merge with gateway policies | `apps/system/networking/edge/admission-policy.yaml` |
+| CrowdSec on every DMZ request | `apps/system/networking/edge/crowdsec-security-policy.yaml` |
+| Authelia `default_policy: deny` and domain rules | `apps/system/security/authelia/templates/configuration.yaml` |
+| Rejected-policy and auth-coverage alerts | `apps/system/observability/prometheus/cilium-alerts.yaml`, `apps/system/observability/prometheus/envoy-gateway-alerts.yaml` |
+
+Selector details: flows/cilium-network-policies.md.
 
 ## Auth consumers
 

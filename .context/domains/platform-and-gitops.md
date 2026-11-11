@@ -1,8 +1,8 @@
-# Domain: Core & GitOps
+# Domain: Platform & GitOps
 
-Scope: `apps/bootstrap/`, `apps/gitops/`, `apps/system/hardware/`, `infra/tofu/`.
-Gateways, cert-manager and the other networking apps: networking.md.
-Versions, tags and chart pins live in each `kustomization.yaml`; read them there.
+Scope: `apps/gitops/`, `infra/tofu/`, and the lifecycle apps in `apps/bootstrap/` and
+`apps/system/hardware/`. Cilium, CoreDNS and gateways: networking.md. External Secrets and
+the policy baseline: security.md. Versions and chart pins live in each `kustomization.yaml`.
 
 ## Bootstrap order (Day-0, OpenTofu)
 
@@ -36,14 +36,14 @@ Git-directory generators: a new directory under the glob becomes an Application 
 All use `ServerSideApply=true` and `preserveResourcesOnDeletion`. A `namespace:` in the app's
 `kustomization.yaml` wins over the destination namespace.
 
-## Bootstrap apps
+## Platform apps (`apps/bootstrap`)
+
+The other three bootstrap apps are indexed elsewhere: `apps/bootstrap/cilium` and
+`apps/bootstrap/coredns` in networking.md, `apps/bootstrap/external-secrets` in security.md.
 
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
 |---|---|---|---|---|---|
-| cilium | `apps/bootstrap/cilium` | kube-system | - | Helm, CCNP | CNI, kube-proxy replacement, LB IPAM, BGP, L2. Files: `bgp.yaml` (peers the UniFi gateway), `ip-pools.yaml` (LB pools selected by Service label `pool:`), `l2-announcements.yaml`, `global-network-policies.yaml` (default-deny + shared allows, see flows/cilium-network-policies.md), `values/values.yaml` |
-| coredns | `apps/bootstrap/coredns` | kube-system | - | Helm, CNP | Upstream resolvers allowed in `network-policy.yaml` |
 | namespaces | `apps/bootstrap/namespaces` | cluster-scoped | - | - | Every namespace and its Pod Security level: `namespaces.yaml`. New namespace = edit here |
-| external-secrets | `apps/bootstrap/external-secrets` | external-secrets | - | Helm, CNP, SecretStore | Defines `ClusterSecretStore` `openbao-store` (OpenBao on the NAS). Every `ExternalSecret` in the repo depends on it |
 | argocd | `apps/bootstrap/argocd` | argocd | - | HTTPRoute, CNP, ExtSecret | Config in `argocd-cm.yaml`, `argocd-rbac-cm.yaml`; OIDC client `argocd` in Authelia; repo creds via ExternalSecret |
 | runtime | `apps/bootstrap/runtime` | cluster-scoped | - | - | `RuntimeClass` objects (crun, WasmEdge); no kustomization, plain manifests |
 
