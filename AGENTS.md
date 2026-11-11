@@ -28,7 +28,7 @@ It never stores versions, tags, replicas or limits; read those from the YAML it 
 | `.context/flows/cilium-network-policies.md` | Writing or debugging a `CiliumNetworkPolicy`; label contracts and selectors per traffic flow |
 | `.context/flows/ingress-and-auth.md` | Routes, gateway listeners, TLS, forward-auth or OIDC, DMZ exposure |
 | `.context/flows/storage-and-secrets.md` | Choosing a StorageClass, backup labels, wiring an `ExternalSecret` |
-| `.context/flows/scaffold-new-app.md` | Adding an app: file checklist, golden templates, legacy patterns to avoid |
+| `.context/flows/scaffold-new-app.md` | Adding or changing a workload: file checklist, resource requests/limits, golden templates, legacy patterns to avoid |
 
 ---
 
@@ -61,26 +61,9 @@ If any sensitive data is discovered in the audit:
 
 ---
 
-## 2. Mandatory Pod Resource Limits (CRITICAL)
+## 2. Pod Resource Requests & Limits
 
-To prevent resource exhaustion, noisy neighbor issues, and out-of-memory kills, **every pod container specification** (including init containers where appropriate) MUST explicitly set both resource requests and limits.
-
-### Configuration Policy
-
-* **CPU:** Must specify both `requests.cpu` and `limits.cpu`.
-* **Memory:** Must specify both `requests.memory` and `limits.memory`.
-
-Example:
-
-```yaml
-resources:
-  requests:
-    cpu: "10m"
-    memory: "64Mi"
-  limits:
-    cpu: "250m"
-    memory: "128Mi"
-```
+Containers in manifests authored in this repo set CPU and memory requests and limits. The policy and an example are in `.context/flows/scaffold-new-app.md`; read it when adding or changing a workload.
 
 ---
 

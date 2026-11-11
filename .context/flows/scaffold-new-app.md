@@ -1,7 +1,7 @@
 # Flow: Scaffold a New App
 
-Mandatory rules (resource limits, image pinning, ExternalSecrets only, validation pipeline)
-are in AGENTS.md sections 2-5. This is the file-level checklist.
+Mandatory rules (image pinning, ExternalSecrets only, validation pipeline) are in AGENTS.md
+sections 3-5. This is the file-level checklist.
 
 ## 1. Registration with ArgoCD
 
@@ -28,7 +28,24 @@ Optional, by feature: `external-http-route-eg.yaml` + `rate-limit-eg.yaml` (publ
 `httpscaledobject.yaml` (scale-to-zero), `valkey.yaml` + its own policy (cache),
 `servicemonitor.yaml` (metrics). Blueprints: the three sibling flow files.
 
-## 3. Files outside the app directory
+## 3. Resource requests and limits
+
+Every container in a pod spec written in this repo (init containers where appropriate) sets
+`requests.cpu`, `requests.memory`, `limits.cpu` and `limits.memory`, to prevent resource
+exhaustion, noisy neighbours and OOM kills. For Helm charts, set them through chart values
+where the chart exposes them.
+
+```yaml
+resources:
+  requests:
+    cpu: "10m"
+    memory: "64Mi"
+  limits:
+    cpu: "250m"
+    memory: "128Mi"
+```
+
+## 4. Files outside the app directory
 
 | When the app... | Also edit |
 |---|---|
@@ -40,7 +57,7 @@ Optional, by feature: `external-http-route-eg.yaml` + `rate-limit-eg.yaml` (publ
 | needs special Renovate handling (grouping, schedule, automerge) | `renovate.json` |
 | always | The matching table in `.context/domains` |
 
-## 4. Golden templates
+## 5. Golden templates
 
 | Template | Path | Copy | Leave behind |
 |---|---|---|---|
@@ -59,7 +76,7 @@ Variants of the stateful template:
 | Helm chart through kustomize `helmCharts` | `apps/workloads/tools/penpot` |
 | Several instances from one base | `apps/workloads/games/minecraft/base` + `apps/workloads/games/minecraft/overlays/vanilla` |
 
-## 5. Legacy and outlier patterns: do NOT copy
+## 6. Legacy and outlier patterns: do NOT copy
 
 | Pattern | Seen in | Use instead |
 |---|---|---|
@@ -73,7 +90,7 @@ Variants of the stateful template:
 | Excluded, unmaintained apps | `apps/workloads/automation/kestra`, `apps/system/observability/uptime`, `apps/system/networking/tailscale` | Not a template for anything |
 | `synology-iscsi*` StorageClasses | `apps/system/observability/uptime` | `longhorn-retain` or `synostorage-nfs` |
 
-## 6. Before pushing
+## 7. Before pushing
 
 1. Validation pipeline from AGENTS.md section 3 on the new directory.
 2. `git diff --cached` credential audit (AGENTS.md section 1).
