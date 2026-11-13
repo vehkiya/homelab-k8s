@@ -92,7 +92,7 @@ spec:
                 claimName: talos-backup-nfs-pvc
             - name: talosctl-bin
               image:
-                reference: ghcr.io/siderolabs/talosctl:v1.14.4@sha256:b3233234327350f20ed194f3fad83d90a64344c1940f839c7b0c0abef50c8c33
+                reference: ghcr.io/siderolabs/talosctl:v1.14.6@sha256:82c9a9985fc7292a222e680414c65955ac0566db588b84d88f620b05d16b1d5b
                 pullPolicy: IfNotPresent
             - name: talos-secrets
               secret:
