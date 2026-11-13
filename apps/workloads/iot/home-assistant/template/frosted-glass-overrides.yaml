@@ -165,11 +165,60 @@ card_mod_root_append:
       padding-bottom: env(safe-area-inset-bottom, 0px) !important;
     }
 
-    /* Hide bottom navbar on mobile-dashboard (replaced by Bubble Card horizontal-buttons-stack),
-       while keeping edit-mode toolbar and other dashboards intact. */
+    /* Replace bottom navbar on mobile-dashboard with a faint top-right ghost .action-items pill
+       (keeps Edit dashboard overflow menu accessible without taking bar height), while keeping
+       full .edit-mode toolbar and other dashboards intact. */
     div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)),
     div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) {
+      top: 0 !important;
+      bottom: auto !important;
+      left: auto !important;
+      right: 0 !important;
+      width: auto !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      border-top: none !important;
+      padding: env(safe-area-inset-top, 0px) 0 0 0 !important;
+      pointer-events: none !important;
+    }
+
+    div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)) .toolbar,
+    div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) .toolbar {
+      height: auto !important;
+      padding: 8px calc(10px + var(--safe-area-inset-right, 0px)) 0 0 !important;
+      border-bottom: none !important;
+      background: transparent !important;
+    }
+
+    div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)) .toolbar > :not(.action-items),
+    div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) .toolbar > :not(.action-items) {
       display: none !important;
+    }
+
+    div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)) .action-items,
+    div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) .action-items {
+      pointer-events: auto !important;
+      border-radius: 9999px !important;
+      padding: 2px !important;
+      background: color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 38%, transparent) !important;
+      backdrop-filter: blur(12px) saturate(1.25) !important;
+      -webkit-backdrop-filter: blur(12px) saturate(1.25) !important;
+      border: 0.5px solid var(--ha-card-border-color, rgba(255, 255, 255, 0.2)) !important;
+      opacity: 0.2 !important;
+      transition: opacity 200ms ease !important;
+      --mdc-icon-button-size: 34px;
+      --ha-icon-button-size: 34px;
+    }
+
+    div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)) .action-items:hover,
+    div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)) .action-items:focus-within,
+    div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) .action-items:hover,
+    div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) .action-items:focus-within {
+      opacity: 1 !important;
     }
 
     div:not(.edit-mode):has(> .header ha-tab-group ha-tab-group-tab:nth-of-type(6)) > #view,
