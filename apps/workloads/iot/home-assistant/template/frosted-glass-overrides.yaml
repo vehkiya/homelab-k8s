@@ -52,7 +52,21 @@ card_mod_card_append:
       background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0.06) 100%) !important;
     }
 
+    /* Gentle 30px / 500ms rise animation on horizontal-buttons-stack */
+    @keyframes from-bottom {
+      0% { transform: translate(-50%, 30px); }
+      45% { transform: translate(-50%, -3px); }
+      75% { transform: translate(-50%, 1px); }
+      100% { transform: translate(-50%, 0); }
+    }
+    .horizontal-buttons-stack-card:not(.editor) .card-content {
+      animation-duration: 500ms !important;
+    }
+
     /* Horizontal Buttons Stack: higher-opacity frosted glass pills with active room tint */
+    .horizontal-buttons-stack-container .bubble-button {
+      touch-action: manipulation;
+    }
     .horizontal-buttons-stack-container .bubble-button[class*="living-room"] { --room-accent: #A89CFF; }
     .horizontal-buttons-stack-container .bubble-button[class*="bedroom"] { --room-accent: #F29BB2; }
     .horizontal-buttons-stack-container .bubble-button[class*="bathroom"] { --room-accent: #7ED4E6; }
@@ -60,12 +74,37 @@ card_mod_card_append:
     .horizontal-buttons-stack-container .bubble-button[class*="hallway"] { --room-accent: #8EB2E8; }
     .horizontal-buttons-stack-container .bubble-button[class*="balcony"] { --room-accent: #8CD6B5; }
 
+    /* Keep horizontal-buttons-stack host/gradient transparent; omit outer depth-shadow so buttons don't bleed a clipped shadow strip between pills */
+    ha-card.horizontal-buttons-stack-card,
+    ha-card.horizontal-buttons-stack-card::before,
+    .horizontal-buttons-stack-card.has-gradient::before {
+      box-shadow: none !important;
+      background: transparent !important;
+      border: none !important;
+    }
+    .horizontal-buttons-stack-card::before,
+    .horizontal-buttons-stack-card.has-gradient::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    .horizontal-buttons-stack-container .bubble-button .bubble-background,
+    .horizontal-buttons-stack-container .bubble-button .bubble-background-color,
+    .horizontal-buttons-stack-container .bubble-button .bubble-icon {
+      transition: transform 90ms ease, background 150ms ease, border-color 150ms ease !important;
+    }
+    .horizontal-buttons-stack-container .bubble-button:active .bubble-background,
+    .horizontal-buttons-stack-container .bubble-button:active .bubble-background-color,
+    .horizontal-buttons-stack-container .bubble-button:active .bubble-icon {
+      transform: scale(0.92);
+    }
+
     .horizontal-buttons-stack-container .bubble-button .bubble-background {
       opacity: 1 !important;
       background: color-mix(in srgb, var(--room-accent, transparent) 7%, color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 62%, transparent)) !important;
       backdrop-filter: blur(18px) saturate(1.35) contrast(var(--frosted-glass-contrast, 1)) !important;
       -webkit-backdrop-filter: blur(18px) saturate(1.35) contrast(var(--frosted-glass-contrast, 1)) !important;
-      box-shadow: var(--ha-card-glass-inset-shadow), var(--frosted-glass-card-depth-shadow) !important;
+      box-shadow: var(--ha-card-glass-inset-shadow) !important;
     }
     .horizontal-buttons-stack-container .bubble-button .bubble-background-color {
       border: var(--bubble-border, var(--ha-card-border)) !important;
@@ -223,7 +262,24 @@ card_mod_root_append:
 
     div:not(.edit-mode):has(> .header ha-tab-group ha-tab-group-tab:nth-of-type(6)) > #view,
     div:not(.edit-mode):has(> .header ha-icon[title="Hallway"]) > #view {
-      padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+      padding-bottom: calc(116px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    /* Viewport-locked bottom fade scrim so long pages soften cleanly above the room pills
+       while obscured bottom cards scroll completely clear of the fade zone. */
+    div:not(.edit-mode):has(> .header ha-tab-group ha-tab-group-tab:nth-of-type(6)) > #view::after,
+    div:not(.edit-mode):has(> .header ha-icon[title="Hallway"]) > #view::after {
+      content: "";
+      position: fixed;
+      left: var(--ha-sidebar-width, 0px);
+      right: 0;
+      bottom: 0;
+      height: calc(116px + env(safe-area-inset-bottom, 0px));
+      background: var(--lovelace-background, var(--background-image));
+      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.58) 28%, rgba(0, 0, 0, 0.92) 56%, #000 72%, #000 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.58) 28%, rgba(0, 0, 0, 0.92) 56%, #000 72%, #000 100%);
+      pointer-events: none;
+      z-index: 3;
     }
   light: |
     .header,
