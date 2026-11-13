@@ -22,11 +22,7 @@ configMapGenerator:
     files:
       - configuration.yaml.template=template/configuration.yaml
       - pill_separator.yaml=template/pill_separator.yaml
-  - name: home-assistant-themes
-    files:
-      - Frosted-Glass.yaml=template/themes/Frosted-Glass.yaml
-      - Frosted-Glass-Light.yaml=template/themes/Frosted-Glass-Light.yaml
-      - Frosted-Glass-Dark.yaml=template/themes/Frosted-Glass-Dark.yaml
+      - patch_frosted_glass.py=template/patch_frosted_glass.py
   - name: home-assistant-wallpapers
     files:
       - frosted-glass-dark-bpr.jpg=template/wallpapers/frosted-glass-dark-bpr.jpg
