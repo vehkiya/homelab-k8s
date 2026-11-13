@@ -36,11 +36,19 @@ spec:
             - -c
             - |
               gomplate --left-delim "[[" --right-delim "]]" -f /template/configuration.yaml.template -o /config/configuration.yaml
-              mkdir -p /config/bubble_card/modules
+              mkdir -p /config/bubble_card/modules "/config/themes/Frosted Glass" /config/www/themes
               cp -f /template/pill_separator.yaml /config/bubble_card/modules/pill_separator.yaml
+              cp -f /themes/Frosted-Glass.yaml "/config/themes/Frosted Glass/Frosted Glass.yaml"
+              cp -f /themes/Frosted-Glass-Light.yaml "/config/themes/Frosted Glass/Frosted Glass Light.yaml"
+              cp -f /themes/Frosted-Glass-Dark.yaml "/config/themes/Frosted Glass/Frosted Glass Dark.yaml"
+              cp -f /wallpapers/*.jpg /config/www/themes/
           volumeMounts:
             - name: config-template
               mountPath: /template
+            - name: config-themes
+              mountPath: /themes
+            - name: config-wallpapers
+              mountPath: /wallpapers
             - name: hass-data
               mountPath: /config
               subPath: config
@@ -97,3 +105,9 @@ spec:
         - name: config-template
           configMap:
             name: home-assistant-config
+        - name: config-themes
+          configMap:
+            name: home-assistant-themes
+        - name: config-wallpapers
+          configMap:
+            name: home-assistant-wallpapers
