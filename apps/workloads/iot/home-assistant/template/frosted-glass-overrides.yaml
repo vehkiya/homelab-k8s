@@ -52,10 +52,17 @@ card_mod_card_append:
       background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0.06) 100%) !important;
     }
 
-    /* Horizontal Buttons Stack: higher-opacity frosted glass pills */
+    /* Horizontal Buttons Stack: higher-opacity frosted glass pills with active room tint */
+    .horizontal-buttons-stack-container .bubble-button[class*="living-room"] { --room-accent: #A89CFF; }
+    .horizontal-buttons-stack-container .bubble-button[class*="bedroom"] { --room-accent: #F29BB2; }
+    .horizontal-buttons-stack-container .bubble-button[class*="bathroom"] { --room-accent: #7ED4E6; }
+    .horizontal-buttons-stack-container .bubble-button[class*="kitchen"] { --room-accent: #F4B68A; }
+    .horizontal-buttons-stack-container .bubble-button[class*="hallway"] { --room-accent: #8EB2E8; }
+    .horizontal-buttons-stack-container .bubble-button[class*="balcony"] { --room-accent: #8CD6B5; }
+
     .horizontal-buttons-stack-container .bubble-button .bubble-background {
       opacity: 1 !important;
-      background: color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 62%, transparent) !important;
+      background: color-mix(in srgb, var(--room-accent, transparent) 7%, color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 62%, transparent)) !important;
       backdrop-filter: blur(18px) saturate(1.35) contrast(var(--frosted-glass-contrast, 1)) !important;
       -webkit-backdrop-filter: blur(18px) saturate(1.35) contrast(var(--frosted-glass-contrast, 1)) !important;
       box-shadow: var(--ha-card-glass-inset-shadow), var(--frosted-glass-card-depth-shadow) !important;
@@ -67,10 +74,13 @@ card_mod_card_append:
       animation: none !important;
     }
     .horizontal-buttons-stack-container .bubble-button.highlight .bubble-background {
-      background: color-mix(in srgb, var(--bubble-accent-color) 30%, color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 68%, transparent)) !important;
+      background: color-mix(in srgb, var(--room-accent, var(--bubble-accent-color)) 34%, color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 66%, transparent)) !important;
     }
     .horizontal-buttons-stack-container .bubble-button.highlight .bubble-background-color {
-      border: 1px solid color-mix(in srgb, var(--bubble-accent-color) 70%, transparent) !important;
+      border: 1px solid color-mix(in srgb, var(--room-accent, var(--bubble-accent-color)) 72%, transparent) !important;
+    }
+    .horizontal-buttons-stack-container .bubble-button.highlight .bubble-icon {
+      color: color-mix(in srgb, var(--room-accent, var(--bubble-accent-color)) 55%, var(--primary-text-color)) !important;
     }
 
     /* Exclude separators from glass background and pseudo-element (keeps pill_separator ::before intact) */
