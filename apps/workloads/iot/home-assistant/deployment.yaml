@@ -36,11 +36,16 @@ spec:
             - -c
             - |
               gomplate --left-delim "[[" --right-delim "]]" -f /template/configuration.yaml.template -o /config/configuration.yaml
-              mkdir -p /config/bubble_card/modules
+              mkdir -p /config/bubble_card/modules /config/www/themes
               cp -f /template/pill_separator.yaml /config/bubble_card/modules/pill_separator.yaml
+              cp -f /template/patch_frosted_glass.py /config/patch_frosted_glass.py
+              cp -f /template/frosted-glass-overrides.yaml /config/frosted-glass-overrides.yaml
+              cp -f /wallpapers/*.jpg /config/www/themes/
           volumeMounts:
             - name: config-template
               mountPath: /template
+            - name: config-wallpapers
+              mountPath: /wallpapers
             - name: hass-data
               mountPath: /config
               subPath: config
@@ -51,6 +56,30 @@ spec:
             limits:
               cpu: "25m"
               memory: "32Mi"
+        - name: patch-themes
+          image: ghcr.io/home-operations/home-assistant
+          command:
+            - python3
+            - /config/patch_frosted_glass.py
+            - --no-reload
+            - --ignore-missing
+          volumeMounts:
+            - name: hass-data
+              mountPath: /config
+              subPath: config
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
       containers:
         - name: homeassistant
           image: ghcr.io/home-operations/home-assistant
@@ -97,3 +126,6 @@ spec:
         - name: config-template
           configMap:
             name: home-assistant-config
+        - name: config-wallpapers
+          configMap:
+            name: home-assistant-wallpapers

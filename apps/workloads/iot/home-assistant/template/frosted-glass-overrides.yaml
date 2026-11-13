@@ -1,0 +1,180 @@
+# Declarative customizations applied on top of upstream HACS Frosted Glass theme
+# by /config/patch_frosted_glass.py. Edit values here rather than modifying theme files directly.
+
+remove_keys:
+  - uix-theme
+  - card-mod-view-yaml
+
+variables:
+  shared:
+    bubble-border-radius: "32px"
+    bubble-button-border-radius: "32px"
+    bubble-card-type-border-radius: "32px"
+    bubble-icon-border-radius: "50%"
+    bubble-sub-button-border-radius: "20px"
+    bubble-horizontal-buttons-stack-border-radius: "32px"
+    navbar-border-radius: "28px"
+    ha-card-border-radius: "28px"
+    border-radius: "28px"
+    ha-card-backdrop-filter: "blur(22px) saturate(1.55) contrast(var(--frosted-glass-contrast, 1))"
+    frosted-glass-popup-backdrop-filter: "blur(24px) saturate(1.3)"
+
+  light:
+    ha-card-glass-tint: "rgba(254, 244, 242, 0.24)"
+    background-image: "center / cover no-repeat fixed url('/local/themes/frosted-glass-light-bpr.jpg')"
+
+  dark:
+    ha-card-glass-tint: "rgba(22, 30, 44, 0.26)"
+    background-image: "center / cover no-repeat fixed url('/local/themes/frosted-glass-dark-bpr.jpg')"
+
+card_mod_card_append:
+  shared: |
+    .bubble-container:not(.bubble-separator) {
+      border-radius: var(--bubble-border-radius, 32px) !important;
+    }
+    .bubble-container:not(.bubble-separator)::before {
+      background: var(--ha-card-glass-tint);
+      box-shadow: none;
+    }
+    /* Render glass rim shine above slider fill so active/on cards keep their specular edge */
+    .bubble-container:not(.bubble-separator)::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: transparent;
+      box-shadow: var(--ha-card-glass-inset-shadow);
+      z-index: 2;
+    }
+    .bubble-range-fill {
+      opacity: 0.48 !important;
+      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0.06) 100%) !important;
+    }
+
+    /* Horizontal Buttons Stack: higher-opacity frosted glass pills */
+    .horizontal-buttons-stack-container .bubble-button .bubble-background {
+      opacity: 1 !important;
+      background: color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 62%, transparent) !important;
+      backdrop-filter: blur(18px) saturate(1.35) contrast(var(--frosted-glass-contrast, 1)) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(1.35) contrast(var(--frosted-glass-contrast, 1)) !important;
+      box-shadow: var(--ha-card-glass-inset-shadow), var(--frosted-glass-card-depth-shadow) !important;
+    }
+    .horizontal-buttons-stack-container .bubble-button .bubble-background-color {
+      border: var(--bubble-border, var(--ha-card-border)) !important;
+    }
+    .horizontal-buttons-stack-container .bubble-button.highlight {
+      animation: none !important;
+    }
+    .horizontal-buttons-stack-container .bubble-button.highlight .bubble-background {
+      background: color-mix(in srgb, var(--bubble-accent-color) 30%, color-mix(in srgb, var(--frosted-glass-menu-surface, var(--card-background-color)) 68%, transparent)) !important;
+    }
+    .horizontal-buttons-stack-container .bubble-button.highlight .bubble-background-color {
+      border: 1px solid color-mix(in srgb, var(--bubble-accent-color) 70%, transparent) !important;
+    }
+
+    /* Exclude separators from glass background and pseudo-element (keeps pill_separator ::before intact) */
+    :host(.type-custom-bubble-card) .bubble-separator,
+    .bubble-separator,
+    .bubble-container.bubble-separator {
+      background: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+    }
+    .bubble-separator::before,
+    .bubble-container.bubble-separator::before {
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Performance preservation: prevent sub-button/icon nested blur lag */
+    :host(.type-custom-bubble-card) .bubble-sub-button {
+      border-radius: var(--bubble-sub-button-border-radius, 20px) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    :host(.type-custom-bubble-card) .bubble-icon-container {
+      border-radius: var(--bubble-icon-border-radius, 50%) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+card_mod_root_append:
+  shared: |
+    :host {
+      --token-size-radius-small: 12px;
+      --token-size-radius-medium: 18px;
+      --token-size-radius-large: 28px;
+    }
+
+    /* =========================
+       BOTTOM NAVIGATION BAR
+       ========================= */
+    .header,
+    app-header {
+      top: auto !important;
+      bottom: 0 !important;
+      position: fixed !important;
+      left: var(--ha-sidebar-width, 0px) !important;
+      right: 0 !important;
+      width: calc(var(--ha-top-app-bar-width, 100%) - var(--safe-area-inset-right, 0px)) !important;
+      box-sizing: border-box !important;
+      transition: left var(--ha-animation-duration-normal, 250ms) ease, width var(--ha-animation-duration-normal, 250ms) ease !important;
+      padding-top: 0px !important;
+      padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    }
+
+    .narrow .header {
+      left: var(--ha-sidebar-width, 0px) !important;
+      width: calc(var(--ha-top-app-bar-width, 100%) - var(--safe-area-inset-left, 0px) - var(--safe-area-inset-right, 0px)) !important;
+      padding-left: var(--safe-area-inset-left) !important;
+    }
+
+    .edit-mode .header {
+      top: 0 !important;
+      bottom: auto !important;
+      padding-top: env(safe-area-inset-top, 0px) !important;
+      padding-bottom: 0px !important;
+      border-top: none !important;
+    }
+
+    #view,
+    hui-view-container,
+    hui-view-container.has-tab-bar,
+    ha-app-layout {
+      padding-top: calc(env(safe-area-inset-top, 0px) + var(--view-container-padding-top, 8px)) !important;
+      padding-bottom: calc(var(--header-height, 56px) + env(safe-area-inset-bottom, 0px) + 20px) !important;
+    }
+
+    .edit-mode #view,
+    .edit-mode hui-view-container {
+      padding-top: calc(var(--header-height, 56px) + var(--tab-bar-height, 56px) + env(safe-area-inset-top, 0px)) !important;
+      padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    }
+
+    /* Hide bottom navbar on mobile-dashboard (replaced by Bubble Card horizontal-buttons-stack),
+       while keeping edit-mode toolbar and other dashboards intact. */
+    div:not(.edit-mode) > .header:has(ha-tab-group ha-tab-group-tab:nth-of-type(6)),
+    div:not(.edit-mode) > .header:has(ha-icon[title="Hallway"]) {
+      display: none !important;
+    }
+
+    div:not(.edit-mode):has(> .header ha-tab-group ha-tab-group-tab:nth-of-type(6)) > #view,
+    div:not(.edit-mode):has(> .header ha-icon[title="Hallway"]) > #view {
+      padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    }
+  light: |
+    .header,
+    app-header {
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+      border-top: 0.5px solid var(--ha-card-border-color, rgba(255, 255, 255, 0.3)) !important;
+    }
+  dark: |
+    .header,
+    app-header {
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35) !important;
+      border-top: 0.5px solid var(--ha-card-border-color, rgba(255, 255, 255, 0.15)) !important;
+    }
