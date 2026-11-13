@@ -39,6 +39,7 @@ spec:
               mkdir -p /config/bubble_card/modules /config/www/themes
               cp -f /template/pill_separator.yaml /config/bubble_card/modules/pill_separator.yaml
               cp -f /template/patch_frosted_glass.py /config/patch_frosted_glass.py
+              cp -f /template/frosted-glass-overrides.yaml /config/frosted-glass-overrides.yaml
               cp -f /wallpapers/*.jpg /config/www/themes/
           volumeMounts:
             - name: config-template

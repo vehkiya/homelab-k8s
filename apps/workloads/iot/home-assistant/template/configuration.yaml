@@ -26,6 +26,9 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+shell_command:
+  patch_frosted_glass: "python3 /config/patch_frosted_glass.py"
+
 template:
   - trigger:
       - trigger: event
