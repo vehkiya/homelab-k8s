@@ -19,9 +19,8 @@ flows/cilium-network-policies.md.
 | cert-manager | `apps/system/networking/cert-manager` | cert-manager | - | Helm, CNP, ExtSecret | `ClusterIssuer`s with Cloudflare DNS-01 (`zerossl-issuer-cf-solver.yaml`, `acme-issuer-cf-solver.yaml`). Secrets from OpenBao `platform/cloudflare`, `platform/zerossl` |
 | keda | `apps/system/networking/keda` | networking | - | Helm, CNP | KEDA + HTTP add-on. Scale-to-zero apps route to Service `keda-add-ons-http-interceptor-proxy` in `networking`; `reference-grant.yaml` permits it |
 | multus | `apps/system/networking/multus` | kube-system | - | - | Secondary pod networks (remote manifest + patches); the only `NetworkAttachmentDefinition` is `apps/workloads/iot/home-assistant/nad.yaml`, attached by home-assistant, go2rtc, matter-server, otbr |
-| tailscale | `apps/system/networking/tailscale` | tailscale | - | Helm | Excluded from the ApplicationSet: not deployed |
 
-No tunnel is deployed: Tailscale is parked, and public traffic arrives through the DMZ gateway.
+Public traffic arrives through the DMZ gateway.
 
 ## Cilium datapath pointers
 
