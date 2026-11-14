@@ -70,14 +70,13 @@ spec:
             - port: "9443"
               protocol: "TCP"
 
-    # Rule 3: Allow trusted internal LAN, VLANs, and Tailscale VPN to internal web (8000), websecure (9443), and Plex (32443)
+    # Rule 3: Allow trusted internal LAN and VLANs to internal web (8000), websecure (9443), and Plex (32443)
     - fromCIDR:
         - "10.10.1.0/24"
         - "192.168.1.0/24"
         - "192.168.4.0/24"
         - "192.168.11.0/24"
         - "192.168.29.0/24"
-        - "100.64.0.0/10"
       toPorts:
         - ports:
             # === Internal web & websecure entrypoints ===

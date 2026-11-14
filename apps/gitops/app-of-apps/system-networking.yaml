@@ -10,8 +10,6 @@ spec:
         revision: HEAD
         directories:
           - path: apps/system/networking/*
-          - path: apps/system/networking/tailscale
-            exclude: true
   template:
     metadata:
       name: "{{path.basename}}"

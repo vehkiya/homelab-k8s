@@ -87,7 +87,7 @@ Variants of the stateful template:
 | Plain manifests without a `kustomization.yaml` | `apps/bootstrap/runtime` | Always a kustomization |
 | `.yml` extension, vendored upstream manifests | `apps/system/storage/synology-csi` | `.yaml`, remote resource or Helm |
 | Misleading file names (`ingress-route*.yaml` holding `HTTPRoute`) | `apps/bootstrap/argocd` | `http-route-eg.yaml` |
-| Excluded, unmaintained apps | `apps/workloads/automation/kestra`, `apps/system/observability/uptime`, `apps/system/networking/tailscale` | Not a template for anything |
+| Excluded, unmaintained apps | `apps/workloads/automation/kestra`, `apps/system/observability/uptime` | Not a template for anything |
 | `synology-iscsi*` StorageClasses | `apps/system/observability/uptime` | `longhorn-retain` or `synostorage-nfs` |
 
 ## 7. Before pushing

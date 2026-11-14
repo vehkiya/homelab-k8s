@@ -25,7 +25,6 @@
     <string>192.168.4.0/24</string>
     <string>192.168.11.0/24</string>
     <string>192.168.29.0/24</string>
-    <string>100.64.0.0/10</string>
   </LocalNetworkAddresses>
   <PublishedServerUrl>https://jellyfin.kerrlab.app</PublishedServerUrl>
   <TrustAllIP6Interfaces>true</TrustAllIP6Interfaces>

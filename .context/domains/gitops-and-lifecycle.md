@@ -31,7 +31,7 @@ Git-directory generators: a new directory under the glob becomes an Application 
 | `bootstrap.yaml` | `apps/bootstrap/*` | directory name (kustomization overrides) | auto |
 | `data-services.yaml` | `apps/data-services/*` | `data-services` | auto |
 | `system-hardware.yaml` | `apps/system/hardware/*` | directory name | auto |
-| `system-networking.yaml` | `apps/system/networking/*`, excludes tailscale | directory name | auto |
+| `system-networking.yaml` | `apps/system/networking/*` | directory name | auto |
 | `system-observability.yaml` | `apps/system/observability/*`, excludes uptime | `observability` | auto |
 | `system-security.yaml` | `apps/system/security/*` | `security` | auto |
 | `system-storage.yaml` | `apps/system/storage/*` | directory name | auto |
