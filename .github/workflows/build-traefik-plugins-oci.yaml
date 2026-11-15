@@ -31,7 +31,7 @@ jobs:
           - image_name: traefik-plugin-cloudflare-realip
             repo: hononeko/traefik-plugin-cloudflare-realip
             # renovate: datasource=github-releases depName=hononeko/traefik-plugin-cloudflare-realip
-            version: v0.1.1
+            version: v0.2.0
 
     steps:
       - name: Checkout repository
