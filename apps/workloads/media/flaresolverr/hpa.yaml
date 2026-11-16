@@ -11,6 +11,7 @@ spec:
   maxReplicas: 4
   behavior:
     scaleUp:
+      stabilizationWindowSeconds: 120
       policies:
         - type: Pods
           value: 1

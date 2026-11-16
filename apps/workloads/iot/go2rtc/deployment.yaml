@@ -27,7 +27,7 @@ spec:
           - cluster.local
         options:
           - name: ndots
-            value: "5"
+            value: "2"
       initContainers:
         - name: inject-secrets
           image: ghcr.io/hononeko/k8s-config-tools
