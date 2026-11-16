@@ -13,14 +13,11 @@ resources:
 
 images:
   - name: quay.io/argoproj/argocd
-    newName: dhi.io/argocd
-    newTag: 3.6.1@sha256:9a58e5dc12171799f5299c8dedfa730b115b1559b13d6cbd1615f7d5014399d2
+    newTag: v3.6.1@sha256:296e3d74f449b2ce45265613fcb68c18ed7366488360c8ea32f5f2a93d2e5c54
   - name: ghcr.io/dexidp/dex
-    newName: dhi.io/dex
-    newTag: 2.46.1@sha256:d8316d5e17de22a12af53e07553b903439df817bde402a082a9c3d4d103a4c2a
+    newTag: v2.46.1@sha256:65b72ca0f4b0bf6d4ada84ec21da8851782563404ac7b8f926923d27ceced9ab
   - name: public.ecr.aws/docker/library/redis
-    newName: dhi.io/redis
-    newTag: 8.10.3-compat@sha256:c58e073a534d7ed4c7ef96c087c03fe8bb56adad4e3629cdaac910c3bb072ffc
+    newTag: 8.10.3-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b1559b13d6cbd1615f7d5014399d2
 
 patches:
   - path: argocd-cm.yaml
