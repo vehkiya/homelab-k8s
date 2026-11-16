@@ -17,7 +17,7 @@ images:
   - name: ghcr.io/dexidp/dex
     newTag: v2.46.1@sha256:65b72ca0f4b0bf6d4ada84ec21da8851782563404ac7b8f926923d27ceced9ab
   - name: public.ecr.aws/docker/library/redis
-    newTag: 8.10.3-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b15938f0b1559b13d6cbd1615f7d5014399d2
+    newTag: 8.10.3-alpine@sha256:7958cfbb9d152f87dadfbc89f1b0b81ff8982feb327476f4911935c3
 
 patches:
   - path: argocd-cm.yaml
