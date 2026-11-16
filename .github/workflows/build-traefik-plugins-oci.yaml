@@ -23,7 +23,7 @@ jobs:
           - image_name: crowdsec-bouncer-traefik-plugin
             repo: maxlerebourg/crowdsec-bouncer-traefik-plugin
             # renovate: datasource=github-releases depName=maxlerebourg/crowdsec-bouncer-traefik-plugin
-            version: v1.8.1
+            version: v1.8.2
           - image_name: traefik-plugin-request-id
             repo: mdklapwijk/traefik-plugin-request-id
             # renovate: datasource=github-releases depName=mdklapwijk/traefik-plugin-request-id
