@@ -13,7 +13,7 @@ spec:
             app: go2rtc
       toPorts:
         - ports:
-            - port: "8123"
+            - port: "web-ui"
               protocol: TCP
     # === Allow access from n8n ===
     - fromEndpoints:
