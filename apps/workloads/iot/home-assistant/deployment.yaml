@@ -27,7 +27,7 @@ spec:
           - cluster.local
         options:
           - name: ndots
-            value: "5"
+            value: "2"
       initContainers:
         - name: prepare-config
           image: ghcr.io/hononeko/k8s-config-tools
