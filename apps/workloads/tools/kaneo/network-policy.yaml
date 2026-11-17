@@ -7,10 +7,10 @@ spec:
     matchLabels:
       app: kaneo
   ingress:
-    # 1. Allow agentic-ticket-proxy in automation namespace
+    # 1. Allow agentic-ticket-proxy in ai namespace
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: automation
+            k8s:io.kubernetes.pod.namespace: ai
             app: agentic-ticket-proxy
       toPorts:
         - ports:

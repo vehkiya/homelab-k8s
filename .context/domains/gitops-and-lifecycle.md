@@ -35,6 +35,7 @@ Git-directory generators: a new directory under the glob becomes an Application 
 | `system-observability.yaml` | `apps/system/observability/*`, excludes uptime | `observability` | auto |
 | `system-security.yaml` | `apps/system/security/*` | `security` | auto |
 | `system-storage.yaml` | `apps/system/storage/*` | directory name | auto |
+| `workloads-ai.yaml` | `apps/workloads/ai/*` | `ai` | auto |
 | `workloads-automation.yaml` | `apps/workloads/automation/*`, excludes kestra | `automation` | auto |
 | `workloads-comms.yaml` | `apps/workloads/comms/*` | `comms` | auto |
 | `workloads-home.yaml` | `apps/workloads/home/*` | `home` | auto |
