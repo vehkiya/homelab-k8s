@@ -6,6 +6,16 @@ spec:
   endpointSelector:
     matchLabels:
       app: agentic-ticket-proxy
+  ingress:
+    # Allow Kaneo webhook callbacks from tools namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tools
+            app: kaneo
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     # 1. PostgreSQL on Fortress
     - toCIDR:

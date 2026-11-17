@@ -74,6 +74,8 @@ spec:
               value: "/home/agent/.config/gh/gitconfig"
             - name: KANEO_BASE_URL
               value: "http://kaneo.tools.svc.cluster.local:5173"
+            - name: KANEO_POLL_INTERVAL_SECONDS
+              value: "300"
             - name: TELEGRAM_ALLOWED_USER_IDS
               value: "369764187"
             - name: DATABASE_URL
