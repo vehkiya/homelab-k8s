@@ -6,6 +6,16 @@ spec:
   endpointSelector:
     matchLabels:
       app: kaneo
+  ingress:
+    # 1. Allow agentic-ticket-proxy in automation namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app: agentic-ticket-proxy
+      toPorts:
+        - ports:
+            - port: "5173"
+              protocol: TCP
   egress:
     # 1. Connection to PostgreSQL and S3 on Fortress
     - toCIDR:

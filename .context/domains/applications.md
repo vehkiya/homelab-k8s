@@ -86,5 +86,6 @@ New minecraft overlay or game server = new element in `apps/gitops/app-of-apps/w
 | ntfy | `apps/workloads/automation/ntfy` | automation | - | HTTPRoute, Middleware, SecPol, BTP, CNP, ExtSecret, PVC | Push notifications, DMZ. Publishers must be listed in its `network-policy.yaml` (media apps, home-assistant, n8n) |
 | renovate | `apps/workloads/automation/renovate` | automation | - | HTTPRoute, Middleware, BTP, CNP, ExtSecret | Renovate server + Redis; GitHub webhooks on DMZ. Rules in `renovate.json` |
 | koshin | `apps/workloads/automation/koshin` | automation | - | Helm, HTTPRoute, BTP, CNP, ExtSecret | Shares host and OpenBao path with renovate. Chart-managed Valkey + NATS |
+| agentic-ticket-proxy | `apps/workloads/automation/agentic-ticket-proxy` | automation | - | CNP, ExtSecret, PVC | Outbound ticket/PR orchestrator. PG, calls kaneo + GitHub + Telegram |
 | kestra | `apps/workloads/automation/kestra` | automation | - | HTTPRoute, CNP, ExtSecret | Excluded from the ApplicationSet: not deployed |
 | fluxer | `apps/workloads/comms/fluxer` | comms | 1,2 | HTTPRoute, Middleware, SecPol, BTP, CNP, ExtSecret | Chat platform, many components ordered by sync-wave. OIDC, PG, S3, shared meilisearch, LiveKit media ports, DMZ |
