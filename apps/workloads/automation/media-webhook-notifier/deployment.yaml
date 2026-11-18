@@ -102,5 +102,5 @@ spec:
               memory: "128Mi"
       volumes:
         - name: config
-          configMap:
-            name: media-webhook-notifier-config
+          secret:
+            secretName: media-webhook-notifier-templates
