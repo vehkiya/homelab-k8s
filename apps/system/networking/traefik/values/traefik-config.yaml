@@ -23,7 +23,7 @@ deployment:
     - name: crowdsec-plugin-vol
       image:
         # renovate: datasource=docker depName=ghcr.io/vehkiya/crowdsec-bouncer-traefik-plugin
-        reference: ghcr.io/vehkiya/crowdsec-bouncer-traefik-plugin:v1.8.1
+        reference: ghcr.io/vehkiya/crowdsec-bouncer-traefik-plugin:v1.8.2
     - name: requestid-plugin-vol
       image:
         # renovate: datasource=docker depName=ghcr.io/vehkiya/traefik-plugin-request-id
@@ -31,7 +31,7 @@ deployment:
     - name: realip-plugin-vol
       image:
         # renovate: datasource=docker depName=ghcr.io/vehkiya/traefik-plugin-cloudflare-realip
-        reference: ghcr.io/vehkiya/traefik-plugin-cloudflare-realip:v0.1.1
+        reference: ghcr.io/vehkiya/traefik-plugin-cloudflare-realip:v0.2.0
     - name: crowdsec-bouncer-key-vol
       secret:
         secretName: crowdsec-bouncer-key
