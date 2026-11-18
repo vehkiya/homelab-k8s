@@ -62,5 +62,6 @@ Every app whose Contracts column lists `ExtSecret` depends on `ClusterSecretStor
 | `platform/security/crowdsec` | traefik (bouncer key) |
 | `automation/renovate` | renovate, koshin |
 | `media/kometa` | kometa, imagemaid |
+| `telegram/bots`, `telegram/channels` | prometheus, agentic-ticket-proxy, media-webhook-notifier |
 
 Wiring details: flows/storage-and-secrets.md.

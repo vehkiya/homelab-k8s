@@ -57,6 +57,8 @@ spec:
               value: "redis"
             - name: STATE_URL
               value: "redis://media-webhook-notifier-dragonfly.automation.svc.cluster.local:6379"
+            - name: DOWNLOAD_CLIENT_DEBOUNCE_SECONDS
+              value: "15"
             - name: TEMPLATES_FILE
               value: "/config/templates.yaml"
             # Telegram inline-button handling (callback queries) via webhook; see
