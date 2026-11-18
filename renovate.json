@@ -79,6 +79,16 @@
       "automerge": true
     },
     {
+      "description": "Exclude stability period (minimumReleaseAge) for vehkiya/* and hononeko/* images",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "/^(?:[^/]+/)?(?:vehkiya|hononeko)//"
+      ],
+      "minimumReleaseAge": null
+    },
+    {
       "groupName": "argocd",
       "matchPackageNames": [
         "quay.io/argoproj/argocd",
