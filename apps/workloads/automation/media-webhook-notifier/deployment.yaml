@@ -55,6 +55,14 @@ spec:
               value: "Kerrlab Plex"
             - name: MEDIA_SERVER_STATUS_MONITOR_ENABLED
               value: "true"
+            - name: MEDIA_SERVER_STATUS_POLL_INTERVAL_SECONDS
+              value: "30"
+            - name: MEDIA_SERVER_STATUS_GRACE_SECONDS
+              value: "90"
+            - name: MEDIA_SERVER_STATUS_REFRESH_SECONDS
+              value: "300"
+            - name: MEDIA_SERVER_STATUS_RECOVERY_SECONDS
+              value: "3600"
             - name: LOG_LEVEL
               value: "INFO"
             - name: STATE_TYPE
