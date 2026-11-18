@@ -25,4 +25,4 @@ images:
   - name: openthread/border-router
     newTag: v2026.11.0@sha256:5ae17855e42000abce4420098c3cc0f16d8b7cf3745ee091810afad75b37d1cc
   - name: ghcr.io/hononeko/thread-udp-proxy
-    newTag: 1.0.1@sha256:1dafd1c4def45a15a3becec155db90c7a67795f58c922a1560d4ace727619e1d
+    newTag: 1.1.0@sha256:145b255b68cadcf4b8ee05f2f313a867106281cd07b72b385c6c8f4a91929296
