@@ -1,0 +1,46 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: agentic-ticket-proxy-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: agentic-ticket-proxy
+  ingress:
+    # Allow Kaneo webhook callbacks from tools namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tools
+            app: kaneo
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    # 1. PostgreSQL on Fortress
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
+    # 2. Kaneo API in tools namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tools
+            app: kaneo
+      toPorts:
+        - ports:
+            - port: "5173"
+              protocol: TCP
+    # 3. Internet egress (GitHub HTTPS/SSH, Telegram Bot API, Claude/Antigravity APIs)
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "80"
+              protocol: TCP
+            - port: "22"
+              protocol: TCP

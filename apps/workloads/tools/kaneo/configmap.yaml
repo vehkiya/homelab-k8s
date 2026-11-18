@@ -30,3 +30,4 @@ data:
   # 10.244.0.0/16: pod CIDR, where Traefik connects from.
   TRUSTED_PROXIES: "127.0.0.0/8, ::1/128, 10.244.0.0/16"
   REDIS_URL: "redis://kaneo-valkey:6379"
+  KANEO_ALLOW_PRIVATE_WEBHOOK_DESTINATIONS: "true"

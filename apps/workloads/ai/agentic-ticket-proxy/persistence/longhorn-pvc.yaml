@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: atp-cli-credentials-pvc
+  labels:
+    app: agentic-ticket-proxy
+    recurring-job.longhorn.io/source: "enabled"
+    recurring-job.longhorn.io/daily-s3-backup: "enabled"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: longhorn-retain
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: atp-worktrees-data-pvc
+  labels:
+    app: agentic-ticket-proxy
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: longhorn-retain
+  volumeMode: Filesystem

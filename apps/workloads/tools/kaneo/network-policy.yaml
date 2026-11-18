@@ -6,6 +6,16 @@ spec:
   endpointSelector:
     matchLabels:
       app: kaneo
+  ingress:
+    # 1. Allow agentic-ticket-proxy in ai namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ai
+            app: agentic-ticket-proxy
+      toPorts:
+        - ports:
+            - port: "5173"
+              protocol: TCP
   egress:
     # 1. Connection to PostgreSQL and S3 on Fortress
     - toCIDR:
@@ -32,6 +42,15 @@ spec:
       toPorts:
         - ports:
             - port: "6379"
+              protocol: TCP
+    # 4. Outbound webhooks to Agentic Ticket Proxy in ai namespace
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ai
+            app: agentic-ticket-proxy
+      toPorts:
+        - ports:
+            - port: "8080"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2

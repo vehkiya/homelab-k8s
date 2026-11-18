@@ -66,10 +66,11 @@ its own claim from `intel-gpu-claim-template`.
 
 New minecraft overlay or game server = new element in `apps/gitops/app-of-apps/workloads-games.yaml`.
 
-## Self-Hosted Utilities & Dev Tools (namespaces `tools`, `automation`, `comms`)
+## Self-Hosted Utilities & Dev Tools (namespaces `ai`, `tools`, `automation`, `comms`)
 
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
 |---|---|---|---|---|---|
+| agentic-ticket-proxy | `apps/workloads/ai/agentic-ticket-proxy` | ai | - | CNP, ExtSecret, PVC | Outbound ticket/PR orchestrator. PG, OpenBao `automation/agentic-ticket-proxy`, calls kaneo + GitHub + Telegram |
 | launchpad | `apps/workloads/tools/launchpad` | tools | - | HTTPRoute, Middleware, BTP, CNP, PVC | Dashboard on the apex domain (own gateway listener). FA, own Valkey, reads the kube-apiserver |
 | whoami | `apps/workloads/tools/whoami` | tools | - | HTTPRoute, Middleware, BTP, KEDA-HTTP, CNP | Edge test target (FA, DMZ, rate limit). Also instantiates the Traefik forward-auth Component for `tools` |
 | it-tools | `apps/workloads/tools/it-tools` | tools | - | HTTPRoute, KEDA-HTTP, CNP | Stateless, scale-to-zero. Golden stateless template |

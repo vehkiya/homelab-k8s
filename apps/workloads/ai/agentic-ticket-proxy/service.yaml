@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agentic-ticket-proxy
+  labels:
+    app: agentic-ticket-proxy
+spec:
+  type: ClusterIP
+  selector:
+    app: agentic-ticket-proxy
+  ports:
+    - name: http-api
+      port: 8080
+      targetPort: http-api
+      protocol: TCP
