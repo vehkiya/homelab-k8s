@@ -26,8 +26,8 @@ labels:
       app.kubernetes.io/name: plex
       app.kubernetes.io/part-of: media-services
 images:
-  - name: plexinc/pms-docker
-    newTag: 1.43.5.11079-b3b13e506@sha256:6d778d41daae68f89115aa87a44ae14a96b23e71a2093da173b5a9aac4091336
+  - name: ghcr.io/home-operations/plex-next
+    newTag: 1.43.5.11079@sha256:4f9aa7fd981d03eca29a98e29159b5273ed411f4a61ec8c70a57c11343355d04
   - name: alpine
     newTag: latest@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf
   - name: ghcr.io/hononeko/k8s-backup-tools

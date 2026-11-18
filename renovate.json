@@ -178,10 +178,9 @@
         "docker"
       ],
       "matchPackageNames": [
-        "plexinc/pms-docker"
+        "ghcr.io/home-operations/plex-next"
       ],
-      "versioning": "loose",
-      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-[0-9a-f]+$/"
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$/"
     },
     {
       "description": "Open and update Plex PRs only between 03:00 and 12:00 so platform automerge lands outside playback hours; own branches so images shared with other apps (k8s-backup-tools) don't bypass the window",
