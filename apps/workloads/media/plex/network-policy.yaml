@@ -55,6 +55,9 @@ spec:
             app: kometa
         - matchLabels:
             app: imagemaid
+        - matchLabels:
+            app.kubernetes.io/name: media-webhook-notifier
+            k8s:io.kubernetes.pod.namespace: automation
       toPorts:
         - ports:
             - port: web-ui

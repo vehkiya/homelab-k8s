@@ -57,6 +57,15 @@ spec:
         - ports:
             - port: "5055"
               protocol: TCP
+    # Allow Plex health polling (/identity) for the pinned server status message
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: plex
+      toPorts:
+        - ports:
+            - port: "32400"
+              protocol: TCP
     # Allow communication to local Dragonfly cache
     - toEndpoints:
         - matchLabels:
