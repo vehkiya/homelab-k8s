@@ -26,7 +26,7 @@ spec:
               protocol: TCP
             - port: "8333"
               protocol: TCP
-    # 2. Outbound internet access (OIDC/S3/webhooks)
+    # 2. Outbound internet access (OIDC/S3/webhooks/SMTP)
     - toEntities:
         - "world"
       toPorts:
@@ -34,6 +34,8 @@ spec:
             - port: "80"
               protocol: TCP
             - port: "443"
+              protocol: TCP
+            - port: "587"
               protocol: TCP
     # 3. Connection to Valkey
     - toEndpoints:
