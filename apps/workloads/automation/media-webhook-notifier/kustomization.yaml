@@ -4,6 +4,7 @@ namespace: automation
 
 resources:
   - deployment.yaml
+  - pdb.yaml
   - service.yaml
   - secret.yaml
   - network-policy.yaml
