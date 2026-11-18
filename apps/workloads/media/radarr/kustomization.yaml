@@ -16,7 +16,7 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: ghcr.io/home-operations/radarr
-    newTag: 7.0.2@sha256:69ea515df6e2a3ea1490cfa127ffaaf9597a9db84fffa2fa150a6fae98fe04cb
+    newTag: 7.0.3@sha256:55d3cf8a4c4c531bb8b5c1ba88eb270d4435e01e228fbdb16cdfc910a17e3b06
   - name: ghcr.io/hononeko/k8s-config-tools
     newTag: 0.1.2@sha256:659cbeceefffbfd34b98957d3c6d5e3f0ac6a5fb3887efe4c4bbbe45787cc75f
 
