@@ -16,4 +16,4 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/agentic-ticket-proxy
-    newTag: 0.1.0@sha256:313b651dcf3c08421b388356f528119b0935b3849b6e52e5e95d8e215e91ae13
+    newTag: 0.2.0@sha256:c61d7dc36cd748a0a255a813f47c79e4db1a8b64745cff35ebebc36c59e8125c
