@@ -31,6 +31,6 @@ labels:
       app.kubernetes.io/part-of: media-services
 images:
   - name: ghcr.io/hononeko/k8s-config-tools
-    newTag: 0.1.1@sha256:fb03e8e7910a51472309b361675f38da44ee398ab6ec64b020b660d4d0d4e400
+    newTag: 0.1.2@sha256:659cbeceefffbfd34b98957d3c6d5e3f0ac6a5fb3887efe4c4bbbe45787cc75f
   - name: kometateam/kometa
     newTag: v2.5.5@sha256:864cec57d099c71a26a5a5ce2784d34d9b53874c91269c3a12df3949eab96562
