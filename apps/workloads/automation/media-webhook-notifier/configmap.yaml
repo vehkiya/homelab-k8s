@@ -6,14 +6,30 @@ metadata:
     app.kubernetes.io/name: media-webhook-notifier
 data:
   templates.yaml: |
+    theme:
+      max_overview_length: 150
     events:
       download:
         complete:
           silent: true
+          image_embed: false
       servarr:
         grab:
           silent: true
+          image_embed: false
         import:
           silent: true
         health:
           silent: true
+      media_server:
+        available:
+          silent: false
+          image_embed: true
+          title: "🍿 {title}"
+          subtitle: "Now available on {media_server_name}"
+          body: |
+            ▪ <b>Specs:</b> {specs}
+            ▪ <b>Rating:</b> {rating}
+            ▪ <b>Duration:</b> {duration}
+
+            <i>{overview}</i>
