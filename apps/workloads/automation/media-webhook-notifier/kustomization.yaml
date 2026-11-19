@@ -18,5 +18,12 @@ resources:
 images:
   - name: ghcr.io/hononeko/media-webhook-notifier
     newTag: 2.18.1@sha256:4b79f737537f7adc1d13c8c08a96797338f0acabc2f73c9b650b102503ce3e7a
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.2@sha256:659cbeceefffbfd34b98957d3c6d5e3f0ac6a5fb3887efe4c4bbbe45787cc75f
   - name: ghcr.io/dragonflydb/dragonfly
     newTag: v2.1.0@sha256:94891bb22ce2fb0f7a5a3ff1bb3b2fbbc5830e2523293e47723d87fa3e5b1184
+
+configMapGenerator:
+  - name: media-webhook-notifier-templates
+    files:
+      - templates.yaml=templates/templates.yaml

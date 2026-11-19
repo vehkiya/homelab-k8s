@@ -33,7 +33,41 @@ spec:
       securityContext:
         runAsUser: 65532
         runAsGroup: 65532
+        fsGroup: 65532
         runAsNonRoot: true
+      initContainers:
+        - name: inject-secrets
+          image: ghcr.io/hononeko/k8s-config-tools
+          command:
+            - gomplate
+            - -f
+            - /template/templates.yaml
+            - -o
+            - /config/templates.yaml
+          envFrom:
+            - secretRef:
+                name: media-webhook-notifier-secret
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: templates-template
+              mountPath: /template
+              readOnly: true
+            - name: config
+              mountPath: /config
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "32Mi"
       containers:
         - name: notifier
           image: ghcr.io/hononeko/media-webhook-notifier
@@ -127,6 +161,8 @@ spec:
               cpu: "200m"
               memory: "128Mi"
       volumes:
+        - name: templates-template
+          configMap:
+            name: media-webhook-notifier-templates
         - name: config
-          secret:
-            secretName: media-webhook-notifier-templates
+          emptyDir: {}

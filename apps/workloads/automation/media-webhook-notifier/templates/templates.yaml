@@ -1,0 +1,43 @@
+theme:
+  max_overview_length: 150
+events:
+  download:
+    complete:
+      silent: true
+      image_embed: false
+      body: |
+        ▪ <b>Release:</b> {release_name}
+        ▪ <b>Tracker:</b> {indexer}
+        ▪ <b>Status:</b> 100% Downloaded
+        ▪ <b>Total Size:</b> {total_size}
+  servarr:
+    grab:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+      topic_id: 4
+      silent: true
+      image_embed: false
+    import:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+      silent: true
+    manual_interaction:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+    health:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+      silent: true
+  seerr:
+    request:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+    issue:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+  media_server:
+    available:
+      silent: false
+      image_embed: true
+      title: "🍿 {title}"
+      subtitle: "Now available on {media_server_name}"
+      body: |
+        ▪ <b>Specs:</b> {specs}
+        ▪ <b>Rating:</b> {rating}
+        ▪ <b>Duration:</b> {duration}
+
+        <i>{overview}</i>
