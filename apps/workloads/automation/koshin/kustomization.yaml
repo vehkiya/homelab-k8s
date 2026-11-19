@@ -5,7 +5,7 @@ namespace: automation
 helmCharts:
   - name: koshin
     repo: oci://ghcr.io/hononeko/charts
-    version: 0.22.1
+    version: 0.22.2
     releaseName: koshin
     namespace: automation
     # The ha profile, with this install's settings layered on top
@@ -23,9 +23,9 @@ resources:
 
 images:
   - name: ghcr.io/hononeko/koshin-proxy
-    newTag: 0.22.1@sha256:47f6765edc9bfa680e2dddd777a224654788ee3829b09818787ad3d135f6be7f
+    newTag: 0.22.2@sha256:f19a23d9c707d9452bf979556d871f4229746dd4c0e944fa4073bf9123b59898
   - name: ghcr.io/hononeko/koshin-worker
-    newTag: 0.22.1@sha256:cdf20617d6dd3c41745b5dd1e74eae7086e4f4b64a500de72f5f28717f0e5097
+    newTag: 0.22.2@sha256:5b16cf5a606d4de3e2e470c3fc9499ec369a87eafd69f6e21fe2cfc06b3fb75d
   - name: ghcr.io/renovatebot/renovate
     newTag: 44.252.7-full@sha256:956360c21b3c9873c65dd9d78e8e92e028db42d75c335f4f246ce988fe8ab4a6
   - name: nats
