@@ -17,9 +17,10 @@ import (
 )
 
 const (
-	appSetDir  = "apps/gitops/app-of-apps"
-	contextDir = ".context"
-	maxLines   = 150
+	appSetDir   = "apps/gitops/app-of-apps"
+	contextDir  = ".context"
+	sourceRepos = ".context/domains/source-repos.md"
+	maxLines    = 150
 )
 
 // status values
@@ -66,6 +67,7 @@ var (
 	pathTokRe = regexp.MustCompile("(?:apps|infra|\\.github|\\.context)/[\\w./-]*[\\w/]")
 	digestRe  = regexp.MustCompile(`sha256:[0-9a-f]{12,}`)
 	tagRe     = regexp.MustCompile(`[\w/-]:v?\d+\.\d+\.\d+`)
+	ownImgRe  = regexp.MustCompile(`ghcr\.io/(?:hononeko|vehkiya)/([a-z0-9._/-]*[a-z0-9])`)
 )
 
 func main() {
@@ -370,6 +372,8 @@ func runCheck(apps []*app) int {
 		}
 	}
 
+	problems = append(problems, checkSourceRepos()...)
+
 	var all []string
 	filepath.WalkDir(contextDir, func(p string, d os.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && filepath.Ext(p) == ".md" {
@@ -408,4 +412,54 @@ func runCheck(apps []*app) int {
 	}
 	fmt.Printf("OK: All %d apps are indexed in .context/domains/*.md\n", len(apps))
 	return 0
+}
+
+// checkSourceRepos reports in-house images that source-repos.md does not list.
+func checkSourceRepos() []string {
+	b, err := os.ReadFile(sourceRepos)
+	if err != nil {
+		return []string{fmt.Sprintf("missing: %s (%v)", sourceRepos, err)}
+	}
+	listed := string(b)
+	found := map[string]string{}
+	visit := func(p string) {
+		if ext := filepath.Ext(p); ext != ".yaml" && ext != ".yml" && ext != ".json" {
+			return
+		}
+		data, err := os.ReadFile(p)
+		if err != nil {
+			return
+		}
+		for _, m := range ownImgRe.FindAllStringSubmatch(string(data), -1) {
+			name := m[1]
+			if name == "charts" {
+				continue
+			}
+			if _, ok := found[name]; !ok {
+				found[name] = p
+			}
+		}
+	}
+	for _, root := range []string{"apps", "infra"} {
+		filepath.WalkDir(root, func(p string, d os.DirEntry, err error) error {
+			if err == nil && !d.IsDir() {
+				visit(p)
+			}
+			return nil
+		})
+	}
+	visit("renovate.json")
+
+	var names []string
+	for n := range found {
+		names = append(names, n)
+	}
+	sort.Strings(names)
+	var problems []string
+	for _, n := range names {
+		if !strings.Contains(listed, "`"+n+"`") {
+			problems = append(problems, fmt.Sprintf("unmapped image: ghcr.io/.../%s (first seen in %s) -> add its source repo to %s", n, found[n], sourceRepos))
+		}
+	}
+	return problems
 }

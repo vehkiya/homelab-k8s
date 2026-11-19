@@ -12,7 +12,8 @@ It never stores versions, tags, replicas or limits; read those from the YAML it 
 1. **No blind grepping.** Before searching `apps/`, read the matching file below to get the
    path and contracts in one hop, then open the target manifests directly.
 2. **Keep it in sync.** When an app is added, removed, renamed or re-wired (namespace, auth,
-   storage, dependencies), update its row in `.context/domains/*.md` in the same change and run
+   storage, dependencies), update its row in `.context/domains/*.md` in the same change (a new
+   in-house image also needs a row in `source-repos.md`) and run
    `go run .context/sync-inventory.go --check` until it prints `OK`. Without `--check` the
    script prints the inventory derived from the ApplicationSets.
 
@@ -25,6 +26,7 @@ It never stores versions, tags, replicas or limits; read those from the YAML it 
 | `.context/domains/storage-and-databases.md` | Longhorn, Synology CSI, StorageClasses, shared volumes, NAS databases and their consumers |
 | `.context/domains/monitoring.md` | Prometheus, Grafana dashboards, alert rules, scrape targets |
 | `.context/domains/applications.md` | Any workload under `apps/workloads/` and its links to other apps |
+| `.context/domains/source-repos.md` | Source code behind an in-house `ghcr.io/hononeko/*` image or chart: which repo, how to fetch it, who consumes it |
 | `.context/flows/cilium-network-policies.md` | Writing or debugging a `CiliumNetworkPolicy`; label contracts and selectors per traffic flow |
 | `.context/flows/ingress-and-auth.md` | Routes, gateway listeners, TLS, forward-auth or OIDC, DMZ exposure |
 | `.context/flows/storage-and-secrets.md` | Choosing a StorageClass, backup labels, wiring an `ExternalSecret` |
