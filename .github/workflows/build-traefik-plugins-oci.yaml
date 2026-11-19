@@ -75,3 +75,5 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image_name }}:${{ matrix.version }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ matrix.repo }}

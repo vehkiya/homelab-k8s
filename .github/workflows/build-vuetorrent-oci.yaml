@@ -71,3 +71,5 @@ jobs:
           context: workspace
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version || env.VUETORRENT_VERSION }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/VueTorrent/VueTorrent
