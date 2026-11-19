@@ -53,6 +53,6 @@ images:
   - name: alpine/k8s
     newTag: 1.37.2@sha256:7a82aeefea3d554a43a8676b137f2b88bae6c1fe11c13862b191b3a086cc28c0
   - name: ghcr.io/hononeko/cs-edl-bouncer
-    newTag: 0.6.0@sha256:268c7e9bb50d5fdd6eedf6bfd677b6ddbd226049078346be7406e71c1faeeff3
+    newTag: 0.6.1@sha256:f8dfaf9d1e6a45adb7aa07d79283383b455ec0d53b0cec276573a9ebb9633ea8
   - name: ghcr.io/kdwils/envoy-proxy-bouncer
     newTag: v0.8.4@sha256:3c7ff986f04c5f1739989463d2e9553f0e7163f9a55d02d240ed6e794e4078f0
