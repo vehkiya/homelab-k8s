@@ -36,4 +36,4 @@ images:
   - name: ghcr.io/karlomikus/salt-rim
     newTag: 5.11.0@sha256:7aa57a94f7cd8b2456c44881254937d28e0b5ed897e299b05a4624ca7d822317
   - name: docker.io/valkey/valkey
-    newTag: 9.1.4@sha256:3ab0eca823ebbf0fe352476ebac330ac9e5f14b592b9a954eab296d341e81b0e
+    newTag: 9.2.0@sha256:1c2b25b09f354c66fe994733acdf12fcfd4bdf6f3bd92b88a93a70378d884056
