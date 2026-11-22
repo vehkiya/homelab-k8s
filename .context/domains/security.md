@@ -42,7 +42,7 @@ Group taxonomy and the registration procedure are in AGENTS.md section 9. Edit p
 
 | Mechanism | Downstream apps |
 |---|---|
-| Native OIDC (pod label `networking/oidc-client: "true"`) | argocd, headlamp, bar-assistant, mealie, autobrr, romm, nodecast-tv, fluxer, kaneo, penpot; off-cluster: openbao, arcane |
+| Native OIDC (pod label `networking/oidc-client: "true"`) | argocd, headlamp, bar-assistant, mealie, autobrr, romm, nodecast-tv, fluxer, kaneo, penpot, miru; off-cluster: openbao, arcane |
 | Forward-auth, privileged tier (`administrators`, `privileged-users`) | prowlarr, qbittorrent, sonarr, radarr, bazarr, posterizarr, unpackerr, z2mqtt, go2rtc, matter-server |
 | Forward-auth, admin only | longhorn UI, Traefik dashboard |
 | Forward-auth, catch-all `users` tier | whoami, launchpad (apex domain) |

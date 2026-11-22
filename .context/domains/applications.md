@@ -18,7 +18,7 @@ its own claim from `intel-gpu-claim-template`.
 | App | Path | Namespace | Wave | Contracts | Upstream Dependencies & Notes |
 |---|---|---|---|---|---|
 | common | `apps/workloads/media/common` | media | - | Middleware | Only instantiates the legacy Traefik forward-auth Component for the namespace |
-| plex | `apps/workloads/media/plex` | media | - | HTTPRoute, Middleware, BTP, CNP, ExtSecret, PVC, PV, CronJob | `media-pvc`, GPU claim, NFS backup volume. Own `plex` listener on both gateways (DMZ). API consumers: tautulli, kometa, imagemaid, posterizarr, bazarr, seerr, sonarr, radarr, home-assistant |
+| plex | `apps/workloads/media/plex` | media | - | HTTPRoute, Middleware, BTP, CNP, ExtSecret, PVC, PV, CronJob | `media-pvc`, GPU claim, NFS backup volume. Own `plex` listener on both gateways (DMZ). API consumers: tautulli, kometa, imagemaid, posterizarr, bazarr, seerr, sonarr, radarr, home-assistant, miru |
 | jellyfin | `apps/workloads/media/jellyfin` | media | - | HTTPRoute, Middleware, SecPol, BTP, CNP, ExtSecret, PVC | `media-pvc`, GPU claim, LDAP against lldap, DMZ. Consumers: bazarr, seerr, home-assistant |
 | sonarr | `apps/workloads/media/sonarr` | media | - | HTTPRoute, CNP, ExtSecret, PVC | Two instances (tv, anime) + portal under one host. PG, FA, `media-pvc`. Callers: prowlarr, bazarr, autobrr, kometa, recyclarr, seerr, unpackerr, posterizarr. Download client: qbittorrent |
 | radarr | `apps/workloads/media/radarr` | media | - | HTTPRoute, CNP, ExtSecret, PVC | PG, FA, `media-pvc`. Same callers and download client as sonarr |
@@ -35,6 +35,7 @@ its own claim from `intel-gpu-claim-template`.
 | recyclarr | `apps/workloads/media/recyclarr` | media | - | CNP, ExtSecret, CronJob | Syncs quality profiles into sonarr (both instances) and radarr via API keys |
 | unpackerr | `apps/workloads/media/unpackerr` | media | - | HTTPRoute, CNP, ExtSecret | FA. `media-pvc`; calls sonarr, radarr |
 | nodecast-tv | `apps/workloads/media/nodecast-tv` | media | - | HTTPRoute, KEDA-HTTP, CNP, ExtSecret, PVC | OIDC, scale-to-zero, GPU claim |
+| miru | `apps/workloads/media/miru` | media | - | HTTPRoute, CNP, ExtSecret | `miru.kerrlab.app`. OIDC, SQLite on emptyDir. Calls plex |
 | media-webhook-notifier | `apps/workloads/automation/media-webhook-notifier` | automation | - | HTTPRoute, Middleware, BTP, CNP, ExtSecret | Receives webhooks from sonarr, radarr, seerr, plex, jellyfin, qbittorrent. Own Dragonfly. DMZ |
 
 ## Home & IoT (namespaces `home`, `iot`)

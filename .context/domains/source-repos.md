@@ -37,6 +37,7 @@ release tag. Renovate then opens the bump PR here (`renovate.json`). Pin stable 
 | `qbit-ntfy-sidecar` | `hononeko/qbit-ntfy-sidecar` | Go | public | Sidecar in `apps/workloads/media/qbittorrent` |
 | `cs-edl-bouncer` | `hononeko/cs-edl-bouncer` | Go | public | Blocklist mirror and UniFi sync in `apps/system/security/crowdsec` |
 | `homelab-launchpad` | `hononeko/homelab-launchpad` | TypeScript | public | `apps/workloads/tools/launchpad` |
+| `miru` | `hononeko/miru` | Kotlin | public | `apps/workloads/media/miru` |
 | `traefik-plugin-cloudflare-realip` (`ghcr.io/vehkiya/...`) | `hononeko/traefik-plugin-cloudflare-realip` | Go | public | Packaged by `.github/workflows/build-traefik-plugins-oci.yaml`; loaded in `apps/system/networking/traefik/values` |
 
 ## Repackaged Upstream Artifacts (not in-house)
