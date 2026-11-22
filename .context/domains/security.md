@@ -56,7 +56,7 @@ Every app whose Contracts column lists `ExtSecret` depends on `ClusterSecretStor
 
 | OpenBao path | Consumers |
 |---|---|
-| `security/authelia/oidc-clients` | authelia, penpot |
+| `security/authelia/oidc-clients` | authelia (digests only; workloads read plaintext from their own path) |
 | `platform/s3/backup-filers` | longhorn, tofu-sync, kaneo, penpot |
 | `platform/cloudflare`, `platform/zerossl` | cert-manager |
 | `platform/security/crowdsec` | traefik (bouncer key) |

@@ -273,9 +273,9 @@ The cluster operates on a hybrid two-layer RBAC model consisting of **Global Lif
 When integrating a workload via native OIDC in `apps/system/security/authelia/templates/configuration.yaml`:
 
 1. **Secret Management:**
-   * Generate an OIDC client secret and store it in OpenBao at `security/authelia/oidc-clients` under the key `<CLIENT>_SECRET`.
+   * Generate an OIDC client secret. Store its digest (argon2id or pbkdf2) in OpenBao at `security/authelia/oidc-clients` under the key `<CLIENT>_SECRET`, and the plaintext at the workload's own path (e.g. `tools/<app>`).
    * Add the property reference to [`apps/system/security/authelia/oidc-secrets.yaml`](apps/system/security/authelia/oidc-secrets.yaml).
-   * In the target workload, inject the secret using an `ExternalSecret` pointing to `tools/<app>` or `security/authelia/oidc-clients`.
+   * In the target workload, inject the plaintext using an `ExternalSecret` pointing to the workload's own path. Never read `security/authelia/oidc-clients` from a workload: it holds only digests, and the token endpoint rejects a digest with `invalid_client`.
 2. **Authorization Policies:**
    * **Admin Only:** Use `admin_only_policy` (e.g. OpenBao, Headlamp).
    * **Privileged Only:** Use `privileged_users_policy` (or a dedicated policy like `autobrr_policy`).
