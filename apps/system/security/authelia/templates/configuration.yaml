@@ -354,6 +354,13 @@ identity_providers:
           - policy: 'two_factor'
             subject:
               - ["group:app-penpot-users"]
+      miru_policy:
+        default_policy: 'deny'
+        rules:
+          - *oidc_standard_rule
+          - policy: 'two_factor'
+            subject:
+              - ["group:app-miru-users"]
     clients:
       # ---- === Bar Assistant === ----
       - client_id: "bar-assistant"
@@ -641,4 +648,27 @@ identity_providers:
           - "authorization_code"
         userinfo_signed_response_alg: "none"
         token_endpoint_auth_method: "client_secret_basic"
+      # ---- === Miru === ----
+      - client_id: "miru"
+        client_name: "Miru"
+        client_secret: {{ secret "/secrets/oidc-clients/MIRU_SECRET" | quote }}
+        public: false
+        authorization_policy: "miru_policy"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        consent_mode: "implicit"
+        redirect_uris:
+          - "https://miru.kerrlab.app/api/v1/auth/oidc/callback"
+        claims_policy: "with_groups"
+        scopes:
+          - "openid"
+          - "profile"
+          - "email"
+          - "groups"
+        response_types:
+          - "code"
+        grant_types:
+          - "authorization_code"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_post"
 
