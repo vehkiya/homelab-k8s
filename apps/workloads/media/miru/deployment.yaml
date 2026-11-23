@@ -79,12 +79,9 @@ spec:
               drop:
                 - ALL
           volumeMounts:
-            - name: data
-              mountPath: /data
             - name: tmp
               mountPath: /tmp
       volumes:
-        - name: data
-          emptyDir: {}
+        # Temporary files, including Tautulli database uploads during an import.
         - name: tmp
           emptyDir: {}
