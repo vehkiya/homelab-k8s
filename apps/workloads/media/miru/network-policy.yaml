@@ -7,6 +7,13 @@ spec:
     matchLabels:
       app: miru
   egress:
+    # PostgreSQL on the NAS (fortress)
+    - toCIDR:
+        - "10.10.1.218/32"
+      toPorts:
+        - ports:
+            - port: "15432"
+              protocol: TCP
     - toEndpoints:
         - matchLabels:
             app: plex

@@ -41,7 +41,7 @@ Not managed in this repo. Apps reach them by `toCIDR` 10.10.1.218/32 in their ow
 
 | Service | Port | Consumers |
 |---|---|---|
-| PostgreSQL | 15432 | authelia, lldap, crowdsec, n8n, fluxer, bar-assistant, mealie, miniflux, home-assistant (recorder), autobrr, bazarr, prowlarr, radarr, sonarr, seerr, kaneo, keeper, penpot, agentic-ticket-proxy, kestra (undeployed) |
+| PostgreSQL | 15432 | authelia, lldap, crowdsec, n8n, fluxer, bar-assistant, mealie, miniflux, home-assistant (recorder), autobrr, bazarr, prowlarr, radarr, sonarr, seerr, kaneo, keeper, miru, penpot, agentic-ticket-proxy, kestra (undeployed) |
 | MariaDB | 3306 | romm |
 | S3 (SeaweedFS) | 8333 | longhorn backups, tofu-sync, fluxer, kaneo, penpot |
 | OpenBao (`bao.kerrlab.app`) | 443 | external-secrets |

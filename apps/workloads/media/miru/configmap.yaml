@@ -3,8 +3,10 @@ kind: ConfigMap
 metadata:
   name: miru-config
 data:
-  DB_ENGINE: "sqlite"
-  SQLITE_PATH: "/data/miru.db"
+  DB_ENGINE: "postgres"
+  DATABASE_URL: "jdbc:postgresql://fortress.kerrlab.app:15432/miru"
+  # The NAS PostgreSQL is shared by many apps; a single Miru pod needs few connections.
+  DATABASE_MAX_POOL_SIZE: "5"
   AUTH_MODE: "oidc"
   AUTH_ALLOW_LOCAL_LOGIN: "false"
   OIDC_ENABLED: "true"
@@ -14,8 +16,8 @@ data:
   OIDC_DISPLAY_NAME: "Kerrlab SSO"
   OIDC_SCOPES: "openid,profile,email,groups"
   OIDC_GROUPS_CLAIM: "groups"
-  OIDC_ADMIN_GROUPS: "administrators,privileged-users"
-  OIDC_USER_GROUPS: "users,app-miru-users"
+  OIDC_ADMIN_GROUPS: "administrators"
+  OIDC_USER_GROUPS: "privileged-users,app-miru-users"
   OIDC_AUTO_LINK_BY_EMAIL: "true"
   OIDC_POST_LOGOUT_REDIRECT_URI: "https://miru.kerrlab.app/login"
   TZ: "Europe/Chisinau"
