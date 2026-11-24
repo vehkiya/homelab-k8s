@@ -208,6 +208,8 @@ webauthn:
   disable: false
   enable_passkey_login: true
   experimental_enable_passkey_uv_two_factors: true
+  # Accept passkeys whose browser did not report credProps.rk at registration (iOS/iPadOS)
+  experimental_enable_passkey_upgrade: true
   display_name: "Kerrlab SSO"
   attestation_conveyance_preference: "none"
   timeout: "60 seconds"
