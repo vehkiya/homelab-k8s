@@ -16,4 +16,4 @@ labels:
 
 images:
   - name: ghcr.io/hononeko/miru
-    newTag: latest@sha256:307bb8e8a7710fb1e845cffb1290488fd18c51e2f33bfb67682ae722490303cd
+    newTag: 1.0.0@sha256:17282be8d377df633a046d84a18ae81e92b866c459437965e79ebd66b3564927
