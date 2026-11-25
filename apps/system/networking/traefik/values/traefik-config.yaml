@@ -1,6 +1,9 @@
 image:
   registry: dhi.io
   repository: traefik
+# Same version as dhi.io/traefik in kustomization images:; the chart derives CLI flags from it
+# renovate: datasource=docker depName=dhi.io/traefik
+versionOverride: 3.7.18
 
 providers:
   kubernetesCRD:
