@@ -27,4 +27,4 @@ images:
   - name: ghcr.io/hononeko/homelab-launchpad
     newTag: 0.4.1@sha256:7f924aec675130f00beda5dcd06e0b3b1613f2d33371c3a3c3f90639e7011074
   - name: docker.io/valkey/valkey
-    newTag: 9.2-alpine@sha256:c8e2d17498838af5d91e12eb7c11220b3434a7b7131a333e3af52ad5e0b80882
+    newTag: 9.2-alpine@sha256:3ad5a213cb1bc2fd4a113c89b6248a88655a6bf1dda69519d04e03cd3e3d2742
