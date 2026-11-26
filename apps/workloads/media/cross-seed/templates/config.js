@@ -26,7 +26,13 @@ module.exports = {
   host: "0.0.0.0",
   port: 2468,
 
-  notificationWebhookUrls: [],
+  // Seeded only on a fresh /config; on a running instance add the same entry under Settings.
+  notificationWebhookUrls: [
+    {
+      url: "http://media-webhook-notifier.automation.svc.cluster.local:8080/api/v1/webhook/cross-seed",
+      headers: { Authorization: "Bearer {{ .Env.MWN_WEBHOOK_TOKEN }}" },
+    },
+  ],
 
   torrentClients: [
     "qbittorrent:http://qbittorrent-ui.media.svc.cluster.local:8080",

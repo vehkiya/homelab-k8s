@@ -52,6 +52,15 @@ spec:
         - ports:
             - port: "web-ui"
               protocol: TCP
+    # Push notifications (notificationWebhookUrls) to media-webhook-notifier
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: media-webhook-notifier
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
     # External HTTP/HTTPS for downloading matched .torrent files from indexers/trackers
     - toEntities:
         - "world"
