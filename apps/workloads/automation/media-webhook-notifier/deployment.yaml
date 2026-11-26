@@ -133,7 +133,7 @@ spec:
               value: "https://media-webhook-notifier.kerrlab.app"
             # cross-seed push notifications at /api/v1/webhook/cross-seed (404 while off).
             - name: CROSS_SEED_ENABLED
-              value: "true"
+              value: "false"
             # Seerr API for the admin-only Approve / Decline / Resolve buttons; SEERR_API_KEY comes from the ExternalSecret.
             - name: SEERR_URL
               value: "http://seerr-ui.media.svc.cluster.local:5055"
