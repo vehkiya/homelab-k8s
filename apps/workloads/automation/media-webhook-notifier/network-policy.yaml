@@ -26,6 +26,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app: jellyfin
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app: cross-seed
       toPorts:
         - ports:
             - port: "8080"

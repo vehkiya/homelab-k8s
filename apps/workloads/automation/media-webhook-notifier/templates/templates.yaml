@@ -29,6 +29,11 @@ events:
       chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
     issue:
       chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+  cross_seed:
+    match:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
+    failure:
+      chat_id: "{{ .Env.MEDIA_EVENTS_CHANNEL }}"
   media_server:
     available:
       silent: false
