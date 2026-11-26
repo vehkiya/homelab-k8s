@@ -16,7 +16,7 @@ resources:
 
 images:
   - name: dhi.io/coredns
-    newTag: 1.14.7@sha256:7038724613cd9cda74ebdff05ad805cd822d25755789744d4584a6b626b60254
+    newTag: 1.15.0@sha256:80f9dcbd39fef011e74ffe9c92ad4358acbb2f76780d959da00ca86fd5e1f15f
 
 patches:
   - target:
