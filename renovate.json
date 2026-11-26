@@ -7,7 +7,9 @@
     "config:recommended",
     ":semanticCommits"
   ],
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "timezone": "Europe/Chisinau",
   "rebaseWhen": "behind-base-branch",
   "labels": [
