@@ -46,3 +46,7 @@ events:
         ▪ <b>Duration:</b> {duration}
 
         <i>{overview}</i>
+    cross_seed:
+      match:
+        enabled: false
+        silent: true
