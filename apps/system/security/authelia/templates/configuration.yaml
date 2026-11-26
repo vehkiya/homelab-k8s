@@ -154,6 +154,7 @@ access_control:
         - "go2rtc.kerrlab.app"
         - "matter.kerrlab.app"
         - "unpackerr.kerrlab.app"
+        - "xseed.kerrlab.app"
       policy: two_factor
       subject:
         - ["group:administrators"]

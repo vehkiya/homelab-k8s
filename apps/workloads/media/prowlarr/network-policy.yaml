@@ -14,6 +14,8 @@ spec:
             app: sonarr
         - matchLabels:
             app: radarr
+        - matchLabels:
+            app: cross-seed
       toPorts:
         - ports:
             - port: "web-ui"
