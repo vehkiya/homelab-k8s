@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: media
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - http-route-eg.yaml
+  - network-policy.yaml
+  - secret.yaml
+  - persistence
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: cross-seed
+      app.kubernetes.io/part-of: media-services
+
+images:
+  - name: ghcr.io/cross-seed/cross-seed
+    newTag: 7.0.0-33@sha256:ac6d4cc4130d90fc5fbb778111fb79ae0470a6564d33167e61821be1dee0be0d
+  - name: ghcr.io/hononeko/k8s-config-tools
+    newTag: 0.1.2@sha256:659cbeceefffbfd34b98957d3c6d5e3f0ac6a5fb3887efe4c4bbbe45787cc75f
+
+configMapGenerator:
+  - name: cross-seed-config-template
+    files:
+      - config.js=templates/config.js

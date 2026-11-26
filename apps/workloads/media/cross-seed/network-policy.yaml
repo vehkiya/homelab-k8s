@@ -1,0 +1,65 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cross-seed-policy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: cross-seed
+  # ----=== Ingress ===----
+  ingress:
+    # Allow announce/webhook triggers from autobrr, qbittorrent, and n8n
+    - fromEndpoints:
+        - matchLabels:
+            app: autobrr
+        - matchLabels:
+            app: qbittorrent
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: automation
+            app.kubernetes.io/name: n8n
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+
+  # ----=== Egress ===----
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: qbittorrent
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app: prowlarr
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app: sonarr
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app: radarr
+      toPorts:
+        - ports:
+            - port: "web-ui"
+              protocol: TCP
+    # External HTTP/HTTPS for downloading matched .torrent files from indexers/trackers
+    - toEntities:
+        - "world"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "443"
+              protocol: UDP
+            - port: "80"
+              protocol: TCP
