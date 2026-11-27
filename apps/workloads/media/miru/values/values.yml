@@ -11,6 +11,10 @@ existingSecret: miru-secrets
 server:
   trustProxyHeaders: true
 
+startupProbe:
+  httpGet:
+    port: web-ui
+
 livenessProbe:
   httpGet:
     port: web-ui
