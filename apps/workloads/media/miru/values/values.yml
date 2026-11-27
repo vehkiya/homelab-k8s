@@ -1,0 +1,55 @@
+strategy:
+  type: Recreate
+
+podLabels:
+  app: miru
+  networking/expose-web-ui: "true"
+  networking/oidc-client: "true"
+
+existingSecret: miru-secrets
+
+server:
+  trustProxyHeaders: true
+
+livenessProbe:
+  httpGet:
+    port: web-ui
+
+readinessProbe:
+  httpGet:
+    port: web-ui
+
+database:
+  engine: postgres
+  postgres:
+    url: "jdbc:postgresql://fortress.kerrlab.app:15432/miru"
+    # The NAS PostgreSQL is shared by many apps; a single Miru pod needs few connections.
+    maxPoolSize: 5
+
+auth:
+  mode: oidc
+  allowLocalLogin: false
+  oidc:
+    enabled: true
+    issuerUrl: "https://auth.kerrlab.app"
+    clientId: "miru"
+    redirectUri: "https://miru.kerrlab.app/api/v1/auth/oidc/callback"
+    displayName: "Kerrlab SSO"
+    scopes: "openid,profile,email,groups"
+    groupsClaim: "groups"
+    adminGroups: "administrators"
+    userGroups: "privileged-users,app-miru-users"
+    autoLinkByEmail: true
+    postLogoutRedirectUri: "https://miru.kerrlab.app/login"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+extraEnv:
+  - name: TZ
+    value: Europe/Chisinau

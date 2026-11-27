@@ -36,7 +36,7 @@ its own claim from `intel-gpu-claim-template`.
 | cross-seed | `apps/workloads/media/cross-seed` | media | - | HTTPRoute, CNP, ExtSecret, PVC | FA, `media-pvc`. Calls qbittorrent, prowlarr, sonarr, radarr, media-webhook-notifier; called by autobrr, qbittorrent |
 | unpackerr | `apps/workloads/media/unpackerr` | media | - | HTTPRoute, CNP, ExtSecret | FA. `media-pvc`; calls sonarr, radarr |
 | nodecast-tv | `apps/workloads/media/nodecast-tv` | media | - | HTTPRoute, KEDA-HTTP, CNP, ExtSecret, PVC | OIDC, scale-to-zero, GPU claim |
-| miru | `apps/workloads/media/miru` | media | - | HTTPRoute, CNP, ExtSecret | `miru.kerrlab.app`. OIDC, PostgreSQL on the NAS. Calls plex |
+| miru | `apps/workloads/media/miru` | media | - | Helm, HTTPRoute, CNP, ExtSecret | `miru.kerrlab.app`. OIDC, PostgreSQL on the NAS. Calls plex |
 | media-webhook-notifier | `apps/workloads/automation/media-webhook-notifier` | automation | - | HTTPRoute, Middleware, BTP, CNP, ExtSecret | Receives webhooks from sonarr, radarr, seerr, plex, jellyfin, qbittorrent, cross-seed. Own Dragonfly. DMZ |
 
 ## Home & IoT (namespaces `home`, `iot`)
