@@ -1,19 +1,45 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: media
+
+helmCharts:
+  - name: miru
+    repo: oci://ghcr.io/hononeko/charts
+    version: 1.1.0
+    releaseName: miru
+    namespace: media
+    valuesFile: values/values.yml
+    skipTests: true
+
 resources:
-  - configmap.yaml
   - secret.yaml
-  - deployment.yaml
-  - service.yaml
   - http-route-eg.yaml
   - network-policy.yaml
 
 labels:
   - pairs:
-      app.kubernetes.io/name: miru
       app.kubernetes.io/part-of: media-services
 
 images:
   - name: ghcr.io/hononeko/miru
-    newTag: 1.0.0@sha256:17282be8d377df633a046d84a18ae81e92b866c459437965e79ebd66b3564927
+    newTag: 1.1.0@sha256:6862ed9b36c50b651d747295f12d42396f54aa549a772c93ca7ab507fd1e6c9a
+
+patches:
+  - target:
+      kind: Deployment
+      name: miru
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/ports/0/name
+        value: web-ui
+  - target:
+      kind: Service
+      name: miru
+    patch: |-
+      - op: replace
+        path: /spec/ports/0/name
+        value: web-ui
+      - op: replace
+        path: /spec/ports/0/targetPort
+        value: web-ui
